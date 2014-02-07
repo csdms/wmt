@@ -1,0 +1,25 @@
+$def with (page)
+
+<html>
+<head>
+  <title>Component Modeling Tool</title>
+  <style>
+    #menu {
+      width: 200px;
+      float: right;
+    }
+  </style>
+</head>
+
+<body>
+  <ul>
+    <li><a href="/cmtweb">Home</a></li>
+    <li><a href="/cmtweb/models/new">New Model</a></li>
+    <li><a href="/cmtweb/help">Help</a></li>
+  </ul>
+
+  <hr>
+
+  $:page
+</body>
+</html>

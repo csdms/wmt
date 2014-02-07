@@ -1,0 +1,81 @@
+{
+  "id":"cem",
+  "component_parameters":[
+    {
+      "key":"simulation_name",
+      "name":"Simulation name",
+      "description":"Name of the simulation",
+      "value":{
+        "type":"string",
+        "default":"CEM"
+      }
+    },
+    {
+      "key":"number_of_rows",
+      "name":"Number of rows",
+      "description":"Number of rows in the computational grid",
+      "value":{
+        "type":"int",
+        "default":50,
+        "range":{
+          "min":30,
+          "max":2147483647
+        }
+      }
+    },
+    {
+      "key":"number_of_columns",
+      "name":"Number of columns",
+      "description":"Number of columns in the computational grid",
+      "value":{
+        "type":"int",
+        "default":1000,
+        "range":{
+          "min":30,
+          "max":2147483647
+        }
+      }
+    },
+    {
+      "key":"row_spacing",
+      "name":"Row spacing",
+      "description":"Grid resolution in cross-shore (row) direction",
+      "value":{
+        "type":"float",
+        "default":100.0,
+        "range":{
+          "min":1.0,
+          "max":1.79769e308
+        },
+        "units":"m"
+      }
+    },
+    {
+      "key":"column_spacing",
+      "name":"Column spacing",
+      "description":"Grid resolution in along-shore (column) direction",
+      "value":{
+        "type":"float",
+        "default":100.0,
+        "range":{
+          "min":1.0,
+          "max":1.79769e308
+        },
+        "units":"m"
+      }
+    },
+    {
+      "key":"output_format",
+      "name":"Output format",
+      "description":"File format for output files",
+      "value":{
+        "type":"choice",
+        "default":"netcdf",
+        "choices":[
+          "netcdf",
+          "vtk"
+        ]
+      }
+    }
+  ]
+}

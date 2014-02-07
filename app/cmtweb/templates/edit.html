@@ -1,0 +1,13 @@
+$def with (model, form)
+
+<h1>Edit $form.d.name</h1>
+
+<form action="" method="post">
+  $:form.render()
+</form>
+
+<h2>Delete</h2>
+
+<form action="/cmtweb/models/delete/$model.id" method="post">
+  <input type="submit" value="Delete"/>
+</form>

@@ -1,0 +1,44 @@
+{
+  "arena": [
+    {
+      "id": "avulsion",
+      "name": "Avulsion",
+      "parameters": {
+          "var1": "value",
+          "var2": "another value"
+      },
+      "connect" : {
+        "discharge": "discharge@hydrotrend",
+        "elevation": "elevation@cem"
+      }
+    },
+    {
+      "id": "cem",
+      "name": "CEM",
+      "parameters": {
+        "var1": "value",
+        "var2": "another value"
+      },
+      "connect" : {
+        "river": "river@avulsion",
+        "waves": "waves@waves"
+      }
+    },
+    {
+      "id": "hydrotrend",
+      "name": "Hydrotrend",
+      "parameters": {
+        "var1": "value",
+        "var2": "another value"
+      }
+    },
+    {
+      "id": "waves",
+      "name": "Waves",
+      "parameters": {
+        "var1": "value",
+        "var2": "another value"
+      }
+    }
+  ]
+}

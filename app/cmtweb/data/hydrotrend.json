@@ -1,0 +1,116 @@
+{
+  "id":"hydrotrend",
+  "component_parameters":[
+    {
+      "key":"simulation_name",
+      "name":"Simulation name",
+      "description":"Name of the simulation",
+      "value":{
+        "type":"string",
+        "default":"HydroTrend"
+      }
+    },
+    {
+      "key":"hypsometry_file",
+      "name":"Hypsometry file",
+      "description":"Location of input hypsometry file",
+      "value":{
+        "type":"string",
+        "default":"/home/csdms/sims/hydrotrend/default/HYDRO0.HYPS"
+      }
+    },
+    {
+      "key":"starting_mean_annual_temperature",
+      "name":"Starting mean annual temperature",
+      "description":"The starting mean annual temperature",
+      "value":{
+        "type":"float",
+        "default":14.26,
+        "range":{
+          "min":0.0,
+          "max":50.0
+        },
+        "units":"C"
+      }
+    },
+    {
+      "key":"change_in_mean_annual_temperature",
+      "name":"Change in mean annual temperature",
+      "description":"The change in the mean annual temperature",
+      "value":{
+        "type":"float",
+        "default":0.0,
+        "range":{
+          "min":-10.0,
+          "max":10.0
+        },
+        "units":"C"
+      }
+    },
+    {
+      "key":"standard_deviation_of_mean_annual_temperature",
+      "name":"Standard deviation of mean annual temperature",
+      "description":"The standard deviation of the mean annual temperature",
+      "value":{
+        "type":"float",
+        "default":0.55,
+        "range":{
+          "min":0.0,
+          "max":10.0
+        },
+        "units":"C"
+      }
+    },
+    {
+      "key":"total_annual_precipitation",
+      "name":"Total annual precipitation",
+      "description":"The total annual precipitation",
+      "value":{
+        "type":"float",
+        "default":1.59,
+        "range":{
+          "min":0.0,
+          "max":50.0
+        },
+        "units":"m/yr"
+      }
+    },
+    {
+      "key":"change_in_total_annual_precipitation",
+      "name":"Change in total annual precipitation",
+      "description":"The change in the total annual precipitation",
+      "value":{
+        "type":"float",
+        "default":0.0,
+        "range":{
+          "min":-10.0,
+          "max":10.0
+        },
+        "units":"m/yr/yr"
+      }
+    },
+    {
+      "key":"standard_deviation_of_total_annual_precipitation",
+      "name":"Standard deviation of total annual precipitation",
+      "description":"The standard deviation of the total annual precipitation",
+      "value":{
+        "type":"float",
+        "default":0.3,
+        "range":{
+          "min":0.0,
+          "max":10.0
+        },
+        "units":"m/yr"
+      }
+    },
+    {
+      "key":"output_format",
+      "name":"Output format",
+      "description":"File format for output files",
+      "value":{
+        "type":"string",
+        "default":"netcdf"
+      }
+    }
+  ]
+}
