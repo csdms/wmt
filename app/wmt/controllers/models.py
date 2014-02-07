@@ -12,16 +12,17 @@ class New(object):
     """
     Create a new model. To create a new model, go here:
 
-    * https://csdms.colorado.edu/wmt/new
+    * https://csdms.colorado.edu/wmt/models/new
 
     You could also just POST some JSON to this URL.
 
     A valid JSON description of a model is simply a valid JSON file
-    of an object with a member called *arena*. The simplest
+    of an object with a member called *model*. The simplest
     example would be::
 
-    { "arena": 0 }
+    { "model": 0 }
 
+    > curl -i -X POST -F name=ModelName -F json=@model.json https://csdms.colorado.edu/wmt/models/new
     """
     form = web.form.Form(
         web.form.Textbox('name',
@@ -42,8 +43,8 @@ class New(object):
         form = self.form()
         if not form.validates():
             return render.new(form)
-        models.new_model(form.d.name, form.d.json, owner='')
-        raise web.seeother('/')
+        id = models.new_model(form.d.name, form.d.json, owner='')
+        return json.dumps(id)
 
 
 class Delete(object):
@@ -51,7 +52,7 @@ class Delete(object):
     Remove a model by *id*. To remove model *1*, go here (**please don't do
     this unless it's a model you created!**):
 
-    * https://csdms.colorado.edu/wmt/remove/1
+    * https://csdms.colorado.edu/wmt/models/remove/1
     """
     def POST(self, id):
         models.del_model(int(id))
@@ -62,7 +63,7 @@ class Edit(object):
     """
     Edit a model by model *id*. To edit model *1*, go here:
 
-    * https://csdms.colorado.edu/wmt/view/1
+    * https://csdms.colorado.edu/wmt/models/view/1
 
     You could also just POST some JSON to this URL.
     """
@@ -86,7 +87,7 @@ class View(object):
     View a model description by model *id*. To view the model with id *1*
     you would go to this page,
 
-    * https://csdms.colorado.edu/wmt/view/1
+    * https://csdms.colorado.edu/wmt/models/view/1
     """
     def GET(self, id):
         model = models.get_model(id)

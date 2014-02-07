@@ -1,5 +1,5 @@
 {
-  "arena": [
+  "model": [
     {
       "id": "avulsion",
       "name": "Avulsion",

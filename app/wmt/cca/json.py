@@ -16,36 +16,36 @@ def check_json_is_valid(text):
         #return False
 
     try:
-        return model.has_key('arena')
+        return model.has_key('model')
     except AttributeError:
         raise
         #return False
 
 
-def load_arena_from_json(text):
+def load_model_from_json(text):
     model = json.loads(text)
     try:
-        return model['arena']
+        return model['model']
     except KeyError:
-        raise ValueError('JSON does not describe a CMT arena')
+        raise ValueError('JSON does not describe a CMT model')
 
 
-def components_in_arena(arena):
+def components_in_model(model):
     names = []
-    for component in arena:
+    for component in model:
         names.append(component['id'])
     return names
 
 
-def component_parameters(arena, name):
-    for component in arena:
+def component_parameters(model, name):
+    for component in model:
         if component['id'] == name:
             return component['parameters'].items()
     raise ValueError(name)
 
 
-def component_connections(arena, name):
-    for component in arena:
+def component_connections(model, name):
+    for component in model:
         if component['id'] == name:
             try:
                 return component['connect'].items()
@@ -69,20 +69,20 @@ def load_component_from_json(file):
 
 def rc_from_json(text):
     try:
-        arena = load_arena_from_json(text)
+        model = load_model_from_json(text)
     except ValueError:
         raise
     else:
-        components = components_in_arena(arena)
+        components = components_in_model(model)
 
     rc = ResourceFile()
     for component in components:
         rc.append('instantiate %s %s' % (component, component))
-        for (key, value) in component_parameters(arena, component):
+        for (key, value) in component_parameters(model, component):
             rc.append('parameters %s Configure %s %s' %
                       (component, key, value))
 
-        for (key, value) in component_connections(arena, component):
+        for (key, value) in component_connections(model, component):
             (provides_port, provides_component) = value.split('@')
             rc.append('connect %s %s %s %s' %
                       (component, key, provides_component, provides_port))

@@ -8,7 +8,7 @@ def check_json_is_valid(text):
         return False
 
     try:
-        return model.has_key('arena')
+        return model.has_key('model')
     except AttributeError:
         return False
 

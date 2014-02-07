@@ -39,14 +39,14 @@
 <p>You can use the <tt>curl</tt> command to get the RC file. Here is an example
   of such a command,</p>
 <pre><code>
-> curl -i -X POST -F arena=@model.json https://csdms.colorado.edu/wmt/rc
+> curl -i -X POST -F model=@model.json https://csdms.colorado.edu/wmt/rc
 </code></pre>
 
 <p>Here is an example of a JSON description of group of connected components.</p>
 
 <pre><code>
 {
-  "arena": [
+  "model": [
     {
       "id": "avulsion",
       "name": "Avulsion",
