@@ -10,14 +10,14 @@ from setuptools.command.install import install
 from wmt import __version__
 
 
-setup(name='wmt.py',
+setup(name='wmt',
       version=__version__,
       description='Web app for the Component Modeling Tool',
       author='Eric Hutton',
       author_email='eric.hutton@colorado.edu',
       url=' http://csdms.colorado.edu/',
       install_requires=['web.py', 'PyYAML>=3.10', 'passlib', ],
-      packages=['wmt', 'wmt.scripts', 'wmt.db', ],
+      packages=['wmt', 'wmt.scripts', 'wmt.models', ],
       long_description="Create, save, edit, run collections of connected components.",
       license="Public domain",
       platforms=["any"],
@@ -26,7 +26,7 @@ setup(name='wmt.py',
                'templates/*html', ], },
       entry_points={
           'console_scripts': [
-              'cmt_site_setup = wmt.scripts.site_setup:main',
+              'wmt_setup = wmt.scripts.site_setup:main',
           ],
       },
      )
