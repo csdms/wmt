@@ -16,7 +16,16 @@ def main():
     site = Site(args.prefix)
     site.create()
 
-    snippet = Template("""
+    epilog = Template(
+"""
+A CMT project has been created for you under:
+
+    ${prefix}
+
+To finish the installation you'll have to do the following:
+
+1. If you're using Apache, add the following lines to httpd.conf:
+
     WSGIScriptAlias /wmt/ ${prefix}/bin/wmt_wsgi_main.py/
 
     Alias /wmt/static ${prefix}/static
@@ -25,9 +34,17 @@ def main():
       Order deny,allow
       148   Allow from all
     </Directory>
-    """)
 
-    print(snippet.substitute(prefix=site.prefix))
+2. Be sure the permissions and ownership are correct for the database files.
+
+    > chown -R nobody:nobody ${prefix}/db
+
+3. Restart Apache:
+
+    > apachectl -k restart
+""")
+
+    print(epilog.substitute(prefix=site.prefix))
 
 
 if __name__ == '__main__':
