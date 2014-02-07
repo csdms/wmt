@@ -6,7 +6,7 @@ from ..config import (site, db)
 
 
 def new_model(name, text, owner=''):
-    db.insert('models', name=name, json=text, owner=owner)
+    return db.insert('models', name=name, json=text, owner=owner)
 
 
 def del_model(id):
