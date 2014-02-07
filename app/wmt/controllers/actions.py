@@ -10,7 +10,7 @@ class Convert(object):
     """
     Convert a JSON description of a model into a CMT resource file::
 
-        curl -i -X POST -d @model.json https://csdms.colorado.edu/cmtweb/convert
+        curl -i -X POST -d @model.json https://csdms.colorado.edu/wmt/convert
     """
     def GET(self):
         return render.convert()
@@ -45,17 +45,17 @@ class Show(object):
     show a list of all the components in the palette. Thus, the following are
     equivalent,
 
-    * https://csdms.colorado.edu/cmtweb/show
-    * https://csdms.colorado.edu/cmtweb/show?element=palette
+    * https://csdms.colorado.edu/wmt/show
+    * https://csdms.colorado.edu/wmt/show?element=palette
 
     To show a JSON description of a particular component, specify it with the
     element attribute,
 
-    * https://csdms.colorado.edu/cmtweb/show?element=avulsion
+    * https://csdms.colorado.edu/wmt/show?element=avulsion
 
     To show a list of all the available models,
 
-    * https://csdms.colorado.edu/cmtweb/show?element=models
+    * https://csdms.colorado.edu/wmt/show?element=models
     """
     def GET(self):
         user_data = web.input(element='palette')

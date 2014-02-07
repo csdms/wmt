@@ -1,0 +1,30 @@
+$def with (models, hosts, session)
+
+<h1>wmt</h1>
+
+<p>Click on a model's name to view its JSON description.</p>
+
+<li>Username: <b>$session.username</b></li>
+
+<h2>Saved models:</h2>
+<ul>
+  $for model in models:
+  <li>
+    <a href="/wmt/models/view/$model.id">$model.name</a>
+    <a href="/wmt/models/edit/$model.id">Edit</a>
+    <a href="/wmt/models/export/$model.id">Resource File</a>
+  </li>
+</ul>
+<a href="/wmt/new">New Model</a>
+
+<h2>Known hosts:</h2>
+<ul>
+  $for host in hosts:
+  <li>
+    <a href="/wmt/hosts/view/$host.id">$host.host</a>
+    <a href="/wmt/hosts/edit/$host.id">Edit</a>
+    <a href="/wmt/hosts/run/$host.id">Run</a>
+  </li>
+</ul>
+<a href="/wmt/hosts/new">New Host</a>
+

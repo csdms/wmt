@@ -12,7 +12,7 @@ class New(object):
     """
     Create a new model. To create a new model, go here:
 
-    * https://csdms.colorado.edu/cmtweb/new
+    * https://csdms.colorado.edu/wmt/new
 
     You could also just POST some JSON to this URL.
 
@@ -51,7 +51,7 @@ class Delete(object):
     Remove a model by *id*. To remove model *1*, go here (**please don't do
     this unless it's a model you created!**):
 
-    * https://csdms.colorado.edu/cmtweb/remove/1
+    * https://csdms.colorado.edu/wmt/remove/1
     """
     def POST(self, id):
         models.del_model(int(id))
@@ -62,7 +62,7 @@ class Edit(object):
     """
     Edit a model by model *id*. To edit model *1*, go here:
 
-    * https://csdms.colorado.edu/cmtweb/view/1
+    * https://csdms.colorado.edu/wmt/view/1
 
     You could also just POST some JSON to this URL.
     """
@@ -86,7 +86,7 @@ class View(object):
     View a model description by model *id*. To view the model with id *1*
     you would go to this page,
 
-    * https://csdms.colorado.edu/cmtweb/view/1
+    * https://csdms.colorado.edu/wmt/view/1
     """
     def GET(self, id):
         model = models.get_model(id)
@@ -104,7 +104,7 @@ class Export(object):
     Export a saved model as a CMT resource file by model *id*. To export
     model *1* to RC format,
 
-    * https://csdms.colorado.edu/cmtweb/export/1
+    * https://csdms.colorado.edu/wmt/export/1
     """
     def GET(self, id):
         model = models.get_models(id)

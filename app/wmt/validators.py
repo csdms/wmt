@@ -14,7 +14,7 @@ def not_too_long(max_len):
 
 
 not_bad_json = web.form.Validator(
-    """Invalid JSON (<a href="/cmtweb/help/new">What's valid?</a>)""",
+    """Invalid JSON (<a href="/wmt/help/new">What's valid?</a>)""",
     check_json_is_valid)
 
 

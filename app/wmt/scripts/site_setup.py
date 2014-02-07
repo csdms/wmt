@@ -3,13 +3,13 @@ from __future__ import absolute_import
 import os
 from string import Template
 
-from cmtweb.site import Site
+from wmt.site import Site
 
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser('Setup CMTweb at a site.')
-    parser.add_argument('prefix', help='path to the cmtweb project')
+    parser = argparse.ArgumentParser('Setup WMT at a site.')
+    parser.add_argument('prefix', help='path to the WMT project')
 
     args = parser.parse_args()
 
@@ -17,9 +17,9 @@ def main():
     site.create()
 
     snippet = Template("""
-    WSGIScriptAlias /cmtweb/ ${prefix}/bin/cmtweb_wsgi_main.py/
+    WSGIScriptAlias /wmt/ ${prefix}/bin/wmt_wsgi_main.py/
 
-    Alias /cmtweb/static ${prefix}/static
+    Alias /wmt/static ${prefix}/static
     AddType text/html .py
     <Directory ${prefix}/>
       Order deny,allow

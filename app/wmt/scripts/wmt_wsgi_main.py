@@ -2,13 +2,13 @@
 import os
 import web
 
-os.environ.setdefault('CMTWEB_PREFIX',
+os.environ.setdefault('WMT_PREFIX',
     os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 )
-from cmtweb import URLS
-import cmtweb.config
-from cmtweb.session import add_sessions_to_app
-import cmtweb.controllers
+from wmt import URLS
+import wmt.config
+from wmt.session import add_sessions_to_app
+import wmt.controllers
 
 
 app = web.application(URLS, globals())

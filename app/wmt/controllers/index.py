@@ -17,7 +17,7 @@ class Help(object):
     just add the command name to the end of the URL. For instance, to get
     help for the *show* command,
 
-    * https://csdms.colorado.edu/cmtweb/help/show
+    * https://csdms.colorado.edu/wmt/help/show
     """
     def GET(self, *args):
         from docutils.core import publish_parts

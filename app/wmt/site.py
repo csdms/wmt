@@ -2,10 +2,10 @@
 import os
 from string import Template
 
-import cmtweb
+import wmt
 
 
-_PACKAGE_PREFIX = os.path.abspath(os.path.dirname(cmtweb.__file__))
+_PACKAGE_PREFIX = os.path.abspath(os.path.dirname(wmt.__file__))
 _SUBDIRS = set(['templates', 'data', 'db', 'bin', 'conf', ])
 
 
@@ -124,7 +124,7 @@ class Templates(SiteSubFolder):
     def populate(self):
         src_dir = os.path.abspath(
             os.path.join(
-                os.path.dirname(cmtweb.__file__),
+                os.path.dirname(wmt.__file__),
                 'templates')
         )
         copy_dir_contents(src_dir, self.prefix)
@@ -135,7 +135,7 @@ class Data(SiteSubFolder):
     def populate(self):
         src_dir = os.path.abspath(
             os.path.join(
-                os.path.dirname(cmtweb.__file__),
+                os.path.dirname(wmt.__file__),
                 'data')
         )
         copy_dir_contents(src_dir, self.prefix)
@@ -161,8 +161,8 @@ class Bin(SiteSubFolder):
     def populate(self):
         import shutil
         shutil.copyfile(
-            os.path.join(_PACKAGE_PREFIX, 'scripts', 'cmtweb_wsgi_main.py'),
-            os.path.join(self.prefix, 'cmtweb_wsgi_main.py'))
+            os.path.join(_PACKAGE_PREFIX, 'scripts', 'wmt_wsgi_main.py'),
+            os.path.join(self.prefix, 'wmt_wsgi_main.py'))
 
 
 class Site(object):
