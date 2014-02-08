@@ -19,6 +19,7 @@ URLS = (
 
     '/models/new', 'wmt.controllers.models.New',
     '/models/open/(\d+)', 'wmt.controllers.models.Open',
+    '/models/save/(\d+)', 'wmt.controllers.models.Save',
     '/models/list', 'wmt.controllers.models.List',
     '/models/delete/(\d+)', 'wmt.controllers.models.Delete',
     '/models/edit/(\d+)', 'wmt.controllers.models.Edit',

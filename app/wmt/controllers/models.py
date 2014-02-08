@@ -47,6 +47,41 @@ class New(object):
         return json.dumps(id)
 
 
+class Save(object):
+    form = web.form.Form(
+        web.form.Textbox('name',
+                         not_too_short(3),
+                         not_too_long(20),
+                         size=30, description='Model name:'),
+        web.form.Textarea('json',
+                          not_too_long(2048),
+                          not_bad_json,
+                          rows=40, cols=80, description=None),
+        web.form.Button('Save')
+    )
+    def GET(self, id):
+        try:
+            model = models.get_model(int(id))
+        except models.BadIdError:
+            return render.new(self.form())
+        else:
+            self.form.fill(model)
+            return render.edit(model, self.form)
+
+    def POST(self, id):
+        form = self.form()
+        if not form.validates():
+            return render.new(form)
+        try:
+            model = models.get_model(id)
+        except models.BadIdError:
+            id = models.new_model(form.d.name, form.d.json, owner='')
+        else:
+            models.update_model(id, form.d.name, form.d.json)
+
+        return json.dumps(int(id))
+
+
 class Delete(object):
     """
     Remove a model by *id*. To remove model *1*, go here (**please don't do
