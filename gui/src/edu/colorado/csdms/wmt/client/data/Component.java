@@ -1,8 +1,8 @@
 package edu.colorado.csdms.wmt.client.data;
 
 /**
- * A class to model a component. It acts as a wrapper around a ComponentJSO
- * object, which is a read-only data object.
+ * A class to model a component in the WMT GUI. It acts as a wrapper around the
+ * data in a ComponentJSO object.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -55,10 +55,10 @@ public class Component {
     }
     this.setUsesPorts(uses);
   }
-  
+
   /**
-   * Makes a Component the hard way -- by specifying up front all the
-   * attributes that define it.
+   * Makes a Component the hard way -- by specifying up front all the attributes
+   * that define it.
    * 
    * @param id
    * @param name
@@ -123,7 +123,7 @@ public class Component {
     return new Component(
         "<i class='fa fa-plus-square fa-fw'></i> Drag component here");
   }
-  
+
   /**
    * Examples and unit tests.
    * 

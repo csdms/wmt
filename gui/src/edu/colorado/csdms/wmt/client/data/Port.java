@@ -1,8 +1,8 @@
 package edu.colorado.csdms.wmt.client.data;
 
 /**
- * A class to model a port. It acts as a wrapper around a PortJSO object, which
- * is a read-only data object.
+ * A class to model a port in the WMT GUI. It acts as a wrapper around the data
+ * in a PortJSO object.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -35,7 +35,7 @@ public class Port {
     this.setId(portJso.getId());
     this.isRequired(portJso.isRequired());
   }
-  
+
   /**
    * Creates a Port with the given id and required/optional attribute.
    * 
@@ -65,6 +65,7 @@ public class Port {
 
   /**
    * Returns the required/optional setting for the Port. (required = true)
+   * 
    * @return
    */
   public Boolean isRequired() {
@@ -73,6 +74,7 @@ public class Port {
 
   /**
    * Sets whether the Port is required (true) or optional (false).
+   * 
    * @param required
    */
   public void isRequired(Boolean required) {
@@ -85,7 +87,7 @@ public class Port {
    * @param args
    */
   public static void main(String[] args) {
-    
+
     // Zero-elt ctor.
     Port p0 = new Port();
     p0.setId("discharge");

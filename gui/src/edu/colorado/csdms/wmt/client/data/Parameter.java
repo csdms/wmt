@@ -4,8 +4,8 @@
 package edu.colorado.csdms.wmt.client.data;
 
 /**
- * A class to model a parameter for a WMT component. It acts as a wrapper
- * around a ParameterJSO object, which is a read-only data object.
+ * A class to model a parameter for a component in the WMT GUI. It acts as a
+ * wrapper around the data in a ParameterJSO object.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -15,7 +15,7 @@ public class Parameter {
   private String name;
   private String description;
   private Value value;
-  
+
   /**
    * Creates an empty Parameter. Attributes can be set on it afterward.
    */
@@ -105,12 +105,12 @@ public class Parameter {
   public void setValue(Value value) {
     this.value = value;
   }
-  
+
   /**
    * Examples and unit tests.
    */
   public static void main() {
-    
+
     // Zero-elt ctr.
     Parameter p0 = new Parameter();
     p0.setKey("simulation_name");
