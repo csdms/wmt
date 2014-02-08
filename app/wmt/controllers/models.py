@@ -94,6 +94,13 @@ class View(object):
         return render.view(model)
 
 
+class Open(object):
+    def GET(self, id):
+        model = models.get_model(id)
+        return json.dumps(dict(name=model.name, id=model.id, json=model.json,
+                              owner=model.owner))
+
+
 class Show(object):
     def GET(self, id):
         model = models.get_model(str(id))
