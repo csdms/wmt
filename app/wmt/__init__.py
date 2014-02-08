@@ -18,6 +18,7 @@ URLS = (
     '/logout', 'wmt.controllers.account.Logout',
 
     '/models/new', 'wmt.controllers.models.New',
+    '/models/list', 'wmt.controllers.models.List',
     '/models/delete/(\d+)', 'wmt.controllers.models.Delete',
     '/models/edit/(\d+)', 'wmt.controllers.models.Edit',
     '/models/view/(\d+)', 'wmt.controllers.models.View',

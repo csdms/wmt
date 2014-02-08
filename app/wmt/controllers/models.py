@@ -100,6 +100,15 @@ class Show(object):
         return model.json
 
 
+class List(object):
+    def GET(self):
+        all_models = models.get_models()
+        resp = []
+        for model in all_models:
+            resp.append(dict(id=model.id, name=model.name))
+        return json.dumps(resp)
+
+
 class Export(object):
     """
     Export a saved model as a CMT resource file by model *id*. To export
