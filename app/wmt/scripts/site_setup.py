@@ -48,7 +48,7 @@ To finish the installation you'll have to do the following:
     > apachectl -k restart
 """)
 
-    print(epilog.substitute(prefix=site.prefix))
+    print(epilog.substitute(prefix=args.prefix))
 
 
 if __name__ == '__main__':
