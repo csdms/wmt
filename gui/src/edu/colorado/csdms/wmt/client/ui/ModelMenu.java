@@ -295,6 +295,9 @@ public class ModelMenu extends DecoratedPopupPanel {
     public void onClick(ClickEvent event) {
       openDialog.hide();
       ModelMenu.this.hide();
+      
+      String modelURL = "https://csdms.colorado.edu/wmt/models/open/18";
+      DataTransfer.getModel(data, modelURL);
     }
   }
 

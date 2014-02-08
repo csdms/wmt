@@ -36,14 +36,13 @@ public class DataTransfer {
   /**
    * Makes an asynchronous HTTP request to get a JSON file from the server.
    * 
-   * @param dm the DataManager object for the WMT session
+   * @param data the DataManager object for the WMT session
    * @param fn a JSON file name
-   * @param the file type: component, parameter or model
+   * @param ft the file type: component, parameter or model
    */
-  public static void get(DataManager dm, String fn, String ft) {
+  public static void get(final DataManager data, String fn, String ft) {
 
     // Helpful locals.
-    final DataManager data = dm;
     final String fileType = ft;
     String fileName = fn;
     String jsonURL = DATA_URL + fileName;
@@ -72,26 +71,6 @@ public class DataTransfer {
                 data.setParameters(json.getId(), json);
                 GWT.log(prefix + data.getParameters(json.getId()).getId());
               }
-              if (fileType == "model") {
-                ModelJSO json = parse(rtxt);
-                // data.setModel(json);
-                GWT.log(prefix + json.getName());
-                Integer index = 0;
-                GWT.log(prefix + json.getComponents().get(index).getId());
-                // GWT.log(prefix + json.getComponents().get(0).getClassName());
-                // GWT.log(prefix +
-                // json.getComponents().get(index).getPorts().toString());
-                // GWT.log(prefix +
-                // json.getComponents().get(index).getConnection("discharge"));
-                // GWT.log(prefix +
-                // json.getComponents().get(index).getConnections().toString());
-                // GWT.log(prefix +
-                // json.getComponents().get(index).getParameters().toString());
-                // GWT.log(prefix +
-                // json.getComponents().get(index).getValues().toString());
-                // GWT.log(prefix +
-                // json.getComponents().get(index).getValue("number_of_rows"));
-              }
             } catch (Exception e) {
               GWT.log("Error:" + e.toString());
             }
@@ -115,16 +94,76 @@ public class DataTransfer {
   }
 
   /**
+   * Makes an asynchronous HTTP request to get a model JSON from the server.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param url the URL for retrieving the model JSON
+   */
+  public static void getModel(final DataManager data, final String url) {
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.GET, URL.encode(url));
+    GWT.log(url);
+
+    try {
+      @SuppressWarnings("unused")
+      Request request = builder.sendRequest(null, new RequestCallback() {
+
+        @Override
+        public void onResponseReceived(Request request, Response response) {
+          if (Response.SC_OK == response.getStatusCode()) {
+            
+            String rtxt = response.getText();
+            
+            GWT.log("I'm here!");
+            GWT.log(rtxt);
+
+            ModelJSO json = parse(rtxt);
+            // data.setModel(json);
+            GWT.log(json.getName());
+            // Integer index = 0;
+            // GWT.log(prefix + json.getComponents().get(index).getId());
+            // GWT.log(prefix + json.getComponents().get(0).getClassName());
+            // GWT.log(prefix +
+            // json.getComponents().get(index).getPorts().toString());
+            // GWT.log(prefix +
+            // json.getComponents().get(index).getConnection("discharge"));
+            // GWT.log(prefix +
+            // json.getComponents().get(index).getConnections().toString());
+            // GWT.log(prefix +
+            // json.getComponents().get(index).getParameters().toString());
+            // GWT.log(prefix +
+            // json.getComponents().get(index).getValues().toString());
+            // GWT.log(prefix +
+            // json.getComponents().get(index).getValue("number_of_rows"));
+
+          } else {
+            String msg = "The URL " + url + " cannot be accessed.";
+            Window.alert(msg);
+          }
+        }
+
+        @Override
+        public void onError(Request request, Throwable exception) {
+          Window.alert(CXN_MSG);
+        }
+      });
+
+    } catch (RequestException e) {
+      Window.alert(CXN_MSG);
+    }
+  }
+
+  /**
    * Makes an asynchronous HTTP request to put a JSON file from the server.
    * 
-   * @param dm the DataManager object for the WMT session
+   * @param data the DataManager object for the WMT session
    * @param fn a JSON file name
    * @param the file type: component, parameter or model
    */
-  public static void put(DataManager dm, String fn, String ft) {
+  public static void put(final DataManager data, String fn, String ft) {
 
     // Helpful locals.
-    final DataManager data = dm;
     final String fileType = ft;
     String fileName = fn;
     String jsonURL = SAVE_URL + fileName;
@@ -132,16 +171,16 @@ public class DataTransfer {
 
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(jsonURL));
-    
+
     try {
       @SuppressWarnings("unused")
       Request request =
-          builder.sendRequest(dm.getModelString(), new RequestCallback() {
+          builder.sendRequest(data.getModelString(), new RequestCallback() {
 
             @Override
             public void onResponseReceived(Request request, Response response) {
               String msg =
-                    response.getStatusCode() + " : " + response.getStatusText();
+                  response.getStatusCode() + " : " + response.getStatusText();
               if (Response.SC_OK == response.getStatusCode()) {
                 Window.alert(msg);
               } else {
@@ -162,20 +201,19 @@ public class DataTransfer {
   /**
    * See "test_4_cem.json" for an example of what the JSON should look like.
    * 
-   * @param dm the DataManager object for the WMT session
+   * @param data the DataManager object for the WMT session
    */
-  public static void serialize(DataManager dm) {
+  public static void serialize(DataManager data) {
 
     // Get the model that the ModelTree stored in the DataManager.
-    ModelJSO model = dm.getModel();
+    ModelJSO model = data.getModel();
     GWT.log(model.getName());
     GWT.log(((Integer) model.getComponents().length()).toString());
 
     // Sneakily create a JsArray of ModelJSO objects. These are for the
     // components that make up the model.
     @SuppressWarnings("unchecked")
-    JsArray<ModelJSO> components =
-        (JsArray<ModelJSO>) ModelJSO.createArray();
+    JsArray<ModelJSO> components = (JsArray<ModelJSO>) ModelJSO.createArray();
 
     // Create a series of new ModelJSO objects representing components in
     // the model and push them into the components JsArray. When finished,
@@ -201,13 +239,13 @@ public class DataTransfer {
     // transfer back to the server, however we do this.)
     String modelString = stringify(model);
     GWT.log(modelString);
-    dm.setModelString(modelString);
-    
+    data.setModelString(modelString);
+
     // Put the file back on the server.
     // XXX Hacky.
-    put(dm, model.getName() + ".json", "model");
+    put(data, model.getName() + ".json", "model");
 
-    // ModelTree tree = dm.getModelTree();
+    // ModelTree tree = data.getModelTree();
     //
     // Iterator<TreeItem> iter = tree.treeItemIterator();
     // while (iter.hasNext()) {
