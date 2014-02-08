@@ -147,7 +147,7 @@ class Database(SiteSubFolder):
         data_dir = os.path.join(_PACKAGE_PREFIX, 'data')
         create_empty_database(
             os.path.join(self.prefix, 'projects.db'),
-            schema=os.path.join(data_dir, 'cmt.sql'),
+            schema=os.path.join(data_dir, 'wmt.sql'),
             clobber=True)
         create_empty_database(
             os.path.join(self.prefix, 'users.db'),
@@ -189,11 +189,11 @@ class Site(object):
             dir.create()
             dir.populate()
 
-        self.to_conf_file(os.path.join(self.dir['conf'].prefix, 'cmt.ini'))
+        self.to_conf_file(os.path.join(self.dir['conf'].prefix, 'wmt.ini'))
 
     def to_conf_file(self, filename):
         sections = {
-            'cmt': {
+            'wmt': {
                 'prefix': self.prefix,
                 'templates': self.dir['templates'].prefix,
                 'data': self.dir['data'].prefix,

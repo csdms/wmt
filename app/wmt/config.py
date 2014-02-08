@@ -26,7 +26,7 @@ def load_wmt_conf(file):
 def read_site_conf(site_prefix):
     from ConfigParser import RawConfigParser
 
-    conf_file_path = os.path.join(site_prefix, 'conf', 'cmt.ini')
+    conf_file_path = os.path.join(site_prefix, 'conf', 'wmt.ini')
     conf = RawConfigParser()
 
     #with open(conf_file_path, 'r') as conf_file:
@@ -42,7 +42,7 @@ def read_config_file(path_to_file):
     config = RawConfigParser()
     config.read(path_to_file)
 
-    site = dict(config.items('cmt'))
+    site = dict(config.items('wmt'))
     site['pw'] = CryptContext.from_path(path_to_file, section='passlib')
     return site
 
@@ -51,7 +51,7 @@ def write_config_file(path_to_file, items):
     from ConfigParser import RawConfigParser
     config = RawConfigParser()
     for item in items:
-        conf.set('cmt', *items)
+        conf.set('wmt', *items)
     config.write(path_to_file)
 
 
@@ -66,7 +66,7 @@ def read_site_config_file(*args):
             raise
 
     os.environ['WMT_PREFIX'] = os.path.abspath(prefix)
-    path = os.path.join(os.environ['WMT_PREFIX'], 'conf', 'cmt.ini')
+    path = os.path.join(os.environ['WMT_PREFIX'], 'conf', 'wmt.ini')
     return read_config_file(path)
 
 
