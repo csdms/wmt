@@ -2,23 +2,32 @@
 from __future__ import absolute_import
 import os
 from string import Template
+from collections import OrderedDict
 
 from wmt.site import Site
 
 
-def setup(prefix):
-    site = Site(prefix)
+def setup(prefix, options={}):
+    site = Site(prefix, options=options)
     site.create()
 
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser('Setup WMT at a site.')
-    parser.add_argument('prefix', help='path to the WMT project')
+    parser = argparse.ArgumentParser('Setup wmt at a site.')
+    parser.add_argument('prefix', help='path to the wmt project')
+    parser.add_argument('--name', default='<your-name>',
+                        help='name of contact')
+    parser.add_argument('--email', default='<your-email>',
+                        help='name of contact')
+    parser.add_argument('--host', default='localhost',
+                        help='name of the host running wmt')
 
     args = parser.parse_args()
 
-    setup(args.prefix)
+    setup(args.prefix, OrderedDict([('name', args.name),
+                                    ('email', args.email),
+                                    ('host', args.host)]))
 
     epilog = Template(
 """

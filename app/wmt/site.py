@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 import os
 from string import Template
+from collections import OrderedDict
 
 import wmt
 
@@ -146,7 +147,7 @@ class Database(SiteSubFolder):
     def populate(self):
         data_dir = os.path.join(_PACKAGE_PREFIX, 'data')
         create_empty_database(
-            os.path.join(self.prefix, 'projects.db'),
+            os.path.join(self.prefix, 'wmt.db'),
             schema=os.path.join(data_dir, 'wmt.sql'),
             clobber=True)
         create_empty_database(
@@ -166,7 +167,7 @@ class Bin(SiteSubFolder):
 
 
 class Site(object):
-    def __init__(self, prefix, **kwds):
+    def __init__(self, prefix, options={}):
         self._prefix = os.path.abspath(prefix)
         self._dirs = {
             'templates': Templates(self.prefix),
@@ -175,6 +176,7 @@ class Site(object):
             'db': Database(self.prefix),
             'bin': Bin(self.prefix),
         }
+        self._options = options
 
     @property
     def prefix(self):
@@ -192,23 +194,22 @@ class Site(object):
         self.to_conf_file(os.path.join(self.dir['conf'].prefix, 'wmt.ini'))
 
     def to_conf_file(self, filename):
-        sections = {
-            'wmt': {
-                'prefix': self.prefix,
-                'templates': self.dir['templates'].prefix,
-                'data': self.dir['data'].prefix,
-                'database': os.path.join(self.dir['db'].prefix, 'projects.db'),
-                'user_db': os.path.join(self.dir['db'].prefix, 'users.db'),
-                'db': self.dir['db'].prefix,
-                'site_domain': 'your website domain',
-                'maintainer_name': 'your name',
-                'maintainer_email': 'your email',
-            },
-            'passlib': {
-                'schemes': 'sha512_crypt, sha256_crypt',
-                'sha256_crypt__default_rounds': '100000',
-                'sha512_crypt__default_rounds': '100000',
-            }
-        }
+        sections = OrderedDict([
+            ('wmt', OrderedDict([
+                ('prefix', self.prefix),
+                ('templates', self.dir['templates'].prefix),
+                ('data', self.dir['data'].prefix),
+                ('database', os.path.join(self.dir['db'].prefix, 'wmt.db')),
+                ('user_db', os.path.join(self.dir['db'].prefix, 'users.db')),
+                ('db', self.dir['db'].prefix), ])
+            ),
+            ('passlib', OrderedDict([
+                ('schemes', 'sha512_crypt, sha256_crypt'),
+                ('sha256_crypt__default_rounds', '100000'),
+                ('sha512_crypt__default_rounds', '100000'), ])
+            ),
+        ])
+        sections['wmt'].update(self._options)
+
         with open(filename, 'w') as conf_file:
             write_configuration(conf_file, sections)
