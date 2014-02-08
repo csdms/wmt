@@ -96,9 +96,13 @@ class View(object):
 
 class Open(object):
     def GET(self, id):
-        model = models.get_model(id)
-        return json.dumps(dict(name=model.name, id=model.id, json=model.json,
-                              owner=model.owner))
+        try:
+            model = models.get_model(id)
+        except models.BadIdError:
+            raise web.notfound()
+        else:
+            return json.dumps(dict(name=model.name, id=model.id,
+                                   json=model.json, owner=model.owner))
 
 
 class Show(object):
@@ -124,5 +128,5 @@ class Export(object):
     * https://csdms.colorado.edu/wmt/export/1
     """
     def GET(self, id):
-        model = models.get_models(id)
+        model = models.get_model(id)
         return render.code(rc_from_json(model.json))

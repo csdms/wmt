@@ -5,6 +5,18 @@ import json
 from ..config import (site, db)
 
 
+class Error(Exception):
+    pass
+
+
+class BadIdError(Error):
+    def __init__(self, id):
+        self._id = id
+
+    def __str__(self):
+        return str(self._id)
+
+
 def new_model(name, text, owner=''):
     return db.insert('models', name=name, json=text, owner=owner)
 
@@ -26,4 +38,4 @@ def get_model(id):
     try:
         return db.select('models', where='id=$id', vars=locals())[0]
     except IndexError:
-        return None
+        raise BadIdError(id)
