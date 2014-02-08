@@ -6,6 +6,11 @@ from string import Template
 from wmt.site import Site
 
 
+def setup(args):
+    site = Site(args.prefix)
+    site.create()
+
+
 def main():
     import argparse
     parser = argparse.ArgumentParser('Setup WMT at a site.')
@@ -13,8 +18,7 @@ def main():
 
     args = parser.parse_args()
 
-    site = Site(args.prefix)
-    site.create()
+    setup(args)
 
     epilog = Template(
 """
