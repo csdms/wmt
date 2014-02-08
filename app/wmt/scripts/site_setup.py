@@ -6,8 +6,8 @@ from string import Template
 from wmt.site import Site
 
 
-def setup(args):
-    site = Site(args.prefix)
+def setup(prefix):
+    site = Site(prefix)
     site.create()
 
 
@@ -18,7 +18,7 @@ def main():
 
     args = parser.parse_args()
 
-    setup(args)
+    setup(args.prefix)
 
     epilog = Template(
 """
