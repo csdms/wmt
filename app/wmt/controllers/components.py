@@ -19,3 +19,8 @@ class Show(object):
             return json.dumps(PALETTE[name])
         except KeyError:
             raise web.notfound()
+
+
+class Dump(object):
+    def GET(self):
+        return json.dumps(PALETTE)
