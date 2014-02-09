@@ -17,6 +17,9 @@ URLS = (
     '/login', 'wmt.controllers.account.Login',
     '/logout', 'wmt.controllers.account.Logout',
 
+    '/components/list', 'wmt.controllers.components.List',
+    '/components/show/(\w+)', 'wmt.controllers.components.Show',
+
     '/models/new', 'wmt.controllers.models.New',
     '/models/open/(\d+)', 'wmt.controllers.models.Open',
     '/models/save/(\d+)', 'wmt.controllers.models.Save',
