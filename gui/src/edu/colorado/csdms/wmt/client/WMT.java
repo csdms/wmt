@@ -40,6 +40,9 @@ public class WMT implements EntryPoint {
     perspective.initializeArena();
     perspective.initializeParameterTable();
     
+    // Retrieve and store the list of available models.
+    DataTransfer.getModelList(data);
+    
     // Load the JSON files used to populate the GUI. A HashMap is used with
     // the file basename as the key and the file type as the value.
     data.files.put("components.json", "component");
