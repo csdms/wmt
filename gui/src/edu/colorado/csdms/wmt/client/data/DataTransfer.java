@@ -33,6 +33,9 @@ public class DataTransfer {
   private static final String DATA_URL = GWT.getHostPageBaseURL() + "data/";
   private static final String SAVE_URL = GWT.getHostPageBaseURL() + "save/";
 
+  private static DataManager data;
+  private static String url;
+
   /**
    * Makes an asynchronous HTTP request to get a JSON file from the server.
    * 
@@ -100,36 +103,18 @@ public class DataTransfer {
    * @param url the URL for retrieving the model JSON
    */
   @SuppressWarnings("unused")
-  public static void getModel(final DataManager data, final String url) {
+  public static void getModel(DataManager data, String url) {
+
+    DataTransfer.data = data;
+    DataTransfer.url = url;
 
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.GET, URL.encode(url));
     GWT.log(url);
 
     try {
-      Request request = builder.sendRequest(null, new RequestCallback() {
-
-        @Override
-        public void onResponseReceived(Request request, Response response) {
-          if (Response.SC_OK == response.getStatusCode()) {
-            String rtxt = response.getText();
-            Window.alert(rtxt);
-//            ModelJSO json = parse(rtxt);
-//            GWT.log(json.getName());
-          } else {
-            String msg =
-                "The URL '" + url + "' did not give an 'OK' response. "
-                    + "Response code: " + response.getStatusCode();
-            Window.alert(msg);
-          }
-        }
-
-        @Override
-        public void onError(Request request, Throwable exception) {
-          Window.alert(ERR_MSG + exception.getMessage());
-        }
-      });
-
+      Request request =
+          builder.sendRequest(null, new GetModelRequestCallback());
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
@@ -206,7 +191,9 @@ public class DataTransfer {
   /**
    * A JSNI method for creating a String from a JavaScriptObject.
    * 
-   * @see http://stackoverflow.com/questions/4872770/excluding-gwt-objectid-from-json-stringifyjso-in-devmode
+   * @see <a
+   *      href="http://stackoverflow.com/questions/4872770/excluding-gwt-objectid-from-json-stringifyjso-in-devmode">this</a>
+   *      discussion of '__gwt_ObjectId'
    * @param jso a JavaScriptObject
    * @return a String representation of the JavaScriptObject
    */
@@ -235,4 +222,32 @@ public class DataTransfer {
   private final native static <T> T parse(String jsonStr) /*-{
 		return eval("(" + jsonStr + ")");
   }-*/;
+
+  /**
+   * A RequestCallback handler class that provides the callback for a GET
+   * request of a model.
+   */
+  private static class GetModelRequestCallback implements RequestCallback {
+
+    @Override
+    public void onResponseReceived(Request request, Response response) {
+      if (Response.SC_OK == response.getStatusCode()) {
+        String rtxt = response.getText();
+        Window.alert(rtxt);
+        // ModelJSO json = parse(rtxt);
+        // GWT.log(json.getName());
+      } else {
+        String msg =
+            "The URL '" + url + "' did not give an 'OK' response. "
+                + "Response code: " + response.getStatusCode();
+        Window.alert(msg);
+      }
+    }
+
+    @Override
+    public void onError(Request request, Throwable exception) {
+      Window.alert(ERR_MSG + exception.getMessage());
+    }
+
+  }
 }
