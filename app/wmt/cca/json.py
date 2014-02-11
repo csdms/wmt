@@ -61,7 +61,7 @@ def load_component_from_json(file):
     except ValueError:
         raise
     else:
-        if desc.has_key('component_parameters'):
+        if desc.has_key('parameters'):
             return desc
         else:
             raise ValueError(file)
