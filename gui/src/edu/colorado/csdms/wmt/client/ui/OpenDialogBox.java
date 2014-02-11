@@ -8,41 +8,41 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
- * A customized DialogBox with fields for specifying a model name and the
- * location where it shall be saved.
+ * A customized DialogBox with a droplist for choosing a model and ok-cancel
+ * buttons.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class SaveDialogBox extends DialogBox {
+public class OpenDialogBox extends DialogBox {
 
-  private FilePanel filePanel;
+  private DroplistPanel modelPanel;
   private ChoicePanel choicePanel;
   
   /**
    * Makes a new SaveDialogBox.
    */
-  public SaveDialogBox() {
+  public OpenDialogBox() {
 
     super(true); // autohide
     this.setModal(true);
 
-    filePanel = new FilePanel();
+    modelPanel = new DroplistPanel();
     choicePanel = new ChoicePanel();
 
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-    contents.add(filePanel);
+    contents.add(modelPanel);
     contents.add(choicePanel);
 
     this.setWidget(contents);
   }
 
-  public FilePanel getFilePanel() {
-    return filePanel;
+  public DroplistPanel getModelPanel() {
+    return modelPanel;
   }
 
-  public void setFilePanel(FilePanel filePanel) {
-    this.filePanel = filePanel;
+  public void setModelPanel(DroplistPanel modelPanel) {
+    this.modelPanel = modelPanel;
   }
 
   public ChoicePanel getChoicePanel() {

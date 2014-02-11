@@ -3,6 +3,7 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -35,7 +36,7 @@ public class ModelMenu extends DecoratedPopupPanel {
   private DataManager data;
   private HTML menuButton;
   private SaveDialogBox saveDialog;
-  private DialogBox openDialog;
+  private OpenDialogBox openDialog;
 
   /**
    * Sets up the Model menu, including all its menu items, as well as its
@@ -62,6 +63,8 @@ public class ModelMenu extends DecoratedPopupPanel {
         new ModelMenuItem("Save Model", "fa-floppy-o");
     ModelMenuItem saveModelAs =
         new ModelMenuItem("Save Model As...", "fa-floppy-o");
+    ModelMenuItem runModel =
+        new ModelMenuItem("Run Model...", "fa-play");
     ModelMenuItem helpButton = new ModelMenuItem("Help");
     ModelMenuItem aboutButton = new ModelMenuItem("About");
 
@@ -74,6 +77,8 @@ public class ModelMenu extends DecoratedPopupPanel {
     menu.setWidget(menuIndex++, 0, saveModel);
     menu.setWidget(menuIndex++, 0, saveModelAs);
     menu.setWidget(menuIndex++, 0, new ModelMenuItem());
+    menu.setWidget(menuIndex++, 0, runModel);
+    menu.setWidget(menuIndex++, 0, new ModelMenuItem());
     menu.setWidget(menuIndex++, 0, helpButton);
     menu.setWidget(menuIndex++, 0, aboutButton);
 
@@ -83,6 +88,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     closeModel.addClickHandler(new CloseModelHandler());
     saveModel.addClickHandler(new SaveModelHandler());
     saveModelAs.addClickHandler(new SaveModelAsHandler());
+    runModel.addClickHandler(new RunModelHandler());
     helpButton.addClickHandler(new HelpHandler());
     aboutButton.addClickHandler(new AboutHandler());
 
@@ -189,24 +195,18 @@ public class ModelMenu extends DecoratedPopupPanel {
     @Override
     public void onClick(ClickEvent event) {
 
-      openDialog = new DialogBox();
-      openDialog.setModal(true);
+      openDialog = new OpenDialogBox();
       openDialog.setText("Open Model...");
+      String[] models = {"Foo", "Bar", "Baz"};
+      for (int i = 0; i < models.length; i++) {
+        openDialog.getModelPanel().getModelDroplist().addItem(models[i]);
+      }
+      
+      openDialog.getChoicePanel().getOkButton().addClickHandler(
+          new OpenOkHandler());
+      openDialog.getChoicePanel().getCancelButton().addClickHandler(
+          new OpenCancelHandler());
 
-      FilePanel filePanel = new FilePanel();
-      filePanel.setDirectory("river:$HOME/.wmt");
-      filePanel.setFile("MyModel");
-
-      ChoicePanel choicePanel = new ChoicePanel();
-      choicePanel.getOkButton().addClickHandler(new OpenOkHandler());
-      choicePanel.getCancelButton().addClickHandler(new OpenCancelHandler());
-
-      VerticalPanel contents = new VerticalPanel();
-      contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-      contents.add(filePanel);
-      contents.add(choicePanel);
-
-      openDialog.setWidget(contents);
       openDialog.center();
       ModelMenu.this.hide();
     }
@@ -247,7 +247,6 @@ public class ModelMenu extends DecoratedPopupPanel {
     public void onClick(ClickEvent event) {
 
       saveDialog = new SaveDialogBox();
-
       saveDialog.setText("Save Model As...");
       saveDialog.getFilePanel().setDirectory("river:$HOME/.wmt");
       saveDialog.getFilePanel().setFile("MyModel");
@@ -262,6 +261,18 @@ public class ModelMenu extends DecoratedPopupPanel {
     }  
   }
 
+  /**
+   * Handles click on the "Run" button in the ModelMenu.
+   */
+  public class RunModelHandler implements ClickHandler {
+    @Override
+    public void onClick(ClickEvent event) {
+      ModelMenuItem item = (ModelMenuItem) event.getSource();
+      ModelMenu.this.hide();
+      Window.alert("Clicked on: " + item.getText(0, 1));
+    }
+  }
+  
   /**
    * Handles click on the "Help" button in the ModelMenu.
    */
@@ -293,11 +304,18 @@ public class ModelMenu extends DecoratedPopupPanel {
   public class OpenOkHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
+
       openDialog.hide();
       ModelMenu.this.hide();
       
-      String modelURL = "http://csdms.colorado.edu/wmt/models/open/18";
-      DataTransfer.getModel(data, modelURL);
+      // Get the selected item from the openDialog.
+      Integer index = openDialog.getModelPanel().getModelDroplist().getSelectedIndex();
+      String modelName = openDialog.getModelPanel().getModelDroplist().getItemText(index);
+      GWT.log("Open model: " + modelName);
+      
+      // Provide unique id for model to GET. This will be provided by a list.
+      //Integer modelId = 22;
+      //DataTransfer.getModel(data, modelId);
     }
   }
 
@@ -330,7 +348,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       data.getPerspective().getViewCenter().setTabText(0, tabTitle);
       data.getModel().setName(modelName);
 
-      DataTransfer.serialize(data);
+      // DataTransfer.serialize(data);
     }
   }
 
