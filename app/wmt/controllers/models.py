@@ -137,13 +137,17 @@ class Open(object):
             raise web.notfound()
         else:
             return json.dumps(dict(name=model.name, id=model.id,
-                                   json=model.json, owner=model.owner))
+                                   owner=model.owner))
 
 
 class Show(object):
     def GET(self, id):
-        model = models.get_model(str(id))
-        return model.json
+        try:
+            model = models.get_model(str(id))
+        except models.BadIdError:
+            raise web.notfound()
+        else:
+            return model.json
 
 
 class List(object):
