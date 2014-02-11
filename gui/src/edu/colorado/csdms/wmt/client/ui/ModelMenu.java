@@ -36,7 +36,7 @@ public class ModelMenu extends DecoratedPopupPanel {
   private DataManager data;
   private HTML menuButton;
   private SaveDialogBox saveDialog;
-  private DialogBox openDialog;
+  private OpenDialogBox openDialog;
 
   /**
    * Sets up the Model menu, including all its menu items, as well as its
@@ -195,24 +195,18 @@ public class ModelMenu extends DecoratedPopupPanel {
     @Override
     public void onClick(ClickEvent event) {
 
-      openDialog = new DialogBox();
-      openDialog.setModal(true);
+      openDialog = new OpenDialogBox();
       openDialog.setText("Open Model...");
+      String[] models = {"Foo", "Bar", "Baz"};
+      for (int i = 0; i < models.length; i++) {
+        openDialog.getModelPanel().getModelDroplist().addItem(models[i]);
+      }
+      
+      openDialog.getChoicePanel().getOkButton().addClickHandler(
+          new OpenOkHandler());
+      openDialog.getChoicePanel().getCancelButton().addClickHandler(
+          new OpenCancelHandler());
 
-      FilePanel filePanel = new FilePanel();
-      filePanel.setDirectory("river:$HOME/.wmt");
-      filePanel.setFile("MyModel");
-
-      ChoicePanel choicePanel = new ChoicePanel();
-      choicePanel.getOkButton().addClickHandler(new OpenOkHandler());
-      choicePanel.getCancelButton().addClickHandler(new OpenCancelHandler());
-
-      VerticalPanel contents = new VerticalPanel();
-      contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-      contents.add(filePanel);
-      contents.add(choicePanel);
-
-      openDialog.setWidget(contents);
       openDialog.center();
       ModelMenu.this.hide();
     }
@@ -253,7 +247,6 @@ public class ModelMenu extends DecoratedPopupPanel {
     public void onClick(ClickEvent event) {
 
       saveDialog = new SaveDialogBox();
-
       saveDialog.setText("Save Model As...");
       saveDialog.getFilePanel().setDirectory("river:$HOME/.wmt");
       saveDialog.getFilePanel().setFile("MyModel");
@@ -315,11 +308,14 @@ public class ModelMenu extends DecoratedPopupPanel {
       openDialog.hide();
       ModelMenu.this.hide();
       
-      // TODO Get the selected item from the openDialog.
+      // Get the selected item from the openDialog.
+      Integer index = openDialog.getModelPanel().getModelDroplist().getSelectedIndex();
+      String modelName = openDialog.getModelPanel().getModelDroplist().getItemText(index);
+      GWT.log("Open model: " + modelName);
       
       // Provide unique id for model to GET. This will be provided by a list.
-      Integer modelId = 22;
-      DataTransfer.getModel(data, modelId);
+      //Integer modelId = 22;
+      //DataTransfer.getModel(data, modelId);
     }
   }
 
