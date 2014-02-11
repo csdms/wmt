@@ -39,6 +39,24 @@ public class ModelJSO extends JavaScriptObject {
   }-*/;
 
   /**
+   * A JSNI method to get the id of the model, an int used to uniquely
+   * identify it in the database. The user can't modify this id -- it's set by
+   * the API. Be aware that this is different than {@link #getId()}, which is
+   * used to get the id of a component.
+   */
+  public final native int getModelId() /*-{
+		return this.id;
+  }-*/;  
+
+  /**
+   * A JSNI method to get the owner of the model, a String. The user can't
+   * modify this id -- it's set by the API.
+   */
+  public final native String getOwner() /*-{
+		return this.owner;
+  }-*/;   
+  
+  /**
    * Gets the JsArray of the components, including their parameters and their
    * connections, that make up a model. This is a JSNI method.
    */

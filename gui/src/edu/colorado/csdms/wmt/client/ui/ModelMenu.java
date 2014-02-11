@@ -311,12 +311,15 @@ public class ModelMenu extends DecoratedPopupPanel {
   public class OpenOkHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
+
       openDialog.hide();
       ModelMenu.this.hide();
       
-      //String modelURL = "http://csdms.colorado.edu/wmt/models/open/18";
-      String modelURL = GWT.getHostPageBaseURL() + "data/test_18.json";
-      DataTransfer.getModel(data, modelURL);
+      // TODO Get the selected item from the openDialog.
+      
+      // Provide unique id for model to GET. This will be provided by a list.
+      Integer modelId = 22;
+      DataTransfer.getModel(data, modelId);
     }
   }
 
@@ -349,7 +352,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       data.getPerspective().getViewCenter().setTabText(0, tabTitle);
       data.getModel().setName(modelName);
 
-      DataTransfer.serialize(data);
+      // DataTransfer.serialize(data);
     }
   }
 

@@ -22,8 +22,8 @@ import edu.colorado.csdms.wmt.client.ui.ModelCell;
 import edu.colorado.csdms.wmt.client.ui.ModelTree;
 
 /**
- * A class that defines static methods for accessing the JSON files used to set
- * up, configure and run WMT.
+ * A class that defines static methods for accessing the JSON files used to
+ * set up, configure and run WMT.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -33,8 +33,8 @@ public class DataTransfer {
   private static final String DATA_URL = GWT.getHostPageBaseURL() + "data/";
   private static final String SAVE_URL = GWT.getHostPageBaseURL() + "save/";
 
-  private static DataManager data;
-  private static String url;
+  private static final String BASE_URL =
+      "http://csdms.colorado.edu/wmt/models/";
 
   /**
    * Makes an asynchronous HTTP request to get a JSON file from the server.
@@ -97,24 +97,38 @@ public class DataTransfer {
   }
 
   /**
-   * Makes an asynchronous HTTP request to get a model JSON from the server.
+   * Makes a pair of asynchronous HTTP GET requests to retrieve model data and
+   * metadata from a server.
    * 
    * @param data the DataManager object for the WMT session
-   * @param url the URL for retrieving the model JSON
+   * @param modelId the unique identifier for the model in the database
    */
   @SuppressWarnings("unused")
-  public static void getModel(DataManager data, String url) {
+  public static void getModel(DataManager data, Integer modelId) {
 
-    DataTransfer.data = data;
-    DataTransfer.url = url;
+    // The "open" URL is for metadata (name, owner), while the "show" URL
+    // returns a ModelJSO.
+    String openURL = BASE_URL + "open/" + modelId.toString();
+    String showURL = BASE_URL + "show/" + modelId.toString();
 
-    RequestBuilder builder =
-        new RequestBuilder(RequestBuilder.GET, URL.encode(url));
-    GWT.log(url);
-
+    RequestBuilder openBuilder =
+        new RequestBuilder(RequestBuilder.GET, URL.encode(openURL));
+    GWT.log(openURL);
     try {
-      Request request =
-          builder.sendRequest(null, new GetModelRequestCallback());
+      Request openRequest =
+          openBuilder
+              .sendRequest(null, new ModelRequestCallback(data, openURL));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }
+
+    RequestBuilder showBuilder =
+        new RequestBuilder(RequestBuilder.GET, URL.encode(showURL));
+    GWT.log(showURL);
+    try {
+      Request showRequest =
+          showBuilder
+              .sendRequest(null, new ModelRequestCallback(data, showURL));
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
@@ -227,15 +241,25 @@ public class DataTransfer {
    * A RequestCallback handler class that provides the callback for a GET
    * request of a model.
    */
-  private static class GetModelRequestCallback implements RequestCallback {
+  public static class ModelRequestCallback implements RequestCallback {
+
+    private DataManager data;
+    private String url;
+
+    public ModelRequestCallback(DataManager data, String url) {
+      this.data = data;
+      this.url = url;
+    }
 
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
         String rtxt = response.getText();
         Window.alert(rtxt);
-        // ModelJSO json = parse(rtxt);
-        // GWT.log(json.getName());
+//        ModelJSO json = parse(rtxt);
+//        GWT.log("name = " + json.getName());
+//        GWT.log("model id = " + json.getModelId());
+//        GWT.log("owner = " + json.getOwner());
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "
@@ -248,6 +272,5 @@ public class DataTransfer {
     public void onError(Request request, Throwable exception) {
       Window.alert(ERR_MSG + exception.getMessage());
     }
-
   }
 }
