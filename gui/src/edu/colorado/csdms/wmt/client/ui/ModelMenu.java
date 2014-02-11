@@ -3,6 +3,7 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -62,6 +63,8 @@ public class ModelMenu extends DecoratedPopupPanel {
         new ModelMenuItem("Save Model", "fa-floppy-o");
     ModelMenuItem saveModelAs =
         new ModelMenuItem("Save Model As...", "fa-floppy-o");
+    ModelMenuItem runModel =
+        new ModelMenuItem("Run Model...", "fa-play");
     ModelMenuItem helpButton = new ModelMenuItem("Help");
     ModelMenuItem aboutButton = new ModelMenuItem("About");
 
@@ -74,6 +77,8 @@ public class ModelMenu extends DecoratedPopupPanel {
     menu.setWidget(menuIndex++, 0, saveModel);
     menu.setWidget(menuIndex++, 0, saveModelAs);
     menu.setWidget(menuIndex++, 0, new ModelMenuItem());
+    menu.setWidget(menuIndex++, 0, runModel);
+    menu.setWidget(menuIndex++, 0, new ModelMenuItem());
     menu.setWidget(menuIndex++, 0, helpButton);
     menu.setWidget(menuIndex++, 0, aboutButton);
 
@@ -83,6 +88,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     closeModel.addClickHandler(new CloseModelHandler());
     saveModel.addClickHandler(new SaveModelHandler());
     saveModelAs.addClickHandler(new SaveModelAsHandler());
+    runModel.addClickHandler(new RunModelHandler());
     helpButton.addClickHandler(new HelpHandler());
     aboutButton.addClickHandler(new AboutHandler());
 
@@ -263,6 +269,18 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
+   * Handles click on the "Run" button in the ModelMenu.
+   */
+  public class RunModelHandler implements ClickHandler {
+    @Override
+    public void onClick(ClickEvent event) {
+      ModelMenuItem item = (ModelMenuItem) event.getSource();
+      ModelMenu.this.hide();
+      Window.alert("Clicked on: " + item.getText(0, 1));
+    }
+  }
+  
+  /**
    * Handles click on the "Help" button in the ModelMenu.
    */
   public class HelpHandler implements ClickHandler {
@@ -296,7 +314,8 @@ public class ModelMenu extends DecoratedPopupPanel {
       openDialog.hide();
       ModelMenu.this.hide();
       
-      String modelURL = "http://csdms.colorado.edu/wmt/models/open/18";
+      //String modelURL = "http://csdms.colorado.edu/wmt/models/open/18";
+      String modelURL = GWT.getHostPageBaseURL() + "data/test_18.json";
       DataTransfer.getModel(data, modelURL);
     }
   }
