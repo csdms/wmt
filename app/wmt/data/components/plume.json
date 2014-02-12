@@ -1,0 +1,19 @@
+{
+  "id":"plume",
+  "name":"Plume",
+  "url":"http://csdms.colorado.edu/wiki/Model:Plume",
+  "provides":[
+  ],
+  "uses":[
+    {
+      "id":"river",
+      "required":false
+    },
+    {
+      "id":"deposition",
+      "required":false
+    }
+  ],
+  "parameters":[
+  ]
+}

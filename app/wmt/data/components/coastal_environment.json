@@ -1,0 +1,14 @@
+{
+  "id":"coastal_environment",
+  "name":"CoastalEnvironment",
+  "url":"http://csdms.colorado.edu/wiki/Category:Modules",
+  "provides":[
+    {
+      "id":"coastal_environment"
+    }
+  ],
+  "uses":[
+  ],
+  "parameters":[
+  ]
+}

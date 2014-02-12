@@ -1,0 +1,26 @@
+{
+  "id":"child",
+  "name":"CHILD",
+  "url":"http://csdms.colorado.edu/wiki/Model_help:CHILD",
+  "provides":[
+    {
+      "id":"subaerial_delta"
+    }
+  ],
+  "uses":[
+    {
+      "id":"coastal_environment",
+      "required":false
+    },
+    {
+      "id":"subaqueous_delta",
+      "required":false
+    },
+    {
+      "id":"baselevel",
+      "required":false
+    }
+  ],
+  "parameters":[
+  ]
+}
