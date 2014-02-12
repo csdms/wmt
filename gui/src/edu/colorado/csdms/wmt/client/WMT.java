@@ -40,7 +40,11 @@ public class WMT implements EntryPoint {
     perspective.initializeArena();
     perspective.initializeParameterTable();
     
-    // Retrieve and store the list of available models.
+    // Retrieve (asynchronously) and store the list of available components
+    // and models. Note that when DataTransfer#getComponentList completes,
+    // it immediately starts pulling component data from the server with calls
+    // to DataTransfer#getComponent. Asynchronous requests are cool!
+    DataTransfer.getComponentList(data);
     DataTransfer.getModelList(data);
     
     // Load the JSON files used to populate the GUI. A HashMap is used with

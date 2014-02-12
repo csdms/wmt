@@ -34,6 +34,7 @@ public class DataManager {
   private String modelString; // stringified JSON
 
   // Experiment with public members.
+  public List<String> componentIdList;
   public List<Integer> modelIdList;
   public List<String> modelNameList;
   public LinkedHashMap<String, String> files;
@@ -42,6 +43,7 @@ public class DataManager {
    * Initializes the DataManager object used in a WMT session.
    */
   public DataManager() {
+    componentIdList = new ArrayList<String>();
     modelIdList = new ArrayList<Integer>();
     modelNameList = new ArrayList<String>();
     files = new LinkedHashMap<String, String>();
