@@ -513,12 +513,12 @@
       "description":"Mean precipitation for January",
       "value":{
         "type":"float",
-        "default":19.14,
+        "default":103.91,
         "range":{
           "min":0.0,
-          "max":100.0
+          "max":1000.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -527,12 +527,12 @@
       "description":"Mean precipitation for February",
       "value":{
         "type":"float",
-        "default":18.85,
+        "default":101.22,
         "range":{
           "min":0.0,
-          "max":100.0
+          "max":1000.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -541,12 +541,12 @@
       "description":"Mean precipitation for March",
       "value":{
         "type":"float",
-        "default":17.49,
+        "default":121.90,
         "range":{
           "min":0.0,
-          "max":100.0
+          "max":1000.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -555,12 +555,12 @@
       "description":"Mean precipitation for April",
       "value":{
         "type":"float",
-        "default":14.76,
+        "default":147.96,
         "range":{
           "min":0.0,
-          "max":100.0
+          "max":1000.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -569,12 +569,12 @@
       "description":"Mean precipitation for May",
       "value":{
         "type":"float",
-        "default":12.08,
+        "default":125.5,
         "range":{
           "min":0.0,
-          "max":100.0
+          "max":1000.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -583,12 +583,12 @@
       "description":"Mean precipitation for June",
       "value":{
         "type":"float",
-        "default":9.99,
+        "default":151.8,
         "range":{
           "min":0.0,
-          "max":100.0
+          "max":1000.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -597,12 +597,12 @@
       "description":"Mean precipitation for July",
       "value":{
         "type":"float",
-        "default":9.43,
+        "default":176.36,
         "range":{
           "min":0.0,
-          "max":100.0
+          "max":1000.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -611,12 +611,12 @@
       "description":"Mean precipitation for August",
       "value":{
         "type":"float",
-        "default":10.13,
+        "default":147.82,
         "range":{
           "min":0.0,
-          "max":100.0
+          "max":1000.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -625,12 +625,12 @@
       "description":"Mean precipitation for September",
       "value":{
         "type":"float",
-        "default":11.92,
+        "default":132.03,
         "range":{
           "min":0.0,
-          "max":100.0
+          "max":1000.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -639,12 +639,12 @@
       "description":"Mean precipitation for October",
       "value":{
         "type":"float",
-        "default":13.91,
+        "default":127.39,
         "range":{
           "min":0.0,
-          "max":100.0
+          "max":1000.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -653,12 +653,12 @@
       "description":"Mean precipitation for November",
       "value":{
         "type":"float",
-        "default":15.82,
+        "default":114.85,
         "range":{
           "min":0.0,
-          "max":100.0
+          "max":1000.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -667,12 +667,12 @@
       "description":"Mean precipitation for December",
       "value":{
         "type":"float",
-        "default":17.93,
+        "default":116.84,
         "range":{
           "min":0.0,
-          "max":100.0
+          "max":1000.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -681,12 +681,12 @@
       "description":"Standard deviation of January precipitations",
       "value":{
         "type":"float",
-        "default":1.05,
+        "default":62.07,
         "range":{
           "min":0.0,
           "max":100.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -695,12 +695,12 @@
       "description":"Standard deviation of February precipitations",
       "value":{
         "type":"float",
-        "default":1.32,
+        "default":69.9,
         "range":{
           "min":0.0,
           "max":100.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -709,12 +709,12 @@
       "description":"Standard deviation of March precipitations",
       "value":{
         "type":"float",
-        "default":1.07,
+        "default":71.12,
         "range":{
           "min":0.0,
           "max":100.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -723,12 +723,12 @@
       "description":"Standard deviation of April precipitations",
       "value":{
         "type":"float",
-        "default":0.88,
+        "default":56.59,
         "range":{
           "min":0.0,
           "max":100.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -737,12 +737,12 @@
       "description":"Standard deviation of May precipitations",
       "value":{
         "type":"float",
-        "default":0.86,
+        "default":71.91,
         "range":{
           "min":0.0,
           "max":100.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -751,12 +751,12 @@
       "description":"Standard deviation of June precipitations",
       "value":{
         "type":"float",
-        "default":1.08,
+        "default":67.80,
         "range":{
           "min":0.0,
           "max":100.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -765,12 +765,12 @@
       "description":"Standard deviation of July precipitations",
       "value":{
         "type":"float",
-        "default":0.95,
+        "default":63.04,
         "range":{
           "min":0.0,
           "max":100.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -779,12 +779,12 @@
       "description":"Standard deviation of August precipitations",
       "value":{
         "type":"float",
-        "default":0.74,
+        "default":49.38,
         "range":{
           "min":0.0,
           "max":100.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -793,12 +793,12 @@
       "description":"Standard deviation of September precipitations",
       "value":{
         "type":"float",
-        "default":0.94,
+        "default":64.54,
         "range":{
           "min":0.0,
           "max":100.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -807,12 +807,12 @@
       "description":"Standard deviation of October precipitations",
       "value":{
         "type":"float",
-        "default":1.14,
+        "default":60.39,
         "range":{
           "min":0.0,
           "max":100.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -821,12 +821,12 @@
       "description":"Standard deviation of November precipitations",
       "value":{
         "type":"float",
-        "default":1.08,
+        "default":60.34,
         "range":{
           "min":0.0,
           "max":100.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -835,12 +835,12 @@
       "description":"Standard deviation of December precipitations",
       "value":{
         "type":"float",
-        "default":1.03,
+        "default":70.08,
         "range":{
           "min":0.0,
           "max":100.0
         },
-        "units":"deg C"
+        "units":"mm"
       }
     },
     {
@@ -853,7 +853,7 @@
       }
     },
     {
-      "key":"bqrt_lithology",
+      "key":"bqrt_lithology_factor",
       "name":"Lithology factor",
       "description":"Lithology factor for BQRT equation",
       "value":{
@@ -867,7 +867,7 @@
       }
     },
     {
-      "key":"bqrt_anthro",
+      "key":"bqrt_anthropogenic_factor",
       "name":"Anthropogenic factor",
       "description":"Anthropogenic factor for BQRT equation",
       "value":{
