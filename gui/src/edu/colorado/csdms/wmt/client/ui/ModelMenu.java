@@ -3,6 +3,9 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import java.util.Collection;
+import java.util.Map.Entry;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -197,11 +200,13 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       openDialog = new OpenDialogBox();
       openDialog.setText("Open Model...");
-      String[] models = {"Foo", "Bar", "Baz"};
-      for (int i = 0; i < models.length; i++) {
-        openDialog.getModelPanel().getModelDroplist().addItem(models[i]);
+
+      // Populate the ModelDroplist with the available models on the server.
+      for (int i = 0; i < data.modelNameList.size(); i++) {
+        openDialog.getModelPanel().getModelDroplist().addItem(
+            data.modelNameList.get(i));
       }
-      
+
       openDialog.getChoicePanel().getOkButton().addClickHandler(
           new OpenOkHandler());
       openDialog.getChoicePanel().getCancelButton().addClickHandler(
@@ -307,15 +312,18 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       openDialog.hide();
       ModelMenu.this.hide();
-      
-      // Get the selected item from the openDialog.
-      Integer index = openDialog.getModelPanel().getModelDroplist().getSelectedIndex();
-      String modelName = openDialog.getModelPanel().getModelDroplist().getItemText(index);
-      GWT.log("Open model: " + modelName);
-      
-      // Provide unique id for model to GET. This will be provided by a list.
-      //Integer modelId = 22;
-      //DataTransfer.getModel(data, modelId);
+
+      // Get the selected item from the openDialog. Problem: This feels
+      // fragile. I'm using the index of the selected modelName to match up
+      // the index of the modelId. This should work consistently because I add
+      // the modelId and modelName to the ArrayList with the same index. It
+      // would be better if they both resided in the same data structure.
+      Integer selIndex =
+          openDialog.getModelPanel().getModelDroplist().getSelectedIndex();
+      Integer modelId = data.modelIdList.get(selIndex);
+
+      // Get the data + metadata for the selected model.
+      DataTransfer.getModel(data, modelId);
     }
   }
 

@@ -3,8 +3,10 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import edu.colorado.csdms.wmt.client.data.ComponentDescriptions;
 import edu.colorado.csdms.wmt.client.data.ComponentParameters;
@@ -33,14 +35,16 @@ public class DataManager {
   private String modelString; // stringified JSON
 
   // Experiment with public members.
-  public HashMap<Integer, String> modelList;
+  public List<Integer> modelIdList;
+  public List<String> modelNameList;
   public LinkedHashMap<String, String> files;
 
   /**
    * Initializes the DataManager object used in a WMT session.
    */
   public DataManager() {
-    modelList = new HashMap<Integer, String>();
+    modelIdList = new ArrayList<Integer>();
+    modelNameList = new ArrayList<String>();
     files = new LinkedHashMap<String, String>();
   }
 

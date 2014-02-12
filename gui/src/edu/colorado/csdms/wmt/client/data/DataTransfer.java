@@ -282,9 +282,8 @@ public class DataTransfer {
 
         // Load the list into the DataManager.
         for (int i = 0; i < json.getModels().length(); i++) {
-          Integer key = json.getModels().get(i).getModelId();
-          String value = json.getModels().get(i).getName();
-          data.modelList.put(key, value);
+          data.modelIdList.add(json.getModels().get(i).getModelId());
+          data.modelNameList.add(json.getModels().get(i).getName());
         }
         
       } else {
