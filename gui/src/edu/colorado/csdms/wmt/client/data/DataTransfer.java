@@ -35,7 +35,64 @@ public class DataTransfer {
 
   private static final String BASE_URL =
       "http://csdms.colorado.edu/wmt/models/";
+  private static final String MODEL_LIST_URL = BASE_URL + "list";
 
+  /**
+   * A JSNI method for creating a String from a JavaScriptObject.
+   * 
+   * @see <a
+   *      href="http://stackoverflow.com/questions/4872770/excluding-gwt-objectid-from-json-stringifyjso-in-devmode">this</a>
+   *      discussion of '__gwt_ObjectId'
+   * @param jso a JavaScriptObject
+   * @return a String representation of the JavaScriptObject
+   */
+  private final native static <T> String stringify(T jso) /*-{
+		return JSON.stringify(jso, function(key, value) {
+			if (key == '__gwt_ObjectId') {
+				return;
+			}
+			return value;
+		});
+  }-*/;
+
+  /**
+   * A JSNI method for evaluating JSONs.
+   * 
+   * Note that this is a generic method. It returns a JavaScript object of the
+   * type denoted by the type parameter T.
+   * 
+   * @see <a
+   *      href="http://docs.oracle.com/javase/tutorial/extra/generics/methods.html">Generic
+   *      Methods</a>
+   * 
+   * @param jsonStr a String that you trust
+   * @return a JavaScriptObject that you can cast to an overlay type
+   */
+  private final native static <T> T parse(String jsonStr) /*-{
+		return eval("(" + jsonStr + ")");
+  }-*/;  
+
+  /**
+   * Makes an asynchronous HTTP GET request to retrieve the list of models
+   * stored in the WMT database.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  @SuppressWarnings("unused")
+  public static void getModelList(DataManager data) {
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.GET, URL.encode(MODEL_LIST_URL));
+
+    try {
+      Request request =
+          builder.sendRequest(null, new ModelListRequestCallback(data,
+              MODEL_LIST_URL));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }
+  }
+  
   /**
    * Makes an asynchronous HTTP request to get a JSON file from the server.
    * 
@@ -203,40 +260,47 @@ public class DataTransfer {
   }
 
   /**
-   * A JSNI method for creating a String from a JavaScriptObject.
-   * 
-   * @see <a
-   *      href="http://stackoverflow.com/questions/4872770/excluding-gwt-objectid-from-json-stringifyjso-in-devmode">this</a>
-   *      discussion of '__gwt_ObjectId'
-   * @param jso a JavaScriptObject
-   * @return a String representation of the JavaScriptObject
+   * A RequestCallback handler class that provides the callback for a GET
+   * request of the list of available models in the WMT database.
    */
-  private final native static <T> String stringify(T jso) /*-{
-		return JSON.stringify(jso, function(key, value) {
-			if (key == '__gwt_ObjectId') {
-				return;
-			}
-			return value;
-		});
-  }-*/;
+  public static class ModelListRequestCallback implements RequestCallback {
 
-  /**
-   * A JSNI method for evaluating JSONs.
-   * 
-   * Note that this is a generic method. It returns a JavaScript object of the
-   * type denoted by the type parameter T.
-   * 
-   * @see <a
-   *      href="http://docs.oracle.com/javase/tutorial/extra/generics/methods.html">Generic
-   *      Methods</a>
-   * 
-   * @param jsonStr a String that you trust
-   * @return a JavaScriptObject that you can cast to an overlay type
-   */
-  private final native static <T> T parse(String jsonStr) /*-{
-		return eval("(" + jsonStr + ")");
-  }-*/;
+    private DataManager data;
+    private String url;
 
+    public ModelListRequestCallback(DataManager data, String url) {
+      this.data = data;
+      this.url = url;
+    }
+
+    @Override
+    public void onResponseReceived(Request request, Response response) {
+      if (Response.SC_OK == response.getStatusCode()) {
+
+        String rtxt = response.getText();
+        ModelListJSO json = parse(rtxt);
+
+        // Load the list into the DataManager.
+        for (int i = 0; i < json.getModels().length(); i++) {
+          Integer key = json.getModels().get(i).getModelId();
+          String value = json.getModels().get(i).getName();
+          data.modelList.put(key, value);
+        }
+        
+      } else {
+        String msg =
+            "The URL '" + url + "' did not give an 'OK' response. "
+                + "Response code: " + response.getStatusCode();
+        Window.alert(msg);
+      }
+    }
+
+    @Override
+    public void onError(Request request, Throwable exception) {
+      Window.alert(ERR_MSG + exception.getMessage());
+    }
+  }  
+  
   /**
    * A RequestCallback handler class that provides the callback for a GET
    * request of a model.
