@@ -357,6 +357,9 @@ public class ModelMenu extends DecoratedPopupPanel {
       data.getModel().setName(modelName);
 
       // DataTransfer.serialize(data);
+      
+      // Update list of saved models in the WMT DataManager.
+      DataTransfer.getModelList(data);
     }
   }
 
