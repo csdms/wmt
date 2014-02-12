@@ -3,9 +3,6 @@
  */
 package edu.colorado.csdms.wmt.client.data;
 
-import java.util.Iterator;
-import java.util.Map.Entry;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.http.client.Request;
@@ -15,11 +12,8 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.ui.DataManager;
-import edu.colorado.csdms.wmt.client.ui.ModelCell;
-import edu.colorado.csdms.wmt.client.ui.ModelTree;
 
 /**
  * A class that defines static methods for accessing the JSON files used to
@@ -282,9 +276,8 @@ public class DataTransfer {
 
         // Load the list into the DataManager.
         for (int i = 0; i < json.getModels().length(); i++) {
-          Integer key = json.getModels().get(i).getModelId();
-          String value = json.getModels().get(i).getName();
-          data.modelList.put(key, value);
+          data.modelIdList.add(json.getModels().get(i).getModelId());
+          data.modelNameList.add(json.getModels().get(i).getName());
         }
         
       } else {
