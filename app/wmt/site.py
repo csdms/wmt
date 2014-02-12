@@ -40,7 +40,7 @@ def copy_dir_contents(src, dest):
     import shutil
     for file in os.listdir(src):
         shutil.copyfile(os.path.join(src, file),
-                            os.path.join(dest, file))
+                        os.path.join(dest, file))
 
 
 def make_directory_tree(prefix, folders):
@@ -139,7 +139,9 @@ class Data(SiteSubFolder):
                 os.path.dirname(wmt.__file__),
                 'data')
         )
-        copy_dir_contents(src_dir, self.prefix)
+        make_directory_tree(src_dir, ['components', ])
+        copy_dir_contents(os.path.join(src_dir, 'components'),
+                          os.path.join(self.prefix, 'components'))
 
 
 class Database(SiteSubFolder):
