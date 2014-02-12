@@ -39,21 +39,22 @@ public class WMT implements EntryPoint {
     RootLayoutPanel.get().add(perspective);
     perspective.initializeArena();
     perspective.initializeParameterTable();
-    
+
     // Retrieve (asynchronously) and store the list of available components
     // and models. Note that when DataTransfer#getComponentList completes,
     // it immediately starts pulling component data from the server with calls
     // to DataTransfer#getComponent. Asynchronous requests are cool!
-    DataTransfer.getComponentList(data);
-    DataTransfer.getModelList(data);
-    
+//    DataTransfer.getComponentList(data);
+//    DataTransfer.getModelList(data);
+
     // Load the JSON files used to populate the GUI. A HashMap is used with
     // the file basename as the key and the file type as the value.
-    data.files.put("components.json", "component");
-    data.files.put("avulsion.json", "parameter");
-    data.files.put("cem.json", "parameter");
-    data.files.put("hydrotrend.json", "parameter");
-    data.files.put("waves.json", "parameter");
+//    data.files.put("components.json", "component");
+//    data.files.put("avulsion.json", "parameter");
+//    data.files.put("cem.json", "parameter");
+//    data.files.put("hydrotrend.json", "parameter");
+//    data.files.put("waves.json", "parameter");
+    data.files.put("avulsion1.json", "new");
     for (Entry<String, String> entry : data.files.entrySet()) {
       DataTransfer.get(data, entry.getKey(), entry.getValue());
     }

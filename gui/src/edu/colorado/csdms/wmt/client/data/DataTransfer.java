@@ -199,6 +199,7 @@ public class DataTransfer {
    * @param fn a JSON file name
    * @param ft the file type: component, parameter or model
    */
+  @Deprecated
   public static void get(final DataManager data, String fn, String ft) {
 
     // Helpful locals.
@@ -220,6 +221,19 @@ public class DataTransfer {
             String rtxt = response.getText();
             String prefix = fileType + ": ";
             try {
+              if (fileType == "new") {
+                ComponentJSO json = parse(rtxt);
+                GWT.log("name = " + json.getName());
+                GWT.log("id = " + json.getId());
+                GWT.log("url = " + json.getURL());
+                GWT.log("provides0 = " + json.getPortsProvided().get(0).getId());
+                GWT.log("uses0 = " + json.getPortsUsed().get(0).getId());
+                GWT.log("nParams = " + json.getParameters().length());
+                GWT.log("param0desc = " + json.getParameters().get(0).getDescription());
+                GWT.log("param0val = " + json.getParameters().get(0).getValue().getDefault());
+                GWT.log("param-key-desc = " + json.getParameter("row_spacing").getDescription());
+                GWT.log("param-key-val = " + json.getParameter("row_spacing").getValue().getDefault());
+              }
               if (fileType == "component") {
                 ComponentDescriptions json = parse(rtxt);
                 data.setComponents(json);
@@ -370,7 +384,7 @@ public class DataTransfer {
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
         String rtxt = response.getText();
-        Window.alert(rtxt);
+        //Window.alert(rtxt);
 //        ModelJSO json = parse(rtxt);
 //        GWT.log("name = " + json.getName());
 //        GWT.log("model id = " + json.getModelId());

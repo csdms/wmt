@@ -64,6 +64,29 @@ public class ComponentJSO extends JavaScriptObject {
   }-*/;
 
   /**
+   * A JSNI method that returns the JsArray of component parameters.
+   */
+  public final native JsArray<ParameterJSO> getParameters() /*-{
+		return this.parameters;
+  }-*/;  
+
+  /**
+   * A JSNI method that returns a ParameterJSO by its "key" attribute.
+   * 
+   * @param key The key of the desired parameter, a String.
+   */
+  public final native ParameterJSO getParameter(String key) /*-{
+		var parameterArray = this.parameters;
+		for (var i = 0; i < parameterArray.length; i++) {
+			parameter = parameterArray[i]
+			if (parameter.key === key) {
+				return parameter;
+			}
+		}
+		return null;
+  }-*/;  
+  
+  /**
    * A non-JSNI method for stringifying the attributes of a Component. Must be
    * final.
    */
