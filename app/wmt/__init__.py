@@ -40,7 +40,3 @@ URLS = (
     '/hosts/run/(\d+)', 'wmt.controllers.hosts.Run',
 )
 
-
-from . import models
-from . import scripts
-
