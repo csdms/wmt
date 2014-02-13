@@ -345,9 +345,9 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       // Set the model name on the ViewCenter tab and in the DataManager.
       String modelName = saveDialog.getFilePanel().getFile();
-      String tabTitle = "Model (" + modelName + ")";
-      data.getPerspective().getViewCenter().setTabText(0, tabTitle);
       data.getModel().setName(modelName);
+      String tabTitle = "Model (" + data.getModel().getName() + ")";
+      data.getPerspective().getViewCenter().setTabText(0, tabTitle);
 
       // DataTransfer.serialize(data);
       

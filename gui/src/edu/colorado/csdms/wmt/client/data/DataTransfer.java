@@ -3,6 +3,9 @@
  */
 package edu.colorado.csdms.wmt.client.data;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.http.client.Request;
@@ -69,6 +72,46 @@ public class DataTransfer {
 		return eval("(" + jsonStr + ")");
   }-*/;  
 
+  /**
+   * Returns a HashMap of entries used to build a HTTP query string.
+   * 
+   * @param modelName the name of the model, a String
+   * @param jsonStr the stringified JSON describing the model
+   */
+  private static HashMap<String, String> makeQueryEntries(String modelName,
+      String jsonStr) {
+    HashMap<String, String> m = new HashMap<String, String>();
+    m.put("name", modelName);
+    m.put("json", jsonStr);
+    return m;
+  }  
+
+  /**
+   * Builds a HTTP query string from a HashMap of key-value entries.
+   * 
+   * @param entries a HashMap of key-value pairs
+   * @return the query, as a String
+   */
+  private static String buildQueryString(HashMap<String, String> entries) {
+
+    StringBuilder sb = new StringBuilder();
+
+    Integer entryCount = 0;
+    for (Entry<String, String> entry : entries.entrySet()) {
+      if (entryCount > 0) {
+        sb.append("&");
+      }
+      String encodedName = URL.encodeQueryString(entry.getKey());
+      sb.append(encodedName);
+      sb.append("=");
+      String encodedValue = URL.encodeQueryString(entry.getValue());
+      sb.append(encodedValue);
+      entryCount++;
+    }
+
+    return sb.toString();
+  }  
+  
   /**
    * Makes an asynchronous HTTP GET request to retrieve the simple list of
    * components stored in the WMT database.
@@ -380,7 +423,7 @@ public class DataTransfer {
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
         String rtxt = response.getText();
-        //Window.alert(rtxt);
+        Window.alert(rtxt);
         ModelJSO jso = parse(rtxt);
         data.setModel(jso);
       } else {
