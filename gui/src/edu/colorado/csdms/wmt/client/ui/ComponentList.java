@@ -3,17 +3,11 @@ package edu.colorado.csdms.wmt.client.ui;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DragStartEvent;
 import com.google.gwt.event.dom.client.DragStartHandler;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HTMLTable;
-import com.google.gwt.user.client.ui.TreeItem;
 
-import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
-import edu.colorado.csdms.wmt.client.data.Port;
 import edu.colorado.csdms.wmt.client.data.PortJSO;
 
 /**
@@ -25,10 +19,9 @@ import edu.colorado.csdms.wmt.client.data.PortJSO;
  * @uses {@link DragCell}, {@link DataManager}
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ComponentList extends Grid implements DragStartHandler,
-    ClickHandler {
+public class ComponentList extends Grid implements DragStartHandler {
 
-  private DataManager data;
+  public DataManager data; // experiment with public data
   private DragCell[] cells;
 
   /**
@@ -49,7 +42,6 @@ public class ComponentList extends Grid implements DragStartHandler,
 
     this.data.setComponentList(this);
     addDomHandler(this, DragStartEvent.getType());
-    addDomHandler(this, ClickEvent.getType());
   }
 
   /**
@@ -60,58 +52,6 @@ public class ComponentList extends Grid implements DragStartHandler,
   public void onDragStart(DragStartEvent event) {
     GWT.log("Dragging component: " + event.getData("text"));
     data.setDraggedComponent(event.getData("text"));
-  }
-
-  /**
-   * Determines which Component in the ComponentList has been clicked. If the
-   * Shift key is held down, attempt to match the selected Component with an
-   * open "uses" port in the ModelTree.
-   */
-  @Override
-  public void onClick(ClickEvent event) {
-
-    HTMLTable.Cell tableCell =
-        ((HTMLTable) event.getSource()).getCellForEvent(event);
-    Component component =
-        new Component(data.getComponent(tableCell.getRowIndex()));
-    GWT.log("Selected in ComponentList: " + component.getName());
-
-    if (event.isShiftKeyDown()) {
-
-      // Find what "uses" ports in the ModelTree are currently open. If there
-      // are none, short-circuit the method.
-      Vector<ModelCell> openCells = data.getModelTree().findOpenModelCells();
-      if (openCells.size() == 0) {
-        return;
-      }
-
-      // In the special case of the driver being the only open "port", add
-      // the selected component and short-circuit the method.
-      if (openCells.get(0).getPortCell().getPort().getId().matches("driver")) {
-        TreeItem target = openCells.get(0).getParentTreeItem();
-        data.getModelTree().addComponent(component, target);
-        target.setState(true);
-        return;
-      }
-
-      // Since this is a convenience, take the first provides port of the
-      // selected component.
-      Port port = component.getProvidesPorts()[0];
-      GWT.log("Port provided: " + port.getId());
-
-      // Try to match a uses port with a provides port of the component.
-      for (int i = 0; i < openCells.size(); i++) {
-        ModelCell cell = openCells.get(i);
-        GWT.log("Open port: " + cell.getPortCell().getPort().getId());
-        if (port.getId().matches(cell.getPortCell().getPort().getId())) {
-          GWT.log("Port match!");
-          TreeItem target = cell.getParentTreeItem();
-          data.getModelTree().addComponent(component, target);
-          target.setState(true);
-          break;
-        }
-      }
-    }
   }
 
   /**
