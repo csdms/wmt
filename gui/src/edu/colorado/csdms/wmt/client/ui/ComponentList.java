@@ -64,9 +64,9 @@ public class ComponentList extends Grid implements DragStartHandler,
   }
 
   /**
-   * Determines which Component in the ComponentList has been clicked. If the 
-   * Shift key is held down, attempt to match the selected Component with
-   * an open "uses" port in the ModelTree.
+   * Determines which Component in the ComponentList has been clicked. If the
+   * Shift key is held down, attempt to match the selected Component with an
+   * open "uses" port in the ModelTree.
    */
   @Override
   public void onClick(ClickEvent event) {
@@ -74,7 +74,8 @@ public class ComponentList extends Grid implements DragStartHandler,
     HTMLTable.Cell tableCell =
         ((HTMLTable) event.getSource()).getCellForEvent(event);
     Component component =
-        new Component(data.getComponents().get(tableCell.getRowIndex()));
+        new Component(data.getComponents().get(
+            data.componentIdList.get(tableCell.getRowIndex())));
     GWT.log("Selected in ComponentList: " + component.getName());
 
     if (event.isShiftKeyDown()) {
