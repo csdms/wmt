@@ -380,7 +380,7 @@ public class DataTransfer {
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
         String rtxt = response.getText();
-        Window.alert(rtxt);
+        //Window.alert(rtxt);
         ModelJSO jso = parse(rtxt);
         data.setModel(jso);
       } else {
