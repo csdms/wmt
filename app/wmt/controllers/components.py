@@ -10,7 +10,9 @@ from ..palette import PALETTE
 
 class List(object):
     def GET(self):
-        return json.dumps(PALETTE.keys())
+        names = list(PALETTE.keys())
+        names.sort()
+        return json.dumps(names)
 
 
 class Show(object):
