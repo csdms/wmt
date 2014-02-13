@@ -4,14 +4,12 @@
 package edu.colorado.csdms.wmt.client.ui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.google.gwt.user.client.Window;
 
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
-import edu.colorado.csdms.wmt.client.data.ComponentParameters;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 
 /**
@@ -27,27 +25,16 @@ public class DataManager {
   private ModelTree modelTree;
   private ParameterTable parameterTable;
 
+  private LinkedHashMap<String, ComponentJSO> components;
   private String draggedComponent;
   private String selectedComponent;
-
-  // To be obsoleted.
-//  private ComponentDescriptions componentDescriptions;
-//  private LinkedHashMap<String, ComponentParameters> componentParameters =
-//      new LinkedHashMap<String, ComponentParameters>();
-  
-  // New.
-  private LinkedHashMap<String, ComponentJSO> components;
-  
   private ModelJSO model;
   private String modelString; // stringified JSON
 
-  // Experiment with public members.
+  // Experiment with public members, for convenience.
   public List<String> componentIdList;
   public List<Integer> modelIdList;
   public List<String> modelNameList;
-  
-  // To be obsoleted.
-//  public LinkedHashMap<String, String> files;
 
   /**
    * Initializes the DataManager object used in a WMT session.
@@ -57,9 +44,6 @@ public class DataManager {
     components = new LinkedHashMap<String, ComponentJSO>();
     modelIdList = new ArrayList<Integer>();
     modelNameList = new ArrayList<String>();
-    
-    // To be obsoleted.
-//    files = new LinkedHashMap<String, String>();
   }
 
   /**
@@ -79,83 +63,63 @@ public class DataManager {
   }
 
   /**
-   * Returns the data on all the components available to WMT. This is a
-   * ComponentDescriptions object, which holds a JsArray of ComponentJSO objects
-   * read from "components.json".
+   * Returns the ComponentJSO object matching the given component id.
+   * 
+   * @param componentId the id of the desired component, a String.
    */
-//  public ComponentDescriptions getComponents() {
-//    return componentDescriptions;
-//  }
   public ComponentJSO getComponent(String componentId) {
     return components.get(componentId);
   }
 
-  public HashMap<String, ComponentJSO> getComponents() {
+  /**
+   * Returns the <em>all</em> the components in a LinkedHashMap of
+   * componentId-ComponentJSO pairs.
+   */
+  public LinkedHashMap<String, ComponentJSO> getComponents() {
     return this.components;
   }
-  
+
   /**
-   * Stores the data on all the components available to WMT. This is a
-   * ComponentDescriptions object, which holds a JsArray of ComponentJSO objects
-   * read from "components.json".
+   * Adds a component to the LinkedHashMap of components.
    * <p>
-   * Initializes the ComponentList object in viewWest. Need to think about
-   * this more; not sure it's a good idea. Used in CMTJson#get.
+   * Once all the components have been pulled from the server, initialize the
+   * ComponentList.
    * 
-   * @param componentDescriptions a ComponentDescriptions object
+   * @param component the component to add, a ComponentJSO object
    */
-//  public void setComponents(ComponentDescriptions componentDescriptions) {
-//    this.componentDescriptions = componentDescriptions;
-//    perspective.initializeComponentList(); // TODO Think about this!
-//  }
   public void setComponent(ComponentJSO component) {
     this.components.put(component.getId(), component);
-    // If the number of components read = number in list, then initialize.
+
+    // Sometimes get error 500.
     Window.alert(component.getId() + " " + this.components.size() + "/"
         + this.componentIdList.size());
+    
     if (this.components.size() == this.componentIdList.size()) {
       perspective.initializeComponentList();
     }
   }
 
+  /**
+   * Sets a LinkedHashMap of componentId-ComponentJSO pairs representing
+   * <em>all</em> the components.
+   * 
+   * @param components all your components are belong to us
+   */
   public void setComponents(LinkedHashMap<String, ComponentJSO> components) {
     this.components = components;
   }
-  
-  /**
-   * Returns the set of parameters for a component, given by its id. This is a
-   * ComponentParameters object, which holds a JsArray of ParameterJSO objects
-   * read from files "<parameter_name>.json".
-   * 
-   * @param componentId a component id, a String
-   */
-//  public ComponentParameters getParameters(String componentId) {
-//    return componentParameters.get(componentId);
-//  }
 
   /**
-   * Stores the set of parameters, given by a ComponentParameters object, which
-   * holds a JsArray of ParameterJSO objects, for a given component.
-   * 
-   * @param componentId the id of the component, a String
-   * @param componentParameters a ComponentParameters object for the parameter
-   */
-//  public void setParameters(String componentId,
-//      ComponentParameters componentParameters) {
-//    this.componentParameters.put(componentId, componentParameters);
-//  }
-
-  /**
-   * TODO
-   * @return the model
+   * Returns the model displayed in the ModelTree, a ModelJSO object.
    */
   public ModelJSO getModel() {
     return model;
   }
 
   /**
-   * TODO
-   * @param model the model to set
+   * Sets the model displayed in the ModelTree.
+   * 
+   * @param model the model to set, a ModelJSO object
    */
   public void setModel(ModelJSO model) {
     this.model = model;

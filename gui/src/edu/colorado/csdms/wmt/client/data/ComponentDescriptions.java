@@ -16,6 +16,7 @@ import com.google.gwt.core.client.JsArray;
  * @author Mark Piper (mark.piper@colorado.edu)
  * 
  */
+@Deprecated
 public class ComponentDescriptions extends JavaScriptObject {
 
   // Overlay types have protected, no-arg, constructors.

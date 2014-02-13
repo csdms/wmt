@@ -3,8 +3,6 @@
  */
 package edu.colorado.csdms.wmt.client;
 
-import java.util.Map.Entry;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.event.dom.client.ContextMenuHandler;
@@ -15,7 +13,7 @@ import edu.colorado.csdms.wmt.client.ui.DataManager;
 import edu.colorado.csdms.wmt.client.ui.Perspective;
 
 /**
- * The CSDMS Web Modeling Tool.
+ * WMT is the CSDMS Web Modeling Tool.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -46,18 +44,6 @@ public class WMT implements EntryPoint {
     // to DataTransfer#getComponent. Asynchronous requests are cool!
     DataTransfer.getComponentList(data);
     DataTransfer.getModelList(data);
-
-    // Load the JSON files used to populate the GUI. A HashMap is used with
-    // the file basename as the key and the file type as the value.
-//    data.files.put("components.json", "component");
-//    data.files.put("avulsion.json", "parameter");
-//    data.files.put("cem.json", "parameter");
-//    data.files.put("hydrotrend.json", "parameter");
-//    data.files.put("waves.json", "parameter");
-//    data.files.put("avulsion1.json", "new");
-//    for (Entry<String, String> entry : data.files.entrySet()) {
-//      DataTransfer.get(data, entry.getKey(), entry.getValue());
-//    }
 
     // Disable the native browser right-click context menu.
     RootLayoutPanel.get().addDomHandler(new ContextMenuHandler() {
