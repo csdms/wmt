@@ -24,15 +24,12 @@ import edu.colorado.csdms.wmt.client.ui.DataManager;
 public class DataTransfer {
 
   private static final String ERR_MSG = "Failed to send the request: ";
-  private static final String DATA_URL = GWT.getHostPageBaseURL() + "data/";
-  private static final String SAVE_URL = GWT.getHostPageBaseURL() + "save/";
-
   private static final String BASE_URL = "http://csdms.colorado.edu/wmt/";
   private static final String MODEL_LIST_URL = BASE_URL + "models/list";
-  private static final String MODEL_OPEN_URL = BASE_URL + "models/open";
-  private static final String MODEL_SHOW_URL = BASE_URL + "models/show";
+  private static final String MODEL_OPEN_URL = BASE_URL + "models/open/";
+  private static final String MODEL_SHOW_URL = BASE_URL + "models/show/";
   private static final String COMPONENT_LIST_URL = BASE_URL + "components/list";
-  private static final String COMPONENT_SHOW_URL = BASE_URL + "components/show";
+  private static final String COMPONENT_SHOW_URL = BASE_URL + "components/show/";
 
   /**
    * A JSNI method for creating a String from a JavaScriptObject.
@@ -108,7 +105,7 @@ public class DataTransfer {
   @SuppressWarnings("unused")
   public static void getComponent(DataManager data, String componentId) {
 
-    String url = COMPONENT_SHOW_URL + "/" + componentId;
+    String url = COMPONENT_SHOW_URL + componentId;
 
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.GET, URL.encode(url));
@@ -141,7 +138,6 @@ public class DataTransfer {
       Window.alert(ERR_MSG + e.getMessage());
     }
   }
-  
 
   /**
    * Makes a pair of asynchronous HTTP GET requests to retrieve model data and
@@ -182,73 +178,12 @@ public class DataTransfer {
   }
 
   /**
-   * Makes an asynchronous HTTP request to POST a JSON file from the server.
+   * Makes an asynchronous HTTP request to POST a model to the server.
    * 
    * @param data the DataManager object for the WMT session
-   * @param fn a JSON file name
-   * @param the file type: component, parameter or model
+   * @param modelName the name the user gave the model
    */
-  public static void post(final DataManager data, String fn, String ft) {
-
-  }
-
-  /**
-   * Makes an asynchronous HTTP request to get a JSON file from the server.
-   * 
-   * @param data the DataManager object for the WMT session
-   * @param fn a JSON file name
-   * @param ft the file type: component, parameter or model
-   */
-  public static void get(final DataManager data, String fn, String ft) {
-
-    // Helpful locals.
-    final String fileType = ft;
-    String fileName = fn;
-    String jsonURL = DATA_URL + fileName;
-    GWT.log(jsonURL);
-
-    RequestBuilder builder =
-        new RequestBuilder(RequestBuilder.GET, URL.encode(jsonURL));
-
-    try {
-      @SuppressWarnings("unused")
-      Request request = builder.sendRequest(null, new RequestCallback() {
-
-        @Override
-        public void onResponseReceived(Request request, Response response) {
-          if (Response.SC_OK == response.getStatusCode()) {
-            String rtxt = response.getText();
-            String prefix = fileType + ": ";
-            try {
-              if (fileType == "component") {
-                ComponentDescriptions json = parse(rtxt);
-                data.setComponents(json);
-                GWT.log(prefix + data.getComponents().get(0).getName());
-              }
-              if (fileType == "parameter") {
-                ComponentParameters json = parse(rtxt);
-                data.setParameters(json.getId(), json);
-                GWT.log(prefix + data.getParameters(json.getId()).getId());
-              }
-            } catch (Exception e) {
-              GWT.log("Error:" + e.toString());
-            }
-          } else {
-            String msg =
-                response.getStatusCode() + " : " + response.getStatusText();
-            Window.alert(msg);
-          }
-        }
-
-        @Override
-        public void onError(Request request, Throwable exception) {
-          Window.alert(ERR_MSG + exception.getMessage());
-        }
-      });
-
-    } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
-    }
+  public static void postModel(DataManager data, String modelName) {
 
   }
   
@@ -297,7 +232,7 @@ public class DataTransfer {
 
     // Put the file back on the server.
     // XXX Hacky.
-    post(data, model.getName() + ".json", "model");
+    postModel(data, model.getName());
 
     // ModelTree tree = data.getModelTree();
     //
@@ -328,12 +263,12 @@ public class DataTransfer {
       if (Response.SC_OK == response.getStatusCode()) {
 
         String rtxt = response.getText();
-        ComponentListJSO json = parse(rtxt);
+        ComponentListJSO jso = parse(rtxt);
 
         // Load the list of components into the DataManager. At the same time,
         // start pulling down data for the components. Asynchronicity is cool!
-        for (int i = 0; i < json.getComponents().length(); i++) {
-          String componentId = json.getComponents().get(i);
+        for (int i = 0; i < jso.getComponents().length(); i++) {
+          String componentId = jso.getComponents().get(i);
           data.componentIdList.add(componentId);
           getComponent(data, componentId);
         }
@@ -370,11 +305,8 @@ public class DataTransfer {
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
         String rtxt = response.getText();
-        Window.alert(rtxt);
-//        ModelJSO json = parse(rtxt);
-//        GWT.log("name = " + json.getName());
-//        GWT.log("model id = " + json.getModelId());
-//        GWT.log("owner = " + json.getOwner());
+        ComponentJSO jso = parse(rtxt);
+        data.setComponent(jso);
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "
@@ -408,12 +340,12 @@ public class DataTransfer {
       if (Response.SC_OK == response.getStatusCode()) {
 
         String rtxt = response.getText();
-        ModelListJSO json = parse(rtxt);
+        ModelListJSO jso = parse(rtxt);
 
-        // Load the list of models into the DataManager.
-        for (int i = 0; i < json.getModels().length(); i++) {
-          data.modelIdList.add(json.getModels().get(i).getModelId());
-          data.modelNameList.add(json.getModels().get(i).getName());
+        // Load the list of models (alphabetical in API) into the DataManager.
+        for (int i = 0; i < jso.getModels().length(); i++) {
+          data.modelIdList.add(jso.getModels().get(i).getModelId());
+          data.modelNameList.add(jso.getModels().get(i).getName());
         }
         
       } else {
@@ -449,10 +381,8 @@ public class DataTransfer {
       if (Response.SC_OK == response.getStatusCode()) {
         String rtxt = response.getText();
         Window.alert(rtxt);
-//        ModelJSO json = parse(rtxt);
-//        GWT.log("name = " + json.getName());
-//        GWT.log("model id = " + json.getModelId());
-//        GWT.log("owner = " + json.getOwner());
+        ModelJSO jso = parse(rtxt);
+        data.setModel(jso);
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "

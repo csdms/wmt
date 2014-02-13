@@ -38,12 +38,12 @@ public class ComponentList extends Grid implements DragStartHandler,
    */
   public ComponentList(DataManager data) {
 
-    super(data.getComponents().length(), 1);
+    super(data.getComponents().size(), 1);
     this.data = data;
-    this.cells = new DragCell[data.getComponents().length()];
+    this.cells = new DragCell[data.getComponents().size()];
 
-    for (int i = 0; i < data.getComponents().length(); i++) {
-      cells[i] = new DragCell(data.getComponents().get(i));
+    for (int i = 0; i < data.getComponents().size(); i++) {
+      cells[i] = new DragCell(data.getComponent(i));
       this.setWidget(i, 0, cells[i]);
     }
 
@@ -63,9 +63,9 @@ public class ComponentList extends Grid implements DragStartHandler,
   }
 
   /**
-   * Determines which Component in the ComponentList has been clicked. If the 
-   * Shift key is held down, attempt to match the selected Component with
-   * an open "uses" port in the ModelTree.
+   * Determines which Component in the ComponentList has been clicked. If the
+   * Shift key is held down, attempt to match the selected Component with an
+   * open "uses" port in the ModelTree.
    */
   @Override
   public void onClick(ClickEvent event) {
@@ -73,7 +73,7 @@ public class ComponentList extends Grid implements DragStartHandler,
     HTMLTable.Cell tableCell =
         ((HTMLTable) event.getSource()).getCellForEvent(event);
     Component component =
-        new Component(data.getComponents().get(tableCell.getRowIndex()));
+        new Component(data.getComponent(tableCell.getRowIndex()));
     GWT.log("Selected in ComponentList: " + component.getName());
 
     if (event.isShiftKeyDown()) {
@@ -163,9 +163,8 @@ public class ComponentList extends Grid implements DragStartHandler,
 
       Boolean portMatch = false;
 
-      ComponentJSO componentJso = data.getComponents().get(cells[i].getId());
+      ComponentJSO componentJso = data.getComponent(i);
       Integer nPortsProvided = componentJso.getPortsProvided().length();
-      // GWT.log(componentJso.getName() + ": " + nPortsProvided.toString());
 
       Integer portIndex = 0;
       while ((portIndex < nPortsProvided) && !portMatch) {

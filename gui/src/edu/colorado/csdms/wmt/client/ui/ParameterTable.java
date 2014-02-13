@@ -47,24 +47,24 @@ public class ParameterTable extends FlexTable {
     setComponentId(data.getSelectedComponent());
 
     // Return if the selected component doesn't have parameters.
-    if (data.getParameters(componentId) == null) {
+    if (data.getComponent(componentId).getParameters() == null) {
       clearTable();
       Window.alert("No parameters defined for this component.");
       return;
     }
 
     // Set the component name on the viewSouth tab.
-    String componentName =
-        data.getParameters(componentId).get("simulation_name").getValue()
-            .getDefault();
-    String tabTitle = "Parameters :: " + componentName;
+    String componentName = data.getComponent(componentId).getName();
+    String tabTitle = "Parameters (" + componentName + ")";
     data.getPerspective().getViewEast().setTabText(0, tabTitle);
 
     // Build the parameter table.
-    Integer nParameters = data.getParameters(componentId).length();
+    Integer nParameters =
+        data.getComponent(componentId).getParameters().length();
     Integer parameterIndex = 0;
     for (int i = 0; i < nParameters; i++) {
-      ParameterJSO parameter = data.getParameters(componentId).get(i);
+      ParameterJSO parameter =
+          data.getComponent(componentId).getParameters().get(i);
       if (parameter.getKey().matches("simulation_name")) {
         continue;
       }
@@ -85,7 +85,7 @@ public class ParameterTable extends FlexTable {
   /**
    * Stores the modified value of a parameter of a component in the WMT
    * DataManager.
-   *  
+   * 
    * @param parameter the ParameterJSO object for the parameter being modified
    * @param value the new parameter value, a String
    */
@@ -93,7 +93,8 @@ public class ParameterTable extends FlexTable {
     // TODO Massive amounts of checking on value.
     String key = parameter.getKey();
     GWT.log(componentId + ": " + key + ": " + value);
-    data.getParameters(componentId).get(key).getValue().setDefault(value);
+    data.getComponent(componentId).getParameter(key).getValue().setDefault(
+        value);
   }
 
   /**
