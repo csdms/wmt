@@ -4,7 +4,9 @@
 package edu.colorado.csdms.wmt.client.ui;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.user.client.Window;
@@ -14,7 +16,7 @@ import edu.colorado.csdms.wmt.client.data.ModelJSO;
 
 /**
  * A class for storing and sharing data, as well as the state of UI elements,
- * within WMT.
+ * within {@link WMT}.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -25,7 +27,7 @@ public class DataManager {
   private ModelTree modelTree;
   private ParameterTable parameterTable;
 
-  private LinkedHashMap<String, ComponentJSO> components;
+  private List<ComponentJSO> components;
   private String draggedComponent;
   private String selectedComponent;
   private ModelJSO model;
@@ -41,20 +43,20 @@ public class DataManager {
    */
   public DataManager() {
     componentIdList = new ArrayList<String>();
-    components = new LinkedHashMap<String, ComponentJSO>();
+    components = new ArrayList<ComponentJSO>();
     modelIdList = new ArrayList<Integer>();
     modelNameList = new ArrayList<String>();
   }
 
   /**
-   * Returns the Perspective object used to organize the WMT views.
+   * Returns the {@link Perspective} object used to organize the WMT views.
    */
   public Perspective getPerspective() {
     return perspective;
   }
 
   /**
-   * Sets the Perspective object used to organize the WMT views.
+   * Sets the {@link Perspective} object used to organize the WMT views.
    * 
    * @param perspective the perspective to set
    */
@@ -63,61 +65,97 @@ public class DataManager {
   }
 
   /**
-   * Returns the ComponentJSO object matching the given component id.
+   * A convenience method that returns the {@link ComponentJSO} object
+   * matching the given component id.
    * 
    * @param componentId the id of the desired component, a String.
    */
   public ComponentJSO getComponent(String componentId) {
-    return components.get(componentId);
+    Iterator<ComponentJSO> iter = components.iterator();
+    while (iter.hasNext()) {
+      ComponentJSO component = (ComponentJSO) iter.next();
+      if (component.getId().matches(componentId)) {
+        return component;
+      }
+    }
+    return null;
   }
 
   /**
-   * Returns the <em>all</em> the components in a LinkedHashMap of
-   * componentId-ComponentJSO pairs.
+   * A convenience method that returns the {@link ComponentJSO} object at the
+   * given position in the ArrayList of components.
+   * 
+   * @param index an offset into the ArrayList of components.
    */
-  public LinkedHashMap<String, ComponentJSO> getComponents() {
+  public ComponentJSO getComponent(Integer index) {
+    return components.get(index);
+  }
+  
+  /**
+   * Returns the <em>all</em> the components in the ArrayList of
+   * {@link ComponentJSO} objects.
+   * 
+   * @return
+   */
+  public List<ComponentJSO> getComponents() {
     return this.components;
   }
-
+  
   /**
-   * Adds a component to the LinkedHashMap of components.
+   * A convenience method that adds a component to the ArrayList of
+   * components.
    * <p>
-   * Once all the components have been pulled from the server, initialize the
-   * ComponentList.
+   * Once all the components have been pulled from the server, sort them
+   * alphabetically and initialize the {@link ComponentList}.
    * 
    * @param component the component to add, a ComponentJSO object
    */
   public void setComponent(ComponentJSO component) {
-    this.components.put(component.getId(), component);
+    this.components.add(component);
 
     // Sometimes get error 500.
     Window.alert(component.getId() + " " + this.components.size() + "/"
         + this.componentIdList.size());
     
     if (this.components.size() == this.componentIdList.size()) {
+      sortComponents();
       perspective.initializeComponentList();
     }
   }
 
   /**
-   * Sets a LinkedHashMap of componentId-ComponentJSO pairs representing
-   * <em>all</em> the components.
+   * Sets an ArrayList of ComponentJSOs representing <em>all</em> the
+   * components.
    * 
    * @param components all your components are belong to us
    */
-  public void setComponents(LinkedHashMap<String, ComponentJSO> components) {
+  public void setComponents(List<ComponentJSO> components) {
     this.components = components;
   }
 
   /**
-   * Returns the model displayed in the ModelTree, a ModelJSO object.
+   * Performs an in-place sort of the ArrayList of components using a
+   * {@link Comparator}.
+   */
+  public void sortComponents() {
+    Collections.sort(components, new Comparator<ComponentJSO>() {
+      @Override
+      public int compare(ComponentJSO o1, ComponentJSO o2) {
+        return o1.getName().compareTo(o2.getName());
+      }
+    });
+  }
+  
+  /**
+   * Returns the model displayed in the {@link ModelTree}, a {@link ModelJSO}
+   * object.
    */
   public ModelJSO getModel() {
     return model;
   }
 
   /**
-   * Sets the model displayed in the ModelTree.
+   * Sets the model displayed in the {@link ModelTree}.
    * 
    * @param model the model to set, a ModelJSO object
    */
@@ -142,16 +180,16 @@ public class DataManager {
   }
 
   /**
-   * Returns a reference to the ComponentList used in the "Components" tab of a
-   * WMT session.
+   * Returns a reference to the {@link ComponentList} used in the "Components"
+   * tab of a WMT session.
    */
   public ComponentList getComponentList() {
     return componentList;
   }
 
   /**
-   * Stores a reference to the ComponentList used in the "Components" tab of a
-   * WMT session.
+   * Stores a reference to the {@link ComponentList} used in the "Components"
+   * tab of a WMT session.
    * 
    * @param componentList the ComponentList instance
    */
@@ -160,14 +198,14 @@ public class DataManager {
   }
 
   /**
-   * Returns a reference to the ModelTree used in a WMT session.
+   * Returns a reference to the {@link ModelTree} used in a WMT session.
    */
   public ModelTree getModelTree() {
     return modelTree;
   }
 
   /**
-   * Stores a reference to the ModelTree used in a WMT session.
+   * Stores a reference to the {@link ModelTree} used in a WMT session.
    * 
    * @param modelTree the ModelTree instance
    */
@@ -176,16 +214,16 @@ public class DataManager {
   }
 
   /**
-   * Returns a reference to the ParameterTable used in the "Parameters" tab of a
-   * WMT session.
+   * Returns a reference to the {@link ParameterTable} used in the
+   * "Parameters" tab of a WMT session.
    */
   public ParameterTable getParameterTable() {
     return parameterTable;
   }
 
   /**
-   * Stores a reference to the ParameterTable used in the "Parameters" tab of a
-   * WMT session.
+   * Stores a reference to the {@link ParameterTable} used in the "Parameters"
+   * tab of a WMT session.
    * 
    * @param parameterTable the parameterTable to set
    */
@@ -194,7 +232,7 @@ public class DataManager {
   }
 
   /**
-   * Returns the id of the Component (a String) being dragged from the
+   * Returns the id of the {@link Component} (a String) being dragged from the
    * "Components" tab of WMT.
    */
   public String getDraggedComponent() {
@@ -202,7 +240,7 @@ public class DataManager {
   }
 
   /**
-   * Stores the id of the Component (a String) being dragged from the
+   * Stores the id of the {@link Component} (a String) being dragged from the
    * "Components" tab of WMT.
    * 
    * @param draggedComponent the id of the dragged component, a String
@@ -212,15 +250,16 @@ public class DataManager {
   }
 
   /**
-   * Returns the id of the Component (a String) that is currently selected in
-   * the ModelTree.
+   * Returns the id of the {@link Component} (a String) that is currently
+   * selected in the {@link ModelTree}.
    */
   public String getSelectedComponent() {
     return selectedComponent;
   }
 
   /**
-   * Stores the id of the Component that is currently selected in the ModelTree.
+   * Stores the id of the {@link Component} that is currently selected in the
+   * {@link ModelTree}.
    * 
    * @param selectedComponent the id of the Component to set, a String
    */

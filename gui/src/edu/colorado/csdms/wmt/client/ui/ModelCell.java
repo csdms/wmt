@@ -216,13 +216,11 @@ public class ModelCell extends Grid implements DropHandler {
       parentTreeItem.removeItems();
     }
 
-    // Get the component id from the drag element, then determine the
-    // component from the id using a helper method defined on the
-    // DataManager object.
+    // Get the component id from the drag element, then determine which
+    // component it is using a helper method defined on the DataManager object.
     String componentId = event.getData("text");
     ModelTree tree = (ModelTree) parentTreeItem.getTree();
-    Component component =
-        new Component(tree.data.getComponents().get(componentId));
+    Component component = new Component(tree.data.getComponent(componentId));    
 
     // Install the Component in the targeted TreeItem.
     tree.addComponent(component, parentTreeItem);
@@ -329,7 +327,7 @@ public class ModelCell extends Grid implements DropHandler {
       // the current uses port.
       ModelTree tree = (ModelTree) ModelCell.this.getParent();
       String componentId = tree.data.getDraggedComponent();
-      ComponentJSO componentJSO = tree.data.getComponents().get(componentId);
+      ComponentJSO componentJSO = tree.data.getComponent(componentId);
       Boolean portsMatch = false;
       for (int i = 0; i < componentJSO.getPortsProvided().length(); i++) {
         if (usesPortId.matches(componentJSO.getPortsProvided().get(i).getId())) {
@@ -458,7 +456,7 @@ public class ModelCell extends Grid implements DropHandler {
       // the current uses port.
       ModelTree tree = (ModelTree) ModelCell.this.getParent();
       String componentId = tree.data.getDraggedComponent();
-      ComponentJSO componentJSO = tree.data.getComponents().get(componentId);
+      ComponentJSO componentJSO = tree.data.getComponent(componentId);
       Boolean portsMatch = false;
       for (int i = 0; i < componentJSO.getPortsProvided().length(); i++) {
         if (usesPortId.matches(componentJSO.getPortsProvided().get(i).getId())) {
@@ -521,8 +519,9 @@ public class ModelCell extends Grid implements DropHandler {
 
       /*
        * Clicking the delete button in the ControlCell removes the Component, as
-       * well as anything beneath it in the ModelTree. <p> TODO This is really
-       * close to ModelTree#addComponent. Make #removeComponent?
+       * well as anything beneath it in the ModelTree.
+       * 
+       * TODO This is really close to ModelTree#addComponent. Make #removeComponent?
        */
       deleteButton.addClickHandler(new ClickHandler() {
         @Override

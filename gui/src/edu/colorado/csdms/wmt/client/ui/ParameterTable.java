@@ -55,7 +55,7 @@ public class ParameterTable extends FlexTable {
 
     // Set the component name on the viewSouth tab.
     String componentName = data.getComponent(componentId).getName();
-    String tabTitle = "Parameters :: " + componentName;
+    String tabTitle = "Parameters (" + componentName + ")";
     data.getPerspective().getViewEast().setTabText(0, tabTitle);
 
     // Build the parameter table.

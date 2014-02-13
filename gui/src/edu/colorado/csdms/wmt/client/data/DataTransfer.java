@@ -307,12 +307,6 @@ public class DataTransfer {
         String rtxt = response.getText();
         ComponentJSO jso = parse(rtxt);
         data.setComponent(jso);
-
-        // Window.alert(rtxt);
-        // ModelJSO jso = parse(rtxt);
-        // GWT.log("name = " + jso.getName());
-        // GWT.log("model id = " + jso.getModelId());
-        // GWT.log("owner = " + jso.getOwner());
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "
@@ -348,7 +342,7 @@ public class DataTransfer {
         String rtxt = response.getText();
         ModelListJSO jso = parse(rtxt);
 
-        // Load the list of models into the DataManager.
+        // Load the list of models (alphabetical in API) into the DataManager.
         for (int i = 0; i < jso.getModels().length(); i++) {
           data.modelIdList.add(jso.getModels().get(i).getModelId());
           data.modelNameList.add(jso.getModels().get(i).getName());
