@@ -29,10 +29,10 @@ public class DataTransfer {
 
   private static final String BASE_URL = "http://csdms.colorado.edu/wmt/";
   private static final String MODEL_LIST_URL = BASE_URL + "models/list";
-  private static final String MODEL_OPEN_URL = BASE_URL + "models/open";
-  private static final String MODEL_SHOW_URL = BASE_URL + "models/show";
+  private static final String MODEL_OPEN_URL = BASE_URL + "models/open/";
+  private static final String MODEL_SHOW_URL = BASE_URL + "models/show/";
   private static final String COMPONENT_LIST_URL = BASE_URL + "components/list";
-  private static final String COMPONENT_SHOW_URL = BASE_URL + "components/show";
+  private static final String COMPONENT_SHOW_URL = BASE_URL + "components/show/";
 
   /**
    * A JSNI method for creating a String from a JavaScriptObject.
@@ -108,7 +108,7 @@ public class DataTransfer {
   @SuppressWarnings("unused")
   public static void getComponent(DataManager data, String componentId) {
 
-    String url = COMPONENT_SHOW_URL + "/" + componentId;
+    String url = COMPONENT_SHOW_URL + componentId;
 
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.GET, URL.encode(url));
