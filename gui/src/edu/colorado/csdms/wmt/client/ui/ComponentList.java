@@ -7,6 +7,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DragStartEvent;
 import com.google.gwt.event.dom.client.DragStartHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -38,12 +39,13 @@ public class ComponentList extends Grid implements DragStartHandler,
    */
   public ComponentList(DataManager data) {
 
-    super(data.getComponents().length(), 1);
+    super(data.getComponents().size(), 1);
     this.data = data;
-    this.cells = new DragCell[data.getComponents().length()];
+    this.cells = new DragCell[data.getComponents().size()];
 
-    for (int i = 0; i < data.getComponents().length(); i++) {
-      cells[i] = new DragCell(data.getComponents().get(i));
+    for (int i = 0; i < data.getComponents().size(); i++) {
+      cells[i] =
+          new DragCell(data.getComponents().get(data.componentIdList.get(i)));
       this.setWidget(i, 0, cells[i]);
     }
 

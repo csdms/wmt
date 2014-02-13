@@ -223,6 +223,7 @@ public class DataTransfer {
             try {
               if (fileType == "new") {
                 ComponentJSO json = parse(rtxt);
+                data.setComponent(json);
                 GWT.log("name = " + json.getName());
                 GWT.log("id = " + json.getId());
                 GWT.log("url = " + json.getURL());
@@ -236,13 +237,13 @@ public class DataTransfer {
               }
               if (fileType == "component") {
                 ComponentDescriptions json = parse(rtxt);
-                data.setComponents(json);
-                GWT.log(prefix + data.getComponents().get(0).getName());
+//                data.setComponents(json);
+//                GWT.log(prefix + data.getComponents().get(0).getName());
               }
               if (fileType == "parameter") {
                 ComponentParameters json = parse(rtxt);
-                data.setParameters(json.getId(), json);
-                GWT.log(prefix + data.getParameters(json.getId()).getId());
+//                data.setParameters(json.getId(), json);
+//                GWT.log(prefix + data.getParameters(json.getId()).getId());
               }
             } catch (Exception e) {
               GWT.log("Error:" + e.toString());
@@ -384,11 +385,14 @@ public class DataTransfer {
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
         String rtxt = response.getText();
-        //Window.alert(rtxt);
-//        ModelJSO json = parse(rtxt);
-//        GWT.log("name = " + json.getName());
-//        GWT.log("model id = " + json.getModelId());
-//        GWT.log("owner = " + json.getOwner());
+        ComponentJSO json = parse(rtxt);
+        data.setComponent(json);
+
+        // Window.alert(rtxt);
+        // ModelJSO json = parse(rtxt);
+        // GWT.log("name = " + json.getName());
+        // GWT.log("model id = " + json.getModelId());
+        // GWT.log("owner = " + json.getOwner());
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "

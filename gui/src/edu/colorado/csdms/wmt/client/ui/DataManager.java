@@ -4,10 +4,13 @@
 package edu.colorado.csdms.wmt.client.ui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import edu.colorado.csdms.wmt.client.data.ComponentDescriptions;
+import com.google.gwt.user.client.Window;
+
+import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ComponentParameters;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 
@@ -27,9 +30,14 @@ public class DataManager {
   private String draggedComponent;
   private String selectedComponent;
 
-  private ComponentDescriptions componentDescriptions;
-  private LinkedHashMap<String, ComponentParameters> componentParameters =
-      new LinkedHashMap<String, ComponentParameters>();
+  // To be obsoleted.
+//  private ComponentDescriptions componentDescriptions;
+//  private LinkedHashMap<String, ComponentParameters> componentParameters =
+//      new LinkedHashMap<String, ComponentParameters>();
+  
+  // New.
+  private LinkedHashMap<String, ComponentJSO> components;
+  
   private ModelJSO model;
   private String modelString; // stringified JSON
 
@@ -37,16 +45,21 @@ public class DataManager {
   public List<String> componentIdList;
   public List<Integer> modelIdList;
   public List<String> modelNameList;
-  public LinkedHashMap<String, String> files;
+  
+  // To be obsoleted.
+//  public LinkedHashMap<String, String> files;
 
   /**
    * Initializes the DataManager object used in a WMT session.
    */
   public DataManager() {
     componentIdList = new ArrayList<String>();
+    components = new LinkedHashMap<String, ComponentJSO>();
     modelIdList = new ArrayList<Integer>();
     modelNameList = new ArrayList<String>();
-    files = new LinkedHashMap<String, String>();
+    
+    // To be obsoleted.
+//    files = new LinkedHashMap<String, String>();
   }
 
   /**
@@ -70,10 +83,17 @@ public class DataManager {
    * ComponentDescriptions object, which holds a JsArray of ComponentJSO objects
    * read from "components.json".
    */
-  public ComponentDescriptions getComponents() {
-    return componentDescriptions;
+//  public ComponentDescriptions getComponents() {
+//    return componentDescriptions;
+//  }
+  public ComponentJSO getComponent(String componentId) {
+    return components.get(componentId);
   }
 
+  public HashMap<String, ComponentJSO> getComponents() {
+    return this.components;
+  }
+  
   /**
    * Stores the data on all the components available to WMT. This is a
    * ComponentDescriptions object, which holds a JsArray of ComponentJSO objects
@@ -84,11 +104,24 @@ public class DataManager {
    * 
    * @param componentDescriptions a ComponentDescriptions object
    */
-  public void setComponents(ComponentDescriptions componentDescriptions) {
-    this.componentDescriptions = componentDescriptions;
-    perspective.initializeComponentList(); // TODO Think about this!
+//  public void setComponents(ComponentDescriptions componentDescriptions) {
+//    this.componentDescriptions = componentDescriptions;
+//    perspective.initializeComponentList(); // TODO Think about this!
+//  }
+  public void setComponent(ComponentJSO component) {
+    this.components.put(component.getId(), component);
+    // If the number of components read = number in list, then initialize.
+    Window.alert(component.getId() + " " + this.components.size() + "/"
+        + this.componentIdList.size());
+    if (this.components.size() == this.componentIdList.size()) {
+      perspective.initializeComponentList();
+    }
   }
 
+  public void setComponents(LinkedHashMap<String, ComponentJSO> components) {
+    this.components = components;
+  }
+  
   /**
    * Returns the set of parameters for a component, given by its id. This is a
    * ComponentParameters object, which holds a JsArray of ParameterJSO objects
@@ -96,9 +129,9 @@ public class DataManager {
    * 
    * @param componentId a component id, a String
    */
-  public ComponentParameters getParameters(String componentId) {
-    return componentParameters.get(componentId);
-  }
+//  public ComponentParameters getParameters(String componentId) {
+//    return componentParameters.get(componentId);
+//  }
 
   /**
    * Stores the set of parameters, given by a ComponentParameters object, which
@@ -107,10 +140,10 @@ public class DataManager {
    * @param componentId the id of the component, a String
    * @param componentParameters a ComponentParameters object for the parameter
    */
-  public void setParameters(String componentId,
-      ComponentParameters componentParameters) {
-    this.componentParameters.put(componentId, componentParameters);
-  }
+//  public void setParameters(String componentId,
+//      ComponentParameters componentParameters) {
+//    this.componentParameters.put(componentId, componentParameters);
+//  }
 
   /**
    * TODO
