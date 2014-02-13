@@ -8,8 +8,7 @@
     }
   ],
   "uses":[
-  ]
-  },
+  ],
   "parameters":[
     {
       "key":"simulation_name",
