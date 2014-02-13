@@ -4,6 +4,8 @@ from ..render import render
 
 from ..validators import (not_too_long, not_bad_json, )
 from ..cca import rc_from_json
+from ..models.components import (get_component_names, get_component,
+                                 IdError)
 
 
 class Convert(object):
@@ -60,15 +62,17 @@ class Show(object):
     def GET(self):
         user_data = web.input(element='palette')
         if user_data.element == 'palette':
-            return json.dumps(PALETTE.keys())
-        elif user_data.element in PALETTE:
-            return json.dumps(PALETTE[user_data.element])
+            return json.dumps(get_component_names())
         elif user_data.element == 'models':
-            return json.dumps([dict(id=p.id, name=p.name) for p in models.get_models()])
+            return json.dumps(
+                [dict(id=p.id, name=p.name) for p in models.get_models()])
         elif user_data.element == 'users':
             return json.dumps([u.username for u in users.get_users()])
         else:
-            return '%s: Unknown element' % user_data.element
+            try:
+                return json.dumps(get_component(user_data.element))
+            except IdError:
+                return '%s: Unknown element' % user_data.element
 
 
 submit_form = web.form.Form(

@@ -1,6 +1,6 @@
 import json
 
-from ..palette import PALETTE
+from ..config import palette
 
 
 class Error(Exception):
@@ -16,11 +16,11 @@ class IdError(Error):
 
 
 def get_components():
-    return PALETTE.values()
+    return palette.values()
 
 
 def get_component_names(sort=False):
-    names = list(PALETTE.keys())
+    names = list(palette.keys())
     if sort:
         names.sort()
     return names
@@ -28,6 +28,6 @@ def get_component_names(sort=False):
 
 def get_component(name):
     try:
-        return PALETTE[name]
+        return palette[name]
     except KeyError:
         raise IdError(name)

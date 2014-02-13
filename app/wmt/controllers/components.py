@@ -26,6 +26,6 @@ class Dump(object):
 class Fill(object):
     def GET(self, name):
         try:
-            return json.dumps(PALETTE[name])
+            return json.dumps(get_component(name))
         except KeyError:
             raise web.notfound()

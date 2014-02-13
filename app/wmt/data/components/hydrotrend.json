@@ -1315,5 +1315,8 @@
         ]
       }
     }
+  ],
+  "input_files": [
+    "hydrotrend.in.tmpl"
   ]
 }

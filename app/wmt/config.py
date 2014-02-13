@@ -1,4 +1,7 @@
 import web
+import os
+
+from .cca.json import load_component_from_json
 
 
 def read_config_file(path_to_file):
@@ -28,5 +31,20 @@ def read_site_config_file(*args):
     return read_config_file(path)
 
 
+def load_palette(palette_dir):
+    palette = {}
+    for file in os.listdir(palette_dir):
+        try:
+            desc = load_component_from_json(
+                os.path.join(palette_dir, file))
+        except ValueError:
+            pass
+        else:
+            palette[desc['id']] = desc
+
+    return palette
+
+
 site = read_site_config_file()
 db = web.database(dbn='sqlite', db=site['database'])
+palette = load_palette(os.path.join(site['data'], 'components'))
