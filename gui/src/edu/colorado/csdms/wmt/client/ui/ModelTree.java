@@ -1,7 +1,8 @@
 package edu.colorado.csdms.wmt.client.ui;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.DragOverEvent;
@@ -25,7 +26,7 @@ import edu.colorado.csdms.wmt.client.data.Port;
 public class ModelTree extends Tree implements DragOverHandler, DropHandler {
 
   public DataManager data; // experimenting with a public member variable
-  private Vector<ModelCell> openModelCells;
+  private List<ModelCell> openModelCells;
 
   /**
    * Creates a ModelTree with an open "driver" port.
@@ -35,7 +36,7 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
   public ModelTree(DataManager data) {
 
     this.data = data;
-    this.openModelCells = new Vector<ModelCell>();
+    this.openModelCells = new ArrayList<ModelCell>();
 
     initializeTree();
     this.data.setModelTree(this);
@@ -135,13 +136,14 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
   /**
    * Iterate through the TreeItems of this ModelTree, finding what ModelCells
    * have open PortCells. Add the cell to the openModelCells Vector.
+   * @return 
    * 
    * @return a Vector of ModelCells with open ports.
    */
-  public Vector<ModelCell> findOpenModelCells() {
+  public List<ModelCell> findOpenModelCells() {
 
     // Always start with a fresh list.
-    openModelCells.removeAllElements();
+    openModelCells.clear();
 
     Iterator<TreeItem> iter = this.treeItemIterator();
     while (iter.hasNext()) {
