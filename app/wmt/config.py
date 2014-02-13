@@ -1,38 +1,4 @@
 import web
-import yaml
-
-
-#from .paths import PREFIX
-
-def wmt_conf(**kwds):
-    prefix = kwds.default('prefix', PREFIX)
-    database_dir = kwds.default('database_dir', os.path.join(prefix, 'db'))
-
-    from string import Template
-    contents = Template("""
-wmt:
-    database_dir: ${prefix}/db
-    data_dir: ${prefix}/data
-    """)
-    return contents.substitute(prefix=prefix)
-
-
-def load_wmt_conf(file):
-    with open(file, 'r') as conf_file:
-        conf = yaml.load(conf_file.read())
-    return conf
-
-
-def read_site_conf(site_prefix):
-    from ConfigParser import RawConfigParser
-
-    conf_file_path = os.path.join(site_prefix, 'conf', 'wmt.ini')
-    conf = RawConfigParser()
-
-    #with open(conf_file_path, 'r') as conf_file:
-    #    conf = yaml.load(conf_file.read())
-
-    return conf
 
 
 def read_config_file(path_to_file):
@@ -45,14 +11,6 @@ def read_config_file(path_to_file):
     site = dict(config.items('wmt'))
     site['pw'] = CryptContext.from_path(path_to_file, section='passlib')
     return site
-
-
-def write_config_file(path_to_file, items):
-    from ConfigParser import RawConfigParser
-    config = RawConfigParser()
-    for item in items:
-        conf.set('wmt', *items)
-    config.write(path_to_file)
 
 
 def read_site_config_file(*args):
