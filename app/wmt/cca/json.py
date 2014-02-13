@@ -5,8 +5,6 @@ import json
 
 from .rc_file import ResourceFile
 
-from ..config import site
-
 
 def check_json_is_valid(text):
     try:
@@ -67,6 +65,15 @@ def load_component_from_json(file):
             raise ValueError(file)
 
 
+def load_component_defaults(file):
+    defaults = {}
+    desc = load_component_from_json(file)
+    for parameter in desc['parameters']:
+        defaults[parameter['key']] = parameter['value']['default']
+
+    return defaults
+
+
 def rc_from_json(text):
     try:
         model = load_model_from_json(text)
@@ -88,24 +95,3 @@ def rc_from_json(text):
                       (component, key, provides_component, provides_port))
 
     return rc.as_string()
-
-
-def get_palette():
-    palette = []
-    for file in os.listdir(site['data']):
-        try:
-            desc = load_component_from_json(os.path.join(site['DATA'], file))
-        except ValueError:
-            pass
-        else:
-            palette.append(desc['id'])
-
-    return palette
-
-
-def get_component(name):
-    json_file = os.path.join(site['DATA'], name + '.json')
-    try:
-        return json.loads(open(json_file, 'r').read())
-    except IOError:
-        raise
