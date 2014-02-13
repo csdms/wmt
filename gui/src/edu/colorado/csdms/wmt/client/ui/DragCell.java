@@ -3,14 +3,21 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import java.util.Vector;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DragStartEvent;
 import com.google.gwt.event.dom.client.DragStartHandler;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.TreeItem;
 
+import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
+import edu.colorado.csdms.wmt.client.data.Port;
 
 /**
  * A draggable (using native GWT DnD) widget that displays a text item with a
@@ -34,9 +41,10 @@ public class DragCell extends Grid implements DragStartHandler {
    */
   public DragCell(ComponentJSO componentJSO) {
 
-    // A DragCell is a Grid with one row and two columns.
+    // A DragCell is a Grid with one row and two columns. And it's draggable.
     super(1, 2);
-        
+    this.getElement().setDraggable(Element.DRAGGABLE_TRUE);
+    
     // The name doesn't really do anything, though it is what GWT native DnD
     // shows on drag. The id is key -- it's what is picked up in the ModelTree
     // on drop. Use the id to figure out what model is being dragged, whether
@@ -60,8 +68,9 @@ public class DragCell extends Grid implements DragStartHandler {
     // Set a tooltip on the component.
     setTooltip(componentJSO);
 
-    this.getElement().setDraggable(Element.DRAGGABLE_TRUE);
+    // Associate event handlers.
     addDomHandler(this, DragStartEvent.getType());
+    grabCell.addClickHandler(new GrabCellClickHandler());
   }
 
   /**
@@ -132,9 +141,62 @@ public class DragCell extends Grid implements DragStartHandler {
     this.getGrabCell().setStyleDependentName("notallowed", !this.sensitive);
     this.getTextCell().setStyleDependentName("notallowed", !this.sensitive);
     
-    // TODO Not a big deal, but not working.
+    // TODO Not a huge deal, but this is not working.
     String isDraggable =
           this.sensitive ? Element.DRAGGABLE_TRUE : Element.DRAGGABLE_FALSE;
     this.getElement().setDraggable(isDraggable);
   }
+  
+  /**
+   * Handles click on the grabby handle button in a DragCell. Attempt to match
+   * the selected component with an open "uses" port in the ModelTree.
+   */
+  public class GrabCellClickHandler implements ClickHandler {
+    @Override
+    public void onClick(ClickEvent event) {
+
+      // Get the parent (the ComponentList) to get access to the DataManager,
+      // which will be needed below.
+      ComponentList parent = (ComponentList) DragCell.this.getParent();
+
+      // The selected component.
+      Component component =
+          new Component(parent.data.getComponent(DragCell.this.id));
+
+      // Find what "uses" ports in the ModelTree are currently open. If there
+      // are none, short-circuit the method.
+      Vector<ModelCell> openCells =
+          parent.data.getModelTree().findOpenModelCells();
+      if (openCells.size() == 0) {
+        return;
+      }
+
+      // In the special case of the driver being the only open "port", add
+      // the selected component and short-circuit the method.
+      if (openCells.get(0).getPortCell().getPort().getId().matches("driver")) {
+        TreeItem target = openCells.get(0).getParentTreeItem();
+        parent.data.getModelTree().addComponent(component, target);
+        target.setState(true);
+        return;
+      }
+
+      // Since this is a convenience, take the first provides port of the
+      // selected component.
+      Port port = component.getProvidesPorts()[0];
+      // GWT.log("Port provided: " + port.getId());
+
+      // Try to match a uses port with a provides port of the component.
+      for (int i = 0; i < openCells.size(); i++) {
+        ModelCell cell = openCells.get(i);
+        // GWT.log("Open port: " + cell.getPortCell().getPort().getId());
+        if (port.getId().matches(cell.getPortCell().getPort().getId())) {
+          // GWT.log("Port match!");
+          TreeItem target = cell.getParentTreeItem();
+          parent.data.getModelTree().addComponent(component, target);
+          target.setState(true);
+          break;
+        }
+      }
+    }
+  }  
 }
