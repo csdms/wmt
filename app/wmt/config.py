@@ -1,7 +1,7 @@
 import web
 import os
 
-from .cca.json import load_component_from_json
+from .utils.json import load_component
 
 
 def read_config_file(path_to_file):
@@ -35,8 +35,7 @@ def load_palette(palette_dir):
     palette = {}
     for file in os.listdir(palette_dir):
         try:
-            desc = load_component_from_json(
-                os.path.join(palette_dir, file))
+            desc = load_component(os.path.join(palette_dir, file))
         except ValueError:
             pass
         else:
