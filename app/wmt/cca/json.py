@@ -53,27 +53,6 @@ def component_connections(model, name):
     raise ValueError(name)
 
 
-def load_component_from_json(file):
-    try:
-        desc = json.loads(open(file, 'r').read())
-    except ValueError:
-        raise
-    else:
-        if desc.has_key('parameters'):
-            return desc
-        else:
-            raise ValueError(file)
-
-
-def load_component_defaults(file):
-    defaults = {}
-    desc = load_component_from_json(file)
-    for parameter in desc['parameters']:
-        defaults[parameter['key']] = parameter['value']['default']
-
-    return defaults
-
-
 def rc_from_json(text):
     try:
         model = load_model_from_json(text)
