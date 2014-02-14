@@ -3,6 +3,10 @@
  */
 package edu.colorado.csdms.wmt.client.data;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.http.client.Request;
@@ -12,8 +16,11 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.ui.DataManager;
+import edu.colorado.csdms.wmt.client.ui.ModelCell;
+import edu.colorado.csdms.wmt.client.ui.ModelTree;
 
 /**
  * A class that defines static methods for accessing the JSON files used to
@@ -69,6 +76,46 @@ public class DataTransfer {
 		return eval("(" + jsonStr + ")");
   }-*/;  
 
+  /**
+   * Returns a HashMap of entries used to build a HTTP query string.
+   * 
+   * @param modelName the name of the model, a String
+   * @param jsonStr the stringified JSON describing the model
+   */
+  private static HashMap<String, String> makeQueryEntries(String modelName,
+      String jsonStr) {
+    HashMap<String, String> m = new HashMap<String, String>();
+    m.put("name", modelName);
+    m.put("json", jsonStr);
+    return m;
+  }  
+
+  /**
+   * Builds a HTTP query string from a HashMap of key-value entries.
+   * 
+   * @param entries a HashMap of key-value pairs
+   * @return the query, as a String
+   */
+  private static String buildQueryString(HashMap<String, String> entries) {
+
+    StringBuilder sb = new StringBuilder();
+
+    Integer entryCount = 0;
+    for (Entry<String, String> entry : entries.entrySet()) {
+      if (entryCount > 0) {
+        sb.append("&");
+      }
+      String encodedName = URL.encodeQueryString(entry.getKey());
+      sb.append(encodedName);
+      sb.append("=");
+      String encodedValue = URL.encodeQueryString(entry.getValue());
+      sb.append(encodedValue);
+      entryCount++;
+    }
+
+    return sb.toString();
+  }  
+  
   /**
    * Makes an asynchronous HTTP GET request to retrieve the simple list of
    * components stored in the WMT database.
@@ -185,6 +232,12 @@ public class DataTransfer {
    */
   public static void postModel(DataManager data, String modelName) {
 
+    // XXX Model this on the DataTransfer#post in GWTandHTTP.
+
+    String msg =
+        "Model name: " + modelName + "; " + "Model JSON: "
+            + data.getModelString();
+    Window.alert(msg);
   }
   
   /**
@@ -194,54 +247,58 @@ public class DataTransfer {
    */
   public static void serialize(DataManager data) {
 
-    // Get the model that the ModelTree stored in the DataManager.
-    ModelJSO model = data.getModel();
-    GWT.log(model.getName());
-    GWT.log(((Integer) model.getComponents().length()).toString());
+    /*
+     * I'm not sure this method should be here. Maybe DataManager instead?
+     */
 
-    // Sneakily create a JsArray of ModelJSO objects. These are for the
-    // components that make up the model.
+    // Create a JsArray of ModelJSO objects for the components that make up
+    // the model.
     @SuppressWarnings("unchecked")
     JsArray<ModelJSO> components = (JsArray<ModelJSO>) ModelJSO.createArray();
-
-    // Create a series of new ModelJSO objects representing components in
-    // the model and push them into the components JsArray. When finished,
-    // set the component JsArray into the model.
-    String[] classNames = {"CEM", "Avulsion", "HydroTrend"};
-    String[] idNames = {"cem_0", "avulsion_0", "hydrotrend_0"};
-    for (int i = 0; i < classNames.length; i++) {
+    
+    // Iterate through the leaves of the ModelTree. For each leaf, create a
+    // new ModelJSO object to hold the component, its ports and its parameters.
+    // When loaded with information from the GUI, push the ModelJSO into the
+    // components JsArray and move to the next leaf.
+    ModelTree tree = data.getModelTree();
+    Iterator<TreeItem> iter = tree.treeItemIterator();
+    while (iter.hasNext()) {
+      
+      TreeItem treeItem = (TreeItem) iter.next();
+      ModelCell cell = (ModelCell) treeItem.getWidget();
+      Component component = cell.getComponentCell().getComponent();
+      ComponentJSO componentJSO = data.getComponent(component.getId()); // awkward
+      
       ModelJSO modelComponent = (ModelJSO) ModelJSO.createObject();
-      modelComponent.setClassName(classNames[i]);
-      modelComponent.setId(idNames[i]);
+      modelComponent.setId(componentJSO.getId());
+      modelComponent.setClassName(componentJSO.getName());
+      
+      // Get the values of the component's parameters. All that's needed for
+      // a ModelJSO are the key-value pairs.
+      Integer nParameters = componentJSO.getParameters().length();
+      for (int i = 0; i < nParameters; i++) {
+        String key = componentJSO.getParameters().get(i).getKey();
+        String value = componentJSO.getParameters().get(i).getValue().getDefault();
+        // TODO Write method to push these into ModelJSO.
+      }
+      
       components.push(modelComponent);
     }
+    
+    // Get the reference to the model stored in the DataManager. Set the 
+    // component JsArray into the model.
+    ModelJSO model = data.getModel();    
     model.setComponents(components);
-
-    // Check that the components are present, and that the count has been
-    // updated.
-    for (int i = 0; i < classNames.length; i++) {
-      GWT.log(model.getComponents().get(i).getClassName());
-    }
-    GWT.log(((Integer) model.getComponents().length()).toString());
-
-    // Stringify the JSON. This is what I'd like to write to a file. (Or
-    // transfer back to the server, however we do this.)
+    
+    // Stringify the ModelJSO object. Store the result (a String) in the
+    // DataManager.
+    // TODO Remove "name" object, leaving only "model".
     String modelString = stringify(model);
-    GWT.log(modelString);
+//    String modelString = stringify(model.getComponents()); // Close, but no.
     data.setModelString(modelString);
 
-    // Put the file back on the server.
-    // XXX Hacky.
+    // Post the model to the server.
     postModel(data, model.getName());
-
-    // ModelTree tree = data.getModelTree();
-    //
-    // Iterator<TreeItem> iter = tree.treeItemIterator();
-    // while (iter.hasNext()) {
-    // TreeItem treeItem = (TreeItem) iter.next();
-    // ModelCell cell = (ModelCell) treeItem.getWidget();
-    // GWT.log(cell.getComponentCell().getComponent().getName());
-    // }
   }
 
   /**
@@ -381,8 +438,8 @@ public class DataTransfer {
       if (Response.SC_OK == response.getStatusCode()) {
         String rtxt = response.getText();
         Window.alert(rtxt);
-        ModelJSO jso = parse(rtxt);
-        data.setModel(jso);
+        //ModelJSO jso = parse(rtxt);
+        //data.setModel(jso);
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "

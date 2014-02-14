@@ -9,14 +9,12 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.gwt.user.client.Window;
-
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 
 /**
  * A class for storing and sharing data, as well as the state of UI elements,
- * within {@link WMT}.
+ * within WMT.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -37,6 +35,7 @@ public class DataManager {
   public List<String> componentIdList;
   public List<Integer> modelIdList;
   public List<String> modelNameList;
+  public Integer saveAttempts = 0;
 
   /**
    * Initializes the DataManager object used in a WMT session.
@@ -112,11 +111,6 @@ public class DataManager {
    */
   public void setComponent(ComponentJSO component) {
     this.components.add(component);
-
-    // Sometimes get error 500.
-    Window.alert(component.getId() + " " + this.components.size() + "/"
-        + this.componentIdList.size());
-    
     if (this.components.size() == this.componentIdList.size()) {
       sortComponents();
       perspective.initializeComponentList();
@@ -232,7 +226,7 @@ public class DataManager {
   }
 
   /**
-   * Returns the id of the {@link Component} (a String) being dragged from the
+   * Returns the id of the Component (a String) being dragged from the
    * "Components" tab of WMT.
    */
   public String getDraggedComponent() {
@@ -240,7 +234,7 @@ public class DataManager {
   }
 
   /**
-   * Stores the id of the {@link Component} (a String) being dragged from the
+   * Stores the id of the Component (a String) being dragged from the
    * "Components" tab of WMT.
    * 
    * @param draggedComponent the id of the dragged component, a String
@@ -250,15 +244,15 @@ public class DataManager {
   }
 
   /**
-   * Returns the id of the {@link Component} (a String) that is currently
-   * selected in the {@link ModelTree}.
+   * Returns the id of the Component (a String) that is currently selected in
+   * the {@link ModelTree}.
    */
   public String getSelectedComponent() {
     return selectedComponent;
   }
 
   /**
-   * Stores the id of the {@link Component} that is currently selected in the
+   * Stores the id of the Component that is currently selected in the
    * {@link ModelTree}.
    * 
    * @param selectedComponent the id of the Component to set, a String

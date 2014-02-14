@@ -1,6 +1,7 @@
 package edu.colorado.csdms.wmt.client.ui;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.DragStartEvent;
@@ -78,11 +79,11 @@ public class ComponentList extends Grid implements DragStartHandler {
   public void setCellSensitivity() {
 
     // Find what (uses) ports in the ModelTree are currently open.
-    Vector<ModelCell> openCells = data.getModelTree().findOpenModelCells();
+    List<ModelCell> openCells = data.getModelTree().findOpenModelCells(); 
     // GWT.log(openPorts.toString());
 
     // A helpful local variable.
-    Vector<String> openPorts = new Vector<String>();
+    List<String> openPorts = new ArrayList<String>();
     for (int i = 0; i < openCells.size(); i++) {
       openPorts.add(openCells.get(i).getPortCell().getPort().getId());
     }

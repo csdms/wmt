@@ -554,8 +554,8 @@ public class ModelCell extends Grid implements DropHandler {
           tree.data.getComponentList().setCellSensitivity();
 
           // If the deleted Component is the selectedComponent, unset it. If
-          // it's also the Component whose parameters are currently shown in the
-          // ParameterTable, clear the ParameterTable.
+          // it's also the Component whose parameters are currently shown in
+          // the ParameterTable, clear the ParameterTable.
           String deleted =
               ModelCell.this.getComponentCell().getComponent().getId();
           String selected = tree.data.getSelectedComponent();
@@ -565,6 +565,17 @@ public class ModelCell extends Grid implements DropHandler {
           }
           if (deleted == showing) {
             tree.data.getParameterTable().clearTable();
+          }
+
+          // If this is the driver, reset the name of the model & the Model
+          // tab. Otherwise, mark it as unsaved.
+          if (openPort.getId().matches("driver")) {
+            tree.data.saveAttempts++;
+            tree.data.getModel().setName(
+                "Model " + tree.data.saveAttempts.toString());
+            tree.data.getPerspective().getViewCenter().setTabText(0, "Model");
+          } else {
+            tree.data.getPerspective().setModelPanelTitle(false);
           }
         }
       });

@@ -1,7 +1,8 @@
 package edu.colorado.csdms.wmt.client.ui;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.DragOverEvent;
@@ -25,7 +26,7 @@ import edu.colorado.csdms.wmt.client.data.Port;
 public class ModelTree extends Tree implements DragOverHandler, DropHandler {
 
   public DataManager data; // experimenting with a public member variable
-  private Vector<ModelCell> openModelCells;
+  private List<ModelCell> openModelCells;
 
   /**
    * Creates a ModelTree with an open "driver" port.
@@ -35,7 +36,7 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
   public ModelTree(DataManager data) {
 
     this.data = data;
-    this.openModelCells = new Vector<ModelCell>();
+    this.openModelCells = new ArrayList<ModelCell>();
 
     initializeTree();
     this.data.setModelTree(this);
@@ -44,6 +45,7 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
     // model created with this ModelTree.
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
     this.data.setModel(model);
+    this.data.getModel().setName("Model " + this.data.saveAttempts.toString());
 
     // Set up ModelTree event handlers.
     addDomHandler(this, DragOverEvent.getType());
@@ -96,6 +98,14 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
     // Get the ModelCell used by the TreeItem target.
     ModelCell cell = (ModelCell) target.getWidget();
 
+    // Mark the model as unsaved with an asterisk. Is this the driver port? If
+    // so, also suggest a model name.
+    if (cell.getPortCell().getPort().getId().matches("driver")) {
+      data.getModel().setName(
+          component.getName() + " " + data.saveAttempts.toString());
+    }
+    data.getPerspective().setModelPanelTitle(false);
+
     // If the Component already exists at a higher level in the ModelTree, set
     // a link to it and exit.
     Component connected1 = hasConnectedInstance(cell.getPortCell().getPort());
@@ -135,13 +145,14 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
   /**
    * Iterate through the TreeItems of this ModelTree, finding what ModelCells
    * have open PortCells. Add the cell to the openModelCells Vector.
+   * @return 
    * 
    * @return a Vector of ModelCells with open ports.
    */
-  public Vector<ModelCell> findOpenModelCells() {
+  public List<ModelCell> findOpenModelCells() {
 
     // Always start with a fresh list.
-    openModelCells.removeAllElements();
+    openModelCells.clear();
 
     Iterator<TreeItem> iter = this.treeItemIterator();
     while (iter.hasNext()) {

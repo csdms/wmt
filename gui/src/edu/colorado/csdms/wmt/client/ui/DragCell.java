@@ -3,7 +3,7 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
-import java.util.Vector;
+import java.util.List;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Cursor;
@@ -165,8 +165,8 @@ public class DragCell extends Grid implements DragStartHandler {
 
       // Find what "uses" ports in the ModelTree are currently open. If there
       // are none, short-circuit the method.
-      Vector<ModelCell> openCells =
-          parent.data.getModelTree().findOpenModelCells();
+      List<ModelCell> openCells = 
+          parent.data.getModelTree().findOpenModelCells();      
       if (openCells.size() == 0) {
         return;
       }
