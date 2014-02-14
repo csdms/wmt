@@ -51,7 +51,7 @@ def make_directory_tree(prefix, folders):
 
     for subdir in folders:
         try:
-            os.mkdir(subdir)
+            os.mkdir(os.path.join(prefix, subdir))
         except OSError:
             pass
 
@@ -139,7 +139,7 @@ class Data(SiteSubFolder):
                 os.path.dirname(wmt.__file__),
                 'data')
         )
-        make_directory_tree(src_dir, ['components', ])
+        make_directory_tree(self.prefix, ['components', ])
         copy_dir_contents(os.path.join(src_dir, 'components'),
                           os.path.join(self.prefix, 'components'))
 
