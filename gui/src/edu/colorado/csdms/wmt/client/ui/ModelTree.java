@@ -45,6 +45,7 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
     // model created with this ModelTree.
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
     this.data.setModel(model);
+    this.data.getModel().setName("Model " + this.data.saveAttempts.toString());
 
     // Set up ModelTree event handlers.
     addDomHandler(this, DragOverEvent.getType());
@@ -96,6 +97,14 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
 
     // Get the ModelCell used by the TreeItem target.
     ModelCell cell = (ModelCell) target.getWidget();
+
+    // Mark the model as unsaved with an asterisk. Is this the driver port? If
+    // so, also suggest a model name.
+    if (cell.getPortCell().getPort().getId().matches("driver")) {
+      data.getModel().setName(
+          component.getName() + " " + data.saveAttempts.toString());
+    }
+    data.getPerspective().setModelPanelTitle(false);
 
     // If the Component already exists at a higher level in the ModelTree, set
     // a link to it and exit.

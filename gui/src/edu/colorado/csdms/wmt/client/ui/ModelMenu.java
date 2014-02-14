@@ -234,6 +234,9 @@ public class ModelMenu extends DecoratedPopupPanel {
       ModelMenuItem item = (ModelMenuItem) event.getSource();
       ModelMenu.this.hide();
       Window.alert("Clicked on: " + item.getText(0, 1));
+
+      // Need to actually save the model, but getting a head start.
+      data.getPerspective().setModelPanelTitle(true);
     }
   }
 
@@ -247,7 +250,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       saveDialog = new SaveDialogBox();
       saveDialog.setText("Save Model As...");
       saveDialog.getFilePanel().setDirectory("river:$HOME/.wmt");
-      saveDialog.getFilePanel().setFile("MyModel");
+      saveDialog.getFilePanel().setFile(data.getModel().getName());
 
       saveDialog.getChoicePanel().getOkButton().addClickHandler(
           new SaveOkHandler());
@@ -345,9 +348,11 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       // Set the model name on the ViewCenter tab and in the DataManager.
       String modelName = saveDialog.getFilePanel().getFile();
-      data.getModel().setName(modelName);
-      String tabTitle = "Model (" + data.getModel().getName() + ")";
-      data.getPerspective().getViewCenter().setTabText(0, tabTitle);
+      if (!data.getModel().getName().matches(modelName)) {
+        data.getModel().setName(modelName);
+        data.saveAttempts++;
+      }
+      data.getPerspective().setModelPanelTitle(true);
 
       DataTransfer.serialize(data);
       

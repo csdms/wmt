@@ -35,6 +35,7 @@ public class DataManager {
   public List<String> componentIdList;
   public List<Integer> modelIdList;
   public List<String> modelNameList;
+  public Integer saveAttempts = 0;
 
   /**
    * Initializes the DataManager object used in a WMT session.
