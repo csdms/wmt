@@ -267,10 +267,20 @@ public class DataTransfer {
       TreeItem treeItem = (TreeItem) iter.next();
       ModelCell cell = (ModelCell) treeItem.getWidget();
       Component component = cell.getComponentCell().getComponent();
+      ComponentJSO componentJSO = data.getComponent(component.getId()); // awkward
       
       ModelJSO modelComponent = (ModelJSO) ModelJSO.createObject();
-      modelComponent.setId(component.getId());
-      modelComponent.setClassName(component.getName());
+      modelComponent.setId(componentJSO.getId());
+      modelComponent.setClassName(componentJSO.getName());
+      
+      // Get the values of the component's parameters. All that's needed for
+      // a ModelJSO are the key-value pairs.
+      Integer nParameters = componentJSO.getParameters().length();
+      for (int i = 0; i < nParameters; i++) {
+        String key = componentJSO.getParameters().get(i).getKey();
+        String value = componentJSO.getParameters().get(i).getValue().getDefault();
+        // TODO Write method to push these into ModelJSO.
+      }
       
       components.push(modelComponent);
     }
