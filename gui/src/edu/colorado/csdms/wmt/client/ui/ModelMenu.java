@@ -349,7 +349,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       String tabTitle = "Model (" + data.getModel().getName() + ")";
       data.getPerspective().getViewCenter().setTabText(0, tabTitle);
 
-      // DataTransfer.serialize(data);
+      DataTransfer.serialize(data);
       
       // Update list of saved models in the WMT DataManager.
       DataTransfer.getModelList(data);

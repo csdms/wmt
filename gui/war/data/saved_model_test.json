@@ -1,0 +1,25 @@
+{
+  "name":"CEM 1",
+  "model":[
+    {
+      "id":"cem",
+      "class":"CEM"
+    },
+    {
+      "id":"avulsion",
+      "class":"Avulsion"
+    },
+    {
+      "id":"hydrotrend",
+      "class":"HydroTrend"
+    },
+    {
+      "id":"cem",
+      "class":"CEM"
+    },
+    {
+      "id":"waves",
+      "class":"Waves"
+    }
+  ]
+}
