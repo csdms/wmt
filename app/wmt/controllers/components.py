@@ -3,6 +3,7 @@ import json
 
 from ..render import render
 from ..models import components as comps
+from ..validators import (not_too_long, not_too_short, not_bad_json)
 
 
 class List(object):
@@ -50,14 +51,23 @@ class Input(object):
 
 
 class Format(object):
+    form = web.form.Form(
+        web.form.Textarea('json',
+                          not_too_long(2048),
+                          rows=40, cols=80, description=None),
+        web.form.Button('Submit')
+    )
+
     def GET(self, name):
-        user_data = web.input()
-        try:
-            return render.code(
-                comps.get_component_formatted_input(name, **user_data))
-        except KeyError as error:
-            return error
-            raise web.notfound()
+        return render.format(self.form())
+
+    def POST(self, name):
+        form = self.form()
+        if not form.validates():
+            return render.format(form)
+        mapping = json.loads(form.d.json)
+        return render.code(
+            comps.get_component_formatted_input(name, **mapping))
 
 
 class Defaults(object):
