@@ -46,37 +46,48 @@ def get_component_defaults(name):
     for parameter in comp['parameters']:
         defaults[parameter['key']] = parameter['value']['default']
 
-    #return '{january_temperature_mean}'.format(**defaults)
-    #return str(type(defaults['january_temperature_mean']))
     return defaults
 
 
-def get_component_input_files(name, with_defaults=False):
-    import string
-
+def _read_input_file(filename):
     input_file_dir = os.path.join(site['data'], 'components')
+    path_to_file = os.path.join(input_file_dir, filename)
+    with open(path_to_file, 'r') as file:
+        contents = file.read()
+    return contents
 
-    comp = get_component(name)
 
-    if 'input_files' not in comp:
-        return ''
+def _decorate_with_header(contents, **kwds):
+    header = []
+    for item in kwds.items():
+        header.append('%s: %s' % item)
+    header_width = max(len(line) for line in header)
 
-    mapping = get_component_defaults(name)
+    return os.linesep.join(
+        header + [
+            '-' * header_width,
+            contents,
+            '-' * header_width,
+        ])
+
+
+def get_component_input(name):
+    input_files = get_component(name)['input_files']
 
     lines = []
-    for filename in comp['input_files']:
-        path_to_file = os.path.join(input_file_dir, filename)
-        lines.append('file: %s' % filename)
-        lines.append('-------------------')
-        with open(path_to_file, 'r') as file:
-            if with_defaults:
-                #contents = string.Template(file.read())
-                contents = file.read()
-                lines.append(contents.format(**mapping))
-                #lines.append(contents.substitute(mapping))
-            else:
-                lines.append(file.read())
-        lines.append('-------------------')
+    for (fid, filename) in enumerate(input_files):
+        contents = _read_input_file(filename)
+        lines.append(
+            _decorate_with_header(
+                contents, file=filename,
+                fileno='%d of %d' % (fid, len(input_files))))
 
     return os.linesep.join(lines)
 
+
+def get_component_formatted_input(name, **kwds):
+    from ..utils.templatefile import FileFormatter
+
+    format = FileFormatter(get_component_defaults(name))
+
+    return format.format(get_component_input(name), **kwds)

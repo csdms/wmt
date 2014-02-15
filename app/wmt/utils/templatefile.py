@@ -11,6 +11,32 @@ ID_PATTERN_STRING = '\$\{(?P<id>[_a-zA-Z][_a-zA-Z]*)\}'
 ID_PATTERN = re.compile(ID_PATTERN_STRING)
 
 
+class FileFormatter(string.Formatter):
+    def __init__(self, defaults):
+        string.Formatter.__init__(self)
+        self._defaults = defaults
+
+    def get_value(self, key, args, kwds):
+        if isinstance(key, types.StringTypes):
+            try:
+                return kwds[key]
+            except KeyError:
+                try:
+                    return self._defaults[key]
+                except KeyError:
+                    raise KeyError('no default for %s' % key)
+        else:
+            string.Formatter.get_value(self, key, args, kwds)
+
+    def format_field(self, value, format_spec):
+        try:
+            return string.Formatter.format_field(self, value, format_spec)
+        except ValueError:
+            if format_spec[-1] in ['f', 'e', 'E', 'g', 'G']:
+                return string.Formatter.format_field(self, float(value),
+                                                     format_spec)
+
+
 class TemplateFile(object):
     def __init__(self, filename):
         self._template = TemplateFile.read_template(filename)

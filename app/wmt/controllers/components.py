@@ -2,23 +2,20 @@ import web
 import json
 
 from ..render import render
-from ..models.components import (get_component, get_component_names,
-                                 get_components, get_component_params,
-                                 get_component_input_files,
-                                 get_component_defaults, IdError)
+from ..models import components as comps
 
 
 class List(object):
     def GET(self):
-        return json.dumps(get_component_names(sort=True))
+        return json.dumps(comps.get_component_names(sort=True))
 
 
 class Show(object):
     def GET(self, name):
         user_data = web.input(key=None)
         try:
-            comp = get_component(name)
-        except IdError:
+            comp = comps.get_component(name)
+        except comps.IdError:
             raise web.notfound()
 
         if user_data.key is None:
@@ -32,34 +29,41 @@ class Show(object):
 
 class Dump(object):
     def GET(self):
-        return json.dumps(get_components())
+        return json.dumps(comps.get_components())
 
 
 class Parameters(object):
     def GET(self, name):
         try:
-            return json.dumps(get_component_params(name))
+            return json.dumps(comps.get_component_params(name))
         except KeyError:
             raise web.notfound()
 
 
 class Input(object):
     def GET(self, name):
-        user_data = web.input(defaults='0')
+        try:
+            return render.code(comps.get_component_input(name))
+        except KeyError as error:
+            return error
+            raise web.notfound()
+
+
+class Format(object):
+    def GET(self, name):
+        user_data = web.input()
         try:
             return render.code(
-                get_component_input_files(
-                    name, with_defaults=user_data.defaults=='1'))
-        except KeyError:
+                comps.get_component_formatted_input(name, **user_data))
+        except KeyError as error:
+            return error
             raise web.notfound()
 
 
 class Defaults(object):
     def GET(self, name):
         try:
-            #return render.code(get_component_defaults(name))
-            #return json.dumps(get_component_defaults(name))
-            return get_component_defaults(name)
+            return comps.get_component_defaults(name)
         except KeyError:
             raise web.notfound()
 
