@@ -53,7 +53,7 @@ class Input(object):
 class Format(object):
     form = web.form.Form(
         web.form.Textarea('json',
-                          not_too_long(2048),
+                          not_too_long(4096),
                           rows=40, cols=80, description=None),
         web.form.Button('Submit')
     )
@@ -73,7 +73,7 @@ class Format(object):
 class Defaults(object):
     def GET(self, name):
         try:
-            return comps.get_component_defaults(name)
+            return json.dumps(comps.get_component_defaults(name))
         except KeyError:
             raise web.notfound()
 
