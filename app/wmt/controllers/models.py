@@ -4,7 +4,6 @@ import json
 from ..models import (models, users)
 from ..render import render
 from ..validators import (not_too_long, not_too_short, not_bad_json)
-from ..palette import PALETTE
 from ..cca import rc_from_json
 
 
