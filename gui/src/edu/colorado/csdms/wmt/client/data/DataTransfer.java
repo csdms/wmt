@@ -264,16 +264,20 @@ public class DataTransfer {
       TreeItem treeItem = (TreeItem) iter.next();
       ModelCell cell = (ModelCell) treeItem.getWidget();
 
+      // Skip linked components and empty components.
       if (cell.getComponentCell().isLinked()) {
         continue;
       }
+      if (cell.getComponentCell().getComponent().getId() == null) {
+        continue;
+      }      
       
       ModelJSO modelComponent = (ModelJSO) ModelJSO.createObject();
-      
+
       // Awkward. Still need Component, though, I think.
       Component component = cell.getComponentCell().getComponent();
       ComponentJSO componentJSO = data.getComponent(component.getId());
-      
+
       modelComponent.setId(componentJSO.getId());
       modelComponent.setClassName(componentJSO.getName());
       if (cell.getPortCell().getPort().getId().matches("driver")) {
@@ -282,16 +286,18 @@ public class DataTransfer {
 
       // Load the component's parameters into the ModelJSO. All that's needed
       // for a ModelJSO are the key-value pairs. (Note: Can't pass arrays into
-      // JSNI methods.)
+      // JSNI methods.) Include zero parameter check because Java is dumb.
       Integer nParameters = componentJSO.getParameters().length();
-      for (int i = 0; i < nParameters; i++) {
-        String key = componentJSO.getParameters().get(i).getKey();
-        if (key.matches("separator")) {
-          continue;
+      if (nParameters > 0) {
+        for (int i = 0; i < nParameters; i++) {
+          String key = componentJSO.getParameters().get(i).getKey();
+          if (key.matches("separator")) {
+            continue;
+          }
+          String value =
+              componentJSO.getParameters().get(i).getValue().getDefault();
+          modelComponent.setParameter(key, value);
         }
-        String value =
-            componentJSO.getParameters().get(i).getValue().getDefault();
-        modelComponent.setParameter(key, value);
       }
 
       // Load the connected ports.

@@ -248,7 +248,10 @@ public class ModelJSO extends JavaScriptObject {
    * @param componentId the component id that provides the port, a String
    */
   public final native void setConnection(String portId, String componentId) /*-{
-    var c = portId + "@" + componentId
+    var c = null;
+    if (componentId != null) {
+      c = portId + "@" + componentId;
+    }
     if (typeof this.connect == 'undefined') {
 			var p = {};
       p[portId] = c;
