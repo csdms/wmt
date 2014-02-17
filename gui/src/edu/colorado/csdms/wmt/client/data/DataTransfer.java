@@ -35,6 +35,7 @@ public class DataTransfer {
   private static final String MODEL_LIST_URL = BASE_URL + "models/list";
   private static final String MODEL_OPEN_URL = BASE_URL + "models/open/";
   private static final String MODEL_SHOW_URL = BASE_URL + "models/show/";
+  private static final String MODEL_NEW_URL = BASE_URL + "models/new";
   private static final String COMPONENT_LIST_URL = BASE_URL + "components/list";
   private static final String COMPONENT_SHOW_URL = BASE_URL + "components/show/";
 
@@ -230,10 +231,24 @@ public class DataTransfer {
    * @param data the DataManager object for the WMT session
    * @param modelName the name the user gave the model
    */
-  public static void postModel(DataManager data, String modelName) {
+  @SuppressWarnings("unused")
+  public static void postModel(DataManager data) {
 
-    // XXX Model this on the DataTransfer#post in GWTandHTTP.
-    Window.alert(data.getModelString());
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(MODEL_NEW_URL));
+
+    HashMap<String, String> entries =
+        makeQueryEntries(data.getModel().getName(), data.getModelString());
+    String queryString = buildQueryString(entries);
+
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      Request request =
+          builder.sendRequest(queryString,
+              new ModelRequestCallback(data, MODEL_NEW_URL));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }    
   }
   
   /**
@@ -328,7 +343,7 @@ public class DataTransfer {
     data.setModelString(modelString);
 
     // Post the model to the server.
-    postModel(data, model.getName());
+    postModel(data);
   }
 
   /**
