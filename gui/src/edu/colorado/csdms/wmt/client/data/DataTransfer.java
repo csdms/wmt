@@ -233,11 +233,7 @@ public class DataTransfer {
   public static void postModel(DataManager data, String modelName) {
 
     // XXX Model this on the DataTransfer#post in GWTandHTTP.
-
-    String msg =
-        "Model name: " + modelName + "; " + "Model JSON: "
-            + data.getModelString();
-    Window.alert(msg);
+    Window.alert(data.getModelString());
   }
   
   /**
@@ -254,47 +250,81 @@ public class DataTransfer {
     // Create a JsArray of ModelJSO objects for the components that make up
     // the model.
     @SuppressWarnings("unchecked")
-    JsArray<ModelJSO> components = (JsArray<ModelJSO>) ModelJSO.createArray();
-    
+    JsArray<ModelJSO> componentsArray =
+        (JsArray<ModelJSO>) ModelJSO.createArray();
+
     // Iterate through the leaves of the ModelTree. For each leaf, create a
-    // new ModelJSO object to hold the component, its ports and its parameters.
+    // ModelJSO object to hold the component, its ports and its parameters.
     // When loaded with information from the GUI, push the ModelJSO into the
     // components JsArray and move to the next leaf.
     ModelTree tree = data.getModelTree();
     Iterator<TreeItem> iter = tree.treeItemIterator();
     while (iter.hasNext()) {
-      
+
       TreeItem treeItem = (TreeItem) iter.next();
       ModelCell cell = (ModelCell) treeItem.getWidget();
-      Component component = cell.getComponentCell().getComponent();
-      ComponentJSO componentJSO = data.getComponent(component.getId()); // awkward
+
+      // Skip linked components and empty components.
+      if (cell.getComponentCell().isLinked()) {
+        continue;
+      }
+      if (cell.getComponentCell().getComponent().getId() == null) {
+        continue;
+      }      
       
       ModelJSO modelComponent = (ModelJSO) ModelJSO.createObject();
+
+      // Awkward. Still need Component, though, I think.
+      Component component = cell.getComponentCell().getComponent();
+      ComponentJSO componentJSO = data.getComponent(component.getId());
+
       modelComponent.setId(componentJSO.getId());
       modelComponent.setClassName(componentJSO.getName());
-      
-      // Get the values of the component's parameters. All that's needed for
-      // a ModelJSO are the key-value pairs.
-      Integer nParameters = componentJSO.getParameters().length();
-      for (int i = 0; i < nParameters; i++) {
-        String key = componentJSO.getParameters().get(i).getKey();
-        String value = componentJSO.getParameters().get(i).getValue().getDefault();
-        // TODO Write method to push these into ModelJSO.
+      if (cell.getPortCell().getPort().getId().matches("driver")) {
+        modelComponent.setDriver();
       }
-      
-      components.push(modelComponent);
+
+      // Load the component's parameters into the ModelJSO. All that's needed
+      // for a ModelJSO are the key-value pairs. (Note: Can't pass arrays into
+      // JSNI methods.) Include zero parameter check because Java is dumb.
+      Integer nParameters = componentJSO.getParameters().length();
+      if (nParameters > 0) {
+        for (int i = 0; i < nParameters; i++) {
+          String key = componentJSO.getParameters().get(i).getKey();
+          if (key.matches("separator")) {
+            continue;
+          }
+          String value =
+              componentJSO.getParameters().get(i).getValue().getDefault();
+          modelComponent.setParameter(key, value);
+        }
+      }
+
+      // Load the connected ports.
+      for (int i = 0; i < treeItem.getChildCount(); i++) {
+        TreeItem child = treeItem.getChild(i);
+        ModelCell childCell = (ModelCell) child.getWidget();
+        String portId = childCell.getPortCell().getPort().getId();
+        String componentId =
+            childCell.getComponentCell().getComponent().getId();
+        modelComponent.setConnection(portId, componentId);
+      }
+
+      // Push the component into the components JsArray.
+      componentsArray.push(modelComponent);
     }
-    
-    // Get the reference to the model stored in the DataManager. Set the 
+
+    // Get the reference to the model stored in the DataManager. Set the
     // component JsArray into the model.
-    ModelJSO model = data.getModel();    
-    model.setComponents(components);
-    
+    ModelJSO model = data.getModel();
+    model.setComponents(componentsArray);
+
     // Stringify the ModelJSO object. Store the result (a String) in the
     // DataManager.
     // TODO Remove "name" object, leaving only "model".
     String modelString = stringify(model);
-//    String modelString = stringify(model.getComponents()); // Close, but no.
+    // String modelString = stringify(model.getComponents()); // Close, but
+    // no.
     data.setModelString(modelString);
 
     // Post the model to the server.

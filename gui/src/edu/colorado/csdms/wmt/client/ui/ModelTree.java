@@ -112,6 +112,7 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
     if (connected1 != null) {
       cell.setComponentCell(cell.new ComponentCell(connected1));
       cell.getComponentCell().addStyleDependentName("linked");
+      cell.getComponentCell().isLinked(true);
       return;
     }
 
@@ -135,6 +136,7 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
       if (connected2 != null) {
         newCell.setComponentCell(newCell.new ComponentCell(connected2));
         newCell.getComponentCell().addStyleDependentName("linked");
+        newCell.getComponentCell().isLinked(true);
       }
     }
 

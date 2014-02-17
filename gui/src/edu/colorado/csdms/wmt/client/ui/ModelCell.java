@@ -376,6 +376,7 @@ public class ModelCell extends Grid implements DropHandler {
       DragEnterHandler, DragLeaveHandler {
 
     private Component component;
+    private Boolean linked = false; // is this a link to another instance?
 
     /**
      * Makes a ComponentCell for the given Component.
@@ -412,7 +413,25 @@ public class ModelCell extends Grid implements DropHandler {
     public void setComponent(Component component) {
       this.component = component;
     }
+    
+    /**
+     * Does this ComponentCell hold a link to another instance of a component?
+     * Returns status as a Boolean.
+     */
+    public Boolean isLinked() {
+      return linked;
+    }
 
+    /**
+     * Sets whether the ComponentCell holds a link to another instance of a 
+     * component.
+     * 
+     * @param linked the "linked" setting, a Boolean
+     */
+    public void isLinked(Boolean linked) {
+      this.linked = linked;
+    }
+    
     /**
      * On a mouse click, stores the id of the selected component in the
      * DataManager.
