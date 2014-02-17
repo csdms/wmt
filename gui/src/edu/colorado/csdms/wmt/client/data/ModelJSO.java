@@ -122,6 +122,13 @@ public class ModelJSO extends JavaScriptObject {
   }-*/;
 
   /**
+   * Sets the driver object of a model component. This is a JSNI method.
+   */
+  public final native void setDriver() /*-{
+		this.driver = true;
+  }-*/;  
+  
+  /**
    * Returns, as a JsArrayString, the ids of the all the parameters listed
    * under the eponymous key of a model component. Index this array with
    * JsArrayString#get. This is a JSNI method.
@@ -131,6 +138,24 @@ public class ModelJSO extends JavaScriptObject {
 		return keys;
   }-*/;  
 
+  /**
+   * Creates or appends to the "parameter" object of a ModelJSO a single
+   * parameter (as a key-value pair) of a component of a model. This is a JSNI
+   * method.
+   * 
+   * @param key the parameter name
+   * @param value the parameter value
+   */
+  public final native void setParameter(String key, String value) /*-{
+    if (typeof this.parameters == 'undefined') {
+			var p = {};
+      p[key] = value;
+		  this.parameters = p;
+		} else {
+      this.parameters[key] = value;
+		}
+  }-*/;  
+  
   /**
    * Returns, as a JsArrayString, the values of the all the parameters listed
    * under the "parameters" key of a model component. Values that are not of
@@ -213,4 +238,23 @@ public class ModelJSO extends JavaScriptObject {
 		  return null;
 		}
   }-*/;
+  
+  /**
+   * Creates or appends the "connect" object of a ModelJSO with a key-value
+   * pair of the form "usesPortId":"providesPortId@componentId". This is a
+   * JSNI method.
+   * 
+   * @param portId the id of the uses port, a String
+   * @param componentId the component id that provides the port, a String
+   */
+  public final native void setConnection(String portId, String componentId) /*-{
+    var c = portId + "@" + componentId
+    if (typeof this.connect == 'undefined') {
+			var p = {};
+      p[portId] = c;
+		  this.connect= p;
+		} else {
+      this.connect[portId] = c;
+		}
+  }-*/;  
 }
