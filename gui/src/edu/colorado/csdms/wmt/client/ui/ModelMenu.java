@@ -355,7 +355,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       data.getPerspective().setModelPanelTitle(true);
 
       // Serialize the model from the GUI and post it to the server.
-      DataTransfer.serialize(data);
+      data.serialize();
       DataTransfer.postModel(data);
     }
   }

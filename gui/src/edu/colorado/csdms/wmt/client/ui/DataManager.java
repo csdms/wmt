@@ -9,7 +9,12 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.user.client.ui.TreeItem;
+
+import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
+import edu.colorado.csdms.wmt.client.data.DataTransfer;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 
 /**
@@ -259,5 +264,95 @@ public class DataManager {
    */
   public void setSelectedComponent(String selectedComponent) {
     this.selectedComponent = selectedComponent;
+  }
+  
+  /**
+   * Translates the model displayed in WMT into a {@link ModelJSO} object,
+   * which completely describes the state of the model. This object is
+   * converted to a string (with {@link DataTransfer#stringify(Object)}) which
+   * can be uploaded to a server.
+   */
+  public void serialize() {
+
+    // Create a JsArray of ModelJSO objects for the components that make up
+    // the model.
+    @SuppressWarnings("unchecked")
+    JsArray<ModelJSO> componentsArray =
+        (JsArray<ModelJSO>) ModelJSO.createArray();
+
+    // Iterate through the leaves of the ModelTree. For each leaf, create a
+    // ModelJSO object to hold the component, its ports and its parameters.
+    // When loaded with information from the GUI, push the ModelJSO into the
+    // components JsArray and move to the next leaf.
+    Iterator<TreeItem> iter = modelTree.treeItemIterator();
+    while (iter.hasNext()) {
+
+      TreeItem treeItem = (TreeItem) iter.next();
+      ModelCell cell = (ModelCell) treeItem.getWidget();
+
+      // Skip linked components and empty components.
+      if (cell.getComponentCell().isLinked()) {
+        continue;
+      }
+      if (cell.getComponentCell().getComponent().getId() == null) {
+        continue;
+      }
+
+      ModelJSO modelComponent = (ModelJSO) ModelJSO.createObject();
+
+      // Awkward. Still need Component, though, I think.
+      Component component = cell.getComponentCell().getComponent();
+      ComponentJSO componentJSO = getComponent(component.getId());
+
+      modelComponent.setId(componentJSO.getId());
+      modelComponent.setClassName(componentJSO.getName());
+      if (cell.getPortCell().getPort().getId().matches("driver")) {
+        modelComponent.setDriver();
+      }
+
+      // Load the component's parameters into the ModelJSO. All that's needed
+      // for a ModelJSO are the key-value pairs. (Note: Can't pass arrays into
+      // JSNI methods.) Include zero parameter check because Java is dumb.
+      Integer nParameters = componentJSO.getParameters().length();
+      if (nParameters > 0) {
+        for (int i = 0; i < nParameters; i++) {
+          String key = componentJSO.getParameters().get(i).getKey();
+          if (key.matches("separator")) {
+            continue;
+          }
+          String value =
+              componentJSO.getParameters().get(i).getValue().getDefault();
+          modelComponent.setParameter(key, value);
+        }
+      }
+
+      // Load the connected ports.
+      for (int i = 0; i < treeItem.getChildCount(); i++) {
+        TreeItem child = treeItem.getChild(i);
+        ModelCell childCell = (ModelCell) child.getWidget();
+        String portId = childCell.getPortCell().getPort().getId();
+        String componentId =
+            childCell.getComponentCell().getComponent().getId();
+        modelComponent.setConnection(portId, componentId);
+      }
+
+      // Push the component into the components JsArray.
+      componentsArray.push(modelComponent);
+    }
+
+    // Set the component JsArray into the model.
+    model.setComponents(componentsArray);
+
+    // Stringify the ModelJSO object. Store the result in the DataManager.
+    modelString = DataTransfer.stringify(model);
+  }  
+  
+  /**
+   * TODO
+   */
+  public void deserialize() {
+    
+    // Deserialize the ModelJSO object returned on opening a model and use the 
+    // information therein to populate the WMT GUI.
   }
 }

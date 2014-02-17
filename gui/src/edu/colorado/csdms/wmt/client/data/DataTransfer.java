@@ -4,11 +4,9 @@
 package edu.colorado.csdms.wmt.client.data;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JsArray;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -16,15 +14,13 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.ui.DataManager;
-import edu.colorado.csdms.wmt.client.ui.ModelCell;
-import edu.colorado.csdms.wmt.client.ui.ModelTree;
 
 /**
- * A class that defines static methods for accessing the JSON files used to
- * set up, configure and run WMT.
+ * A class that defines static methods for accessing, through asynchronous
+ * HTTP GET and POST requests, the JSON files used to set up, configure and
+ * run WMT.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -48,7 +44,7 @@ public class DataTransfer {
    * @param jso a JavaScriptObject
    * @return a String representation of the JavaScriptObject
    */
-  private final native static <T> String stringify(T jso) /*-{
+  public final native static <T> String stringify(T jso) /*-{
 		return JSON.stringify(jso, function(key, value) {
 			if (key == '__gwt_ObjectId') {
 				return;
@@ -78,7 +74,8 @@ public class DataTransfer {
   }-*/;  
 
   /**
-   * Returns a HashMap of entries used to build a HTTP query string.
+   * A worker that returns a HashMap of entries used to build a HTTP query
+   * string.
    * 
    * @param modelName the name of the model, a String
    * @param jsonStr the stringified JSON describing the model
@@ -92,7 +89,8 @@ public class DataTransfer {
   }  
 
   /**
-   * Builds a HTTP query string from a HashMap of key-value entries.
+   * A worker that builds a HTTP query string from a HashMap of key-value
+   * entries (e.g., returned from {@link #makeQueryEntries(String, String)}).
    * 
    * @param entries a HashMap of key-value pairs
    * @return the query, as a String
@@ -118,8 +116,8 @@ public class DataTransfer {
   }  
   
   /**
-   * Makes an asynchronous HTTP GET request to retrieve the simple list of
-   * components stored in the WMT database.
+   * Makes an asynchronous HTTP GET request to retrieve the list of components
+   * stored in the WMT database.
    * <p>
    * Note that on completion of the request,
    * {@link #getComponent(DataManager, String)} starts pulling data for
@@ -250,102 +248,14 @@ public class DataTransfer {
       Window.alert(ERR_MSG + e.getMessage());
     }    
   }
-  
-  /**
-   * See "test_4_cem.json" for an example of what the JSON should look like.
-   * 
-   * @param data the DataManager object for the WMT session
-   */
-  public static void serialize(DataManager data) {
-
-    /*
-     * I'm not sure this method should be here. Maybe DataManager instead?
-     */
-
-    // Create a JsArray of ModelJSO objects for the components that make up
-    // the model.
-    @SuppressWarnings("unchecked")
-    JsArray<ModelJSO> componentsArray =
-        (JsArray<ModelJSO>) ModelJSO.createArray();
-
-    // Iterate through the leaves of the ModelTree. For each leaf, create a
-    // ModelJSO object to hold the component, its ports and its parameters.
-    // When loaded with information from the GUI, push the ModelJSO into the
-    // components JsArray and move to the next leaf.
-    ModelTree tree = data.getModelTree();
-    Iterator<TreeItem> iter = tree.treeItemIterator();
-    while (iter.hasNext()) {
-
-      TreeItem treeItem = (TreeItem) iter.next();
-      ModelCell cell = (ModelCell) treeItem.getWidget();
-
-      // Skip linked components and empty components.
-      if (cell.getComponentCell().isLinked()) {
-        continue;
-      }
-      if (cell.getComponentCell().getComponent().getId() == null) {
-        continue;
-      }      
-      
-      ModelJSO modelComponent = (ModelJSO) ModelJSO.createObject();
-
-      // Awkward. Still need Component, though, I think.
-      Component component = cell.getComponentCell().getComponent();
-      ComponentJSO componentJSO = data.getComponent(component.getId());
-
-      modelComponent.setId(componentJSO.getId());
-      modelComponent.setClassName(componentJSO.getName());
-      if (cell.getPortCell().getPort().getId().matches("driver")) {
-        modelComponent.setDriver();
-      }
-
-      // Load the component's parameters into the ModelJSO. All that's needed
-      // for a ModelJSO are the key-value pairs. (Note: Can't pass arrays into
-      // JSNI methods.) Include zero parameter check because Java is dumb.
-      Integer nParameters = componentJSO.getParameters().length();
-      if (nParameters > 0) {
-        for (int i = 0; i < nParameters; i++) {
-          String key = componentJSO.getParameters().get(i).getKey();
-          if (key.matches("separator")) {
-            continue;
-          }
-          String value =
-              componentJSO.getParameters().get(i).getValue().getDefault();
-          modelComponent.setParameter(key, value);
-        }
-      }
-
-      // Load the connected ports.
-      for (int i = 0; i < treeItem.getChildCount(); i++) {
-        TreeItem child = treeItem.getChild(i);
-        ModelCell childCell = (ModelCell) child.getWidget();
-        String portId = childCell.getPortCell().getPort().getId();
-        String componentId =
-            childCell.getComponentCell().getComponent().getId();
-        modelComponent.setConnection(portId, componentId);
-      }
-
-      // Push the component into the components JsArray.
-      componentsArray.push(modelComponent);
-    }
-
-    // Get the reference to the model stored in the DataManager. Set the
-    // component JsArray into the model.
-    ModelJSO model = data.getModel();
-    model.setComponents(componentsArray);
-
-    // Stringify the ModelJSO object. Store the result (a String) in the
-    // DataManager.
-    // TODO Remove "name" object, leaving only "model".
-    String modelString = stringify(model);
-    // String modelString = stringify(model.getComponents()); // Close, but
-    // no.
-    data.setModelString(modelString);
-  }
 
   /**
    * A RequestCallback handler class that provides the callback for a GET
-   * request of the list of available components in the WMT database.
+   * request of the list of available components in the WMT database. On
+   * success, the list of component ids are stored in the {@link DataManager}
+   * object for the WMT session. Concurrently,
+   * {@link DataTransfer#getComponent(DataManager, String)} is called to
+   * download and store information on the listed components.
    */
   public static class ComponentListRequestCallback implements RequestCallback {
 
@@ -388,7 +298,9 @@ public class DataTransfer {
 
   /**
    * A RequestCallback handler class that provides the callback for a GET
-   * request of a component.
+   * request of a component. On success,
+   * {@link DataManager#setComponent(ComponentJSO)} is called to store the
+   * component in the DataManager object for the WMT session.
    */
   public static class ComponentRequestCallback implements RequestCallback {
 
@@ -422,7 +334,9 @@ public class DataTransfer {
   
   /**
    * A RequestCallback handler class that provides the callback for a GET
-   * request of the list of available models in the WMT database.
+   * request of the list of available models in the WMT database. On success,
+   * the list of model names and ids are stored in the {@link DataManager}
+   * object for the WMT session.
    */
   public static class ModelListRequestCallback implements RequestCallback {
 
@@ -466,8 +380,12 @@ public class DataTransfer {
   }  
   
   /**
-   * A RequestCallback handler class that provides the callback for a GET
-   * request of a model.
+   * A RequestCallback handler class that provides the callback for a model
+   * GET or POST request.
+   * <p>
+   * Note that on a successful POST,
+   * {@link DataTransfer#getModelList(DataManager)} is called to refresh the
+   * list of available models on the server.
    */
   public static class ModelRequestCallback implements RequestCallback {
 
