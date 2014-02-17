@@ -341,9 +341,6 @@ public class DataTransfer {
     // String modelString = stringify(model.getComponents()); // Close, but
     // no.
     data.setModelString(modelString);
-
-    // Post the model to the server.
-    postModel(data);
   }
 
   /**
@@ -444,7 +441,11 @@ public class DataTransfer {
         String rtxt = response.getText();
         ModelListJSO jso = parse(rtxt);
 
-        // Load the list of models (alphabetical in API) into the DataManager.
+        // Start with clean lists of model names and ids.
+        data.modelIdList.clear();
+        data.modelNameList.clear();
+        
+        // Load the list of models into the DataManager.
         for (int i = 0; i < jso.getModels().length(); i++) {
           data.modelIdList.add(jso.getModels().get(i).getModelId());
           data.modelNameList.add(jso.getModels().get(i).getName());
@@ -483,8 +484,11 @@ public class DataTransfer {
       if (Response.SC_OK == response.getStatusCode()) {
         String rtxt = response.getText();
         Window.alert(rtxt);
-        //ModelJSO jso = parse(rtxt);
-        //data.setModel(jso);
+        // ModelJSO jso = parse(rtxt);
+        // data.setModel(jso);
+
+        // Update list of saved models in the WMT DataManager.
+        DataTransfer.getModelList(data);
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "

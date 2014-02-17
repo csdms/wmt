@@ -354,10 +354,9 @@ public class ModelMenu extends DecoratedPopupPanel {
       }
       data.getPerspective().setModelPanelTitle(true);
 
+      // Serialize the model from the GUI and post it to the server.
       DataTransfer.serialize(data);
-      
-      // Update list of saved models in the WMT DataManager.
-      DataTransfer.getModelList(data);
+      DataTransfer.postModel(data);
     }
   }
 
