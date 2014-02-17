@@ -28,6 +28,7 @@ setup(name='wmt',
           'console_scripts': [
               'wmt_setup = wmt.scripts.site_setup:main',
               'wmt_fill_file = wmt.scripts.fill_file:main',
+              'wmt_validate = wmt.scripts.validate:main',
           ],
       },
      )
