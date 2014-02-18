@@ -26,6 +26,8 @@ import edu.colorado.csdms.wmt.client.data.ModelJSO;
  */
 public class DataManager {
 
+  private Boolean developmentMode;
+  
   private Perspective perspective;
   private ComponentList componentList;
   private ModelTree modelTree;
@@ -51,6 +53,23 @@ public class DataManager {
     components = new ArrayList<ComponentJSO>();
     modelIdList = new ArrayList<Integer>();
     modelNameList = new ArrayList<String>();
+  }
+
+  /**
+   * Returns true if GWT is running in development mode; false for production
+   * mode.
+   */
+  public Boolean isDevelopmentMode() {
+    return developmentMode;
+  }
+
+  /**
+   * Stores the GWT mode: true if in development, false if in production.
+   * 
+   * @param developmentMode a Boolean, set to true for development mode
+   */
+  public void isDevelopmentMode(Boolean developmentMode) {
+    this.developmentMode = developmentMode;
   }
 
   /**
