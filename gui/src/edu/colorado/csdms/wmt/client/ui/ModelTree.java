@@ -169,14 +169,26 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
   }
 
   /**
-   * Checks whether a given component is present in the ModelTree.
+   * Checks whether a given component is present in the ModelTree. This is an
+   * overloaded version of {@link #isComponentPresent(String)}.
    * 
-   * @param componentId the id of component to check
+   * @param component a Component to check
    * @return true if the component is in the ModelTree
    */
   public Boolean isComponentPresent(Component component) {
 
     String componentId = component.getId();
+    return isComponentPresent(componentId);
+  }
+
+  /**
+   * Checks whether a given component is present in the ModelTree.
+   * 
+   * @param componentId the id of component to check
+   * @return true if the component is in the ModelTree
+   */
+  public Boolean isComponentPresent(String componentId) {
+
     Boolean componentIsPresent = false;
 
     Iterator<TreeItem> iter = this.treeItemIterator();
@@ -190,8 +202,8 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
     }
 
     return componentIsPresent;
-  }
-
+  }  
+  
   /**
    * Checks whether the input Port has already appeared higher up in the
    * ModelTree hierarchy, and has a connected Component. If so, the Component
