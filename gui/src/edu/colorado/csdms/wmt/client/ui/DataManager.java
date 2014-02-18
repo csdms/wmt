@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.data.Component;
@@ -353,6 +354,10 @@ public class DataManager {
   public void deserialize() {
     
     // Deserialize the ModelJSO object returned on opening a model and use the 
-    // information therein to populate the WMT GUI.
+    // information contained within it to populate the WMT GUI.
+    
+    // A placeholder to see what's in the model that was opened...
+    modelString = DataTransfer.stringify(model);
+    Window.alert(modelString);
   }
 }

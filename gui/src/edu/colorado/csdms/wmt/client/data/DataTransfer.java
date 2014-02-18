@@ -400,13 +400,20 @@ public class DataTransfer {
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
-        String rtxt = response.getText();
-        Window.alert(rtxt);
-        // ModelJSO jso = parse(rtxt);
-        // data.setModel(jso);
 
-        // Update list of saved models in the WMT DataManager.
-        DataTransfer.getModelList(data);
+        String rtxt = response.getText();
+
+        // On successful GET, deserialize the ModelJSO and populate the GUI.
+        if (url.contains(MODEL_SHOW_URL)) {
+          ModelJSO jso = parse(rtxt);
+          data.setModel(jso);
+          data.deserialize();
+        }
+
+        // On successful POST, update list of saved models in the DataManager.
+        if (url.contains(MODEL_NEW_URL)) {
+          DataTransfer.getModelList(data);
+        }
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "
