@@ -309,16 +309,17 @@ public class ModelMenu extends DecoratedPopupPanel {
       openDialog.hide();
       ModelMenu.this.hide();
 
-      // Get the selected item from the openDialog. Problem: This feels
-      // fragile. I'm using the index of the selected modelName to match up
-      // the index of the modelId. This should work consistently because I add
-      // the modelId and modelName to the ArrayList with the same index. It
-      // would be better if they both resided in the same data structure.
+      // Get the selected item from the openDialog. This feels fragile. I'm
+      // using the index of the selected modelName to match up the index of
+      // the modelId. This should work consistently because I add the modelId
+      // and modelName to the ArrayList with the same index. It would be
+      // better if they both resided in the same data structure.
       Integer selIndex =
           openDialog.getModelPanel().getModelDroplist().getSelectedIndex();
       Integer modelId = data.modelIdList.get(selIndex);
 
-      // Get the data + metadata for the selected model.
+      // Get the data + metadata for the selected model. On success, #getModel
+      // calls DataManager#deserialize, which populates the WMT GUI.
       DataTransfer.getModel(data, modelId);
     }
   }

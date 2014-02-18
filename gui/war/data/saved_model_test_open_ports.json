@@ -1,33 +1,17 @@
 {
-  "name":"Avulsion 0",
+  "name":"CEM and buds",
   "model":[
-    {
-      "id":"avulsion",
-      "class":"Avulsion",
-      "driver":true,
-      "parameters":{
-        "simulation_name":"Avulsion",
-        "number_of_rows":"500",
-        "number_of_columns":"500",
-        "row_spacing":"100",
-        "column_spacing":"100",
-        "output_format":"netcdf"
-      },
-      "connect":{
-        "discharge":null,
-        "elevation":"elevation@cem"
-      }
-    },
     {
       "id":"cem",
       "class":"CEM",
+      "driver":true,
       "parameters":{
         "simulation_name":"CEM",
-        "number_of_rows":"50",
-        "number_of_columns":"1000",
-        "row_spacing":"100",
-        "column_spacing":"100",
-        "output_format":"netcdf"
+        "number_of_rows":"4200",
+        "number_of_columns":"4200",
+        "row_spacing":"150",
+        "column_spacing":"150",
+        "output_format":"vtk"
       },
       "connect":{
         "river":"river@avulsion",
@@ -35,16 +19,32 @@
       }
     },
     {
+      "id":"avulsion",
+      "class":"Avulsion",
+      "parameters":{
+        "simulation_name":"Avulsion",
+        "number_of_rows":"2100",
+        "number_of_columns":"2100",
+        "row_spacing":"300",
+        "column_spacing":"300",
+        "output_format":"vtk"
+      },
+      "connect":{
+        "discharge":null,
+        "elevation":"elevation@cem"
+      }
+    },
+    {
       "id":"waves",
       "class":"Waves",
       "parameters":{
         "simulation_name":"Waves",
-        "model_end_time":"10",
-        "incoming_wave_height":"2",
-        "incoming_wave_period":"7",
+        "model_end_time":"42",
+        "incoming_wave_height":"2.5",
+        "incoming_wave_period":"7.5",
         "highness_factor":"0.2",
         "asymmetry":"0.5",
-        "output_format":"netcdf"
+        "output_format":"vtk"
       }
     }
   ]

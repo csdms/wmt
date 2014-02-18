@@ -383,9 +383,10 @@ public class DataTransfer {
    * A RequestCallback handler class that provides the callback for a model
    * GET or POST request.
    * <p>
-   * Note that on a successful POST,
+   * On a successful GET, {@link DataManager#deserialize()} is called to
+   * populate the WMT GUI. On a successful POST,
    * {@link DataTransfer#getModelList(DataManager)} is called to refresh the
-   * list of available models on the server.
+   * list of models available on the server.
    */
   public static class ModelRequestCallback implements RequestCallback {
 

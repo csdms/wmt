@@ -378,5 +378,27 @@ public class DataManager {
     // A placeholder to see what's in the model that was opened...
     modelString = DataTransfer.stringify(model);
     Window.alert(modelString);
+    
+    modelTree.clear();
+    parameterTable.clearTable();
+    modelTree.initializeTree();
+    
+    for (int i = 0; i < model.getComponents().length(); i++) {
+
+      ModelJSO modelComponent = model.getComponents().get(i);
+      ComponentJSO componentJSO = getComponent(modelComponent.getId());
+      
+      if (modelComponent.isDriver()) {
+        TreeItem driver = modelTree.getItem(0);
+        Component component = new Component(componentJSO);
+        modelTree.addComponent(component, driver);
+        driver.setState(true);
+      }
+
+    }
+
+    componentList.setCellSensitivity();    
+    
+    // Set model name on tab.
   }
 }
