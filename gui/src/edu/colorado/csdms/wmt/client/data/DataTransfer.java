@@ -229,6 +229,9 @@ public class DataTransfer {
 
     String url = DataURL.newModel(data);
 
+    GWT.log(url);
+    GWT.log(data.getModelString());
+    
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 

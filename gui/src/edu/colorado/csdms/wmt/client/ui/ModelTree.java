@@ -191,13 +191,16 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
 
     Boolean componentIsPresent = false;
 
-    Iterator<TreeItem> iter = this.treeItemIterator();
-    while (iter.hasNext() && !componentIsPresent) {
-      TreeItem treeItem = (TreeItem) iter.next();
-      ModelCell cell = (ModelCell) treeItem.getWidget();
-      if (cell.getComponentCell().getComponent().getId() != null) {
-        componentIsPresent =
-            cell.getComponentCell().getComponent().getId().matches(componentId);
+    if (componentId != null) {
+      Iterator<TreeItem> iter = this.treeItemIterator();
+      while (iter.hasNext() && !componentIsPresent) {
+        TreeItem treeItem = (TreeItem) iter.next();
+        ModelCell cell = (ModelCell) treeItem.getWidget();
+        if (cell.getComponentCell().getComponent().getId() != null) {
+          componentIsPresent =
+              cell.getComponentCell().getComponent().getId().matches(
+                  componentId);
+        }
       }
     }
 
