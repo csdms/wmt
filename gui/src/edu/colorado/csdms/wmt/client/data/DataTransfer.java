@@ -46,10 +46,8 @@ public class DataTransfer {
   }-*/;
 
   /**
-   * A JSNI method for evaluating JSONs.
-   * 
-   * Note that this is a generic method. It returns a JavaScript object of the
-   * type denoted by the type parameter T.
+   * A JSNI method for evaluating JSONs. This is a generic method. It returns
+   * a JavaScript object of the type denoted by the type parameter T.
    * 
    * @see <a
    *      href="http://docs.oracle.com/javase/tutorial/extra/generics/methods.html">Generic
@@ -66,8 +64,7 @@ public class DataTransfer {
   }-*/;
 
   /**
-   * A worker that returns a HashMap of entries used to build a HTTP query
-   * string.
+   * A worker that returns a HashMap of entries used in a HTTP query string.
    * 
    * @param modelName the name of the model, a String
    * @param jsonStr the stringified JSON describing the model

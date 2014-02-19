@@ -183,14 +183,14 @@ public class DataManager {
   }
 
   /**
-   * Gets the stringified model JSON created by DataTransfer#serialize.
+   * Gets the stringified model JSON created by {@link #serialize()}.
    */
   public String getModelString() {
     return modelString;
   }
 
   /**
-   * Stores the stringified model JSON created by DataTransfer#serialize.
+   * Stores the stringified model JSON created by {@link #serialize()}.
    * 
    * @param modelString the modelString to set
    */
@@ -289,8 +289,9 @@ public class DataManager {
   /**
    * Translates the model displayed in WMT into a {@link ModelJSO} object,
    * which completely describes the state of the model. This object is
-   * converted to a string (with {@link DataTransfer#stringify(Object)}) which
-   * can be uploaded to a server.
+   * converted to a string (with
+   * {@link DataTransfer#stringify(JavaScriptObject)}) which can be uploaded
+   * to a server.
    */
   public void serialize() {
 
@@ -325,7 +326,7 @@ public class DataManager {
       ComponentJSO componentJSO = getComponent(component.getId());
 
       modelComponent.setId(componentJSO.getId());
-      modelComponent.setClassName(componentJSO.getName());
+      modelComponent.setClassName(componentJSO.getId()); // XXX Check this.
       if (cell.getPortCell().getPort().getId().matches("driver")) {
         modelComponent.setDriver();
       }

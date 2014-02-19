@@ -8,9 +8,9 @@ import com.google.gwt.core.client.GWT;
 import edu.colorado.csdms.wmt.client.ui.DataManager;
 
 /**
- * A class that defines static methods for returning URLs for accessing
- * components and models. Works in GWT development mode and in production mode,
- * accessing the WMT API.
+ * A class defining static methods that return URLs for accessing components
+ * and models. Works in GWT development mode and in production mode, accessing
+ * the WMT API.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -28,7 +28,7 @@ public class DataURL {
   private static final String MODEL_NEW_URL = API_URL + "models/new";
 
   /**
-   * Returns the URL to access the list of available components on the server.
+   * Returns the URL for the list of available components on the server.
    * 
    * @param data the DataManager object for the WMT session
    */
@@ -55,7 +55,7 @@ public class DataURL {
   }
 
   /**
-   * Returns the URL to get the list of available models from the server.
+   * Returns the URL for the list of available models from the server.
    * 
    * @param data the DataManager object for the WMT session
    */
@@ -98,6 +98,8 @@ public class DataURL {
 
   /**
    * Returns the URL for posting a new model to the server.
+   * <p>
+   * Note that this appears to work only in production mode.
    * 
    * @param data the DataManager object for the WMT session
    */
