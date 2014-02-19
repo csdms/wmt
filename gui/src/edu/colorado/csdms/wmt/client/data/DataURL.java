@@ -4,6 +4,7 @@
 package edu.colorado.csdms.wmt.client.data;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 
 import edu.colorado.csdms.wmt.client.ui.DataManager;
 
@@ -27,6 +28,16 @@ public class DataURL {
   private static final String MODEL_SHOW_URL = API_URL + "models/show/";
   private static final String MODEL_NEW_URL = API_URL + "models/new";
 
+  /**
+   * A wrapper around Window.Location that returns the application URL in
+   * either development or production mode.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String applicationURL(DataManager data) {
+    return Window.Location.getHref();
+  }
+  
   /**
    * Returns the URL for the list of available components on the server.
    * 

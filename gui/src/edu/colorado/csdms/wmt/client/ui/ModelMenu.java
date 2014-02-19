@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import edu.colorado.csdms.wmt.client.data.DataTransfer;
+import edu.colorado.csdms.wmt.client.data.DataURL;
 
 /**
  * Encapsulates a menu for operations on Models -- e.g., New, Open, Close and
@@ -169,23 +170,21 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "New Model" button in the ModelMenu.
+   * Handles click on the "New Model" button in the ModelMenu. Opens a new
+   * instance of WMT in a new browser tab.
    */
   public class NewModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
-      ModelMenuItem item = (ModelMenuItem) event.getSource();
       ModelMenu.this.hide();
-      Window.alert("Clicked on: " + item.getText(0, 0));
-      // ModelMenu.this.data.getModelTree().clear();
-      // ModelMenu.this.data.getParameterTable().clearTable();
-      // ModelMenu.this.data.getModelTree().initializeTree();
-      // ModelMenu.this.data.getComponentList().setCellSensitivity();
+      Window.open(DataURL.applicationURL(data), "_blank", null);
     }
   }
 
   /**
-   * Handles click on the "Open Model..." button in the ModelMenu.
+   * Handles click on the "Open Model..." button in the ModelMenu. Pops up an
+   * instance of {@link OpenDialogBox} to prompt the user for a model to open.
+   * Events are sent to {@link OpenOkHandler} and {@link OpenCancelHandler}.
    */
   public class OpenModelHandler implements ClickHandler {
     @Override
@@ -211,17 +210,16 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "Close Model" button in the ModelMenu.
+   * Handles click on the "Close Model" button in the ModelMenu. Resets the 
+   * WMT GUI to its default state.
    */
   public class CloseModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
-      ModelMenuItem item = (ModelMenuItem) event.getSource();
       ModelMenu.this.hide();
-      Window.alert("Clicked on: " + item.getText(0, 1));
-      // ModelMenu.this.data.getModelTree().clear();
-      // ModelMenu.this.data.getParameterTable().clearTable();
-      // ModelMenu.this.data.getComponentList().setCellSensitivity();
+      // ModelMenuItem item = (ModelMenuItem) event.getSource();
+      // Window.alert("Clicked on: " + item.getText(0, 1));
+      data.getPerspective().reset();
     }
   }
 
@@ -241,7 +239,9 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "Save Model As..." button in the ModelMenu.
+   * Handles click on the "Save Model As..." button in the ModelMenu. Pops up an
+   * instance of {@link SaveDialogBox} to prompt the user for a model to open.
+   * Events are sent to {@link SaveOkHandler} and {@link SaveCancelHandler}.
    */
   public class SaveModelAsHandler implements ClickHandler {
     @Override
@@ -300,7 +300,9 @@ public class ModelMenu extends DecoratedPopupPanel {
 
   /**
    * Handles click on the "OK" button in the open dialog that appears when the
-   * "Open Model..." button is clicked in the ModelMenu.
+   * "Open Model..." button is clicked in the ModelMenu. Calls
+   * {@link DataTransfer#getModel(DataManager, Integer)} to pull the selected
+   * model from the server.
    */
   public class OpenOkHandler implements ClickHandler {
     @Override
@@ -326,7 +328,8 @@ public class ModelMenu extends DecoratedPopupPanel {
 
   /**
    * Handles click on the "Cancel" button in the open dialog that appears when
-   * the "Open Model..." button is clicked in the ModelMenu.
+   * the "Open Model..." button is clicked in the ModelMenu. Cancels action
+   * and closes menu.
    */
   public class OpenCancelHandler implements ClickHandler {
     @Override
@@ -338,7 +341,9 @@ public class ModelMenu extends DecoratedPopupPanel {
   
   /**
    * Handles click on the "OK" button in the save dialog that appears when the
-   * "Save Model As..." button is clicked in the ModelMenu.
+   * "Save Model As..." button is clicked in the ModelMenu. Uses
+   * {@link DataManager#serialize()} to serialize the model, then posts it to
+   * the server with {@link DataTransfer#postModel(DataManager)}.
    */
   public class SaveOkHandler implements ClickHandler {
     @Override
@@ -363,7 +368,8 @@ public class ModelMenu extends DecoratedPopupPanel {
 
   /**
    * Handles click on the "Cancel" button in the save dialog that appears when
-   * the "Save Model As..." button is clicked in the ModelMenu.
+   * the "Save Model As..." button is clicked in the ModelMenu. Cancels action
+   * and closes menu.
    */
   public class SaveCancelHandler implements ClickHandler {
     @Override
