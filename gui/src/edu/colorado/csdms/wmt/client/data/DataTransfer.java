@@ -128,13 +128,16 @@ public class DataTransfer {
   @SuppressWarnings("unused")
   public static void getComponentList(DataManager data) {
 
+    String url = DataURL.listComponents(data);
+    GWT.log(url);
+
     RequestBuilder builder =
-        new RequestBuilder(RequestBuilder.GET, URL.encode(COMPONENT_LIST_URL));
+        new RequestBuilder(RequestBuilder.GET, URL.encode(url));
 
     try {
       Request request =
-          builder.sendRequest(null, new ComponentListRequestCallback(data,
-              COMPONENT_LIST_URL));
+          builder
+              .sendRequest(null, new ComponentListRequestCallback(data, url));
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
@@ -151,11 +154,12 @@ public class DataTransfer {
   @SuppressWarnings("unused")
   public static void getComponent(DataManager data, String componentId) {
 
-    String url = COMPONENT_SHOW_URL + componentId;
-
+    String url = DataURL.showComponent(data, componentId);
+    GWT.log(url);
+    
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.GET, URL.encode(url));
-    GWT.log(url);
+
     try {
       Request request =
           builder.sendRequest(null, new ComponentRequestCallback(data, url));
@@ -231,7 +235,7 @@ public class DataTransfer {
    */
   @SuppressWarnings("unused")
   public static void postModel(DataManager data) {
-
+    
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(MODEL_NEW_URL));
 
@@ -273,6 +277,8 @@ public class DataTransfer {
 
         String rtxt = response.getText();
         ComponentListJSO jso = parse(rtxt);
+        
+        GWT.log(rtxt);
 
         // Load the list of components into the DataManager. At the same time,
         // start pulling down data for the components. Asynchronicity is cool!
