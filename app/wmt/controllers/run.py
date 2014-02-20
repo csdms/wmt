@@ -14,7 +14,6 @@ class StageIn(object):
                          not_too_long(20),
                          size=30, description='Simulation name:'),
         web.form.Textarea('json',
-                          not_too_long(2048),
                           not_bad_json,
                           rows=40, cols=80, description=None),
         web.form.Button('Stage')
