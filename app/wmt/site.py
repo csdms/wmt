@@ -7,7 +7,6 @@ import wmt
 
 
 _PACKAGE_PREFIX = os.path.abspath(os.path.dirname(wmt.__file__))
-_SUBDIRS = set(['templates', 'data', 'db', 'bin', 'conf', ])
 
 
 def create_empty_database(path_to_db, clobber=True, schema=None):
@@ -126,6 +125,14 @@ class Conf(SiteSubFolder):
 class Stage(SiteSubFolder):
     name = 'stage'
     def populate(self):
+        make_directory_tree(self.prefix, [])
+        chown_folder_and_files(self.prefix, 'nobody', 'nobody')
+
+
+class Logs(SiteSubFolder):
+    name = 'logs'
+    def populate(self):
+        make_directory_tree(self.prefix, [])
         chown_folder_and_files(self.prefix, 'nobody', 'nobody')
 
 
@@ -187,6 +194,7 @@ class Site(object):
             'db': Database(self.prefix),
             'bin': Bin(self.prefix),
             'stage': Stage(self.prefix),
+            'logs': Logs(self.prefix),
         }
         self._options = options
 
@@ -212,6 +220,7 @@ class Site(object):
                 ('templates', self.dir['templates'].prefix),
                 ('data', self.dir['data'].prefix),
                 ('stage', self.dir['stage'].prefix),
+                ('logs', self.dir['logs'].prefix),
                 ('database', os.path.join(self.dir['db'].prefix, 'wmt.db')),
                 ('user_db', os.path.join(self.dir['db'].prefix, 'users.db')),
                 ('db', self.dir['db'].prefix), ])
