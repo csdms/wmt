@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.TreeItem;
 
@@ -33,7 +34,8 @@ public class DataManager {
   private ModelTree modelTree;
   private ParameterTable parameterTable;
 
-  private List<ComponentJSO> components;
+  private List<ComponentJSO> components;      // "class" components
+  private List<ComponentJSO> modelComponents; // "instance" components
   private String draggedComponent;
   private String selectedComponent;
   private ModelJSO model;
@@ -51,6 +53,7 @@ public class DataManager {
   public DataManager() {
     componentIdList = new ArrayList<String>();
     components = new ArrayList<ComponentJSO>();
+    modelComponents = new ArrayList<ComponentJSO>();
     modelIdList = new ArrayList<Integer>();
     modelNameList = new ArrayList<String>();
   }
@@ -92,7 +95,7 @@ public class DataManager {
    * A convenience method that returns the {@link ComponentJSO} object
    * matching the given component id.
    * 
-   * @param componentId the id of the desired component, a String.
+   * @param componentId the id of the desired component, a String
    */
   public ComponentJSO getComponent(String componentId) {
     Iterator<ComponentJSO> iter = components.iterator();
@@ -103,13 +106,13 @@ public class DataManager {
       }
     }
     return null;
-  }
-
+  }  
+  
   /**
    * A convenience method that returns the {@link ComponentJSO} object at the
    * given position in the ArrayList of components.
    * 
-   * @param index an offset into the ArrayList of components.
+   * @param index an offset into the ArrayList of components
    */
   public ComponentJSO getComponent(Integer index) {
     return components.get(index);
@@ -118,8 +121,6 @@ public class DataManager {
   /**
    * Returns the <em>all</em> the components in the ArrayList of
    * {@link ComponentJSO} objects.
-   * 
-   * @return
    */
   public List<ComponentJSO> getComponents() {
     return this.components;
@@ -139,7 +140,7 @@ public class DataManager {
     if (this.components.size() == this.componentIdList.size()) {
       sortComponents();
       perspective.initializeComponentList();
-    }
+    } // XXX This is fragile.
   }
 
   /**
@@ -164,6 +165,59 @@ public class DataManager {
       }
     });
   }
+
+  /**
+   * A convenience method that returns the {@link ComponentJSO} object
+   * matching the given model component id.
+   * <p>
+   * Compare with {@link #getComponent(String)} for "class" components.
+   * 
+   * @param modelComponentId the id of the desired model component, a String
+   */
+  public ComponentJSO getModelComponent(String modelComponentId) {
+    Iterator<ComponentJSO> iter = modelComponents.iterator();
+    while (iter.hasNext()) {
+      ComponentJSO component = (ComponentJSO) iter.next();
+      if (component.getId().matches(modelComponentId)) {
+        return component;
+      }
+    }
+    return null;
+  }  
+  
+  /**
+   * A convenience method that returns the {@link ComponentJSO} object at the
+   * given position in the ArrayList of model components.
+   * <p>
+   * Compare with {@link #getComponent(Integer)} for "class" components.
+   * 
+   * @param index an offset into the ArrayList of model components
+   */
+  public ComponentJSO getModelComponent(Integer index) {
+    return modelComponents.get(index);
+  }  
+  
+  /**
+   * Returns the <em>all</em> the model components in the ArrayList of
+   * {@link ComponentJSO} objects.
+   * <p>
+   * Compare with {@link #getComponents()} for "class" components.
+   */
+  public List<ComponentJSO> getModelComponents() {
+    return this.modelComponents;
+  }
+  
+  /**
+   * A convenience method that adds a component to the ArrayList of
+   * model components.
+   * <p>
+   * Compare with {@link #setComponent(ComponentJSO)} for "class" components.
+   * 
+   * @param modelComponent the model component to add, a ComponentJSO object
+   */
+  public void setModelComponent(ComponentJSO modelComponent) {
+    this.modelComponents.add(modelComponent);
+  }  
   
   /**
    * Returns the model displayed in the {@link ModelTree}, a {@link ModelJSO}
@@ -372,34 +426,37 @@ public class DataManager {
    * TODO
    */
   public void deserialize() {
-    
-    // Deserialize the ModelJSO object returned on opening a model and use the 
+
+    // Deserialize the ModelJSO object returned on opening a model and use the
     // information contained within it to populate the WMT GUI.
-    
-    // A placeholder to see what's in the model that was opened...
-    modelString = DataTransfer.stringify(model);
-    Window.alert(modelString);
-    
-    modelTree.clear();
-    parameterTable.clearTable();
-    modelTree.initializeTree();
-    
+
+    perspective.reset();
+
     for (int i = 0; i < model.getComponents().length(); i++) {
 
       ModelJSO modelComponent = model.getComponents().get(i);
-      ComponentJSO componentJSO = getComponent(modelComponent.getId());
-      
+      ComponentJSO modelComponentJSO =
+          getModelComponent(modelComponent.getId());
+
+      Integer nModelParameters = modelComponent.getParameters().length();
+      for (int j = 0; j < nModelParameters; j++) {
+        String key = modelComponent.getParameters().get(j);
+        String value = modelComponent.getValue(key);
+        modelComponentJSO.getParameter(key).getValue().setDefault(value);
+      }
+
       if (modelComponent.isDriver()) {
         TreeItem driver = modelTree.getItem(0);
-        Component component = new Component(componentJSO);
+        Component component = new Component(modelComponentJSO);
         modelTree.addComponent(component, driver);
         driver.setState(true);
       }
 
+      GWT.log(DataTransfer.stringify(modelComponentJSO));
     }
 
-    componentList.setCellSensitivity();    
-    
+    componentList.setCellSensitivity();
+
     // Set model name on tab.
   }
 }

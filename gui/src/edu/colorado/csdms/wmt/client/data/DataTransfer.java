@@ -59,10 +59,10 @@ public class DataTransfer {
    * @param jsonStr a trusted String
    * @return a JavaScriptObject that can be cast to an overlay type
    */
-  private final native static <T> T parse(String jsonStr) /*-{
+  public final native static <T> T parse(String jsonStr) /*-{
 		return eval("(" + jsonStr + ")");
-  }-*/;
-
+  }-*/;  
+  
   /**
    * A worker that returns a HashMap of entries used in a HTTP query string.
    * 
@@ -318,8 +318,10 @@ public class DataTransfer {
       if (Response.SC_OK == response.getStatusCode()) {
         String rtxt = response.getText();
         GWT.log(rtxt);
-        ComponentJSO jso = parse(rtxt);
-        data.setComponent(jso);
+        ComponentJSO jso1 = parse(rtxt);
+        data.setComponent(jso1);          // "class" component
+        ComponentJSO jso2 = parse(rtxt);
+        data.setModelComponent(jso2);     // "instance" component, for model
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "
