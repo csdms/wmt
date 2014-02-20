@@ -12,20 +12,11 @@
   "parameters":[
     {
       "key":"separator",
-      "name":"Input",
-      "description":"Input",
+      "name":"Run Parameters",
+      "description":"Run Parameters",
       "value":{
         "type":"string",
         "default":""
-      }
-    },
-    {
-      "key":"input_directory",
-      "name":"Input directory",
-      "description":"Input directory",
-      "value":{
-        "type":"string",
-        "default":"$HOME/CMT_input"
       }
     },
     {
@@ -35,24 +26,6 @@
       "value":{
         "type":"string",
         "default":"HydroTrend"
-      }
-    },
-    {
-      "key":"separator",
-      "name":"Run",
-      "description":"Run",
-      "value":{
-        "type":"string",
-        "default":""
-      }
-    },
-    {
-      "key":"hypsometry_file",
-      "name":"Hypsometry file",
-      "description":"Location of input hypsometry file",
-      "value":{
-        "type":"string",
-        "default":"/home/csdms/sims/hydrotrend/default/HYDRO0.HYPS"
       }
     },
     {
@@ -67,6 +40,32 @@
           "max":100000
         },
         "units":"yr"
+      }
+    },
+    {
+      "key":"separator",
+      "name":"Input Files",
+      "description":"Input Files",
+      "value":{
+        "type":"string",
+        "default":""
+      }
+    },
+    {
+      "key":"hypsometry_file",
+      "name":"Hypsometry file",
+      "description":"Basin hypsometry file",
+      "value":{
+        "type":"choice",
+        "default":"waipaoa.hyps",
+        "choices":[
+          "danube.hyps",
+          "eel.hyps",
+          "ganges.hyps",
+          "lanyang.hyps",
+          "po.hyps",
+          "waipaoa.hyps"
+        ]
       }
     },
     {

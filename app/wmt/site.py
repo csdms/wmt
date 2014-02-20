@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 import os
+import shutil
 from string import Template
 from collections import OrderedDict
 
@@ -155,9 +156,8 @@ class Data(SiteSubFolder):
                 os.path.dirname(wmt.__file__),
                 'data')
         )
-        make_directory_tree(self.prefix, ['components', ])
-        copy_dir_contents(os.path.join(src_dir, 'components'),
-                          os.path.join(self.prefix, 'components'))
+        shutil.copytree(os.path.join(src_dir, 'components'),
+                        os.path.join(self.prefix, 'components'))
 
 
 class Database(SiteSubFolder):
