@@ -37,8 +37,7 @@ def _load_table(name, db='.'):
             except ValueError as error:
                 raise LoadError(str(error))
     except IOError as error:
-        pass
-        #raise LoadError(str(error))
+        table = []
 
     return table
 
