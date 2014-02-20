@@ -1,10 +1,12 @@
+from __future__ import print_function
+
 import web
 import os
+import sys
+import logging
 
-from .utils.json import load_component
 
-
-def read_config_file(path_to_file):
+def _read_config_file(path_to_file):
     from ConfigParser import RawConfigParser
     from passlib.context import CryptContext
 
@@ -28,16 +30,19 @@ def read_site_config_file(*args):
 
     os.environ['WMT_PREFIX'] = os.path.abspath(prefix)
     path = os.path.join(os.environ['WMT_PREFIX'], 'conf', 'wmt.ini')
-    return read_config_file(path)
+    return _read_config_file(path)
 
 
-def load_palette(palette_dir):
+def _load_palette(palette_dir):
+    from .utils.json import load_component
+
+
     palette = {}
     for file in os.listdir(palette_dir):
         try:
             desc = load_component(os.path.join(palette_dir, file))
         except ValueError:
-            pass
+            logger.error('%s: unable to load component' % os.path.join(palette_dir, file))
         else:
             palette[desc['id']] = desc
 
@@ -46,4 +51,5 @@ def load_palette(palette_dir):
 
 site = read_site_config_file()
 db = web.database(dbn='sqlite', db=site['database'])
-palette = load_palette(os.path.join(site['data'], 'components'))
+palette = _load_palette(os.path.join(site['data'], 'components'))
+logger = logging.getLogger('wmtserver')
