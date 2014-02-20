@@ -1,23 +1,4 @@
-{
-  "id":"avulsion",
-  "name":"Avulsion",
-  "url":"http://csdms.colorado.edu/wiki/Model_help:Avulsion",
-  "provides":[
-    {
-      "id":"river"
-    }
-  ],
-  "uses": [
-    {
-      "id":"discharge",
-      "required":false
-    },
-    {
-      "id":"elevation",
-      "required":false
-    }
-  ],
-  "parameters":[
+[
     {
       "key":"simulation_name",
       "name":"Simulation name",
@@ -94,5 +75,4 @@
         ]
       }
     }
-  ]
-}
+]

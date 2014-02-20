@@ -1,0 +1,10 @@
+[
+  {
+    "id":"discharge",
+    "required":false
+  },
+  {
+    "id":"elevation",
+    "required":false
+  }
+]
