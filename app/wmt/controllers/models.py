@@ -3,7 +3,7 @@ import json
 
 from ..models import (models, users)
 from ..render import render
-from ..validators import (not_too_long, not_too_short, not_bad_json)
+from ..validators import (not_too_short, not_bad_json)
 from ..cca import rc_from_json
 
 
@@ -26,10 +26,10 @@ class New(object):
     form = web.form.Form(
         web.form.Textbox('name',
                          not_too_short(3),
-                         not_too_long(20),
+                         #not_too_long(20),
                          size=30, description='Model name:'),
         web.form.Textarea('json',
-                          not_too_long(2048),
+                          #not_too_long(2048),
                           not_bad_json,
                           rows=40, cols=80, description=None),
         web.form.Button('Save')
@@ -50,10 +50,10 @@ class Save(object):
     form = web.form.Form(
         web.form.Textbox('name',
                          not_too_short(3),
-                         not_too_long(20),
+                         #not_too_long(20),
                          size=30, description='Model name:'),
         web.form.Textarea('json',
-                          not_too_long(2048),
+                          #not_too_long(2048),
                           not_bad_json,
                           rows=40, cols=80, description=None),
         web.form.Button('Save')

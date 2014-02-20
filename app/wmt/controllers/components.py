@@ -67,7 +67,7 @@ class Format(object):
             return render.format(form)
         mapping = json.loads(form.d.json)
         return render.code(
-            comps.get_component_formatted_input(name, **mapping))
+            comps.get_component_pretty_input(name, **mapping))
 
 
 class Defaults(object):

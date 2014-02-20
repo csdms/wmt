@@ -1,7 +1,7 @@
 import os
 import json
 
-from ..config import palette, site
+from ..config import palette, site, logger
 
 
 class Error(Exception):
@@ -61,7 +61,7 @@ def _decorate_with_header(contents, **kwds):
     header = []
     for item in kwds.items():
         header.append('%s: %s' % item)
-    header_width = max(len(line) for line in header)
+    header_width = 80
 
     return os.linesep.join(
         header + [
@@ -74,15 +74,11 @@ def _decorate_with_header(contents, **kwds):
 def get_component_input(name):
     input_files = get_component(name)['input_files']
 
-    lines = []
+    files = {}
     for (fid, filename) in enumerate(input_files):
-        contents = _read_input_file(filename)
-        lines.append(
-            _decorate_with_header(
-                contents, file=filename,
-                fileno='%d of %d' % (fid, len(input_files))))
+        files[filename] = _read_input_file(filename)
 
-    return os.linesep.join(lines)
+    return files
 
 
 def get_component_formatted_input(name, **kwds):
@@ -90,4 +86,28 @@ def get_component_formatted_input(name, **kwds):
 
     format = FileFormatter(get_component_defaults(name))
 
-    return format.format(get_component_input(name), **kwds)
+    input = dict()
+    for (filename, contents) in get_component_input(name).items():
+        formatted = format.format(contents, **kwds)
+        input[filename] = format.format(contents, **kwds)
+
+    return input
+
+
+def get_component_pretty_input(name, **kwds):
+    from ..utils.templatefile import FileFormatter
+
+    format = FileFormatter(get_component_defaults(name))
+
+    lines = []
+    for (filename, contents) in get_component_input(name).items():
+        formatted = format.format(contents, **kwds)
+
+        header = dict(file=filename)
+        if len(format.missing_fields) > 0:
+            header['missing'] = ', \n  '.join(format.missing_fields)
+        lines.append(_decorate_with_header(formatted, **header))
+
+        format.clear_missing()
+
+    return os.linesep.join(lines)

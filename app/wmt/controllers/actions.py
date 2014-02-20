@@ -24,7 +24,7 @@ class Convert(object):
 class RcFile(object):
     form = web.form.Form(
         web.form.Textarea('content',
-                          not_too_long(2048),
+                          #not_too_long(2048),
                           not_bad_json,
                           rows=40, cols=80, description=None),
         web.form.Button('submit', type='submit', description='Submit',
