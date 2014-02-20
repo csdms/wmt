@@ -311,6 +311,8 @@ public class ModelMenu extends DecoratedPopupPanel {
       openDialog.hide();
       ModelMenu.this.hide();
 
+      data.getPerspective().reset();      
+      
       // Get the selected item from the openDialog. This feels fragile. I'm
       // using the index of the selected modelName to match up the index of
       // the modelId. This should work consistently because I add the modelId

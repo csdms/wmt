@@ -86,7 +86,8 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
   }
 
   /**
-   * Adds a Component to the ModelCell used by the targeted TreeItem.
+   * Adds a Component to the ModelCell used by the targeted TreeItem. Uses
+   * {@link #setComponent(Component, TreeItem)}.
    * 
    * @param component the Component to add
    * @param target the TreeItem to which the Component is to be added
@@ -95,16 +96,27 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
 
     GWT.log("Adding component: " + component.getName());
 
-    // Get the ModelCell used by the TreeItem target.
-    ModelCell cell = (ModelCell) target.getWidget();
-
     // Mark the model as unsaved with an asterisk. Is this the driver port? If
     // so, also suggest a model name.
-    if (cell.getPortCell().getPort().getId().matches("driver")) {
+    if (this.getItem(0).equals(target)) {
       data.getModel().setName(
           component.getName() + " " + data.saveAttempts.toString());
     }
     data.getPerspective().setModelPanelTitle(false);
+    
+    this.setComponent(component, target);
+  }
+
+  /**
+   * Adds a Component to the ModelCell used by the targeted TreeItem.
+   * 
+   * @param component the Component to add
+   * @param target the TreeItem to which the Component is to be added
+   */
+  public void setComponent(Component component, TreeItem target) {
+
+    // Get the ModelCell used by the TreeItem target.
+    ModelCell cell = (ModelCell) target.getWidget();
 
     // If the Component already exists at a higher level in the ModelTree, set
     // a link to it and exit.
@@ -142,8 +154,8 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
 
     // Update the sensitivity of the DragCells in the ComponentList.
     data.getComponentList().setCellSensitivity();
-  }
-
+  }  
+  
   /**
    * Iterate through the TreeItems of this ModelTree, finding what ModelCells
    * have open PortCells. Add the cell to the openModelCells Vector.

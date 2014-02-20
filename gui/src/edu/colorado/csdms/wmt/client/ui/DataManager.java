@@ -465,7 +465,8 @@ public class DataManager {
     // Deserialize the ModelJSO object returned on opening a model and use the
     // information contained within it to populate the WMT GUI.
 
-    perspective.reset();
+    // Set model name on tab.
+    perspective.setModelPanelTitle(true);
     
     for (int i = 0; i < model.getComponents().length(); i++) {
 
@@ -483,15 +484,15 @@ public class DataManager {
       if (modelComponent.isDriver()) {
         TreeItem driver = modelTree.getItem(0);
         Component component = new Component(modelComponentJSO);
-        modelTree.addComponent(component, driver);
+        modelTree.setComponent(component, driver);
         driver.setState(true);
       }
 
       GWT.log(DataTransfer.stringify(modelComponentJSO));
     }
 
-    componentList.setCellSensitivity();
+//    componentList.setCellSensitivity();
 
-    // Set model name on tab.
+
   }
 }
