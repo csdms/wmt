@@ -38,6 +38,8 @@ URLS = (
     '/models/convert', 'wmt.controllers.actions.Convert',
     '/models/submit', 'wmt.controllers.actions.Submit',
 
+    '/run/(\d*)', 'wmt.controllers.run.StageIn',
+
     '/hosts/new', 'wmt.controllers.hosts.New',
     '/hosts/view/(\d+)', 'wmt.controllers.hosts.View',
     '/hosts/edit/(\d+)', 'wmt.controllers.hosts.Edit',

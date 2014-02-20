@@ -39,8 +39,11 @@ def create_empty_database(path_to_db, clobber=True, schema=None):
 def copy_dir_contents(src, dest):
     import shutil
     for file in os.listdir(src):
-        shutil.copyfile(os.path.join(src, file),
-                        os.path.join(dest, file))
+        try:
+            shutil.copyfile(os.path.join(src, file),
+                            os.path.join(dest, file))
+        except IOError:
+            pass
 
 
 def make_directory_tree(prefix, folders):
@@ -120,6 +123,12 @@ class Conf(SiteSubFolder):
         pass
 
 
+class Stage(SiteSubFolder):
+    name = 'stage'
+    def populate(self):
+        chown_folder_and_files(self.prefix, 'nobody', 'nobody')
+
+
 class Templates(SiteSubFolder):
     name = 'templates'
     def populate(self):
@@ -177,6 +186,7 @@ class Site(object):
             'data': Data(self.prefix),
             'db': Database(self.prefix),
             'bin': Bin(self.prefix),
+            'stage': Stage(self.prefix),
         }
         self._options = options
 
@@ -201,6 +211,7 @@ class Site(object):
                 ('prefix', self.prefix),
                 ('templates', self.dir['templates'].prefix),
                 ('data', self.dir['data'].prefix),
+                ('stage', self.dir['stage'].prefix),
                 ('database', os.path.join(self.dir['db'].prefix, 'wmt.db')),
                 ('user_db', os.path.join(self.dir['db'].prefix, 'users.db')),
                 ('db', self.dir['db'].prefix), ])
