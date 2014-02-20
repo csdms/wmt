@@ -37,7 +37,8 @@ def _load_table(name, db='.'):
             except ValueError as error:
                 raise LoadError(str(error))
     except IOError as error:
-        raise LoadError(str(error))
+        pass
+        #raise LoadError(str(error))
 
     return table
 
@@ -45,7 +46,7 @@ def _load_table(name, db='.'):
 def _construct_component_from_db(path_to_db):
     desc = _load_table('info', db=path_to_db)
 
-    for table in ['parameters', 'uses', 'provides']:
+    for table in ['parameters', 'uses', 'provides', 'files']:
         desc[table] = _load_table(table, db=path_to_db)
 
     return desc
