@@ -546,17 +546,35 @@ public class ModelCell extends Grid implements DropHandler {
         @Override
         public void onClick(ClickEvent event) {
 
-          // Get the targeted TreeItem and delete all of its children.
-          TreeItem target = ModelCell.this.parentTreeItem;
-          if (target == null) {
-            return;
-          }
-          target.removeItems();
+          // Get the ModelTree. Also get the targeted TreeItem and delete all
+          // of its children.
+          ModelTree tree = (ModelTree) parentTreeItem.getTree();
+          parentTreeItem.removeItems();
 
+          // The deleted Component.
+          String deleted = getComponentCell().getComponent().getId();
+          
+          // If the deleted Component is the selectedComponent, unset it. 
+          String selected = tree.data.getSelectedComponent();
+          if (deleted == selected) {
+            tree.data.setSelectedComponent(null);
+          }
+          
+          // If the deleted Component, or any of its children, are currently
+          // displaying their parameters in the ParameterTable, clear the
+          // ParameterTable.          
+          String showing = tree.data.getParameterTable().getComponentId();
+          if (deleted == showing) {
+            tree.data.getParameterTable().clearTable();
+          }
+          if (!tree.isComponentPresent(showing)) {
+            tree.data.getParameterTable().clearTable();
+          }          
+          
           // Make a new ModelCell (overwriting the current). Attach it to the
           // target TreeItem.
           Port openPort = new Port();
-          if (target.getParentItem() != null) {
+          if (parentTreeItem.getParentItem() != null) {
             openPort.setId(portCell.port.getId());
             openPort.isRequired(portCell.port.isRequired());
           } else {
@@ -565,26 +583,11 @@ public class ModelCell extends Grid implements DropHandler {
           }
           Component infoComponent = Component.makeInfoComponent();
           ModelCell newCell = new ModelCell(openPort, infoComponent);
-          newCell.setParentTreeItem(target);
-          target.setWidget(newCell);
+          newCell.setParentTreeItem(parentTreeItem);
+          parentTreeItem.setWidget(newCell);
 
           // Update the sensitivity of the DragCells in the ComponentList.
-          ModelTree tree = (ModelTree) ModelCell.this.parentTreeItem.getTree();
           tree.data.getComponentList().setCellSensitivity();
-
-          // If the deleted Component is the selectedComponent, unset it. If
-          // it's also the Component whose parameters are currently shown in
-          // the ParameterTable, clear the ParameterTable.
-          String deleted =
-              ModelCell.this.getComponentCell().getComponent().getId();
-          String selected = tree.data.getSelectedComponent();
-          String showing = tree.data.getParameterTable().getComponentId();
-          if (deleted == selected) {
-            tree.data.setSelectedComponent(null);
-          }
-          if (deleted == showing) {
-            tree.data.getParameterTable().clearTable();
-          }
 
           // If this is the driver, reset the name of the model & the Model
           // tab. Otherwise, mark it as unsaved.

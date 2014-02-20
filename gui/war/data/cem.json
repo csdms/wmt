@@ -1,269 +1,98 @@
 {
-  "id":"cem",
-  "component_parameters":[
+  "name":"CEM",
+  "parameters":[
     {
-      "key":"separator",
-      "name":"Input",
-      "description":"Input",
       "value":{
-        "type":"string",
-        "default":""
-      }
-    },
-    {
-      "key":"simulation_name",
+        "default":"CEM",
+        "type":"string"
+      },
       "name":"Simulation name",
-      "description":"Name of the simulation",
-      "value":{
-        "type":"string",
-        "default":"CEM"
-      }
+      "key":"simulation_name",
+      "description":"Name of the simulation"
     },
     {
-      "key":"input_directory",
-      "name":"Input directory",
-      "description":"Input directory",
       "value":{
-        "type":"string",
-        "default":"$HOME/CMT_input"
-      }
-    },
-    {
-      "key":"run_duration",
-      "name":"Run duration",
-      "description":"Run duration",
-      "value":{
-        "type":"float",
-        "default":100,
-        "range":{
-          "min":1.0,
-          "max":1.79769e308
-        },
-        "units":"d"
-      }
-    },
-    {
-      "key":"separator",
-      "name":"Grid",
-      "description":"Grid",
-      "value":{
-        "type":"string",
-        "default":""
-      }
-    },
-    {
-      "key":"number_of_rows",
-      "name":"Number of rows",
-      "description":"Number of rows in the computational grid",
-      "value":{
-        "type":"int",
         "default":50,
         "range":{
-          "min":30,
-          "max":2147483647
-        }
-      }
+          "max":2147483647,
+          "min":30
+        },
+        "type":"int"
+      },
+      "name":"Number of rows",
+      "key":"number_of_rows",
+      "description":"Number of rows in the computational grid"
     },
     {
-      "key":"number_of_columns",
-      "name":"Number of columns",
-      "description":"Number of columns in the computational grid",
       "value":{
-        "type":"int",
         "default":1000,
         "range":{
-          "min":30,
-          "max":2147483647
-        }
-      }
+          "max":2147483647,
+          "min":30
+        },
+        "type":"int"
+      },
+      "name":"Number of columns",
+      "key":"number_of_columns",
+      "description":"Number of columns in the computational grid"
     },
     {
-      "key":"row_spacing",
+      "value":{
+        "default":100.0,
+        "units":"m",
+        "range":{
+          "max":1.79769e+308,
+          "min":1.0
+        },
+        "type":"float"
+      },
       "name":"Row spacing",
-      "description":"Grid resolution in cross-shore (row) direction",
-      "value":{
-        "type":"float",
-        "default":100.0,
-        "range":{
-          "min":1.0,
-          "max":1.79769e308
-        },
-        "units":"m"
-      }
+      "key":"row_spacing",
+      "description":"Grid resolution in cross-shore (row) direction"
     },
     {
-      "key":"column_spacing",
+      "value":{
+        "default":100.0,
+        "units":"m",
+        "range":{
+          "max":1.79769e+308,
+          "min":1.0
+        },
+        "type":"float"
+      },
       "name":"Column spacing",
-      "description":"Grid resolution in along-shore (column) direction",
-      "value":{
-        "type":"float",
-        "default":100.0,
-        "range":{
-          "min":1.0,
-          "max":1.79769e308
-        },
-        "units":"m"
-      }
+      "key":"column_spacing",
+      "description":"Grid resolution in along-shore (column) direction"
     },
     {
-      "key":"sediment_flux_flag",
-      "name":"Sediment flux flag",
-      "description":"Sediment flux flag",
       "value":{
-        "type":"choice",
-        "default":"true",
-        "choices":[
-          "true",
-          "false"
-        ]
-      }
-    },
-    {
-      "key":"separator",
-      "name":"Model",
-      "description":"Model",
-      "value":{
-        "type":"string",
-        "default":""
-      }
-    },
-    {
-      "key":"gradient_of_shoreface",
-      "name":"Gradient of the shoreface",
-      "description":"Gradient of the shoreface",
-      "value":{
-        "type":"float",
-        "default":0.01,
-        "range":{
-          "min":0.001,
-          "max":1.0
-        }
-      }
-    },
-    {
-      "key":"gradient_of_shelf",
-      "name":"Gradient of the shelf",
-      "description":"Gradient of the shelf",
-      "value":{
-        "type":"float",
-        "default":0.001,
-        "range":{
-          "min":0.0001,
-          "max":1.0
-        }
-      }
-    },
-    {
-      "key":"water_depth_of_shoreface",
-      "name":"Water depth of the shoreface",
-      "description":"Water depth of the shoreface",
-      "value":{
-        "type":"float",
-        "default":10.0,
-        "range":{
-          "min":0.0,
-          "max":100.0
-        },
-        "units":"m"
-      }
-    },
-    {
-      "key":"separator",
-      "name":"Output",
-      "description":"Output",
-      "value":{
-        "type":"string",
-        "default":""
-      }
-    },
-    {
-      "key":"output_directory",
-      "name":"Output directory",
-      "description":"Output directory",
-      "value":{
-        "type":"string",
-        "default":"$HOME/CMT_output"
-      }
-    },
-    {
-      "key":"output_interval",
-      "name":"Output interval",
-      "description":"Output interval",
-      "value":{
-        "type":"int",
-        "default":10,
-        "range":{
-          "min":1,
-          "max":2147483647
-        }
-      }
-    },
-    {
-      "key":"output_format",
-      "name":"Output format",
-      "description":"File format for output files",
-      "value":{
-        "type":"choice",
         "default":"netcdf",
+        "type":"choice",
         "choices":[
           "netcdf",
           "vtk"
         ]
-      }
-    },
-    {
-      "key":"surface__elevation_file",
-      "name":"Output surface__elevation_file",
-      "description":"Output file for surface__elevation_file",
-      "value":{
-        "type":"string",
-        "default":""
-      }
-    },
-    {
-      "key":"sea_water__depth_file",
-      "name":"Output sea_water__depth_file",
-      "description":"Output file for sea_water__depth_file",
-      "value":{
-        "type":"string",
-        "default":""
-      }
-    },
-    {
-      "key":"sea_water_to_sediment__depth_ratio_file",
-      "name":"Output sea_water_to_sediment__depth_ratio_file",
-      "description":"Output file for sea_water_to_sediment__depth_ratio_file",
-      "value":{
-        "type":"string",
-        "default":""
-      }
-    },
-    {
-      "key":"river_mouth__location_model_x_component_file",
-      "name":"Output river_mouth__location_model_x_component_file",
-      "description":"Output file for river_mouth__location_model_x_component_file",
-      "value":{
-        "type":"string",
-        "default":""
-      }
-    },
-    {
-      "key":"river_mouth__location_model_y_component_file",
-      "name":"Output river_mouth__location_model_y_component_file",
-      "description":"Output file for river_mouth__location_model_y_component_file",
-      "value":{
-        "type":"string",
-        "default":""
-      }
-    },
-    {
-      "key":"river_mouth_bed_load_sediment__mass_flow_rate_file",
-      "name":"Output river_mouth_bed_load_sediment__mass_flow_rate_file",
-      "description":"Output file for river_mouth_bed_load_sediment__mass_flow_rate_file",
-      "value":{
-        "type":"string",
-        "default":""
-      }
+      },
+      "name":"Output format",
+      "key":"output_format",
+      "description":"File format for output files"
     }
-  ]
+  ],
+  "url":"http://csdms.colorado.edu/wiki/Model_help:CEM",
+  "uses":[
+    {
+      "required":false,
+      "id":"river"
+    },
+    {
+      "required":false,
+      "id":"waves"
+    }
+  ],
+  "provides":[
+    {
+      "id":"elevation"
+    }
+  ],
+  "id":"cem"
 }

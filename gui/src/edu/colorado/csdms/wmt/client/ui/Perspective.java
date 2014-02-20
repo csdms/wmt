@@ -268,4 +268,18 @@ public class Perspective extends DockLayoutPanel {
     String tabTitle = "Model (" + marker + data.getModel().getName() + ")";
     data.getPerspective().getViewCenter().setTabText(0, tabTitle);
   }
+  
+  /**
+   * Resets WMT to an approximation of its startup state.
+   */
+  public void reset() {
+    data.getModelTree().clear();
+    data.getParameterTable().clearTable();
+    data.getModelTree().initializeTree();
+    data.getComponentList().setCellSensitivity();
+
+    data.saveAttempts = 0;
+    data.getModel().setName("Model " + data.saveAttempts.toString());
+    data.getPerspective().getViewCenter().setTabText(0, "Model");
+  }
 }

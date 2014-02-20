@@ -1,81 +1,98 @@
 {
-  "id":"avulsion",
-  "component_parameters":[
+  "name":"Avulsion",
+  "parameters":[
     {
-      "key":"simulation_name",
+      "value":{
+        "default":"Avulsion",
+        "type":"string"
+      },
       "name":"Simulation name",
-      "description":"Name of the simulation",
-      "value":{
-        "type":"string",
-        "default":"Avulsion"
-      }
+      "key":"simulation_name",
+      "description":"Name of the simulation"
     },
     {
-      "key":"number_of_rows",
+      "value":{
+        "default":500,
+        "range":{
+          "max":2147483647,
+          "min":0
+        },
+        "type":"int"
+      },
       "name":"Number of rows",
-      "description":"Number of rows in the computational grid",
-      "value":{
-        "type":"int",
-        "default":500,
-        "range":{
-          "min":0,
-          "max":2147483647
-        }
-      }
+      "key":"number_of_rows",
+      "description":"Number of rows in the computational grid"
     },
     {
-      "key":"number_of_columns",
+      "value":{
+        "default":500,
+        "range":{
+          "max":2147483647,
+          "min":0
+        },
+        "type":"int"
+      },
       "name":"Number of columns",
-      "description":"Number of columns in the computational grid",
-      "value":{
-        "type":"int",
-        "default":500,
-        "range":{
-          "min":0,
-          "max":2147483647
-        }
-      }
+      "key":"number_of_columns",
+      "description":"Number of columns in the computational grid"
     },
     {
-      "key":"row_spacing",
+      "value":{
+        "default":100.0,
+        "units":"m",
+        "range":{
+          "max":10000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
       "name":"Row spacing",
-      "description":"Grid resolution in cross-shore (row) direction",
-      "value":{
-        "type":"float",
-        "default":100.0,
-        "range":{
-          "min":0.0,
-          "max":10000.0
-        },
-        "units":"m"
-      }
+      "key":"row_spacing",
+      "description":"Grid resolution in cross-shore (row) direction"
     },
     {
-      "key":"column_spacing",
+      "value":{
+        "default":100.0,
+        "units":"m",
+        "range":{
+          "max":10000.0,
+          "min":0.12
+        },
+        "type":"float"
+      },
       "name":"Column spacing",
-      "description":"Grid resolution in along-shore (column) direction",
-      "value":{
-        "type":"float",
-        "default":100.0,
-        "range":{
-          "min":0.12,
-          "max":10000.0
-        },
-        "units":"m"
-      }
+      "key":"column_spacing",
+      "description":"Grid resolution in along-shore (column) direction"
     },
     {
-      "key":"output_format",
-      "name":"Output format",
-      "description":"File format for output files",
       "value":{
-        "type":"choice",
         "default":"netcdf",
+        "type":"choice",
         "choices":[
           "netcdf",
           "vtk"
         ]
-      }
+      },
+      "name":"Output format",
+      "key":"output_format",
+      "description":"File format for output files"
     }
-  ]
+  ],
+  "url":"http://csdms.colorado.edu/wiki/Model_help:Avulsion",
+  "uses":[
+    {
+      "required":false,
+      "id":"discharge"
+    },
+    {
+      "required":false,
+      "id":"elevation"
+    }
+  ],
+  "provides":[
+    {
+      "id":"river"
+    }
+  ],
+  "id":"avulsion"
 }

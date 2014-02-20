@@ -105,6 +105,7 @@ public class ParameterTable extends FlexTable {
     data.setSelectedComponent(null); // should also be in ControlCell#delete?
     setComponentId(null);
     data.getPerspective().getViewEast().setTabText(0, "Parameters");
+    this.removeAllRows();
     this.clear(true);
   }
 

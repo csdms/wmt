@@ -4,8 +4,7 @@
 package edu.colorado.csdms.wmt.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.dom.client.ContextMenuEvent;
-import com.google.gwt.event.dom.client.ContextMenuHandler;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import edu.colorado.csdms.wmt.client.data.DataTransfer;
@@ -31,6 +30,9 @@ public class WMT implements EntryPoint {
 
     // Initialize the DataManager object.
     data = new DataManager();
+    
+    // Are we running in GWT development mode or in production mode?
+    data.isDevelopmentMode(!GWT.isProdMode() && GWT.isClient());
 
     // Set up the basic framework of views for the GUI.
     perspective = new Perspective(data);
@@ -44,14 +46,5 @@ public class WMT implements EntryPoint {
     // to DataTransfer#getComponent. Asynchronous requests are cool!
     DataTransfer.getComponentList(data);
     DataTransfer.getModelList(data);
-
-    // Disable the native browser right-click context menu.
-    RootLayoutPanel.get().addDomHandler(new ContextMenuHandler() {
-      @Override
-      public void onContextMenu(ContextMenuEvent event) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    }, ContextMenuEvent.getType());
   }
 }
