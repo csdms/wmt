@@ -10,8 +10,8 @@ import com.google.gwt.user.client.ui.FlexTable;
 import edu.colorado.csdms.wmt.client.data.ParameterJSO;
 
 /**
- * Builds a table of parameters for a single WMT component. The value of the
- * parameter is editable.
+ * Builds a table of parameters for a single WMT model component. The value of
+ * the parameter is editable.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -21,8 +21,8 @@ public class ParameterTable extends FlexTable {
   private String componentId; // the id of the displayed component
 
   /**
-   * Initializes a table of parameters for a single WMT component. The table is
-   * empty until the loadTable method is called.
+   * Initializes a table of parameters for a single WMT model component. The
+   * table is empty until {@link #loadTable()} is called.
    * 
    * @param data the DataManager instance for the WMT session
    */
@@ -39,32 +39,32 @@ public class ParameterTable extends FlexTable {
 
   /**
    * A worker that loads the ParameterTable with parameter values for the
-   * selected component.
+   * selected model component.
    */
   public void loadTable() {
 
     // The component whose parameters are to be displayed.
-    setComponentId(data.getSelectedComponent());
+    this.setComponentId(data.getSelectedComponent());
 
     // Return if the selected component doesn't have parameters.
-    if (data.getComponent(componentId).getParameters() == null) {
-      clearTable();
+    if (data.getModelComponent(componentId).getParameters() == null) {
+      this.clearTable();
       Window.alert("No parameters defined for this component.");
       return;
     }
 
-    // Set the component name on the viewSouth tab.
-    String componentName = data.getComponent(componentId).getName();
+    // Set the component name on the tab holding the ParameterTable.
+    String componentName = data.getModelComponent(componentId).getName();
     String tabTitle = "Parameters (" + componentName + ")";
     data.getPerspective().getViewEast().setTabText(0, tabTitle);
 
     // Build the parameter table.
     Integer nParameters =
-        data.getComponent(componentId).getParameters().length();
+        data.getModelComponent(componentId).getParameters().length();
     Integer parameterIndex = 0;
     for (int i = 0; i < nParameters; i++) {
       ParameterJSO parameter =
-          data.getComponent(componentId).getParameters().get(i);
+          data.getModelComponent(componentId).getParameters().get(i);
       if (parameter.getKey().matches("simulation_name")) {
         continue;
       }
@@ -83,8 +83,8 @@ public class ParameterTable extends FlexTable {
   }
 
   /**
-   * Stores the modified value of a parameter of a component in the WMT
-   * DataManager.
+   * Stores the modified value of a parameter of a model component in the WMT
+   * {@link DataManager}.
    * 
    * @param parameter the ParameterJSO object for the parameter being modified
    * @param value the new parameter value, a String
@@ -93,8 +93,8 @@ public class ParameterTable extends FlexTable {
     // TODO Massive amounts of checking on value.
     String key = parameter.getKey();
     GWT.log(componentId + ": " + key + ": " + value);
-    data.getComponent(componentId).getParameter(key).getValue().setDefault(
-        value);
+    data.getModelComponent(componentId).getParameter(key).getValue()
+        .setDefault(value);
   }
 
   /**
@@ -103,23 +103,23 @@ public class ParameterTable extends FlexTable {
    */
   public void clearTable() {
     data.setSelectedComponent(null); // should also be in ControlCell#delete?
-    setComponentId(null);
+    this.setComponentId(null);
     data.getPerspective().getViewEast().setTabText(0, "Parameters");
     this.removeAllRows();
     this.clear(true);
   }
 
   /**
-   * Returns the id of the component (a String) whose parameters are displayed
-   * in the ParameterTable.
+   * Returns the id of the model component (a String) whose parameters are
+   * displayed in the ParameterTable.
    */
   public String getComponentId() {
     return componentId;
   }
 
   /**
-   * Stores the id of the component (a String) whose parameters are displayed in
-   * the ParameterTable.
+   * Stores the id of the model component (a String) whose parameters are
+   * displayed in the ParameterTable.
    * 
    * @param componentId a component id, a String
    */

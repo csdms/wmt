@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -60,8 +61,65 @@ public class DataTransfer {
    * @return a JavaScriptObject that can be cast to an overlay type
    */
   public final native static <T> T parse(String jsonStr) /*-{
-		return eval("(" + jsonStr + ")");
+		return JSON.parse(jsonStr);
   }-*/;  
+
+  /**
+   * Returns a deep copy of the input JavaScriptObject.
+   * <p>
+   * This is the public interface to {@link #copyImpl(JavaScriptObject)},
+   * which does the heavy lifting.
+   * 
+   * @param jso a JavaScriptObject
+   */
+  @SuppressWarnings("unchecked")
+  public static <T extends JavaScriptObject> T copy(T jso) {
+    return (T) copyImpl(jso);
+  } 
+  
+  /**
+   * A recursive JSNI method for making a deep copy of an input
+   * JavaScriptObject. This is the private implementation of
+   * {@link #copy(JavaScriptObject)}.
+   * 
+   * @see <a
+   *      href="http://stackoverflow.com/questions/4730463/gwt-overlay-deep-copy"
+   *      >This</a> example code was very helpful (thanks to the author, <a
+   *      href="http://stackoverflow.com/users/247462/javier-ferrero">Javier
+   *      Ferrero</a>!)
+   * @param obj
+   */
+  private static native JavaScriptObject copyImpl(JavaScriptObject obj) /*-{
+
+		if (obj == null)
+			return obj;
+
+		var copy;
+
+		if (obj instanceof Date) {
+			copy = new Date();
+			copy.setTime(obj.getTime());
+		} else if (obj instanceof Array) {
+			copy = [];
+			for (var i = 0, len = obj.length; i < len; i++) {
+				if (obj[i] == null || typeof obj[i] != "object")
+					copy[i] = obj[i];
+				else
+					copy[i] = @edu.colorado.csdms.wmt.client.data.DataTransfer::copyImpl(Lcom/google/gwt/core/client/JavaScriptObject;)(obj[i]);
+			}
+		} else {
+			copy = {};
+			for ( var attr in obj) {
+				if (obj.hasOwnProperty(attr)) {
+					if (obj[attr] == null || typeof obj[attr] != "object")
+						copy[attr] = obj[attr];
+					else
+						copy[attr] = @edu.colorado.csdms.wmt.client.data.DataTransfer::copyImpl(Lcom/google/gwt/core/client/JavaScriptObject;)(obj[attr]);
+				}
+			}
+		}
+		return copy;
+  }-*/;
   
   /**
    * A worker that returns a HashMap of entries used in a HTTP query string.
@@ -300,7 +358,7 @@ public class DataTransfer {
   /**
    * A RequestCallback handler class that provides the callback for a GET
    * request of a component. On success,
-   * {@link DataManager#setComponent(ComponentJSO)} is called to store the
+   * {@link DataManager#addComponent(ComponentJSO)} is called to store the
    * component in the DataManager object for the WMT session.
    */
   public static class ComponentRequestCallback implements RequestCallback {
@@ -319,9 +377,9 @@ public class DataTransfer {
         String rtxt = response.getText();
         GWT.log(rtxt);
         ComponentJSO jso1 = parse(rtxt);
-        data.setComponent(jso1);          // "class" component
+        data.addComponent(jso1);          // "class" component
         ComponentJSO jso2 = parse(rtxt);
-        data.setModelComponent(jso2);     // "instance" component, for model
+        data.addModelComponent(jso2);     // "instance" component, for model
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "
