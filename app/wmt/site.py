@@ -156,8 +156,15 @@ class Data(SiteSubFolder):
                 os.path.dirname(wmt.__file__),
                 'data')
         )
-        shutil.copytree(os.path.join(src_dir, 'components'),
-                        os.path.join(self.prefix, 'components'))
+        src_path, dst_path = (
+            os.path.join(src_dir, 'components'),
+            os.path.join(self.prefix, 'components')
+        )
+
+        if os.path.isdir(dst_path):
+            shutil.rmtree(dst_path)
+
+        shutil.copytree(src_path, dst_path)
 
 
 class Database(SiteSubFolder):
