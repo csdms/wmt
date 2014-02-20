@@ -49,8 +49,8 @@ def get_component_defaults(name):
     return defaults
 
 
-def _read_input_file(filename):
-    input_file_dir = os.path.join(site['data'], 'components')
+def _read_input_file(name, filename):
+    input_file_dir = os.path.join(site['data'], 'components', name, 'files')
     path_to_file = os.path.join(input_file_dir, filename)
     with open(path_to_file, 'r') as file:
         contents = file.read()
@@ -76,7 +76,7 @@ def get_component_input(name):
 
     files = {}
     for (fid, filename) in enumerate(input_files):
-        files[filename] = _read_input_file(filename)
+        files[filename] = _read_input_file(name, filename)
 
     return files
 

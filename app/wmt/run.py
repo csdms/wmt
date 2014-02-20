@@ -6,28 +6,39 @@ from .models import (models, components)
 from .config import site
 
 
+_HOOK_NAMES = set(['pre-stage', 'post-stage'])
+
+
+def path_to_hook(name, hook):
+    return os.path.join(site['data'], 'components', name, 'hooks',
+                        hook + '.py')
+
+
 def get_component_hooks(name):
-    import imp
-
-    try:
-        (fp, pathname, description) = imp.find_module(
-            'hooks', [os.path.join(site['data'], 'components')])
-    except ImportError:
-        raise ValueError(os.path.join(site['data'], 'components'))
-
-    try:
-        hooks = imp.load_module('hooks', fp, pathname, description)
-    except ImportError:
-        hooks = None
-    finally:
-        if fp:
-            fp.close()
-
+    hooks = {}
+    for hook in _HOOK_NAMES:
+        hooks[hook] = get_component_hook(name, hook)
     return hooks
 
 
+def get_component_hook(name, hook_name):
+    import imp
+
+    pathname = path_to_hook(name, hook_name)
+    try:
+        hook = imp.load_source(hook_name, pathname)
+    except (IOError, ImportError):
+        raise ValueError(pathname)
+        hook = imp.new_module(hook_name)
+        def execute(*args):
+            pass
+        setattr(hook, 'execute', execute)
+
+    return hook
+
+
 def stagein(id):
-    model = json.loads(models.get_model(id).json)
+    model = json.loads(models.get_model(id).json)['model']
 
     run_id = str(uuid.uuid4())
 
@@ -36,26 +47,24 @@ def stagein(id):
 
     try:
         os.mkdir(run_dir)
+        for component in model:
+            os.mkdir(os.path.join(run_dir, component['class'].lower()))
     except OSError:
         pass
 
-    for component in model['model']:
+    for component in model:
         name = component['class'].lower()
-        os.mkdir(os.path.join(run_dir, name))
-        try:
-            input_files = components.get_component(name)['input_files']
-        except KeyError:
-            pass
-        else:
-            hooks = get_component_hooks(name)
-            hooks.stagein_pre()
+        hooks = get_component_hooks(name)
 
-            files = components.get_component_formatted_input(name, **component['parameters'])
-            for (filename, contents) in files.items():
-                with open(os.path.join(run_dir, name, filename), 'w') as f:
-                    f.write(contents)
+        hooks['pre-stage'].execute()
 
-            hooks.stagein_post(name, run_id, component['parameters'])
+        files = components.get_component_formatted_input(
+            name, **component['parameters'])
 
+        for (filename, contents) in files.items():
+            with open(os.path.join(run_dir, name, filename), 'w') as f:
+                f.write(contents)
+
+        hooks['post-stage'].execute(name, run_id, component['parameters'])
 
     return run_id

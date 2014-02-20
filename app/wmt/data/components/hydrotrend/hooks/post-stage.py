@@ -1,5 +1,4 @@
 import os
-import shutil
 from wmt.config import site
 
 
@@ -18,6 +17,8 @@ class execute_in_dir(object):
 
 
 def execute(name, id, env):
+    import shutil
+    this_dir = os.path.abspath(os.path.dirname(__file__))
     stage_dir = os.path.join(site['stage'], id, name)
 
     with execute_in_dir(stage_dir) as _:
@@ -28,5 +29,5 @@ def execute(name, id, env):
         shutil.move('HYDRO.IN', 'INPUT')
 
         shutil.copy(
-            os.path.join('..', 'files', env['hypsometry_file']),
+            os.path.join(this_dir, '..', 'files', env['hypsometry_file']),
             os.path.join('INPUT', 'HYDRO0.HYPS'))
