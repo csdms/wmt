@@ -105,6 +105,9 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
     data.getPerspective().setModelPanelTitle(false);
     
     this.setComponent(component, target);
+    
+    // Ensure that the (class) component replaces the model component.
+    data.replaceModelComponent(data.getComponent(component.getId()));
   }
 
   /**
