@@ -1,0 +1,10 @@
+[
+  {
+    "id":"river",
+    "required":false
+  },
+  {
+    "id":"deposition",
+    "required":false
+  }
+]

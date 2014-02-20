@@ -1,0 +1,347 @@
+[
+  {
+    "key":"separator",
+    "name":"Run Parameters",
+    "description":"Run Parameters",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"run_duration",
+    "name":"Run duration",
+    "description":"Simulation run time",
+    "value":{
+      "type":"int",
+      "default":1825000,
+      "range":{
+        "min":0,
+        "max":1.79769313486e+308
+      },
+      "units":"d"
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Input Files",
+    "description":"Input Files",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"bathymetry_file",
+    "name":"Bathymetry file",
+    "description":"CSV-formatted bathymetry file",
+    "value":{
+      "type":"string",
+      "default":"sedflux2d_bathy.csv"
+    }
+  },
+  {
+    "key":"sea_level_file",
+    "name":"Sea-level file",
+    "description":"CSV-formatted sea-level file",
+    "value":{
+      "type":"string",
+      "default":"sedflux2d_sea_level_constant.csv"
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Grid",
+    "description":"Grid",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"z_resolution",
+    "name":"z-resolution",
+    "description":"Resolution in the vertical direction",
+    "value":{
+      "type":"float",
+      "default": 0.01,
+      "range":{
+        "min": 0,
+        "max": 10.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"along_shore_resolution",
+    "name":"along-shore resolution",
+    "description":"Width of the coastline",
+    "value":{
+      "type":"float",
+      "default": 50000.0,
+      "range":{
+        "min": 0,
+        "max": 1.79769313486e+308
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"cross_shore_resolution",
+    "name":"cross-shore resolution",
+    "description":"Spatial resolution in the cross-shore direction",
+    "value":{
+      "type":"float",
+      "default": 250.0,
+      "range":{
+        "min": 0.0,
+        "max": 10000.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Compaction",
+    "description":"Compaction",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"compaction_process_is_on",
+    "name":"Turn on compaction",
+    "description":"Turn on/off the compaction process module",
+    "value":{
+      "type":"choice",
+      "default":"no",
+      "choices":[
+        "yes",
+        "no"
+      ]
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Isostasy",
+    "description":"Isostasy",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"isostasy_process_is_on",
+    "name":"Turn on isostasy",
+    "description":"Turn on/off the isostasy process module",
+    "value":{
+      "type":"choice",
+      "default":"no",
+      "choices":[
+        "yes",
+        "no"
+      ]
+    }
+  },
+  {
+    "key":"isostasy_effective_elastic_thickness",
+    "name":"Effective elastic thickness",
+    "description":"Effective elastic thickness of crust",
+    "value":{
+      "type":"float",
+      "default": 65000.0,
+      "range":{
+        "min": 1000.0,
+        "max": 1.79769313486e+308
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"isostasy_youngs_modulus",
+    "name":"Young's modulus",
+    "description":"Young's modulus",
+    "value":{
+      "type":"float",
+      "default": 7e10,
+      "range":{
+        "min": 1e9,
+        "max": 1e12
+      },
+      "units":"Pa"
+    }
+  },
+  {
+    "key":"isostasy_relaxation_time",
+    "name":"Relaxation time",
+    "description":"Relaxation time of crust",
+    "value":{
+      "type":"float",
+      "default": 5000.0,
+      "range":{
+        "min": 0.0,
+        "max": 100000.0
+      },
+      "units":"Pa"
+    }
+  },
+  {
+    "key":"separator",
+    "name":"River",
+    "description":"River",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"river_bed_load_flux",
+    "name":"Bed-load flux at river mouth",
+    "description":"Bed-load flux at river mouth",
+    "value":{
+      "type":"float",
+      "default": 70.0,
+      "range":{
+        "min": 0.01,
+        "max": 1000.0
+      },
+      "units":"kg/s"
+    }
+  },
+  {
+    "key":"river_suspended_load_concentration_0",
+    "name":"Suspended load concentration of grain class 0",
+    "description":"Suspended load concentration of grain class 0",
+    "value":{
+      "type":"float",
+      "default": 0.1,
+      "range":{
+        "min": 0.01,
+        "max": 1.0
+      },
+      "units":"kg/m^3"
+    }
+  },
+  {
+    "key":"river_suspended_load_concentration_1",
+    "name":"Suspended load concentration of grain class 1",
+    "description":"Suspended load concentration of grain class 1",
+    "value":{
+      "type":"float",
+      "default": 0.1,
+      "range":{
+        "min": 0.01,
+        "max": 1.0
+      },
+      "units":"kg/m^3"
+    }
+  },
+  {
+    "key":"river_velocity",
+    "name":"River velocity",
+    "description":"Flow velocity at river mouth",
+    "value":{
+      "type":"float",
+      "default": 1.2,
+      "range":{
+        "min": 0.5,
+        "max": 5.0
+      },
+      "units":"m/s"
+    }
+  },
+  {
+    "key":"river_width",
+    "name":"River width",
+    "description":"Width of river at river mouth",
+    "value":{
+      "type":"float",
+      "default": 400.0,
+      "range":{
+        "min": 10.0,
+        "max": 5000.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"river_depth",
+    "name":"River depth",
+    "description":"Depth of river at river mouth",
+    "value":{
+      "type":"float",
+      "default": 4.0,
+      "range":{
+        "min": 1.0,
+        "max": 50.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"bed_load_dump_length",
+    "name":"Bed load dump length",
+    "description":"Distance from the river mouth over which to dump bed load",
+    "value":{
+      "type":"float",
+      "default": 2000.0,
+      "range":{
+        "min": 10.0,
+        "max": 10000.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Plume",
+    "description":"Plume",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"plume_max_width",
+    "name":"Maximum plume width",
+    "description":"Maximum width of the river plume",
+    "value":{
+      "type":"float",
+      "default": 15.0,
+      "range":{
+        "min": 1.0,
+        "max": 100.0
+      },
+      "units":"km"
+    }
+  },
+  {
+    "key":"plume_cross_shore_nodes",
+    "name":"Number of cross-shore nodes for plume",
+    "description":"Number of nodes in the cross-shore direction of the plume solution grid (must be odd)",
+    "value":{
+      "type":"int",
+      "default": 21,
+      "range":{
+        "min": 3,
+        "max": 21
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"plume_river_mouth_nodes",
+    "name":"Number of nodes in river mouth",
+    "description":"Number of nodes within the river mouth of the plume solution grid (must be odd)",
+    "value":{
+      "type":"int",
+      "default": 3,
+      "range":{
+        "min": 3,
+        "max": 21
+      },
+      "units":"-"
+    }
+  }
+]

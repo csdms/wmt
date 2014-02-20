@@ -1,0 +1,14 @@
+[
+  {
+    "id":"coastal_environment",
+    "required":false
+  },
+  {
+    "id":"subaerial_delta",
+    "required":false
+  },
+  {
+    "id":"baselevel",
+    "required":false
+  }
+]
