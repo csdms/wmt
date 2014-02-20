@@ -9,32 +9,64 @@ import types
 
 ID_PATTERN_STRING = '\$\{(?P<id>[_a-zA-Z][_a-zA-Z]*)\}'
 ID_PATTERN = re.compile(ID_PATTERN_STRING)
+_INTEGER_PRESENTATION_TYPES = set(['b', 'c', 'd', 'o', 'x', 'X', 'n', None])
+_FLOAT_PRESENTATION_TYPES = set(['f', 'e', 'E', 'g', 'G'])
 
 
 class FileFormatter(string.Formatter):
     def __init__(self, defaults):
         string.Formatter.__init__(self)
         self._defaults = defaults
+        self._missing = set()
+        self._used = set()
+
+    @property
+    def missing_fields(self):
+        return self._missing
+
+    def clear_missing(self):
+        self._missing = set()
+
+    def _get_value_from_keywords(self, key, kwds):
+        try:
+            return kwds[key]
+        except KeyError:
+            return self._defaults[key]
 
     def get_value(self, key, args, kwds):
         if isinstance(key, types.StringTypes):
             try:
-                return kwds[key]
+                value = self._get_value_from_keywords(key, kwds)
             except KeyError:
-                try:
-                    return self._defaults[key]
-                except KeyError:
-                    raise KeyError('no default for %s' % key)
+                value = '{%s}' % key
+                self._missing.add(key)
+            else:
+                self._used.add(key)
+            finally:
+                return value
         else:
             string.Formatter.get_value(self, key, args, kwds)
+
 
     def format_field(self, value, format_spec):
         try:
             return string.Formatter.format_field(self, value, format_spec)
-        except ValueError:
-            if format_spec[-1] in ['f', 'e', 'E', 'g', 'G']:
+        except ValueError as error:
+            presentatin_type = format_spec[-1]
+            if presentation_type in _INTEGER_PRESENTATION_TYPES:
+                return string.Formatter.format_field(self, int(value),
+                                                     format_spec)
+            elif presentation_type in _FLOAT_PRESENTATION_TYPES:
                 return string.Formatter.format_field(self, float(value),
                                                      format_spec)
+            else:
+                raise error
+
+    def lint(self):
+        warnings = []
+        for field in self._missing:
+            warnings.append('missing: %s' % field)
+        return warnings
 
 
 class TemplateFile(object):
