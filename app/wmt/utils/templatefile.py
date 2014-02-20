@@ -52,7 +52,7 @@ class FileFormatter(string.Formatter):
         try:
             return string.Formatter.format_field(self, value, format_spec)
         except ValueError as error:
-            presentatin_type = format_spec[-1]
+            presentation_type = format_spec[-1]
             if presentation_type in _INTEGER_PRESENTATION_TYPES:
                 return string.Formatter.format_field(self, int(value),
                                                      format_spec)
