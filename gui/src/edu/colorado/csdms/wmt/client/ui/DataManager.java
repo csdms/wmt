@@ -225,6 +225,17 @@ public class DataManager {
   }  
   
   /**
+   * Replaces <em>all</em> of the model components with copies of the (class)
+   * components using {@link DataTransfer#copy()}.
+   */
+  public void resetModelComponents() {
+    for (int i = 0; i < modelComponents.size(); i++) {
+      ComponentJSO copy = DataTransfer.copy(components.get(i));
+      modelComponents.set(i, copy);
+    }
+  }
+  
+  /**
    * Returns the <em>all</em> the model components in the ArrayList of
    * {@link ComponentJSO} objects.
    * <p>
@@ -455,18 +466,6 @@ public class DataManager {
     // information contained within it to populate the WMT GUI.
 
     perspective.reset();
-
-    
-    ComponentJSO mc = this.getModelComponent("cem");
-    mc.getParameter("number_of_rows").getValue().setDefault(42);
-    GWT.log("mc: " + mc.getParameter("number_of_rows").getValue().getDefault());
-    ComponentJSO cc = this.getComponent("cem");
-    GWT.log("cc: " + cc.getParameter("number_of_rows").getValue().getDefault());
-    this.replaceModelComponent(cc);
-    ComponentJSO mc1 = this.getModelComponent("cem"); // need to re-get! 
-    GWT.log("mc1: " + mc1.getParameter("number_of_rows").getValue().getDefault());    
-
-    
     
     for (int i = 0; i < model.getComponents().length(); i++) {
 
