@@ -1,4 +1,4 @@
-from __future__ import print_function
+from __future__ import (absolute_import, print_function)
 
 import os
 from sys import stderr as STDERR
@@ -23,12 +23,13 @@ def _component_names(palette_dir):
     for item in os.listdir(palette_dir):
         if os.path.isdir(os.path.join(palette_dir, item)):
             names.add(item)
-    names = ['hydrotrend']
     return names
 
 
 def _load_table(name, db='.'):
-    path_to_table = os.path.join(db, name + '.db')
+    import json
+
+    path_to_table = os.path.join(db, name + '.json')
     try:
         with open(path_to_table, 'r') as opened:
             try:
@@ -58,7 +59,6 @@ def load_palette(palette_dir):
         try:
             palette[name] = _construct_component_from_db(path_to_db)
         except LoadError:
-            raise
             print('%s: unable to load' % name, file=STDERR)
 
     return palette
