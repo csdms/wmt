@@ -358,7 +358,7 @@ public class DataTransfer {
   /**
    * A RequestCallback handler class that provides the callback for a GET
    * request of a component. On success,
-   * {@link DataManager#setComponent(ComponentJSO)} is called to store the
+   * {@link DataManager#addComponent(ComponentJSO)} is called to store the
    * component in the DataManager object for the WMT session.
    */
   public static class ComponentRequestCallback implements RequestCallback {
@@ -377,9 +377,9 @@ public class DataTransfer {
         String rtxt = response.getText();
         GWT.log(rtxt);
         ComponentJSO jso1 = parse(rtxt);
-        data.setComponent(jso1);          // "class" component
+        data.addComponent(jso1);          // "class" component
         ComponentJSO jso2 = parse(rtxt);
-        data.setModelComponent(jso2);     // "instance" component, for model
+        data.addModelComponent(jso2);     // "instance" component, for model
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "

@@ -11,7 +11,6 @@ import java.util.List;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.data.Component;
@@ -119,14 +118,6 @@ public class DataManager {
   }
   
   /**
-   * Returns the <em>all</em> the components in the ArrayList of
-   * {@link ComponentJSO} objects.
-   */
-  public List<ComponentJSO> getComponents() {
-    return this.components;
-  }
-  
-  /**
    * A convenience method that adds a component to the ArrayList of
    * components.
    * <p>
@@ -135,22 +126,12 @@ public class DataManager {
    * 
    * @param component the component to add, a ComponentJSO object
    */
-  public void setComponent(ComponentJSO component) {
+  public void addComponent(ComponentJSO component) {
     this.components.add(component);
     if (this.components.size() == this.componentIdList.size()) {
       sortComponents();
       perspective.initializeComponentList();
     } // XXX This is fragile.
-  }
-
-  /**
-   * Sets an ArrayList of ComponentJSOs representing <em>all</em> the
-   * components.
-   * 
-   * @param components all your components are belong to us
-   */
-  public void setComponents(List<ComponentJSO> components) {
-    this.components = components;
   }
 
   /**
@@ -164,6 +145,24 @@ public class DataManager {
         return o1.getName().compareTo(o2.getName());
       }
     });
+  }  
+  
+  /**
+   * Returns the <em>all</em> the components in the ArrayList of
+   * {@link ComponentJSO} objects.
+   */
+  public List<ComponentJSO> getComponents() {
+    return this.components;
+  }
+
+  /**
+   * Sets an ArrayList of ComponentJSOs representing <em>all</em> the
+   * components.
+   * 
+   * @param components all your components are belong to us
+   */
+  public void setComponents(List<ComponentJSO> components) {
+    this.components = components;
   }
 
   /**
@@ -196,6 +195,34 @@ public class DataManager {
   public ComponentJSO getModelComponent(Integer index) {
     return modelComponents.get(index);
   }  
+
+  /**
+   * A convenience method that adds a component to the ArrayList of
+   * model components.
+   * <p>
+   * Compare with {@link #addComponent(ComponentJSO)} for "class" components.
+   * 
+   * @param modelComponent the model component to add, a {@link ComponentJSO}
+   */
+  public void addModelComponent(ComponentJSO modelComponent) {
+    this.modelComponents.add(modelComponent);
+  }  
+
+  /**
+   * Replaces the item in DataManager's ArrayList of model components with the
+   * input component. A regex on the id of the model component is used to
+   * identify the component to replace.
+   * 
+   * @param component the replacement component, a {@link ComponentJSO}
+   */
+  public void replaceModelComponent(ComponentJSO component) {
+    for (int i = 0; i < modelComponents.size(); i++) {
+      if (modelComponents.get(i).getId().matches(component.getId())) {
+        modelComponents.set(i, component);
+        return;
+      }
+    }
+  }  
   
   /**
    * Returns the <em>all</em> the model components in the ArrayList of
@@ -208,15 +235,13 @@ public class DataManager {
   }
   
   /**
-   * A convenience method that adds a component to the ArrayList of
-   * model components.
-   * <p>
-   * Compare with {@link #setComponent(ComponentJSO)} for "class" components.
+   * Sets an ArrayList of ComponentJSOs representing <em>all</em> the model
+   * components.
    * 
-   * @param modelComponent the model component to add, a ComponentJSO object
+   * @param components all your components are belong to us
    */
-  public void setModelComponent(ComponentJSO modelComponent) {
-    this.modelComponents.add(modelComponent);
+  public void setModelComponents(List<ComponentJSO> modelComponents) {
+    this.modelComponents = modelComponents;
   }  
   
   /**
@@ -343,9 +368,8 @@ public class DataManager {
   /**
    * Translates the model displayed in WMT into a {@link ModelJSO} object,
    * which completely describes the state of the model. This object is
-   * converted to a string (with
-   * {@link DataTransfer#stringify(JavaScriptObject)}) which can be uploaded
-   * to a server.
+   * converted to a string (with {@link DataTransfer#stringify()}) which can
+   * be uploaded to a server.
    */
   public void serialize() {
 
@@ -432,6 +456,18 @@ public class DataManager {
 
     perspective.reset();
 
+    
+    ComponentJSO mc = this.getModelComponent("cem");
+    mc.getParameter("number_of_rows").getValue().setDefault(42);
+    GWT.log("mc: " + mc.getParameter("number_of_rows").getValue().getDefault());
+    ComponentJSO cc = this.getComponent("cem");
+    GWT.log("cc: " + cc.getParameter("number_of_rows").getValue().getDefault());
+    this.replaceModelComponent(cc);
+    ComponentJSO mc1 = this.getModelComponent("cem"); // need to re-get! 
+    GWT.log("mc1: " + mc1.getParameter("number_of_rows").getValue().getDefault());    
+
+    
+    
     for (int i = 0; i < model.getComponents().length(); i++) {
 
       ModelJSO modelComponent = model.getComponents().get(i);
