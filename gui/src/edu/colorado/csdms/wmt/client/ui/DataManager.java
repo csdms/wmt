@@ -17,7 +17,6 @@ import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.DataTransfer;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
-import edu.colorado.csdms.wmt.client.data.Port;
 
 /**
  * A class for storing and sharing data, as well as the state of UI elements,
@@ -462,11 +461,13 @@ public class DataManager {
   
   /**
    * Extracts the information contained in the {@link ModelJSO} object
-   * returned on opening a model and uses it to populate the {@link ModelTree}
-   * .
+   * returned from opening a model (model menu > "Open Model...") and uses it
+   * to populate the {@link ModelTree}.
    */
   public void deserialize() {
 
+    // TODO Refactor to improve clarity. And performance.
+    
     // Set model name on tab.
     perspective.setModelPanelTitle(true);
 
