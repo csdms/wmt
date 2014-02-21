@@ -249,7 +249,6 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       saveDialog = new SaveDialogBox();
       saveDialog.setText("Save Model As...");
-      saveDialog.getFilePanel().setDirectory("river:$HOME/.wmt");
       saveDialog.getFilePanel().setFile(data.getModel().getName());
 
       saveDialog.getChoicePanel().getOkButton().addClickHandler(
