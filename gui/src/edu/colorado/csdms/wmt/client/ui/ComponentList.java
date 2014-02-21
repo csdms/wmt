@@ -80,7 +80,6 @@ public class ComponentList extends Grid implements DragStartHandler {
 
     // Find what (uses) ports in the ModelTree are currently open.
     List<ModelCell> openCells = data.getModelTree().findOpenModelCells(); 
-    // GWT.log(openPorts.toString());
 
     // A helpful local variable.
     List<String> openPorts = new ArrayList<String>();
