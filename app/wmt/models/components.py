@@ -72,10 +72,10 @@ def _decorate_with_header(contents, **kwds):
 
 
 def get_component_input(name):
-    input_files = get_component(name)['input_files']
+    filenames = get_component(name)['files']
 
     files = {}
-    for (fid, filename) in enumerate(input_files):
+    for (fid, filename) in enumerate(filenames):
         files[filename] = _read_input_file(name, filename)
 
     return files

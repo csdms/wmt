@@ -33,4 +33,7 @@ class StageIn(object):
         if not form.validates():
             return render.stagein(form)
 
-        return run.stagein(id)
+        run_id = run.stagein(id)
+        dropoff_dir = run.stageout(run_id)
+
+        return dropoff_dir
