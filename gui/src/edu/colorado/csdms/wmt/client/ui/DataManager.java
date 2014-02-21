@@ -38,6 +38,8 @@ public class DataManager {
   private String draggedComponent;
   private String selectedComponent;
   private ModelJSO model;
+  private Boolean modelIsSaved = false;
+  private Boolean modelHasBeenSaved = false;
   private String modelString; // stringified JSON
 
   // Experiment with public members, for convenience.
@@ -275,6 +277,34 @@ public class DataManager {
   }
 
   /**
+   * @return the modelIsSaved
+   */
+  public Boolean modelIsSaved() {
+    return modelIsSaved;
+  }
+
+  /**
+   * @param modelIsSaved the modelIsSaved to set
+   */
+  public void modelIsSaved(Boolean modelIsSaved) {
+    this.modelIsSaved = modelIsSaved;
+  }
+
+  /**
+   * @return the modelHasBeenSaved
+   */
+  public Boolean modelHasBeenSaved() {
+    return modelHasBeenSaved;
+  }
+
+  /**
+   * @param modelHasBeenSaved the modelHasBeenSaved to set
+   */
+  public void modelHasBeenSaved(Boolean modelHasBeenSaved) {
+    this.modelHasBeenSaved = modelHasBeenSaved;
+  }
+
+  /**
    * Gets the stringified model JSON created by {@link #serialize()}.
    */
   public String getModelString() {
@@ -468,8 +498,7 @@ public class DataManager {
 
     // TODO Refactor to improve clarity. And performance.
     
-    // Set model name on tab.
-    perspective.setModelPanelTitle(true);
+    perspective.setModelPanelTitle();
 
     Integer nModelComponents = model.getComponents().length();
     Integer nModelComponentsUsed = 0;

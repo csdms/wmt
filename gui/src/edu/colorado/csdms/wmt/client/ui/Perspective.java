@@ -190,13 +190,11 @@ public class Perspective extends DockLayoutPanel {
   }
 
   /**
-   * A convenience method for setting the tab title of the Model panel.
-   * 
-   * @param isModelSaved if the model isn't saved, prepend an asterisk to its
-   *          name
+   * A convenience method for setting the tab title of the Model panel. If the
+   * model isn't saved, prepend an asterisk to its name.
    */
-  public void setModelPanelTitle(Boolean isModelSaved) {
-    String marker = isModelSaved ? "" : "*";
+  public void setModelPanelTitle() {
+    String marker = data.modelIsSaved() ? "" : "*";
     String tabTitle = "Model (" + marker + data.getModel().getName() + ")";
     viewCenter.setTabText(0, tabTitle);
   }

@@ -480,6 +480,9 @@ public class DataTransfer {
         // On successful POST, update list of saved models in the DataManager.
         if (type.matches("new")) {
           DataTransfer.getModelList(data);
+          data.modelIsSaved(true);
+          data.modelHasBeenSaved(true);
+          data.getPerspective().setModelPanelTitle();
         }
       } else {
         String msg =
