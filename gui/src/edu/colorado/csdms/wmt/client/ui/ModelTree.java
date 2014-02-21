@@ -161,7 +161,7 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
   
   /**
    * Iterate through the TreeItems of this ModelTree, finding what ModelCells
-   * have open PortCells. Add the cell to the openModelCells Vector.
+   * have open PortCells. Add the cell to the openModelCells List.
    * @return 
    * 
    * @return a Vector of ModelCells with open ports.

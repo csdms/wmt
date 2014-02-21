@@ -17,6 +17,7 @@ import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.DataTransfer;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
+import edu.colorado.csdms.wmt.client.data.Port;
 
 /**
  * A class for storing and sharing data, as well as the state of UI elements,
@@ -167,18 +168,20 @@ public class DataManager {
 
   /**
    * A convenience method that returns the {@link ComponentJSO} object
-   * matching the given model component id.
+   * matching the given model component id, or null if no match is found.
    * <p>
    * Compare with {@link #getComponent(String)} for "class" components.
    * 
    * @param modelComponentId the id of the desired model component, a String
    */
   public ComponentJSO getModelComponent(String modelComponentId) {
-    Iterator<ComponentJSO> iter = modelComponents.iterator();
-    while (iter.hasNext()) {
-      ComponentJSO component = (ComponentJSO) iter.next();
-      if (component.getId().matches(modelComponentId)) {
-        return component;
+    if (modelComponentId != null) {
+      Iterator<ComponentJSO> iter = modelComponents.iterator();
+      while (iter.hasNext()) {
+        ComponentJSO component = (ComponentJSO) iter.next();
+        if (component.getId().matches(modelComponentId)) {
+          return component;
+        }
       }
     }
     return null;
@@ -458,41 +461,91 @@ public class DataManager {
   }  
   
   /**
-   * TODO
+   * Extracts the information contained in the {@link ModelJSO} object
+   * returned on opening a model and uses it to populate the {@link ModelTree}
+   * .
    */
   public void deserialize() {
 
-    // Deserialize the ModelJSO object returned on opening a model and use the
-    // information contained within it to populate the WMT GUI.
-
     // Set model name on tab.
     perspective.setModelPanelTitle(true);
-    
-    for (int i = 0; i < model.getComponents().length(); i++) {
 
-      ModelJSO modelComponent = model.getComponents().get(i);
-      ComponentJSO modelComponentJSO =
-          getModelComponent(modelComponent.getId());
+    Integer nModelComponents = model.getComponents().length();
+    Integer nModelComponentsUsed = 0;
 
-      Integer nModelParameters = modelComponent.getParameters().length();
-      for (int j = 0; j < nModelParameters; j++) {
-        String key = modelComponent.getParameters().get(j);
-        String value = modelComponent.getValue(key);
-        modelComponentJSO.getParameter(key).getValue().setDefault(value);
+    // Locate the driver.
+    Integer driverIndex = 0;
+    for (int i = 0; i < nModelComponents; i++) {
+      if (model.getComponents().get(i).isDriver()) {
+        driverIndex = i;
+        break;
       }
-
-      if (modelComponent.isDriver()) {
-        TreeItem driver = modelTree.getItem(0);
-        Component component = new Component(modelComponentJSO);
-        modelTree.setComponent(component, driver);
-        driver.setState(true);
-      }
-
-      GWT.log(DataTransfer.stringify(modelComponentJSO));
     }
 
-//    componentList.setCellSensitivity();
+    // Set up the root of the ModelTree with the driver.
+    ModelJSO driver = model.getComponents().get(driverIndex);
+    Component driverComponent =
+        new Component(getModelComponent(driver.getId()));
+    TreeItem root = modelTree.getItem(0);
+    modelTree.setComponent(driverComponent, root);
+    root.setState(true);
+    nModelComponentsUsed++;
 
+    // Find matches for the driver's open ports supplied by the model.
+    List<ModelCell> openCells = modelTree.findOpenModelCells();
+    for (int i = 0; i < driver.getPorts().length(); i++) {
+      String portId = driver.getPorts().get(i);
+      String componentId = driver.getConnection(portId);
+      GWT.log(portId + ":" + componentId);
+      if (componentId == null) {
+        continue;
+      }
+      for (int j = 0; j < openCells.size(); j++) {
+        if (openCells.get(j).getPortCell().getPort().getId().matches(portId)) {
+          Component component = new Component(getModelComponent(componentId));
+          TreeItem leaf = openCells.get(j).getParentTreeItem();
+          modelTree.setComponent(component, leaf);
+          leaf.setState(true);
+          nModelComponentsUsed++;
+        }
+      }
+    }
 
+    // Loop to fill in open ports in ModelTree with the remaining components
+    // in the model.
+    Integer index = 0;
+    while (nModelComponentsUsed < nModelComponents) {
+      ModelJSO mc = model.getComponents().get(index);
+      index++;
+      List<ModelCell> cells = modelTree.findOpenModelCells();
+      for (int i = 0; i < mc.getPorts().length(); i++) {
+        String portId = mc.getPorts().get(i);
+        String componentId = mc.getConnection(portId);
+        GWT.log(portId + ":" + componentId);
+        if (componentId == null) {
+          continue;
+        }
+        for (int j = 0; j < cells.size(); j++) {
+          if (cells.get(j).getPortCell().getPort().getId().matches(portId)) {
+            Component component = new Component(getModelComponent(componentId));
+            TreeItem leaf = cells.get(j).getParentTreeItem();
+            modelTree.setComponent(component, leaf);
+            leaf.setState(true);
+            nModelComponentsUsed++;
+          }
+        }
+      }
+    }
+
+    // Loop to load the parameters for the components in the model.
+    for (int i = 0; i < nModelComponents; i++) {
+      ModelJSO mc = model.getComponents().get(i);
+      ComponentJSO mcJSO = getModelComponent(mc.getId());
+      for (int j = 0; j < mc.getParameters().length(); j++) {
+        String key = mc.getParameters().get(j);
+        String value = mc.getValue(key);
+        mcJSO.getParameter(key).getValue().setDefault(value);
+      }
+    }
   }
 }
