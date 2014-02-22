@@ -1,6 +1,7 @@
 import os
 import web
 import json
+from datetime import datetime
 
 from ..config import (site, db)
 
@@ -18,7 +19,8 @@ class BadIdError(Error):
 
 
 def new_model(name, text, owner=''):
-    return db.insert('models', name=name, json=text, owner=owner)
+    return db.insert('models', name=name, json=text, owner=owner,
+                    date=web.net.httpdate(datetime.now()))
 
 
 def del_model(id):
@@ -27,7 +29,7 @@ def del_model(id):
 
 def update_model(id, name, text):
     db.update('models', where='id=$id', vars=locals(),
-              name=name, json=text)
+              name=name, json=text, date=web.net.httpdate(datetime.now()))
 
 
 def get_models():

@@ -1,6 +1,7 @@
 create table models (
   id            integer primary key,
   name          text,
+  date          text,
   json          text,
   owner         text
 );
