@@ -249,43 +249,29 @@ public class DataTransfer {
   @SuppressWarnings("unused")
   public static void getModel(DataManager data, Integer modelId) {
 
-    // The "open" URL returns metadata (name, owner), while the "show" URL
-    // returns a ModelJSO.
-
+    // The "open" URL returns metadata (name, owner) to a ModelMetadataJSO,
+    // while the "show" URL returns a ModelJSO.
+    String openURL = DataURL.openModel(data, modelId);
+    GWT.log(openURL);
     String showURL = DataURL.showModel(data, modelId);
     GWT.log(showURL);
 
-    RequestBuilder showBuilder =
-        new RequestBuilder(RequestBuilder.GET, URL.encode(showURL));
-
+    RequestBuilder openBuilder =
+        new RequestBuilder(RequestBuilder.GET, URL.encode(openURL));
     try {
-      Request showRequest =
-          showBuilder.sendRequest(null, new ModelRequestCallback(data, modelId,
-              showURL, "show"));
+      Request openRequest =
+          openBuilder.sendRequest(null, new ModelRequestCallback(data, openURL,
+              "open"));
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
-  }
 
-  /**
-   * TODO
-   * 
-   * @param data
-   * @param modelId
-   */
-  @SuppressWarnings("unused")
-  private static void getModelMetadata(DataManager data, Integer modelId) {
-
-    String openURL = DataURL.openModel(data, modelId);
-    GWT.log(openURL);
-
-    RequestBuilder openBuilder =
-        new RequestBuilder(RequestBuilder.GET, URL.encode(openURL));
-
+    RequestBuilder showBuilder =
+        new RequestBuilder(RequestBuilder.GET, URL.encode(showURL));
     try {
-      Request openRequest =
-          openBuilder.sendRequest(null, new ModelRequestCallback(data, modelId,
-              openURL, "open"));
+      Request showRequest =
+          showBuilder.sendRequest(null, new ModelRequestCallback(data, showURL,
+              "show"));
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
@@ -304,7 +290,7 @@ public class DataTransfer {
         data.getMetadata() != null ? data.getMetadata().getId() : -1;
 
     GWT.log("all modelIds: " + data.modelIdList.toString());
-    GWT.log("that modelId: " + modelId.toString());
+    GWT.log("this modelId: " + modelId.toString());
 
     String url;
     if (data.modelIdList.contains(modelId)) {
@@ -325,8 +311,8 @@ public class DataTransfer {
     try {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
       Request request =
-          builder.sendRequest(queryString, new ModelRequestCallback(data, null,
-              url, "new/edit"));
+          builder.sendRequest(queryString, new ModelRequestCallback(data, url,
+              "new/edit"));
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
@@ -479,14 +465,11 @@ public class DataTransfer {
   public static class ModelRequestCallback implements RequestCallback {
 
     private DataManager data;
-    private Integer modelId;
     private String url;
     private String type;
 
-    public ModelRequestCallback(DataManager data, Integer modelId, String url,
-        String type) {
+    public ModelRequestCallback(DataManager data, String url, String type) {
       this.data = data;
-      this.modelId = modelId;
       this.url = url;
       this.type = type;
     }
@@ -502,16 +485,12 @@ public class DataTransfer {
         if (type.matches("show")) {
           ModelJSO jso = parse(rtxt);
           data.setModel(jso);
-          getModelMetadata(data, modelId);
           data.modelIsSaved(true);
           data.deserialize();
         }
-
         if (type.matches("open")) {
           ModelMetadataJSO jso = parse(rtxt);
           data.setMetadata(jso);
-          Integer thisModelId = jso.getId();
-          GWT.log("this modelId: " + thisModelId);
         }
 
         // On successful POST, update list of saved models in the DataManager.
