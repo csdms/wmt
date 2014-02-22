@@ -1,21 +1,45 @@
 $def with (models, hosts, session)
 
+<html>
+  <link rel="stylesheet" type="text/css" href="/wmt/static/style.css" />
+<head>
+</head>
+
+<body>
 <h1>wmt</h1>
 
 <p>Click on a model's name to view its JSON description.</p>
 
 <li>Username: <b>$session.username</b></li>
 
+<a href="/wmt/models/new">New Model</a>
+
 <h2>Saved models:</h2>
-<ul>
+
+<table id="hor-minimalist-a">
+  <tr>
+    <th scope="col">ID</th>
+    <th scope="col">Name</th>
+    <th scope="col">Edit</th>
+    <th scope="col">CCA Resource File</th>
+  </tr>
+  $for model in models:
+  <tr>
+    <td>$model.id</td>
+    <td>$model.name</td>
+    <td><a href="/wmt/models/edit/$model.id">Edit</a></td>
+    <td><a href="/wmt/models/export/$model.id">Resource File</a></td>
+  </tr>
+</table>
+
+<!--ul>
   $for model in models:
   <li>
     <a href="/wmt/models/view/$model.id">$model.name</a>
     <a href="/wmt/models/edit/$model.id">Edit</a>
     <a href="/wmt/models/export/$model.id">Resource File</a>
   </li>
-</ul>
-<a href="/wmt/models/new">New Model</a>
+</ul-->
 
 <h2>Known hosts:</h2>
 <ul>
@@ -28,3 +52,5 @@ $def with (models, hosts, session)
 </ul>
 <a href="/wmt/hosts/new">New Host</a>
 
+</body>
+</html>

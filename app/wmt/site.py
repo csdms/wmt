@@ -130,6 +130,17 @@ class Stage(SiteSubFolder):
         chown_folder_and_files(self.prefix, 'nobody', 'nobody')
 
 
+class Static(SiteSubFolder):
+    name = 'static'
+    def populate(self):
+        src_dir = os.path.abspath(
+            os.path.join(
+                os.path.dirname(wmt.__file__),
+                'static')
+        )
+        copy_dir_contents(src_dir, self.prefix)
+
+
 class Logs(SiteSubFolder):
     name = 'logs'
     def populate(self):
@@ -201,6 +212,7 @@ class Site(object):
             'db': Database(self.prefix),
             'bin': Bin(self.prefix),
             'stage': Stage(self.prefix),
+            'static': Static(self.prefix),
             'logs': Logs(self.prefix),
         }
         self._options = options
@@ -227,6 +239,7 @@ class Site(object):
                 ('templates', self.dir['templates'].prefix),
                 ('data', self.dir['data'].prefix),
                 ('stage', self.dir['stage'].prefix),
+                ('static', self.dir['static'].prefix),
                 ('logs', self.dir['logs'].prefix),
                 ('database', os.path.join(self.dir['db'].prefix, 'wmt.db')),
                 ('user_db', os.path.join(self.dir['db'].prefix, 'users.db')),
