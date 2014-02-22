@@ -101,7 +101,6 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
     if (this.getItem(0).equals(target)) {
       data.getModel().setName(
           component.getName() + " " + data.saveAttempts.toString());
-      data.modelHasBeenSaved(false);
     }
     data.modelIsSaved(false);
     data.getPerspective().setModelPanelTitle();

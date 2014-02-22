@@ -278,6 +278,9 @@ public class Perspective extends DockLayoutPanel {
     data.getModelTree().initializeTree();
     data.getComponentList().setCellSensitivity();
 
+    data.setModel(null);
+    data.setMetadata(null);
+    
     data.saveAttempts = 0;
     data.getModel().setName("Model " + data.saveAttempts.toString());
     viewCenter.setTabText(0, "Model");

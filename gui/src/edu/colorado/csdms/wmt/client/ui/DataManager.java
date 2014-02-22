@@ -41,7 +41,6 @@ public class DataManager {
   private ModelJSO model;
   private ModelMetadataJSO metadata;
   private Boolean modelIsSaved = false;
-  private Boolean modelHasBeenSaved = false;
   private String modelString; // stringified JSON
 
   // Experiment with public members, for convenience.
@@ -309,22 +308,6 @@ public class DataManager {
    */
   public void modelIsSaved(Boolean modelIsSaved) {
     this.modelIsSaved = modelIsSaved;
-  }
-
-  /**
-   * Returns true if the current model has been saved previously.
-   */
-  public Boolean modelHasBeenSaved() {
-    return modelHasBeenSaved;
-  }
-
-  /**
-   * Set to true if the current model has been saved previously.
-   * 
-   * @param modelHasBeenSaved
-   */
-  public void modelHasBeenSaved(Boolean modelHasBeenSaved) {
-    this.modelHasBeenSaved = modelHasBeenSaved;
   }
 
   /**

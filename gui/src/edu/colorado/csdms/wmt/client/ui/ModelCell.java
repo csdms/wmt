@@ -594,7 +594,8 @@ public class ModelCell extends Grid implements DropHandler {
           tree.data.modelIsSaved(false);
           if (openPort.getId().matches("driver")) {
             tree.data.saveAttempts++;
-            tree.data.modelHasBeenSaved(false);
+            tree.data.setModel(null);
+            tree.data.setMetadata(null);
             tree.data.getModel().setName(
                 "Model " + tree.data.saveAttempts.toString());
             tree.data.getPerspective().getViewCenter().setTabText(0, "Model");

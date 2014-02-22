@@ -248,12 +248,12 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       ModelMenu.this.hide();
       GWT.log("modelIsSaved = " + data.modelIsSaved() + "; "
-          + "modelHasBeenSaved = " + data.modelHasBeenSaved());
+          + "modelHasBeenSaved = " + (data.getMetadata() != null));
 
       // If the model hasn't been saved previously, show the SaveDialogBox;
       // otherwise, serialize the model and post it to the server.
       if (!data.modelIsSaved()) {
-        if (!data.modelHasBeenSaved()) {
+        if (data.getMetadata() == null) {          
           showSaveDialogBox();
         } else {
           data.serialize();

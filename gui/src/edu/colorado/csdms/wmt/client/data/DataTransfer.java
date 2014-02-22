@@ -19,8 +19,9 @@ import com.google.gwt.user.client.Window;
 import edu.colorado.csdms.wmt.client.ui.DataManager;
 
 /**
- * A class that defines static methods for accessing, through asynchronous HTTP
- * GET and POST requests, the JSON files used to set up, configure and run WMT.
+ * A class that defines static methods for accessing, through asynchronous
+ * HTTP GET and POST requests, the JSON files used to set up, configure and
+ * run WMT.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -62,7 +63,7 @@ public class DataTransfer {
    */
   public final native static <T> T parse(String jsonStr) /*-{
 		return JSON.parse(jsonStr);
-  }-*/;  
+  }-*/;
 
   /**
    * Returns a deep copy of the input JavaScriptObject.
@@ -75,8 +76,8 @@ public class DataTransfer {
   @SuppressWarnings("unchecked")
   public static <T extends JavaScriptObject> T copy(T jso) {
     return (T) copyImpl(jso);
-  } 
-  
+  }
+
   /**
    * A recursive JSNI method for making a deep copy of an input
    * JavaScriptObject. This is the private implementation of
@@ -120,7 +121,7 @@ public class DataTransfer {
 		}
 		return copy;
   }-*/;
-  
+
   /**
    * A worker that returns a HashMap of entries used in a HTTP query string.
    * 
@@ -191,8 +192,8 @@ public class DataTransfer {
   }
 
   /**
-   * Makes an asynchronous HTTP GET request to the server to retrieve data for a
-   * component, including its "provides" and "uses" ports as well as its
+   * Makes an asynchronous HTTP GET request to the server to retrieve data for
+   * a component, including its "provides" and "uses" ports as well as its
    * parameters.
    * 
    * @param data the DataManager object for the WMT session
@@ -288,8 +289,8 @@ public class DataTransfer {
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
-  }  
-  
+  }
+
   /**
    * Makes an asynchronous HTTP request to POST a model to the server.
    * 
@@ -299,13 +300,15 @@ public class DataTransfer {
   @SuppressWarnings("unused")
   public static void postModel(DataManager data) {
 
+    Integer modelId =
+        data.getMetadata() != null ? data.getMetadata().getId() : -1;
+
     GWT.log("all modelIds: " + data.modelIdList.toString());
-    Integer modelId = data.getMetadata().getId();
     GWT.log("that modelId: " + modelId.toString());
-    
+
     String url;
-    if (data.modelIdList.contains(data.getMetadata().getId())) {
-      url = DataURL.editModel(data, data.getMetadata().getId());
+    if (data.modelIdList.contains(modelId)) {
+      url = DataURL.editModel(data, modelId);
     } else {
       url = DataURL.newModel(data);
     }
@@ -323,7 +326,7 @@ public class DataTransfer {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
       Request request =
           builder.sendRequest(queryString, new ModelRequestCallback(data, null,
-              url, "new"));
+              url, "new/edit"));
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
@@ -399,9 +402,9 @@ public class DataTransfer {
         String rtxt = response.getText();
         GWT.log(rtxt);
         ComponentJSO jso1 = parse(rtxt);
-        data.addComponent(jso1);          // "class" component
+        data.addComponent(jso1); // "class" component
         ComponentJSO jso2 = parse(rtxt);
-        data.addModelComponent(jso2);     // "instance" component, for model
+        data.addModelComponent(jso2); // "instance" component, for model
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "
@@ -465,8 +468,8 @@ public class DataTransfer {
   }
 
   /**
-   * A RequestCallback handler class that provides the callback for a model GET
-   * or POST request.
+   * A RequestCallback handler class that provides the callback for a model
+   * GET or POST request.
    * <p>
    * On a successful GET, {@link DataManager#deserialize()} is called to
    * populate the WMT GUI. On a successful POST,
@@ -501,10 +504,9 @@ public class DataTransfer {
           data.setModel(jso);
           getModelMetadata(data, modelId);
           data.modelIsSaved(true);
-          data.modelHasBeenSaved(true);
           data.deserialize();
         }
-        
+
         if (type.matches("open")) {
           ModelMetadataJSO jso = parse(rtxt);
           data.setMetadata(jso);
@@ -513,10 +515,9 @@ public class DataTransfer {
         }
 
         // On successful POST, update list of saved models in the DataManager.
-        if (type.matches("new")) {
+        if (type.matches("new/edit")) {
           DataTransfer.getModelList(data);
           data.modelIsSaved(true);
-          data.modelHasBeenSaved(true);
           data.getPerspective().setModelPanelTitle();
         }
       } else {
