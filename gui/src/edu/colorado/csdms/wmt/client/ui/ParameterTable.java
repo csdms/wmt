@@ -90,11 +90,21 @@ public class ParameterTable extends FlexTable {
    * @param value the new parameter value, a String
    */
   public void setValue(ParameterJSO parameter, String value) {
+    
     // TODO Massive amounts of checking on value.
+    
     String key = parameter.getKey();
+    String previousValue =
+        data.getModelComponent(componentId).getParameter(key).getValue()
+            .getDefault();
     GWT.log(componentId + ": " + key + ": " + value);
-    data.getModelComponent(componentId).getParameter(key).getValue()
-        .setDefault(value);
+
+    if (!value.matches(previousValue)) {
+      data.getModelComponent(componentId).getParameter(key).getValue()
+          .setDefault(value);
+      data.modelIsSaved(false);
+      data.getPerspective().setModelPanelTitle();
+    }
   }
 
   /**
