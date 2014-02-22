@@ -300,12 +300,12 @@ public class DataTransfer {
   public static void postModel(DataManager data) {
 
     GWT.log("all modelIds: " + data.modelIdList.toString());
-//    GWT.log("that modelId: " + data.getModel().getModelId());
-    GWT.log("that modelId: " + data.getModelId());    
+    Integer modelId = data.getMetadata().getId();
+    GWT.log("that modelId: " + modelId.toString());
     
     String url;
-    if (data.modelIdList.contains(data.getModelId())) {
-      url = DataURL.editModel(data, data.getModelId());
+    if (data.modelIdList.contains(data.getMetadata().getId())) {
+      url = DataURL.editModel(data, data.getMetadata().getId());
     } else {
       url = DataURL.newModel(data);
     }
@@ -506,11 +506,10 @@ public class DataTransfer {
         }
         
         if (type.matches("open")) {
-          ModelJSO jso = parse(rtxt);
-          Integer thisModelId = jso.getModelId();
+          ModelMetadataJSO jso = parse(rtxt);
+          data.setMetadata(jso);
+          Integer thisModelId = jso.getId();
           GWT.log("this modelId: " + thisModelId);
-          data.setModelId(thisModelId);
-          //data.getModel().setModelId(thisModelId);
         }
 
         // On successful POST, update list of saved models in the DataManager.
