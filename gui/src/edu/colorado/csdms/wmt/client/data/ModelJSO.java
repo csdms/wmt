@@ -45,7 +45,11 @@ public class ModelJSO extends JavaScriptObject {
    * used to get the id of a component.
    */
   public final native int getModelId() /*-{
-		return this.id;
+    if (typeof this.id == 'undefined') {
+			return -1;
+		} else {
+			return this.id;
+		}
   }-*/;  
 
   /**
