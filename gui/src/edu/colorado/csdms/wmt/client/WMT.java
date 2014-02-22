@@ -37,7 +37,7 @@ public class WMT implements EntryPoint {
     // Set up the basic framework of views for the GUI.
     perspective = new Perspective(data);
     RootLayoutPanel.get().add(perspective);
-    perspective.initializeArena();
+    perspective.initializeModel();
     perspective.initializeParameterTable();
 
     // Retrieve (asynchronously) and store the list of available components

@@ -591,13 +591,15 @@ public class ModelCell extends Grid implements DropHandler {
 
           // If this is the driver, reset the name of the model & the Model
           // tab. Otherwise, mark it as unsaved.
+          tree.data.modelIsSaved(false);
           if (openPort.getId().matches("driver")) {
             tree.data.saveAttempts++;
+            tree.data.modelHasBeenSaved(false);
             tree.data.getModel().setName(
                 "Model " + tree.data.saveAttempts.toString());
             tree.data.getPerspective().getViewCenter().setTabText(0, "Model");
           } else {
-            tree.data.getPerspective().setModelPanelTitle(false);
+            tree.data.getPerspective().setModelPanelTitle();
           }
         }
       });

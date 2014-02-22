@@ -250,32 +250,46 @@ public class DataTransfer {
 
     // The "open" URL returns metadata (name, owner), while the "show" URL
     // returns a ModelJSO.
-    String openURL = DataURL.openModel(data, modelId);
-    String showURL = DataURL.showModel(data, modelId);
 
-    RequestBuilder openBuilder =
-        new RequestBuilder(RequestBuilder.GET, URL.encode(openURL));
-    GWT.log(openURL);
-    try {
-      Request openRequest =
-          openBuilder.sendRequest(null, new ModelRequestCallback(data, openURL,
-              "open"));
-    } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
-    }
+    String showURL = DataURL.showModel(data, modelId);
+    GWT.log(showURL);
 
     RequestBuilder showBuilder =
         new RequestBuilder(RequestBuilder.GET, URL.encode(showURL));
-    GWT.log(showURL);
+
     try {
       Request showRequest =
-          showBuilder.sendRequest(null, new ModelRequestCallback(data, showURL,
-              "show"));
+          showBuilder.sendRequest(null, new ModelRequestCallback(data, modelId,
+              showURL, "show"));
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
   }
 
+  /**
+   * TODO
+   * 
+   * @param data
+   * @param modelId
+   */
+  @SuppressWarnings("unused")
+  private static void getModelMetadata(DataManager data, Integer modelId) {
+
+    String openURL = DataURL.openModel(data, modelId);
+    GWT.log(openURL);
+
+    RequestBuilder openBuilder =
+        new RequestBuilder(RequestBuilder.GET, URL.encode(openURL));
+
+    try {
+      Request openRequest =
+          openBuilder.sendRequest(null, new ModelRequestCallback(data, modelId,
+              openURL, "open"));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }
+  }  
+  
   /**
    * Makes an asynchronous HTTP request to POST a model to the server.
    * 
@@ -285,11 +299,19 @@ public class DataTransfer {
   @SuppressWarnings("unused")
   public static void postModel(DataManager data) {
 
-    String url = DataURL.newModel(data);
-
+    GWT.log("all modelIds: " + data.modelIdList.toString());
+//    GWT.log("that modelId: " + data.getModel().getModelId());
+    GWT.log("that modelId: " + data.getModelId());    
+    
+    String url;
+    if (data.modelIdList.contains(data.getModelId())) {
+      url = DataURL.editModel(data, data.getModelId());
+    } else {
+      url = DataURL.newModel(data);
+    }
     GWT.log(url);
     GWT.log(data.getModelString());
-    
+
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 
@@ -300,8 +322,8 @@ public class DataTransfer {
     try {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
       Request request =
-          builder.sendRequest(queryString, new ModelRequestCallback(data, url,
-              "new"));
+          builder.sendRequest(queryString, new ModelRequestCallback(data, null,
+              url, "new"));
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
@@ -454,11 +476,14 @@ public class DataTransfer {
   public static class ModelRequestCallback implements RequestCallback {
 
     private DataManager data;
+    private Integer modelId;
     private String url;
     private String type;
 
-    public ModelRequestCallback(DataManager data, String url, String type) {
+    public ModelRequestCallback(DataManager data, Integer modelId, String url,
+        String type) {
       this.data = data;
+      this.modelId = modelId;
       this.url = url;
       this.type = type;
     }
@@ -474,12 +499,26 @@ public class DataTransfer {
         if (type.matches("show")) {
           ModelJSO jso = parse(rtxt);
           data.setModel(jso);
+          getModelMetadata(data, modelId);
+          data.modelIsSaved(true);
+          data.modelHasBeenSaved(true);
           data.deserialize();
+        }
+        
+        if (type.matches("open")) {
+          ModelJSO jso = parse(rtxt);
+          Integer thisModelId = jso.getModelId();
+          GWT.log("this modelId: " + thisModelId);
+          data.setModelId(thisModelId);
+          //data.getModel().setModelId(thisModelId);
         }
 
         // On successful POST, update list of saved models in the DataManager.
         if (type.matches("new")) {
           DataTransfer.getModelList(data);
+          data.modelIsSaved(true);
+          data.modelHasBeenSaved(true);
+          data.getPerspective().setModelPanelTitle();
         }
       } else {
         String msg =

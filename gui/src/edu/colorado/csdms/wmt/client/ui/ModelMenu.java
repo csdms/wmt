@@ -3,6 +3,7 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -224,17 +225,41 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "Save Model" button in the ModelMenu.
+   * A worker that pops up the "Save Model As..." dialog box.
+   */
+  private void showSaveDialogBox() {
+    saveDialog = new SaveDialogBox();
+    saveDialog.setText("Save Model As...");
+    saveDialog.getFilePanel().setFile(data.getModel().getName());
+    saveDialog.getChoicePanel().getOkButton().addClickHandler(
+        new SaveOkHandler());
+    saveDialog.getChoicePanel().getCancelButton().addClickHandler(
+        new SaveCancelHandler());
+    saveDialog.center();
+  }
+  
+  /**
+   * Handles click on the "Save Model" button in the ModelMenu. Saves the model
+   * displayed in WMT to the server.
    */
   public class SaveModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
-      ModelMenuItem item = (ModelMenuItem) event.getSource();
-      ModelMenu.this.hide();
-      Window.alert("Clicked on: " + item.getText(0, 1));
 
-      // Need to actually save the model, but getting a head start.
-      data.getPerspective().setModelPanelTitle(true);
+      ModelMenu.this.hide();
+      GWT.log("modelIsSaved = " + data.modelIsSaved() + "; "
+          + "modelHasBeenSaved = " + data.modelHasBeenSaved());
+
+      // If the model hasn't been saved previously, show the SaveDialogBox;
+      // otherwise, serialize the model and post it to the server.
+      if (!data.modelIsSaved()) {
+        if (!data.modelHasBeenSaved()) {
+          showSaveDialogBox();
+        } else {
+          data.serialize();
+          DataTransfer.postModel(data);
+        }
+      }
     }
   }
 
@@ -246,19 +271,8 @@ public class ModelMenu extends DecoratedPopupPanel {
   public class SaveModelAsHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
-
-      saveDialog = new SaveDialogBox();
-      saveDialog.setText("Save Model As...");
-      saveDialog.getFilePanel().setDirectory("river:$HOME/.wmt");
-      saveDialog.getFilePanel().setFile(data.getModel().getName());
-
-      saveDialog.getChoicePanel().getOkButton().addClickHandler(
-          new SaveOkHandler());
-      saveDialog.getChoicePanel().getCancelButton().addClickHandler(
-          new SaveCancelHandler());
-
-      saveDialog.center();
       ModelMenu.this.hide();
+      showSaveDialogBox();
     }  
   }
 
@@ -353,14 +367,13 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       saveDialog.hide();
       ModelMenu.this.hide();
-
-      // Set the model name on the ViewCenter tab and in the DataManager.
+      
+      // Set the model name in the DataManager.
       String modelName = saveDialog.getFilePanel().getFile();
       if (!data.getModel().getName().matches(modelName)) {
         data.getModel().setName(modelName);
         data.saveAttempts++;
       }
-      data.getPerspective().setModelPanelTitle(true);
 
       // Serialize the model from the GUI and post it to the server.
       data.serialize();
@@ -380,5 +393,4 @@ public class ModelMenu extends DecoratedPopupPanel {
       ModelMenu.this.hide();
     }
   }
-
 }

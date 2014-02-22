@@ -49,7 +49,7 @@ public class Perspective extends DockLayoutPanel {
 
   // Secondary UI panels/widgets.
   private ScrollPanel scrollComponents;
-  private ScrollPanel scrollArena;
+  private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
   private ModelMenu modelMenu;
 
@@ -152,8 +152,8 @@ public class Perspective extends DockLayoutPanel {
      */
     public ViewCenter() {
       super(TAB_BAR_HEIGHT, Unit.EM);
-      setArenaPanel(new ScrollPanel());
-      this.add(scrollArena, "Model");
+      setModelPanel(new ScrollPanel());
+      this.add(scrollModel, "Model");
     }
   } // end ViewCenter
 
@@ -181,14 +181,24 @@ public class Perspective extends DockLayoutPanel {
     this.scrollComponents = scrollComponents;
   }
 
-  public ScrollPanel getArenaPanel() {
-    return scrollArena;
+  public ScrollPanel getModelPanel() {
+    return scrollModel;
   }
 
-  public void setArenaPanel(ScrollPanel scrollArena) {
-    this.scrollArena = scrollArena;
+  public void setModelPanel(ScrollPanel scrollModel) {
+    this.scrollModel = scrollModel;
   }
 
+  /**
+   * A convenience method for setting the tab title of the Model panel. If the
+   * model isn't saved, prepend an asterisk to its name.
+   */
+  public void setModelPanelTitle() {
+    String marker = data.modelIsSaved() ? "" : "*";
+    String tabTitle = "Model (" + marker + data.getModel().getName() + ")";
+    viewCenter.setTabText(0, tabTitle);
+  }
+  
   public ScrollPanel getParametersPanel() {
     return scrollParameters;
   }
@@ -217,23 +227,21 @@ public class Perspective extends DockLayoutPanel {
    */
   public void setModelMenu(ModelMenu modelMenu) {
     this.modelMenu = modelMenu;
-  }
-
+  }  
+  
   /**
    * Sets up the default starting ModelTree in the "Model" tab, showing
    * only the open port for the driver of the model.
    */
-  public void initializeArena() {
+  public void initializeModel() {
     ModelTree modelTree = new ModelTree(data);
-    getArenaPanel().add(modelTree);
+    scrollModel.add(modelTree);
 
-    // XXX Should this be in ModelTree? But then it must know ParameterTable.
     modelTree.addHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
         if (data.getSelectedComponent() != null) {
-          ParameterTable table =
-              (ParameterTable) getParametersPanel().getWidget();
+          ParameterTable table = (ParameterTable) scrollParameters.getWidget();
           table.removeAllRows(); // FlexTable
           table.loadTable();
         }
@@ -246,7 +254,7 @@ public class Perspective extends DockLayoutPanel {
    */
   public void initializeParameterTable() {
     ParameterTable parameterTable = new ParameterTable(data);
-    getParametersPanel().add(parameterTable);
+    scrollParameters.add(parameterTable);
   }
 
   /**
@@ -254,19 +262,7 @@ public class Perspective extends DockLayoutPanel {
    */
   public void initializeComponentList() {
     ComponentList componentList = new ComponentList(data);
-    getComponentsPanel().add(componentList);
-  }
-
-  /**
-   * A convenience method for setting the tab title of the Model panel.
-   * 
-   * @param isModelSaved if the model isn't saved, prepend an asterisk to its
-   *          name
-   */
-  public void setModelPanelTitle(Boolean isModelSaved) {
-    String marker = isModelSaved ? "" : "*";
-    String tabTitle = "Model (" + marker + data.getModel().getName() + ")";
-    data.getPerspective().getViewCenter().setTabText(0, tabTitle);
+    scrollComponents.add(componentList);
   }
   
   /**
@@ -284,6 +280,6 @@ public class Perspective extends DockLayoutPanel {
 
     data.saveAttempts = 0;
     data.getModel().setName("Model " + data.saveAttempts.toString());
-    data.getPerspective().getViewCenter().setTabText(0, "Model");
+    viewCenter.setTabText(0, "Model");
   }
 }

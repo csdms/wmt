@@ -17,7 +17,6 @@ import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.DataTransfer;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
-import edu.colorado.csdms.wmt.client.data.Port;
 
 /**
  * A class for storing and sharing data, as well as the state of UI elements,
@@ -39,6 +38,9 @@ public class DataManager {
   private String draggedComponent;
   private String selectedComponent;
   private ModelJSO model;
+  private Integer modelId; // unique id set by API
+  private Boolean modelIsSaved = false;
+  private Boolean modelHasBeenSaved = false;
   private String modelString; // stringified JSON
 
   // Experiment with public members, for convenience.
@@ -276,6 +278,53 @@ public class DataManager {
   }
 
   /**
+   * Returns the unique id set by the API for the model.
+   */
+  public Integer getModelId() {
+    return modelId;
+  }
+
+  /**
+   * Stores the unique id set by the API for the model.
+   * <p>
+   * Use this instead of creating a ModelJSO#setModelId, since "id" is an
+   * object only in the "open" URL, not the "show" URL.
+   * 
+   * @param modelId the modelId to store, an Integer.
+   */
+  public void setModelId(Integer modelId) {
+    this.modelId = modelId;
+  }
+
+  /**
+   * @return the modelIsSaved
+   */
+  public Boolean modelIsSaved() {
+    return modelIsSaved;
+  }
+
+  /**
+   * @param modelIsSaved the modelIsSaved to set
+   */
+  public void modelIsSaved(Boolean modelIsSaved) {
+    this.modelIsSaved = modelIsSaved;
+  }
+
+  /**
+   * @return the modelHasBeenSaved
+   */
+  public Boolean modelHasBeenSaved() {
+    return modelHasBeenSaved;
+  }
+
+  /**
+   * @param modelHasBeenSaved the modelHasBeenSaved to set
+   */
+  public void modelHasBeenSaved(Boolean modelHasBeenSaved) {
+    this.modelHasBeenSaved = modelHasBeenSaved;
+  }
+
+  /**
    * Gets the stringified model JSON created by {@link #serialize()}.
    */
   public String getModelString() {
@@ -462,13 +511,14 @@ public class DataManager {
   
   /**
    * Extracts the information contained in the {@link ModelJSO} object
-   * returned on opening a model and uses it to populate the {@link ModelTree}
-   * .
+   * returned from opening a model (model menu > "Open Model...") and uses it
+   * to populate the {@link ModelTree}.
    */
   public void deserialize() {
 
-    // Set model name on tab.
-    perspective.setModelPanelTitle(true);
+    // TODO Refactor to improve clarity. And performance.
+    
+    perspective.setModelPanelTitle();
 
     Integer nModelComponents = model.getComponents().length();
     Integer nModelComponentsUsed = 0;
