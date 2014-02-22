@@ -37,5 +37,5 @@ def read_site_config_file(*args):
 
 site = read_site_config_file()
 db = web.database(dbn='sqlite', db=site['database'])
-palette = load_palette(os.path.join(site['data'], 'components'))
+palette = load_palette(os.path.join(site['db'], 'components'))
 logger = logging.getLogger('wmtserver')

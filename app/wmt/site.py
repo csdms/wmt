@@ -133,11 +133,7 @@ class Stage(SiteSubFolder):
 class Static(SiteSubFolder):
     name = 'static'
     def populate(self):
-        src_dir = os.path.abspath(
-            os.path.join(
-                os.path.dirname(wmt.__file__),
-                'static')
-        )
+        src_dir = os.path.join(_PACKAGE_PREFIX, 'data', 'static')
         copy_dir_contents(src_dir, self.prefix)
 
 
@@ -151,22 +147,25 @@ class Logs(SiteSubFolder):
 class Templates(SiteSubFolder):
     name = 'templates'
     def populate(self):
-        src_dir = os.path.abspath(
-            os.path.join(
-                os.path.dirname(wmt.__file__),
-                'templates')
-        )
+        src_dir = os.path.join(_PACKAGE_PREFIX, 'data', 'templates')
         copy_dir_contents(src_dir, self.prefix)
 
 
-class Data(SiteSubFolder):
-    name = 'data'
+class Database(SiteSubFolder):
+    name = 'db'
     def populate(self):
-        src_dir = os.path.abspath(
-            os.path.join(
-                os.path.dirname(wmt.__file__),
-                'data')
-        )
+        src_dir = os.path.join(_PACKAGE_PREFIX, 'data', 'db')
+
+        create_empty_database(
+            os.path.join(self.prefix, 'wmt.db'),
+            schema=os.path.join(src_dir, 'wmt.sql'),
+            clobber=True)
+        create_empty_database(
+            os.path.join(self.prefix, 'users.db'),
+            schema=os.path.join(src_dir, 'users.sql'),
+            clobber=True)
+        chown_folder_and_files(self.prefix, 'nobody', 'nobody')
+
         src_path, dst_path = (
             os.path.join(src_dir, 'components'),
             os.path.join(self.prefix, 'components')
@@ -176,21 +175,6 @@ class Data(SiteSubFolder):
             shutil.rmtree(dst_path)
 
         shutil.copytree(src_path, dst_path)
-
-
-class Database(SiteSubFolder):
-    name = 'db'
-    def populate(self):
-        data_dir = os.path.join(_PACKAGE_PREFIX, 'data')
-        create_empty_database(
-            os.path.join(self.prefix, 'wmt.db'),
-            schema=os.path.join(data_dir, 'wmt.sql'),
-            clobber=True)
-        create_empty_database(
-            os.path.join(self.prefix, 'users.db'),
-            schema=os.path.join(data_dir, 'users.sql'),
-            clobber=True)
-        chown_folder_and_files(self.prefix, 'nobody', 'nobody')
 
 
 class Bin(SiteSubFolder):
@@ -208,7 +192,6 @@ class Site(object):
         self._dirs = {
             'templates': Templates(self.prefix),
             'conf': Conf(self.prefix),
-            'data': Data(self.prefix),
             'db': Database(self.prefix),
             'bin': Bin(self.prefix),
             'stage': Stage(self.prefix),
@@ -237,7 +220,6 @@ class Site(object):
             ('wmt', OrderedDict([
                 ('prefix', self.prefix),
                 ('templates', self.dir['templates'].prefix),
-                ('data', self.dir['data'].prefix),
                 ('stage', self.dir['stage'].prefix),
                 ('static', self.dir['static'].prefix),
                 ('logs', self.dir['logs'].prefix),

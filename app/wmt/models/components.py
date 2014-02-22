@@ -50,7 +50,7 @@ def get_component_defaults(name):
 
 
 def _read_input_file(name, filename):
-    input_file_dir = os.path.join(site['data'], 'components', name, 'files')
+    input_file_dir = os.path.join(site['db'], 'components', name, 'files')
     path_to_file = os.path.join(input_file_dir, filename)
     with open(path_to_file, 'r') as file:
         contents = file.read()
