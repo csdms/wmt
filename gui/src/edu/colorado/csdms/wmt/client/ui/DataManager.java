@@ -38,6 +38,7 @@ public class DataManager {
   private String draggedComponent;
   private String selectedComponent;
   private ModelJSO model;
+  private Integer modelId; // unique id set by API
   private Boolean modelIsSaved = false;
   private Boolean modelHasBeenSaved = false;
   private String modelString; // stringified JSON
@@ -274,6 +275,25 @@ public class DataManager {
    */
   public void setModel(ModelJSO model) {
     this.model = model;
+  }
+
+  /**
+   * Returns the unique id set by the API for the model.
+   */
+  public Integer getModelId() {
+    return modelId;
+  }
+
+  /**
+   * Stores the unique id set by the API for the model.
+   * <p>
+   * Use this instead of creating a ModelJSO#setModelId, since "id" is an
+   * object only in the "open" URL, not the "show" URL.
+   * 
+   * @param modelId the modelId to store, an Integer.
+   */
+  public void setModelId(Integer modelId) {
+    this.modelId = modelId;
   }
 
   /**
