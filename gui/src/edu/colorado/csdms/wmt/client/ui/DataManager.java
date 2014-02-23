@@ -17,6 +17,7 @@ import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.DataTransfer;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
+import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 
 /**
  * A class for storing and sharing data, as well as the state of UI elements,
@@ -27,18 +28,18 @@ import edu.colorado.csdms.wmt.client.data.ModelJSO;
 public class DataManager {
 
   private Boolean developmentMode;
-  
+
   private Perspective perspective;
   private ComponentList componentList;
   private ModelTree modelTree;
   private ParameterTable parameterTable;
 
-  private List<ComponentJSO> components;      // "class" components
+  private List<ComponentJSO> components; // "class" components
   private List<ComponentJSO> modelComponents; // "instance" components
   private String draggedComponent;
   private String selectedComponent;
   private ModelJSO model;
-  private Integer modelId; // unique id set by API
+  private ModelMetadataJSO metadata;
   private Boolean modelIsSaved = false;
   private Boolean modelHasBeenSaved = false;
   private String modelString; // stringified JSON
@@ -108,8 +109,8 @@ public class DataManager {
       }
     }
     return null;
-  }  
-  
+  }
+
   /**
    * A convenience method that returns the {@link ComponentJSO} object at the
    * given position in the ArrayList of components.
@@ -119,7 +120,7 @@ public class DataManager {
   public ComponentJSO getComponent(Integer index) {
     return components.get(index);
   }
-  
+
   /**
    * A convenience method that adds a component to the ArrayList of
    * components.
@@ -148,8 +149,8 @@ public class DataManager {
         return o1.getName().compareTo(o2.getName());
       }
     });
-  }  
-  
+  }
+
   /**
    * Returns the <em>all</em> the components in the ArrayList of
    * {@link ComponentJSO} objects.
@@ -187,8 +188,8 @@ public class DataManager {
       }
     }
     return null;
-  }  
-  
+  }
+
   /**
    * A convenience method that returns the {@link ComponentJSO} object at the
    * given position in the ArrayList of model components.
@@ -199,11 +200,11 @@ public class DataManager {
    */
   public ComponentJSO getModelComponent(Integer index) {
     return modelComponents.get(index);
-  }  
+  }
 
   /**
-   * A convenience method that adds a component to the ArrayList of
-   * model components.
+   * A convenience method that adds a component to the ArrayList of model
+   * components.
    * <p>
    * Compare with {@link #addComponent(ComponentJSO)} for "class" components.
    * 
@@ -211,7 +212,7 @@ public class DataManager {
    */
   public void addModelComponent(ComponentJSO modelComponent) {
     this.modelComponents.add(modelComponent);
-  }  
+  }
 
   /**
    * Replaces the item in DataManager's ArrayList of model components with the
@@ -227,8 +228,8 @@ public class DataManager {
         return;
       }
     }
-  }  
-  
+  }
+
   /**
    * Replaces <em>all</em> of the model components with copies of the (class)
    * components using {@link DataTransfer#copy()}.
@@ -239,7 +240,7 @@ public class DataManager {
       modelComponents.set(i, copy);
     }
   }
-  
+
   /**
    * Returns the <em>all</em> the model components in the ArrayList of
    * {@link ComponentJSO} objects.
@@ -249,7 +250,7 @@ public class DataManager {
   public List<ComponentJSO> getModelComponents() {
     return this.modelComponents;
   }
-  
+
   /**
    * Sets an ArrayList of ComponentJSOs representing <em>all</em> the model
    * components.
@@ -258,8 +259,8 @@ public class DataManager {
    */
   public void setModelComponents(List<ComponentJSO> modelComponents) {
     this.modelComponents = modelComponents;
-  }  
-  
+  }
+
   /**
    * Returns the model displayed in the {@link ModelTree}, a {@link ModelJSO}
    * object.
@@ -278,47 +279,49 @@ public class DataManager {
   }
 
   /**
-   * Returns the unique id set by the API for the model.
+   * Returns the ModelMetadataJSO object used to store the metadata for a
+   * model.
    */
-  public Integer getModelId() {
-    return modelId;
+  public ModelMetadataJSO getMetadata() {
+    return metadata;
   }
 
   /**
-   * Stores the unique id set by the API for the model.
-   * <p>
-   * Use this instead of creating a ModelJSO#setModelId, since "id" is an
-   * object only in the "open" URL, not the "show" URL.
+   * Stores the ModelMetadataJSO object that holds a model's metadata.
    * 
-   * @param modelId the modelId to store, an Integer.
+   * @param metadata the model's ModelMetadataJSO object
    */
-  public void setModelId(Integer modelId) {
-    this.modelId = modelId;
+  public void setMetadata(ModelMetadataJSO metadata) {
+    this.metadata = metadata;
   }
 
   /**
-   * @return the modelIsSaved
+   * Returns the save state of the model. (True = saved)
    */
   public Boolean modelIsSaved() {
     return modelIsSaved;
   }
 
   /**
-   * @param modelIsSaved the modelIsSaved to set
+   * Stores the save state of the model. (True = saved)
+   * 
+   * @param modelIsSaved the model save state, a Boolean
    */
   public void modelIsSaved(Boolean modelIsSaved) {
     this.modelIsSaved = modelIsSaved;
   }
 
   /**
-   * @return the modelHasBeenSaved
+   * Returns true if the current model has been saved previously.
    */
   public Boolean modelHasBeenSaved() {
     return modelHasBeenSaved;
   }
 
   /**
-   * @param modelHasBeenSaved the modelHasBeenSaved to set
+   * Set to true if the current model has been saved previously.
+   * 
+   * @param modelHasBeenSaved
    */
   public void modelHasBeenSaved(Boolean modelHasBeenSaved) {
     this.modelHasBeenSaved = modelHasBeenSaved;
@@ -427,7 +430,7 @@ public class DataManager {
   public void setSelectedComponent(String selectedComponent) {
     this.selectedComponent = selectedComponent;
   }
-  
+
   /**
    * Translates the model displayed in WMT into a {@link ModelJSO} object,
    * which completely describes the state of the model. This object is
@@ -507,8 +510,8 @@ public class DataManager {
 
     // Stringify the ModelJSO object. Store the result in the DataManager.
     modelString = DataTransfer.stringify(model);
-  }  
-  
+  }
+
   /**
    * Extracts the information contained in the {@link ModelJSO} object
    * returned from opening a model (model menu > "Open Model...") and uses it
@@ -517,7 +520,7 @@ public class DataManager {
   public void deserialize() {
 
     // TODO Refactor to improve clarity. And performance.
-    
+
     perspective.setModelPanelTitle();
 
     Integer nModelComponents = model.getComponents().length();
