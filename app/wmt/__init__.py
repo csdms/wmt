@@ -39,6 +39,10 @@ URLS = (
     '/models/submit', 'wmt.controllers.actions.Submit',
 
     '/run/(\d*)', 'wmt.controllers.run.StageIn',
+    '/run/new', 'wmt.controllers.run.New',
+    '/run/update/(\d+)', 'wmt.controllers.run.Update',
+    '/run/show', 'wmt.controllers.run.Show',
+    '/run/upload', 'wmt.controllers.run.Upload',
 
     '/hosts/new', 'wmt.controllers.hosts.New',
     '/hosts/view/(\d+)', 'wmt.controllers.hosts.View',

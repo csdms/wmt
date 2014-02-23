@@ -156,14 +156,11 @@ class Database(SiteSubFolder):
     def populate(self):
         src_dir = os.path.join(_PACKAGE_PREFIX, 'data', 'db')
 
-        create_empty_database(
-            os.path.join(self.prefix, 'wmt.db'),
-            schema=os.path.join(src_dir, 'wmt.sql'),
-            clobber=True)
-        create_empty_database(
-            os.path.join(self.prefix, 'users.db'),
-            schema=os.path.join(src_dir, 'users.sql'),
-            clobber=True)
+        for db in ['wmt', 'users', 'submission']:
+            create_empty_database(
+                os.path.join(self.prefix, db + '.db'),
+                schema=os.path.join(src_dir, db + '.sql'),
+                clobber=True)
         chown_folder_and_files(self.prefix, 'nobody', 'nobody')
 
         src_path, dst_path = (
@@ -225,6 +222,8 @@ class Site(object):
                 ('logs', self.dir['logs'].prefix),
                 ('database', os.path.join(self.dir['db'].prefix, 'wmt.db')),
                 ('user_db', os.path.join(self.dir['db'].prefix, 'users.db')),
+                ('submission_db', os.path.join(self.dir['db'].prefix,
+                                               'submission.db')),
                 ('db', self.dir['db'].prefix), ])
             ),
             ('passlib', OrderedDict([
