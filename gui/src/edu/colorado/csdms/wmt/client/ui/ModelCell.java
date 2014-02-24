@@ -573,13 +573,13 @@ public class ModelCell extends Grid implements DropHandler {
           
           // Make a new ModelCell (overwriting the current). Attach it to the
           // target TreeItem.
-          Port openPort = new Port();
+          Port openPort;          
           if (parentTreeItem.getParentItem() != null) {
+            openPort = new Port();
             openPort.setId(portCell.port.getId());
             openPort.isRequired(portCell.port.isRequired());
           } else {
-            openPort.setId("driver"); // This is the top of the ModelTree.
-            openPort.isRequired(true);
+            openPort = tree.initializeTree(); // at root of ModelTree.
           }
           Component infoComponent = Component.makeInfoComponent();
           ModelCell newCell = new ModelCell(openPort, infoComponent);
@@ -594,8 +594,6 @@ public class ModelCell extends Grid implements DropHandler {
           tree.data.modelIsSaved(false);
           if (openPort.getId().matches("driver")) {
             tree.data.saveAttempts++;
-            tree.data.setModel(null);
-            tree.data.setMetadata(null);
             tree.data.getModel().setName(
                 "Model " + tree.data.saveAttempts.toString());
             tree.data.getPerspective().getViewCenter().setTabText(0, "Model");

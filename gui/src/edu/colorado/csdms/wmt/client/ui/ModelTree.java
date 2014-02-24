@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
+import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.data.Port;
 
 /**
@@ -40,12 +41,6 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
 
     initializeTree();
     this.data.setModelTree(this);
-    
-    // Set an empty model in the DataManager. It will be used to save the
-    // model created with this ModelTree.
-    ModelJSO model = (ModelJSO) ModelJSO.createObject();
-    this.data.setModel(model);
-    this.data.getModel().setName("Model " + this.data.saveAttempts.toString());
 
     // Set up ModelTree event handlers.
     addDomHandler(this, DragOverEvent.getType());
@@ -54,10 +49,26 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
 
   /**
    * A worker that sets up the root TreeItem (the "driver") of the ModelTree.
+   * It also initializes the {@link ModelJSO} and {@link ModelMetadataJSO}
+   * objects used to save the model created with this ModelTree.
+   * <p>
+   * The returned Port is optional.
    */
-  public void initializeTree() {
+  public Port initializeTree() {
+    
+    this.clear();
     Port driverPort = new Port("driver", true);
     addTreeItem(driverPort, null);
+
+    ModelJSO model = (ModelJSO) ModelJSO.createObject();
+    data.setModel(model);
+    data.getModel().setName("Model " + data.saveAttempts.toString());
+
+    ModelMetadataJSO metadata =
+        (ModelMetadataJSO) ModelMetadataJSO.createObject();
+    data.setMetadata(metadata);
+    
+    return driverPort;
   }
 
   /**
