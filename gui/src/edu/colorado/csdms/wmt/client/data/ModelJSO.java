@@ -112,6 +112,18 @@ public class ModelJSO extends JavaScriptObject {
   }-*/;
 
   /**
+   * A convenience method that returns the number of parameters a component
+   * has.
+   */
+  public final native int nParameters() /*-{
+    var n = 0;
+		if (typeof this.parameters != 'undefined') {
+			n = Object.keys(this.parameters).length;
+		}
+    return n;
+  }-*/;  
+  
+  /**
    * Returns, as a JsArrayString, the keys of the all the parameters listed
    * under the eponymous object of a model component. Index this array with
    * JsArrayString#get. This is a JSNI method.
@@ -147,7 +159,7 @@ public class ModelJSO extends JavaScriptObject {
    */
   public final native JsArrayString getValues() /*-{
 		var values = [];
-		for ( var key in this.parameters) {
+		for (var key in this.parameters) {
 			values = values.concat(this.parameters[key].toString());
 		}
 		return values;
@@ -168,6 +180,17 @@ public class ModelJSO extends JavaScriptObject {
   }-*/;
 
   /**
+   * A convenience method that returns the number of ports a component has.
+   */
+  public final native int nPorts() /*-{
+    var n = 0;
+		if (typeof this.connect != 'undefined') {
+			n = Object.keys(this.connect).length;
+		} 
+    return n;
+  }-*/;  
+  
+  /**
    * Returns, as a JsArrayString, the ids of the all the ports listed under the
    * "connect" object of a model component. Index this array with
    * JsArrayString#get. The "connect" object may not be present. This is a JSNI
@@ -180,8 +203,8 @@ public class ModelJSO extends JavaScriptObject {
 			var keys = Object.keys(this.connect);
 			return keys;
 		}
-  }-*/;
-
+  }-*/;  
+  
   /**
    * Returns, as a JsArrayString, the ids of the all the components that are
    * connected to the ports listed under the "connect" object of a model
