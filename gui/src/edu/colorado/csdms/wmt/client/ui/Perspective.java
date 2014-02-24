@@ -194,8 +194,14 @@ public class Perspective extends DockLayoutPanel {
    * model isn't saved, prepend an asterisk to its name.
    */
   public void setModelPanelTitle() {
-    String marker = data.modelIsSaved() ? "" : "*";
-    String tabTitle = "Model (" + marker + data.getModel().getName() + ")";
+    String tabTitle;
+    if (data.getModel().getName() != null) {
+      String marker = data.modelIsSaved() ? "" : "*";
+      tabTitle = "Model (" + marker + data.getModel().getName() + ")";
+    } else {
+      tabTitle = "Model";
+      data.getModel().setName(tabTitle + data.saveAttempts.toString());
+    }
     viewCenter.setTabText(0, tabTitle);
   }
   
@@ -277,7 +283,6 @@ public class Perspective extends DockLayoutPanel {
     data.getModelTree().initializeTree();
     data.getComponentList().setCellSensitivity();
 
-    data.getModel().setName("Model " + data.saveAttempts.toString());
-    viewCenter.setTabText(0, "Model");
+    setModelPanelTitle();
   }
 }

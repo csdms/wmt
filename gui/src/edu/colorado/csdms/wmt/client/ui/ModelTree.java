@@ -62,8 +62,6 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
 
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
     data.setModel(model);
-    data.getModel().setName("Model " + data.saveAttempts.toString());
-
     ModelMetadataJSO metadata =
         (ModelMetadataJSO) ModelMetadataJSO.createObject();
     data.setMetadata(metadata);
