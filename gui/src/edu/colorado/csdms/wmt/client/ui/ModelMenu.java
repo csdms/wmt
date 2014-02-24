@@ -225,7 +225,9 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * A worker that pops up the "Save Model As..." dialog box.
+   * Pops up an instance of {@link SaveDialogBox} to prompt the user to save
+   * the model. Events are sent to {@link SaveOkHandler} and
+   * {@link SaveCancelHandler}.
    */
   private void showSaveDialogBox() {
     saveDialog = new SaveDialogBox();
@@ -239,8 +241,8 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
   
   /**
-   * Handles click on the "Save Model" button in the ModelMenu. Saves the model
-   * displayed in WMT to the server.
+   * Handles click on the "Save Model" button in the ModelMenu. Saves a
+   * not-previously-saved model or a new model displayed in WMT to the server.
    */
   public class SaveModelHandler implements ClickHandler {
     @Override
@@ -253,7 +255,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       // If the model hasn't been saved previously, show the SaveDialogBox;
       // otherwise, serialize the model and post it to the server.
       if (!data.modelIsSaved()) {
-        if (data.getMetadata() == null) {          
+        if (data.getMetadata().getName() == null) {          
           showSaveDialogBox();
         } else {
           data.serialize();
@@ -264,9 +266,8 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "Save Model As..." button in the ModelMenu. Pops up an
-   * instance of {@link SaveDialogBox} to prompt the user for a model to open.
-   * Events are sent to {@link SaveOkHandler} and {@link SaveCancelHandler}.
+   * Handles click on the "Save Model As..." button in the ModelMenu. Prompts
+   * the user for a model name using {@link ModelMenu#showSaveDialogBox()}.
    */
   public class SaveModelAsHandler implements ClickHandler {
     @Override
