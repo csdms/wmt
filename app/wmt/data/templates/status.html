@@ -1,0 +1,38 @@
+$def with (submissions)
+
+<html>
+  <link rel="stylesheet" type="text/css" href="/wmt/static/style.css" />
+<head>
+</head>
+
+<body>
+<h1>wmt</h1>
+
+<h2>Status</h2>
+
+<table id="hor-minimalist-a">
+  <tr>
+    <th scope="col">ID</th>
+    <th scope="col">UUID</th>
+    <th scope="col">Name</th>
+    <th scope="col">Status</th>
+    <th scope="col">Created</th>
+    <th scope="col">Last Changed</th>
+    <th scope="col">Owner</th>
+    <th scope="col">Message</th>
+  </tr>
+  $for submission in submissions:
+  <tr>
+    <td>$submission.id</td>
+    <td>$submission.uuid</td>
+    <td>$submission.name</td>
+    <td>$submission.status</td>
+    <td>$submission.created</td>
+    <td>$submission.updated</td>
+    <td>$submission.owner</td>
+    <td>$submission.message</td>
+  </tr>
+</table>
+
+</body>
+</html>
