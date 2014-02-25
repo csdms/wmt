@@ -123,8 +123,8 @@ class Conf(SiteSubFolder):
         pass
 
 
-class Stage(SiteSubFolder):
-    name = 'stage'
+class Files(SiteSubFolder):
+    name = 'files'
     def populate(self):
         make_directory_tree(self.prefix, [])
         chown_folder_and_files(self.prefix, 'nobody', 'nobody')
@@ -168,10 +168,15 @@ class Database(SiteSubFolder):
             os.path.join(self.prefix, 'components')
         )
 
-        if os.path.isdir(dst_path):
+        try:
             shutil.rmtree(dst_path)
+        except OSError:
+            print '%s: unable to remove directory tree' % dst_path
 
-        shutil.copytree(src_path, dst_path)
+        try:
+            shutil.copytree(src_path, dst_path)
+        except OSError:
+            print '%s: unable to copy tree' % dst_path
 
 
 class Bin(SiteSubFolder):
@@ -191,7 +196,7 @@ class Site(object):
             'conf': Conf(self.prefix),
             'db': Database(self.prefix),
             'bin': Bin(self.prefix),
-            'stage': Stage(self.prefix),
+            'files': Files(self.prefix),
             'static': Static(self.prefix),
             'logs': Logs(self.prefix),
         }
@@ -217,7 +222,8 @@ class Site(object):
             ('wmt', OrderedDict([
                 ('prefix', self.prefix),
                 ('templates', self.dir['templates'].prefix),
-                ('stage', self.dir['stage'].prefix),
+                ('files', self.dir['files'].prefix),
+                ('uploads', self.dir['files'].prefix),
                 ('static', self.dir['static'].prefix),
                 ('logs', self.dir['logs'].prefix),
                 ('database', os.path.join(self.dir['db'].prefix, 'wmt.db')),
