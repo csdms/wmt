@@ -61,6 +61,8 @@ public class ModelMenu extends DecoratedPopupPanel {
         new ModelMenuItem("Save Model", "fa-floppy-o");
     ModelMenuItem saveModelAs =
         new ModelMenuItem("Save Model As...", "fa-floppy-o");
+    ModelMenuItem deleteModel =
+        new ModelMenuItem("Delete Model...", "fa-trash-o");
     ModelMenuItem runModel =
         new ModelMenuItem("Run Model...", "fa-play");
     ModelMenuItem helpButton = new ModelMenuItem("Help");
@@ -74,6 +76,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     menu.setWidget(menuIndex++, 0, closeModel);
     menu.setWidget(menuIndex++, 0, saveModel);
     menu.setWidget(menuIndex++, 0, saveModelAs);
+    menu.setWidget(menuIndex++, 0, deleteModel);
     menu.setWidget(menuIndex++, 0, new ModelMenuItem());
     menu.setWidget(menuIndex++, 0, runModel);
     menu.setWidget(menuIndex++, 0, new ModelMenuItem());
@@ -86,7 +89,8 @@ public class ModelMenu extends DecoratedPopupPanel {
     closeModel.addClickHandler(new CloseModelHandler());
     saveModel.addClickHandler(new SaveModelHandler());
     saveModelAs.addClickHandler(new SaveModelAsHandler());
-    runModel.addClickHandler(new RunModelHandler());
+    deleteModel.addClickHandler(new DeleteModelHandler());
+    runModel.addClickHandler(new RunModelHandler());    
     helpButton.addClickHandler(new HelpHandler());
     aboutButton.addClickHandler(new AboutHandler());
 
@@ -277,6 +281,18 @@ public class ModelMenu extends DecoratedPopupPanel {
     }  
   }
 
+  /**
+   * Handles click on the "Delete" button in the ModelMenu.
+   */
+  public class DeleteModelHandler implements ClickHandler {
+    @Override
+    public void onClick(ClickEvent event) {
+      ModelMenuItem item = (ModelMenuItem) event.getSource();
+      ModelMenu.this.hide();
+      Window.alert("Clicked on: " + item.getText(0, 1));
+    }
+  }  
+  
   /**
    * Handles click on the "Run" button in the ModelMenu.
    */
