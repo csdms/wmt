@@ -35,8 +35,8 @@ public class ModelMenu extends DecoratedPopupPanel {
   private DataManager data;
   private HTML menuButton;
   private SaveDialogBox saveDialog;
-  private OpenDialogBox openDialog;
-  private OpenDialogBox deleteDialog;  
+  private DroplistDialogBox openDialog;
+  private DroplistDialogBox deleteDialog;  
 
   /**
    * Sets up the Model menu, including all its menu items, as well as its
@@ -191,15 +191,17 @@ public class ModelMenu extends DecoratedPopupPanel {
 
   /**
    * Handles click on the "Open Model..." button in the ModelMenu. Pops up an
-   * instance of {@link OpenDialogBox} to prompt the user for a model to open.
+   * instance of {@link DroplistDialogBox} to prompt the user for a model to open.
    * Events are sent to {@link OpenOkHandler} and {@link OpenCancelHandler}.
    */
   public class OpenModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
 
-      openDialog = new OpenDialogBox();
+      openDialog = new DroplistDialogBox();
       openDialog.setText("Open Model...");
+      openDialog.getChoicePanel().getOkButton().setHTML(
+          "<i class='fa fa-folder-open-o'></i> Open");      
 
       // Populate the ModelDroplist with the available models on the server.
       for (int i = 0; i < data.modelNameList.size(); i++) {
@@ -239,6 +241,8 @@ public class ModelMenu extends DecoratedPopupPanel {
   private void showSaveDialogBox() {
     saveDialog = new SaveDialogBox();
     saveDialog.setText("Save Model As...");
+    saveDialog.getChoicePanel().getOkButton().setHTML(
+          "<i class='fa fa-floppy-o'></i> Save");    
     saveDialog.getFilePanel().setFile(data.getModel().getName());
     saveDialog.getChoicePanel().getOkButton().addClickHandler(
         new SaveOkHandler());
@@ -291,7 +295,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     @Override
     public void onClick(ClickEvent event) {
       
-      deleteDialog = new OpenDialogBox();
+      deleteDialog = new DroplistDialogBox();
       deleteDialog.setText("Delete Model...");
       deleteDialog.getChoicePanel().getOkButton().setHTML(
           "<i class='fa fa-trash-o'></i> Delete");

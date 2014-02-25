@@ -22,7 +22,7 @@ public class ChoicePanel extends Composite {
    */
   public ChoicePanel() {
 
-    okButton = new Button("<i class='fa fa-folder-open-o'></i> OK");
+    okButton = new Button("<i class='fa fa-check'></i> OK");
     cancelButton = new Button("<i class='fa fa-ban'></i> Cancel");
     HorizontalPanel buttonPanel = new HorizontalPanel();
     buttonPanel.setSpacing(5); // px
