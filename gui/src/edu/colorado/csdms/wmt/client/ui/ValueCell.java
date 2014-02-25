@@ -4,12 +4,14 @@
 package edu.colorado.csdms.wmt.client.ui;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 
 import edu.colorado.csdms.wmt.client.data.ParameterJSO;
@@ -22,10 +24,11 @@ import edu.colorado.csdms.wmt.client.data.ParameterJSO;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ValueCell extends SimplePanel {
+public class ValueCell extends HorizontalPanel {
 
   private TextBox valueTextBox;
   private ListBox valueListBox;
+  private Button valueUploadButton;
   private ParameterJSO parameter;
 
   /**
@@ -38,9 +41,8 @@ public class ValueCell extends SimplePanel {
 
     this.parameter = parameter;
     
-    // If the parameter doesn't have a value (e.g., a separator),
-    // short-circuit the method and return.
-    if (this.parameter.getValue() == null) {
+    // If the parameter is a separator, short-circuit the method and return.
+    if (this.parameter.getKey().matches("separator")) {
       return;
     }
     
@@ -53,11 +55,8 @@ public class ValueCell extends SimplePanel {
     valueTextBox = new TextBox();
     valueListBox = new ListBox(false); // no multi select
 
-    if (!type.matches("choice")) {
-      valueTextBox.setText(value);
-      valueTextBox.getElement().getStyle().setBackgroundColor("#ffc");
-      this.add(valueTextBox);
-    } else {
+    if (type.matches("choice")) {
+      
       Integer nChoices = this.parameter.getValue().getChoices().length();
       for (int i = 0; i < nChoices; i++) {
         valueListBox.addItem(this.parameter.getValue().getChoices().get(i));
@@ -67,6 +66,32 @@ public class ValueCell extends SimplePanel {
       }
       valueListBox.setVisibleItemCount(1); // show one item -- a droplist
       this.add(valueListBox);
+      
+    } else if (type.matches("file")) {
+      
+      Integer nFiles = this.parameter.getValue().getFiles().length();
+      for (int i = 0; i < nFiles; i++) {
+        valueListBox.addItem(this.parameter.getValue().getFiles().get(i));
+        if (valueListBox.getItemText(i).matches(value)) {
+          valueListBox.setSelectedIndex(i);
+        }
+      }
+      valueListBox.setVisibleItemCount(1); // show one item -- a droplist
+      this.add(valueListBox);
+      
+      valueUploadButton = new Button("<i class='fa fa-cloud-upload'></i>");
+      valueUploadButton.setTitle("Upload file to server");
+      this.add(valueUploadButton);
+
+      this.setCellVerticalAlignment(valueListBox, ALIGN_MIDDLE);      
+      valueUploadButton.getElement().getStyle().setMarginLeft(3, Unit.PX);
+      
+    } else {
+      
+      valueTextBox.setText(value);
+      valueTextBox.getElement().getStyle().setBackgroundColor("#ffc");
+      this.add(valueTextBox);
+      
     }
 
     // If appropriate, add a tooltip showing the valid range of the value.

@@ -62,8 +62,8 @@
     {
       "value":{
         "default":"waipaoa.hyps",
-        "type":"choice",
-        "choices":[
+        "type":"file",
+        "files":[
           "danube.hyps",
           "eel.hyps",
           "ganges.hyps",
