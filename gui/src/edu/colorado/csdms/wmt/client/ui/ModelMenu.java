@@ -24,7 +24,8 @@ import edu.colorado.csdms.wmt.client.data.DataURL;
  * Save -- as well as a "hamburger" icon to show/hide this menu. The icon and
  * menu are positioned in the upper right corner of the Arena view.
  * <p>
- * Menu item names, icons and grouping are modeled on Word, Eclipse and Chrome.
+ * Menu item names, icons and grouping are modeled on Word, Eclipse and
+ * Chrome.
  * 
  * @see http://fortawesome.github.io/Font-Awesome/
  * @author Mark Piper (mark.piper@colorado.edu)
@@ -90,7 +91,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     saveModel.addClickHandler(new SaveModelHandler());
     saveModelAs.addClickHandler(new SaveModelAsHandler());
     deleteModel.addClickHandler(new DeleteModelHandler());
-    runModel.addClickHandler(new RunModelHandler());    
+    runModel.addClickHandler(new RunModelHandler());
     helpButton.addClickHandler(new HelpHandler());
     aboutButton.addClickHandler(new AboutHandler());
 
@@ -143,7 +144,8 @@ public class ModelMenu extends DecoratedPopupPanel {
   public class ModelMenuItem extends Grid {
 
     /**
-     * The zero-element constructor makes a separator from an HTML "hr" element.
+     * The zero-element constructor makes a separator from an HTML "hr"
+     * element.
      */
     public ModelMenuItem() {
       super(1, 1);
@@ -207,7 +209,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       openDialog.getChoicePanel().getOkButton().addClickHandler(
           new OpenOkHandler());
       openDialog.getChoicePanel().getCancelButton().addClickHandler(
-          new OpenCancelHandler());
+          new GenericCancelHandler());
 
       openDialog.center();
       ModelMenu.this.hide();
@@ -215,7 +217,7 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "Close Model" button in the ModelMenu. Resets the 
+   * Handles click on the "Close Model" button in the ModelMenu. Resets the
    * WMT GUI to its default state.
    */
   public class CloseModelHandler implements ClickHandler {
@@ -240,10 +242,10 @@ public class ModelMenu extends DecoratedPopupPanel {
     saveDialog.getChoicePanel().getOkButton().addClickHandler(
         new SaveOkHandler());
     saveDialog.getChoicePanel().getCancelButton().addClickHandler(
-        new SaveCancelHandler());
+        new GenericCancelHandler());
     saveDialog.center();
   }
-  
+
   /**
    * Handles click on the "Save Model" button in the ModelMenu. Saves a
    * not-previously-saved model or a new model displayed in WMT to the server.
@@ -259,7 +261,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       // If the model hasn't been saved previously, show the SaveDialogBox;
       // otherwise, serialize the model and post it to the server.
       if (!data.modelIsSaved()) {
-        if (data.getMetadata().getName() == null) {          
+        if (data.getMetadata().getName() == null) {
           showSaveDialogBox();
         } else {
           data.serialize();
@@ -278,7 +280,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     public void onClick(ClickEvent event) {
       ModelMenu.this.hide();
       showSaveDialogBox();
-    }  
+    }
   }
 
   /**
@@ -291,8 +293,8 @@ public class ModelMenu extends DecoratedPopupPanel {
       ModelMenu.this.hide();
       Window.alert("Clicked on: " + item.getText(0, 1));
     }
-  }  
-  
+  }
+
   /**
    * Handles click on the "Run" button in the ModelMenu.
    */
@@ -304,7 +306,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       Window.alert("Clicked on: " + item.getText(0, 1));
     }
   }
-  
+
   /**
    * Handles click on the "Help" button in the ModelMenu.
    */
@@ -342,8 +344,8 @@ public class ModelMenu extends DecoratedPopupPanel {
       openDialog.hide();
       ModelMenu.this.hide();
 
-      data.getPerspective().reset();      
-      
+      data.getPerspective().reset();
+
       // Get the selected item from the openDialog. This feels fragile. I'm
       // using the index of the selected modelName to match up the index of
       // the modelId. This should work consistently because I add the modelId
@@ -360,19 +362,6 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "Cancel" button in the open dialog that appears when
-   * the "Open Model..." button is clicked in the ModelMenu. Cancels action
-   * and closes menu.
-   */
-  public class OpenCancelHandler implements ClickHandler {
-    @Override
-    public void onClick(ClickEvent event) {
-      openDialog.hide();
-      ModelMenu.this.hide();
-    }
-  }  
-  
-  /**
    * Handles click on the "OK" button in the save dialog that appears when the
    * "Save Model As..." button is clicked in the ModelMenu. Uses
    * {@link DataManager#serialize()} to serialize the model, then posts it to
@@ -384,7 +373,7 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       saveDialog.hide();
       ModelMenu.this.hide();
-      
+
       // Set the model name in the DataManager.
       String modelName = saveDialog.getFilePanel().getFile();
       if (!data.getModel().getName().matches(modelName)) {
@@ -399,15 +388,20 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "Cancel" button in the save dialog that appears when
-   * the "Save Model As..." button is clicked in the ModelMenu. Cancels action
-   * and closes menu.
+   * Handles click on the "Cancel" button in any dialog spawned from the
+   * {@link ModelMenu}. Cancels action and closes both the dialog and the
+   * {@link ModelMenu}.
    */
-  public class SaveCancelHandler implements ClickHandler {
+  public class GenericCancelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
-      saveDialog.hide();
       ModelMenu.this.hide();
+      if ((openDialog != null) && (openDialog.isShowing())) {
+        openDialog.hide();
+      }
+      if ((saveDialog != null) && (saveDialog.isShowing())) {
+        saveDialog.hide();
+      }
     }
   }
 }
