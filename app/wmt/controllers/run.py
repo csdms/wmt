@@ -1,11 +1,13 @@
 import web
 import os
+import json
 
 from ..models import (models, users, submissions)
 from ..render import render
 from ..validators import (not_too_long, not_too_short, not_bad_json)
 from ..cca import rc_from_json
 from .. import run
+from ..utils.io import chunk_copy
 
 
 class StageIn(object):
@@ -87,27 +89,27 @@ class Update(object):
         raise web.seeother('/run/show')
 
 
-class Upload(object):
-    def GET(self):
-        return """<html><head></head><body>
-<form method="POST" enctype="multipart/form-data" action="">
-<input type="file" name="myfile"/>
-<br/>
-<input type="submit"/>
-</form>
-</body></html>
-    """
+_UPLOAD_DIR = '/data/ftp/pub/users/wmt'
+_CHUCK_SIZE = 8192
 
+class Upload(object):
     def POST(self):
         import uuid
-        x = web.input(myfile={})
-        filename = str(uuid.uuid4())
-        dest = os.path.join('/data/ftp/pub/users/wmt/', x['myfile'].filename)
-        #dest = os.path.join('/data/ftp/pub/users/wmt/', filename)
-        with open(dest, 'w') as f:
-            f.write(x['myfile'].value)
+        import hashlib
 
-        raise web.seeother('/run/upload')
+        dest_filename = str(uuid.uuid4())
+        checksum = hashlib.md5()
+
+        path_to_dest = os.path.join(_UPLOAD_DIR, dest_filename)
+
+        with open(path_to_dest, 'w') as dest_fp:
+            chunk_copy(web.ctx.env['wsgi.input'], dest_fp,
+                       chunk_size=_CHUNK_SIZE, checksum=checksum)
+
+        return json.dumps({
+            'uuid': dest_filename,
+            'checksum': checksum.hexdigest(),
+        })
 
 
 class Show(object):
