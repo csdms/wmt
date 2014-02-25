@@ -138,7 +138,8 @@ public class Perspective extends DockLayoutPanel {
     public ViewWest() {
       super(TAB_BAR_HEIGHT, Unit.EM);
       setComponentsPanel(new ScrollPanel());
-      this.add(scrollComponents, "Components");
+      String tabTitle = data.tabPrefix("component") + "Components";
+      this.add(scrollComponents, tabTitle, true);
     }
   } // end ViewWest
 
@@ -153,7 +154,8 @@ public class Perspective extends DockLayoutPanel {
     public ViewCenter() {
       super(TAB_BAR_HEIGHT, Unit.EM);
       setModelPanel(new ScrollPanel());
-      this.add(scrollModel, "Model");
+      String tabTitle = data.tabPrefix("model") + "Model";
+      this.add(scrollModel, tabTitle, true);
     }
   } // end ViewCenter
 
@@ -169,7 +171,8 @@ public class Perspective extends DockLayoutPanel {
     public ViewEast() {
       super(TAB_BAR_HEIGHT, Unit.EM);
       setParametersPanel(new ScrollPanel());
-      this.add(scrollParameters, "Parameters");
+      String tabTitle = data.tabPrefix("parameter") + "Parameters";
+      this.add(scrollParameters, tabTitle, true);
     }
   } // end ViewEast
 
@@ -194,23 +197,36 @@ public class Perspective extends DockLayoutPanel {
    * model isn't saved, prepend an asterisk to its name.
    */
   public void setModelPanelTitle() {
-    String tabTitle;
+    String tabTitle = data.tabPrefix("model") + "Model";
     if (data.getModel().getName() != null) {
       String marker = data.modelIsSaved() ? "" : "*";
-      tabTitle = "Model (" + marker + data.getModel().getName() + ")";
+      tabTitle += " (" + marker + data.getModel().getName() + ")";
     } else {
-      tabTitle = "Model";
       data.getModel().setName(tabTitle + data.saveAttempts.toString());
     }
-    viewCenter.setTabText(0, tabTitle);
+    viewCenter.setTabHTML(0, tabTitle);
   }
-  
+
   public ScrollPanel getParametersPanel() {
     return scrollParameters;
   }
 
   public void setParametersPanel(ScrollPanel scrollParameters) {
     this.scrollParameters = scrollParameters;
+  }
+
+  /**
+   * A convenience method for setting the title of the Parameters panel.
+   * 
+   * @param componentId the id of the component whose parameters are displayed
+   */
+  public void setParameterPanelTitle(String componentId) {
+    String tabTitle = data.tabPrefix("parameter") + "Parameters";
+    if (componentId != null) {
+      String componentName = data.getModelComponent(componentId).getName();
+      tabTitle += " (" + componentName + ")";
+    }
+    viewEast.setTabHTML(0, tabTitle);
   }
 
   public TabLayoutPanel getViewEast() {
@@ -233,11 +249,11 @@ public class Perspective extends DockLayoutPanel {
    */
   public void setModelMenu(ModelMenu modelMenu) {
     this.modelMenu = modelMenu;
-  }  
-  
+  }
+
   /**
-   * Sets up the default starting ModelTree in the "Model" tab, showing
-   * only the open port for the driver of the model.
+   * Sets up the default starting ModelTree in the "Model" tab, showing only
+   * the open port for the driver of the model.
    */
   public void initializeModel() {
     ModelTree modelTree = new ModelTree(data);
@@ -270,7 +286,7 @@ public class Perspective extends DockLayoutPanel {
     ComponentList componentList = new ComponentList(data);
     scrollComponents.add(componentList);
   }
-  
+
   /**
    * Resets WMT to an approximation of its startup state.
    */

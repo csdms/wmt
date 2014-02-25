@@ -425,6 +425,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       GWT.log("Deleting model: " + modelId);
       
       // TODO
+      Window.alert("When implemented, this would delete model #" + modelId);
     }
   }  
   

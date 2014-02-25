@@ -54,9 +54,7 @@ public class ParameterTable extends FlexTable {
     }
 
     // Set the component name on the tab holding the ParameterTable.
-    String componentName = data.getModelComponent(componentId).getName();
-    String tabTitle = "Parameters (" + componentName + ")";
-    data.getPerspective().getViewEast().setTabText(0, tabTitle);
+    data.getPerspective().setParameterPanelTitle(componentId);
 
     // Build the parameter table.
     Integer nParameters =
@@ -116,7 +114,7 @@ public class ParameterTable extends FlexTable {
   public void clearTable() {
     data.setSelectedComponent(null); // should also be in ControlCell#delete?
     this.setComponentId(null);
-    data.getPerspective().getViewEast().setTabText(0, "Parameters");
+    data.getPerspective().setParameterPanelTitle(null);
     this.removeAllRows();
     this.clear(true);
   }

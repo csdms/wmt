@@ -78,6 +78,25 @@ public class DataManager {
   }
 
   /**
+   * A convenience method that returns the prefix (a String) to be displayed
+   * before the name of the tab title in the WMT interface. Currently a Font
+   * Awesome icon.
+   * 
+   * @param tabName the name of the tab: "model", "parameter" or "component"
+   */
+  public String tabPrefix(String tabName) {
+    String prefix = "";
+    if (tabName.matches("model")) {
+      prefix = "<i class='fa fa-globe'></i> ";
+    } else if (tabName.matches("parameter")) {
+      prefix = "<i class='fa fa-wrench'></i> ";
+    } else if (tabName.matches("component")) {
+      prefix = "<i class='fa fa-cogs'></i> ";
+    }
+    return prefix;
+  }
+
+  /**
    * Returns the {@link Perspective} object used to organize the WMT views.
    */
   public Perspective getPerspective() {
