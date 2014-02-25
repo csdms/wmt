@@ -126,7 +126,7 @@ class Conf(SiteSubFolder):
 class Files(SiteSubFolder):
     name = 'files'
     def populate(self):
-        make_directory_tree(self.prefix, [])
+        make_directory_tree(self.prefix, ['uploads', 'downloads'])
         chown_folder_and_files(self.prefix, 'nobody', 'nobody')
 
 
@@ -223,7 +223,8 @@ class Site(object):
                 ('prefix', self.prefix),
                 ('templates', self.dir['templates'].prefix),
                 ('files', self.dir['files'].prefix),
-                ('uploads', self.dir['files'].prefix),
+                ('uploads', os.path.join(self.dir['files'].prefix, 'uploads')),
+                ('downloads', os.path.join(self.dir['files'].prefix, 'downloads')),
                 ('static', self.dir['static'].prefix),
                 ('logs', self.dir['logs'].prefix),
                 ('database', os.path.join(self.dir['db'].prefix, 'wmt.db')),
