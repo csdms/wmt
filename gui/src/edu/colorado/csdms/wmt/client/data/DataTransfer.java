@@ -387,10 +387,9 @@ public class DataTransfer {
       if (Response.SC_OK == response.getStatusCode()) {
         String rtxt = response.getText();
         GWT.log(rtxt);
-        ComponentJSO jso1 = parse(rtxt);
-        data.addComponent(jso1); // "class" component
-        ComponentJSO jso2 = parse(rtxt);
-        data.addModelComponent(jso2); // "instance" component, for model
+        ComponentJSO jso = parse(rtxt);
+        data.addComponent(jso); // "class" component
+        data.addModelComponent(copy(jso)); // "instance" component, for model
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "

@@ -214,16 +214,17 @@ public class DataManager {
   }
 
   /**
-   * Replaces the item in DataManager's ArrayList of model components with the
-   * input component. A regex on the id of the model component is used to
-   * identify the component to replace.
+   * Replaces the item in DataManager's ArrayList of model components with a
+   * copy of the input component. A regex on the id of the model component is
+   * used to identify the component to replace.
    * 
    * @param component the replacement component, a {@link ComponentJSO}
    */
   public void replaceModelComponent(ComponentJSO component) {
     for (int i = 0; i < modelComponents.size(); i++) {
       if (modelComponents.get(i).getId().matches(component.getId())) {
-        modelComponents.set(i, component);
+        ComponentJSO copy = DataTransfer.copy(component);
+        modelComponents.set(i, copy);
         return;
       }
     }
@@ -450,7 +451,6 @@ public class DataManager {
 
       // Awkward. Still need Component, though, I think.
       Component component = cell.getComponentCell().getComponent();
-//      ComponentJSO componentJSO = getComponent(component.getId());
       ComponentJSO componentJSO = getModelComponent(component.getId());
 
       modelComponent.setId(componentJSO.getId());
