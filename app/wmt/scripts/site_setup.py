@@ -12,8 +12,28 @@ def setup(prefix, options={}):
     site.create()
 
 
+def collect_user_vars(arg_values):
+    values = []
+    for value in arg_values:
+        values.extend(value.split(','))
+    return [value.split('=') for value in values]
+
+
+def read_site_vars(filename):
+    from ConfigParser import ConfigParser, NoSectionError
+
+    parser = ConfigParser()
+    parser.read([filename])
+
+    try:
+        return dict(parser.items('wmt'))
+    except NoSectionError:
+        return dict()
+
+
 def main():
     import argparse
+
     parser = argparse.ArgumentParser('Setup wmt at a site.')
     parser.add_argument('prefix', help='path to the wmt project')
     parser.add_argument('--name', default='<your-name>',
@@ -22,12 +42,20 @@ def main():
                         help='name of contact')
     parser.add_argument('--host', default='localhost',
                         help='name of the host running wmt')
+    parser.add_argument('--conf', action='append', default=[],
+                        help='give a custom configuration value')
+    parser.add_argument('--file', default='site.cfg',
+                        help='read options from a files')
 
     args = parser.parse_args()
 
-    setup(args.prefix, OrderedDict([('name', args.name),
-                                    ('email', args.email),
-                                    ('host', args.host)]))
+    user_vars = read_site_vars(args.file)
+    user_vars.update(collect_user_vars(args.conf))
+    user_vars.update([('name', args.name),
+                      ('email', args.email),
+                      ('host', args.host)])
+
+    setup(args.prefix, user_vars)
 
     epilog = Template(
 """
