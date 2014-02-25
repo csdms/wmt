@@ -387,7 +387,14 @@ public class ModelCell extends Grid implements DropHandler {
 
       super(component.getName());
       setComponent(component);
-      setTitle("Component: " + component.getName());
+      
+      String tooltip = "";
+      if (component.getName().contains("</i>")) {
+        tooltip = "Drag component here";
+      } else {
+        tooltip = "Component: " + component.getName();
+      }   
+      setTitle(tooltip);
 
       setStyleName("wmt-ComponentCell");
       addStyleDependentName("unconnected");
