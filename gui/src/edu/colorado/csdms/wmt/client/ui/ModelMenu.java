@@ -36,6 +36,7 @@ public class ModelMenu extends DecoratedPopupPanel {
   private HTML menuButton;
   private SaveDialogBox saveDialog;
   private OpenDialogBox openDialog;
+  private OpenDialogBox deleteDialog;  
 
   /**
    * Sets up the Model menu, including all its menu items, as well as its
@@ -289,9 +290,25 @@ public class ModelMenu extends DecoratedPopupPanel {
   public class DeleteModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
-      ModelMenuItem item = (ModelMenuItem) event.getSource();
-      ModelMenu.this.hide();
-      Window.alert("Clicked on: " + item.getText(0, 1));
+      
+      deleteDialog = new OpenDialogBox();
+      deleteDialog.setText("Delete Model...");
+      deleteDialog.getChoicePanel().getOkButton().setHTML(
+          "<i class='fa fa-trash-o'></i> Delete");
+
+      // Populate the ModelDroplist with the available models on the server.
+      for (int i = 0; i < data.modelNameList.size(); i++) {
+        deleteDialog.getModelPanel().getModelDroplist().addItem(
+            data.modelNameList.get(i));
+      }
+
+      deleteDialog.getChoicePanel().getOkButton().addClickHandler(
+          new DeleteOkHandler());
+      deleteDialog.getChoicePanel().getCancelButton().addClickHandler(
+          new GenericCancelHandler());
+
+      deleteDialog.center();
+      ModelMenu.this.hide();      
     }
   }
 
@@ -388,6 +405,26 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
+   * Handles click on the "Delete" button in the dialog that appears when the
+   * "Delete Model..." button is clicked in the {@link ModelMenu}.
+   */
+  public class DeleteOkHandler implements ClickHandler {
+    @Override
+    public void onClick(ClickEvent event) {
+
+      deleteDialog.hide();
+      ModelMenu.this.hide();
+
+      Integer selIndex =
+          deleteDialog.getModelPanel().getModelDroplist().getSelectedIndex();
+      Integer modelId = data.modelIdList.get(selIndex);
+      GWT.log("Deleting model: " + modelId);
+      
+      // TODO
+    }
+  }  
+  
+  /**
    * Handles click on the "Cancel" button in any dialog spawned from the
    * {@link ModelMenu}. Cancels action and closes both the dialog and the
    * {@link ModelMenu}.
@@ -402,6 +439,9 @@ public class ModelMenu extends DecoratedPopupPanel {
       if ((saveDialog != null) && (saveDialog.isShowing())) {
         saveDialog.hide();
       }
+      if ((deleteDialog != null) && (deleteDialog.isShowing())) {
+        deleteDialog.hide();
+      }      
     }
   }
 }
