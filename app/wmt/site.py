@@ -185,7 +185,7 @@ class Bin(SiteSubFolder):
         import shutil
         shutil.copyfile(
             os.path.join(_PACKAGE_PREFIX, 'scripts', 'wmt_wsgi_main.py'),
-            os.path.join(self.prefix, 'wmt_wsgi_main.py'))
+            os.path.join(self.prefix, 'start_wmt.wsgi'))
 
 
 class Site(object):
