@@ -55,7 +55,7 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
    * The returned Port is optional.
    */
   public Port initializeTree() {
-    
+
     this.clear();
     Port driverPort = new Port("driver", true);
     addTreeItem(driverPort, null);
@@ -65,7 +65,7 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
     ModelMetadataJSO metadata =
         (ModelMetadataJSO) ModelMetadataJSO.createObject();
     data.setMetadata(metadata);
-    
+
     return driverPort;
   }
 
@@ -113,11 +113,16 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
     }
     data.modelIsSaved(false);
     data.getPerspective().setModelPanelTitle();
-    
+
     this.setComponent(component, target);
-    
+
     // Ensure that the (class) component replaces the model component.
     data.replaceModelComponent(data.getComponent(component.getId()));
+
+    if (!data.getParameterTable().isCellPresent(0, 0)) {
+      data.getParameterTable().showInfoMessage();
+    }
+
   }
 
   /**
@@ -167,12 +172,11 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
 
     // Update the sensitivity of the DragCells in the ComponentList.
     data.getComponentList().setCellSensitivity();
-  }  
-  
+  }
+
   /**
    * Iterate through the TreeItems of this ModelTree, finding what ModelCells
    * have open PortCells. Add the cell to the openModelCells List.
-   * @return 
    * 
    * @return a Vector of ModelCells with open ports.
    */
@@ -230,8 +234,8 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
     }
 
     return componentIsPresent;
-  }  
-  
+  }
+
   /**
    * Checks whether the input Port has already appeared higher up in the
    * ModelTree hierarchy, and has a connected Component. If so, the Component

@@ -6,6 +6,7 @@ package edu.colorado.csdms.wmt.client.ui;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 
 import edu.colorado.csdms.wmt.client.data.ParameterJSO;
 
@@ -35,6 +36,16 @@ public class ParameterTable extends FlexTable {
     if (this.data.getSelectedComponent() != null) {
       loadTable();
     }
+  }
+
+  /**
+   * A worker that displays an informational message in the ParameterTable.
+   */
+  public void showInfoMessage() {
+    HTML infoMessage =
+        new HTML("Select a model component to view and edit its parameters");
+    infoMessage.setStyleName("wmt-ParameterTableMessage");
+    this.setWidget(0, 0, infoMessage);
   }
 
   /**

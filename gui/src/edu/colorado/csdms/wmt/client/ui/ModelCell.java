@@ -392,7 +392,7 @@ public class ModelCell extends Grid implements DropHandler {
       if (component.getName().contains("</i>")) {
         tooltip = "Drag component here";
       } else {
-        tooltip = "Component: " + component.getName();
+        tooltip = "Model Component: " + component.getName();
       }   
       setTitle(tooltip);
 
@@ -569,10 +569,13 @@ public class ModelCell extends Grid implements DropHandler {
 
           // If the deleted Component, or any of its children, are currently
           // displaying their parameters in the ParameterTable, clear the
-          // ParameterTable.
+          // ParameterTable. If this isn't the driver, show the info message.
           String showing = tree.data.getParameterTable().getComponentId();
           if (deleted == showing) {
             tree.data.getParameterTable().clearTable();
+            if (parentTreeItem.getParentItem() != null) {
+              tree.data.getParameterTable().showInfoMessage();
+            }
           }
           if (!tree.isComponentPresent(showing)) {
             tree.data.getParameterTable().clearTable();
