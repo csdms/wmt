@@ -1,3 +1,5 @@
+import requests
+
 
 def _copy_a_chunk(src_fp, dest_fp, chunk_size, checksum=None):
     chunk = src_fp.read(chunk_size)
@@ -14,3 +16,8 @@ def chunk_copy(src_fp, dest_fp, chunk_size=8192, checksum=None):
             _copy_a_chunk(src_fp, dest_fp, chunk_size, checksum=checksum)
         except EOFError:
             break
+
+
+def upload_large_file(filename, url):
+    with open(filename, 'r') as fp:
+        return requests.post(url, data=fp)
