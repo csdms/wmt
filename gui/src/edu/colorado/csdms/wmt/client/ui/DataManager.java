@@ -41,7 +41,6 @@ public class DataManager {
   private ModelJSO model;
   private ModelMetadataJSO metadata;
   private Boolean modelIsSaved = false;
-  private Boolean modelHasBeenSaved = false;
   private String modelString; // stringified JSON
 
   // Experiment with public members, for convenience.
@@ -76,6 +75,25 @@ public class DataManager {
    */
   public void isDevelopmentMode(Boolean developmentMode) {
     this.developmentMode = developmentMode;
+  }
+
+  /**
+   * A convenience method that returns the prefix (a String) to be displayed
+   * before the name of the tab title in the WMT interface. Currently a Font
+   * Awesome icon.
+   * 
+   * @param tabName the name of the tab: "model", "parameter" or "component"
+   */
+  public String tabPrefix(String tabName) {
+    String prefix = "";
+    if (tabName.matches("model")) {
+      prefix = "<i class='fa fa-globe'></i> ";
+    } else if (tabName.matches("parameter")) {
+      prefix = "<i class='fa fa-wrench'></i> ";
+    } else if (tabName.matches("component")) {
+      prefix = "<i class='fa fa-cogs'></i> ";
+    }
+    return prefix;
   }
 
   /**
@@ -215,16 +233,17 @@ public class DataManager {
   }
 
   /**
-   * Replaces the item in DataManager's ArrayList of model components with the
-   * input component. A regex on the id of the model component is used to
-   * identify the component to replace.
+   * Replaces the item in DataManager's ArrayList of model components with a
+   * copy of the input component. A regex on the id of the model component is
+   * used to identify the component to replace.
    * 
    * @param component the replacement component, a {@link ComponentJSO}
    */
   public void replaceModelComponent(ComponentJSO component) {
     for (int i = 0; i < modelComponents.size(); i++) {
       if (modelComponents.get(i).getId().matches(component.getId())) {
-        modelComponents.set(i, component);
+        ComponentJSO copy = DataTransfer.copy(component);
+        modelComponents.set(i, copy);
         return;
       }
     }
@@ -309,22 +328,6 @@ public class DataManager {
    */
   public void modelIsSaved(Boolean modelIsSaved) {
     this.modelIsSaved = modelIsSaved;
-  }
-
-  /**
-   * Returns true if the current model has been saved previously.
-   */
-  public Boolean modelHasBeenSaved() {
-    return modelHasBeenSaved;
-  }
-
-  /**
-   * Set to true if the current model has been saved previously.
-   * 
-   * @param modelHasBeenSaved
-   */
-  public void modelHasBeenSaved(Boolean modelHasBeenSaved) {
-    this.modelHasBeenSaved = modelHasBeenSaved;
   }
 
   /**
@@ -467,7 +470,7 @@ public class DataManager {
 
       // Awkward. Still need Component, though, I think.
       Component component = cell.getComponentCell().getComponent();
-      ComponentJSO componentJSO = getComponent(component.getId());
+      ComponentJSO componentJSO = getModelComponent(component.getId());
 
       modelComponent.setId(componentJSO.getId());
       modelComponent.setClassName(componentJSO.getId()); // XXX Check this.
@@ -546,20 +549,22 @@ public class DataManager {
 
     // Find matches for the driver's open ports supplied by the model.
     List<ModelCell> openCells = modelTree.findOpenModelCells();
-    for (int i = 0; i < driver.getPorts().length(); i++) {
-      String portId = driver.getPorts().get(i);
-      String componentId = driver.getConnection(portId);
-      GWT.log(portId + ":" + componentId);
-      if (componentId == null) {
-        continue;
-      }
-      for (int j = 0; j < openCells.size(); j++) {
-        if (openCells.get(j).getPortCell().getPort().getId().matches(portId)) {
-          Component component = new Component(getModelComponent(componentId));
-          TreeItem leaf = openCells.get(j).getParentTreeItem();
-          modelTree.setComponent(component, leaf);
-          leaf.setState(true);
-          nModelComponentsUsed++;
+    if (driver.nPorts() > 0) {
+      for (int i = 0; i < driver.nPorts(); i++) {
+        String portId = driver.getPorts().get(i);
+        String componentId = driver.getConnection(portId);
+        GWT.log(portId + ":" + componentId);
+        if (componentId == null) {
+          continue;
+        }
+        for (int j = 0; j < openCells.size(); j++) {
+          if (openCells.get(j).getPortCell().getPort().getId().matches(portId)) {
+            Component component = new Component(getModelComponent(componentId));
+            TreeItem leaf = openCells.get(j).getParentTreeItem();
+            modelTree.setComponent(component, leaf);
+            leaf.setState(true);
+            nModelComponentsUsed++;
+          }
         }
       }
     }
@@ -571,20 +576,24 @@ public class DataManager {
       ModelJSO mc = model.getComponents().get(index);
       index++;
       List<ModelCell> cells = modelTree.findOpenModelCells();
-      for (int i = 0; i < mc.getPorts().length(); i++) {
-        String portId = mc.getPorts().get(i);
-        String componentId = mc.getConnection(portId);
-        GWT.log(portId + ":" + componentId);
-        if (componentId == null) {
-          continue;
-        }
-        for (int j = 0; j < cells.size(); j++) {
-          if (cells.get(j).getPortCell().getPort().getId().matches(portId)) {
-            Component component = new Component(getModelComponent(componentId));
-            TreeItem leaf = cells.get(j).getParentTreeItem();
-            modelTree.setComponent(component, leaf);
-            leaf.setState(true);
-            nModelComponentsUsed++;
+
+      if (mc.nPorts() > 0) {
+        for (int i = 0; i < mc.nPorts(); i++) {
+          String portId = mc.getPorts().get(i);
+          String componentId = mc.getConnection(portId);
+          GWT.log(portId + ":" + componentId);
+          if (componentId == null) {
+            continue;
+          }
+          for (int j = 0; j < cells.size(); j++) {
+            if (cells.get(j).getPortCell().getPort().getId().matches(portId)) {
+              Component component =
+                  new Component(getModelComponent(componentId));
+              TreeItem leaf = cells.get(j).getParentTreeItem();
+              modelTree.setComponent(component, leaf);
+              leaf.setState(true);
+              nModelComponentsUsed++;
+            }
           }
         }
       }
@@ -594,10 +603,12 @@ public class DataManager {
     for (int i = 0; i < nModelComponents; i++) {
       ModelJSO mc = model.getComponents().get(i);
       ComponentJSO mcJSO = getModelComponent(mc.getId());
-      for (int j = 0; j < mc.getParameters().length(); j++) {
-        String key = mc.getParameters().get(j);
-        String value = mc.getValue(key);
-        mcJSO.getParameter(key).getValue().setDefault(value);
+      if (mc.nParameters() > 0) {
+        for (int j = 0; j < mc.nParameters(); j++) {
+          String key = mc.getParameters().get(j);
+          String value = mc.getValue(key);
+          mcJSO.getParameter(key).getValue().setDefault(value);
+        }
       }
     }
   }

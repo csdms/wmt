@@ -24,7 +24,8 @@ import edu.colorado.csdms.wmt.client.data.DataURL;
  * Save -- as well as a "hamburger" icon to show/hide this menu. The icon and
  * menu are positioned in the upper right corner of the Arena view.
  * <p>
- * Menu item names, icons and grouping are modeled on Word, Eclipse and Chrome.
+ * Menu item names, icons and grouping are modeled on Word, Eclipse and
+ * Chrome.
  * 
  * @see http://fortawesome.github.io/Font-Awesome/
  * @author Mark Piper (mark.piper@colorado.edu)
@@ -34,7 +35,8 @@ public class ModelMenu extends DecoratedPopupPanel {
   private DataManager data;
   private HTML menuButton;
   private SaveDialogBox saveDialog;
-  private OpenDialogBox openDialog;
+  private DroplistDialogBox openDialog;
+  private DroplistDialogBox deleteDialog;  
 
   /**
    * Sets up the Model menu, including all its menu items, as well as its
@@ -61,6 +63,8 @@ public class ModelMenu extends DecoratedPopupPanel {
         new ModelMenuItem("Save Model", "fa-floppy-o");
     ModelMenuItem saveModelAs =
         new ModelMenuItem("Save Model As...", "fa-floppy-o");
+    ModelMenuItem deleteModel =
+        new ModelMenuItem("Delete Model...", "fa-trash-o");
     ModelMenuItem runModel =
         new ModelMenuItem("Run Model...", "fa-play");
     ModelMenuItem helpButton = new ModelMenuItem("Help");
@@ -74,6 +78,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     menu.setWidget(menuIndex++, 0, closeModel);
     menu.setWidget(menuIndex++, 0, saveModel);
     menu.setWidget(menuIndex++, 0, saveModelAs);
+    menu.setWidget(menuIndex++, 0, deleteModel);
     menu.setWidget(menuIndex++, 0, new ModelMenuItem());
     menu.setWidget(menuIndex++, 0, runModel);
     menu.setWidget(menuIndex++, 0, new ModelMenuItem());
@@ -86,6 +91,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     closeModel.addClickHandler(new CloseModelHandler());
     saveModel.addClickHandler(new SaveModelHandler());
     saveModelAs.addClickHandler(new SaveModelAsHandler());
+    deleteModel.addClickHandler(new DeleteModelHandler());
     runModel.addClickHandler(new RunModelHandler());
     helpButton.addClickHandler(new HelpHandler());
     aboutButton.addClickHandler(new AboutHandler());
@@ -139,7 +145,8 @@ public class ModelMenu extends DecoratedPopupPanel {
   public class ModelMenuItem extends Grid {
 
     /**
-     * The zero-element constructor makes a separator from an HTML "hr" element.
+     * The zero-element constructor makes a separator from an HTML "hr"
+     * element.
      */
     public ModelMenuItem() {
       super(1, 1);
@@ -184,15 +191,17 @@ public class ModelMenu extends DecoratedPopupPanel {
 
   /**
    * Handles click on the "Open Model..." button in the ModelMenu. Pops up an
-   * instance of {@link OpenDialogBox} to prompt the user for a model to open.
+   * instance of {@link DroplistDialogBox} to prompt the user for a model to open.
    * Events are sent to {@link OpenOkHandler} and {@link OpenCancelHandler}.
    */
   public class OpenModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
 
-      openDialog = new OpenDialogBox();
+      openDialog = new DroplistDialogBox();
       openDialog.setText("Open Model...");
+      openDialog.getChoicePanel().getOkButton().setHTML(
+          "<i class='fa fa-folder-open-o'></i> Open");      
 
       // Populate the ModelDroplist with the available models on the server.
       for (int i = 0; i < data.modelNameList.size(); i++) {
@@ -203,7 +212,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       openDialog.getChoicePanel().getOkButton().addClickHandler(
           new OpenOkHandler());
       openDialog.getChoicePanel().getCancelButton().addClickHandler(
-          new OpenCancelHandler());
+          new GenericCancelHandler());
 
       openDialog.center();
       ModelMenu.this.hide();
@@ -211,7 +220,7 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "Close Model" button in the ModelMenu. Resets the 
+   * Handles click on the "Close Model" button in the ModelMenu. Resets the
    * WMT GUI to its default state.
    */
   public class CloseModelHandler implements ClickHandler {
@@ -225,22 +234,26 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * A worker that pops up the "Save Model As..." dialog box.
+   * Pops up an instance of {@link SaveDialogBox} to prompt the user to save
+   * the model. Events are sent to {@link SaveOkHandler} and
+   * {@link SaveCancelHandler}.
    */
   private void showSaveDialogBox() {
     saveDialog = new SaveDialogBox();
     saveDialog.setText("Save Model As...");
+    saveDialog.getChoicePanel().getOkButton().setHTML(
+          "<i class='fa fa-floppy-o'></i> Save");    
     saveDialog.getFilePanel().setFile(data.getModel().getName());
     saveDialog.getChoicePanel().getOkButton().addClickHandler(
         new SaveOkHandler());
     saveDialog.getChoicePanel().getCancelButton().addClickHandler(
-        new SaveCancelHandler());
+        new GenericCancelHandler());
     saveDialog.center();
   }
-  
+
   /**
-   * Handles click on the "Save Model" button in the ModelMenu. Saves the model
-   * displayed in WMT to the server.
+   * Handles click on the "Save Model" button in the ModelMenu. Saves a
+   * not-previously-saved model or a new model displayed in WMT to the server.
    */
   public class SaveModelHandler implements ClickHandler {
     @Override
@@ -248,12 +261,12 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       ModelMenu.this.hide();
       GWT.log("modelIsSaved = " + data.modelIsSaved() + "; "
-          + "modelHasBeenSaved = " + data.modelHasBeenSaved());
+          + "modelHasBeenSaved = " + (data.getMetadata() != null));
 
       // If the model hasn't been saved previously, show the SaveDialogBox;
       // otherwise, serialize the model and post it to the server.
       if (!data.modelIsSaved()) {
-        if (!data.modelHasBeenSaved()) {
+        if (data.getMetadata().getName() == null) {
           showSaveDialogBox();
         } else {
           data.serialize();
@@ -264,16 +277,43 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "Save Model As..." button in the ModelMenu. Pops up an
-   * instance of {@link SaveDialogBox} to prompt the user for a model to open.
-   * Events are sent to {@link SaveOkHandler} and {@link SaveCancelHandler}.
+   * Handles click on the "Save Model As..." button in the ModelMenu. Prompts
+   * the user for a model name using {@link ModelMenu#showSaveDialogBox()}.
    */
   public class SaveModelAsHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
       ModelMenu.this.hide();
       showSaveDialogBox();
-    }  
+    }
+  }
+
+  /**
+   * Handles click on the "Delete" button in the ModelMenu.
+   */
+  public class DeleteModelHandler implements ClickHandler {
+    @Override
+    public void onClick(ClickEvent event) {
+      
+      deleteDialog = new DroplistDialogBox();
+      deleteDialog.setText("Delete Model...");
+      deleteDialog.getChoicePanel().getOkButton().setHTML(
+          "<i class='fa fa-trash-o'></i> Delete");
+
+      // Populate the ModelDroplist with the available models on the server.
+      for (int i = 0; i < data.modelNameList.size(); i++) {
+        deleteDialog.getModelPanel().getModelDroplist().addItem(
+            data.modelNameList.get(i));
+      }
+
+      deleteDialog.getChoicePanel().getOkButton().addClickHandler(
+          new DeleteOkHandler());
+      deleteDialog.getChoicePanel().getCancelButton().addClickHandler(
+          new GenericCancelHandler());
+
+      deleteDialog.center();
+      ModelMenu.this.hide();      
+    }
   }
 
   /**
@@ -287,7 +327,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       Window.alert("Clicked on: " + item.getText(0, 1));
     }
   }
-  
+
   /**
    * Handles click on the "Help" button in the ModelMenu.
    */
@@ -325,8 +365,8 @@ public class ModelMenu extends DecoratedPopupPanel {
       openDialog.hide();
       ModelMenu.this.hide();
 
-      data.getPerspective().reset();      
-      
+      data.getPerspective().reset();
+
       // Get the selected item from the openDialog. This feels fragile. I'm
       // using the index of the selected modelName to match up the index of
       // the modelId. This should work consistently because I add the modelId
@@ -343,19 +383,6 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "Cancel" button in the open dialog that appears when
-   * the "Open Model..." button is clicked in the ModelMenu. Cancels action
-   * and closes menu.
-   */
-  public class OpenCancelHandler implements ClickHandler {
-    @Override
-    public void onClick(ClickEvent event) {
-      openDialog.hide();
-      ModelMenu.this.hide();
-    }
-  }  
-  
-  /**
    * Handles click on the "OK" button in the save dialog that appears when the
    * "Save Model As..." button is clicked in the ModelMenu. Uses
    * {@link DataManager#serialize()} to serialize the model, then posts it to
@@ -367,7 +394,7 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       saveDialog.hide();
       ModelMenu.this.hide();
-      
+
       // Set the model name in the DataManager.
       String modelName = saveDialog.getFilePanel().getFile();
       if (!data.getModel().getName().matches(modelName)) {
@@ -382,15 +409,44 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "Cancel" button in the save dialog that appears when
-   * the "Save Model As..." button is clicked in the ModelMenu. Cancels action
-   * and closes menu.
+   * Handles click on the "Delete" button in the dialog that appears when the
+   * "Delete Model..." button is clicked in the {@link ModelMenu}.
    */
-  public class SaveCancelHandler implements ClickHandler {
+  public class DeleteOkHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
-      saveDialog.hide();
+
+      deleteDialog.hide();
       ModelMenu.this.hide();
+
+      Integer selIndex =
+          deleteDialog.getModelPanel().getModelDroplist().getSelectedIndex();
+      Integer modelId = data.modelIdList.get(selIndex);
+      GWT.log("Deleting model: " + modelId);
+      
+      // TODO
+      Window.alert("When implemented, this would delete model #" + modelId);
+    }
+  }  
+  
+  /**
+   * Handles click on the "Cancel" button in any dialog spawned from the
+   * {@link ModelMenu}. Cancels action and closes both the dialog and the
+   * {@link ModelMenu}.
+   */
+  public class GenericCancelHandler implements ClickHandler {
+    @Override
+    public void onClick(ClickEvent event) {
+      ModelMenu.this.hide();
+      if ((openDialog != null) && (openDialog.isShowing())) {
+        openDialog.hide();
+      }
+      if ((saveDialog != null) && (saveDialog.isShowing())) {
+        saveDialog.hide();
+      }
+      if ((deleteDialog != null) && (deleteDialog.isShowing())) {
+        deleteDialog.hide();
+      }      
     }
   }
 }

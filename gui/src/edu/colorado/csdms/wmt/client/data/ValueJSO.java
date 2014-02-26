@@ -117,6 +117,15 @@ public class ValueJSO extends JavaScriptObject {
   }-*/;
 
   /**
+   * A JSNI method to access the "files" attribute of a ValueJSO. May not be
+   * present, though ignored without an exception; is an array of strings,
+   * represented by a JsArrayString object.
+   */
+  public final native JsArrayString getFiles() /*-{
+		return this.files;
+  }-*/;  
+  
+  /**
    * A non-JSNI method for stringifying the attributes of a ValueJSO. Must be
    * final.
    */

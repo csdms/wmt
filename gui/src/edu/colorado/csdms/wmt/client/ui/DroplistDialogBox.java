@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class OpenDialogBox extends DialogBox {
+public class DroplistDialogBox extends DialogBox {
 
   private DroplistPanel modelPanel;
   private ChoicePanel choicePanel;
@@ -21,7 +21,7 @@ public class OpenDialogBox extends DialogBox {
   /**
    * Makes a new SaveDialogBox.
    */
-  public OpenDialogBox() {
+  public DroplistDialogBox() {
 
     super(true); // autohide
     this.setModal(true);

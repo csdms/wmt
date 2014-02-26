@@ -1,5 +1,22 @@
 {
+  "files":[
+    "hydrotrend.in.tmpl"
+  ],
+  "doi":"10.1594/IEDA/100135",
   "name":"HydroTrend",
+  "license":"GPLv3",
+  "author":"Albert Kettner",
+  "url":"http://csdms.colorado.edu/wiki/Model_help:HydroTrend",
+  "id":"hydrotrend",
+  "version":"3.0.1",
+  "uses":[
+    
+  ],
+  "provides":[
+    {
+      "id":"discharge"
+    }
+  ],
   "parameters":[
     {
       "value":{
@@ -45,8 +62,8 @@
     {
       "value":{
         "default":"waipaoa.hyps",
-        "type":"choice",
-        "choices":[
+        "type":"file",
+        "files":[
           "danube.hyps",
           "eel.hyps",
           "ganges.hyps",
@@ -1306,17 +1323,5 @@
       "description":"Output file for channel_outflow_end_bed_load_sediment__mass_flow_rate"
     }
   ],
-  "url":"http://csdms.colorado.edu/wiki/Model_help:HydroTrend",
-  "uses":[
-    
-  ],
-  "provides":[
-    {
-      "id":"discharge"
-    }
-  ],
-  "id":"hydrotrend",
-  "input_files":[
-    "hydrotrend.in.tmpl"
-  ]
+  "email":"albert.kettner@colorado.edu"
 }

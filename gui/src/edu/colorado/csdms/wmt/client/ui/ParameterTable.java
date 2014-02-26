@@ -6,6 +6,7 @@ package edu.colorado.csdms.wmt.client.ui;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 
 import edu.colorado.csdms.wmt.client.data.ParameterJSO;
 
@@ -38,6 +39,16 @@ public class ParameterTable extends FlexTable {
   }
 
   /**
+   * A worker that displays an informational message in the ParameterTable.
+   */
+  public void showInfoMessage() {
+    HTML infoMessage =
+        new HTML("Select a model component to view and edit its parameters");
+    infoMessage.setStyleName("wmt-ParameterTableMessage");
+    this.setWidget(0, 0, infoMessage);
+  }
+
+  /**
    * A worker that loads the ParameterTable with parameter values for the
    * selected model component.
    */
@@ -54,9 +65,7 @@ public class ParameterTable extends FlexTable {
     }
 
     // Set the component name on the tab holding the ParameterTable.
-    String componentName = data.getModelComponent(componentId).getName();
-    String tabTitle = "Parameters (" + componentName + ")";
-    data.getPerspective().getViewEast().setTabText(0, tabTitle);
+    data.getPerspective().setParameterPanelTitle(componentId);
 
     // Build the parameter table.
     Integer nParameters =
@@ -90,11 +99,23 @@ public class ParameterTable extends FlexTable {
    * @param value the new parameter value, a String
    */
   public void setValue(ParameterJSO parameter, String value) {
+
     // TODO Massive amounts of checking on value.
+
     String key = parameter.getKey();
+    String previousValue =
+        data.getModelComponent(componentId).getParameter(key).getValue()
+            .getDefault();
     GWT.log(componentId + ": " + key + ": " + value);
-    data.getModelComponent(componentId).getParameter(key).getValue()
-        .setDefault(value);
+
+    // Don't update state when tabbing between fields or moving within field.
+    // XXX Would be better to handle this further upstream.
+    if (!value.matches(previousValue)) {
+      data.getModelComponent(componentId).getParameter(key).getValue()
+          .setDefault(value);
+      data.modelIsSaved(false);
+      data.getPerspective().setModelPanelTitle();
+    }
   }
 
   /**
@@ -104,7 +125,7 @@ public class ParameterTable extends FlexTable {
   public void clearTable() {
     data.setSelectedComponent(null); // should also be in ControlCell#delete?
     this.setComponentId(null);
-    data.getPerspective().getViewEast().setTabText(0, "Parameters");
+    data.getPerspective().setParameterPanelTitle(null);
     this.removeAllRows();
     this.clear(true);
   }

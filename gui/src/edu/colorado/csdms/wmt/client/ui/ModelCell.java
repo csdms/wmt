@@ -387,7 +387,14 @@ public class ModelCell extends Grid implements DropHandler {
 
       super(component.getName());
       setComponent(component);
-      setTitle("Component: " + component.getName());
+      
+      String tooltip = "";
+      if (component.getName().contains("</i>")) {
+        tooltip = "Drag component here";
+      } else {
+        tooltip = "Model Component: " + component.getName();
+      }   
+      setTitle(tooltip);
 
       setStyleName("wmt-ComponentCell");
       addStyleDependentName("unconnected");
@@ -553,33 +560,36 @@ public class ModelCell extends Grid implements DropHandler {
 
           // The deleted Component.
           String deleted = getComponentCell().getComponent().getId();
-          
-          // If the deleted Component is the selectedComponent, unset it. 
+
+          // If the deleted Component is the selectedComponent, unset it.
           String selected = tree.data.getSelectedComponent();
           if (deleted == selected) {
             tree.data.setSelectedComponent(null);
           }
-          
+
           // If the deleted Component, or any of its children, are currently
           // displaying their parameters in the ParameterTable, clear the
-          // ParameterTable.          
+          // ParameterTable. If this isn't the driver, show the info message.
           String showing = tree.data.getParameterTable().getComponentId();
           if (deleted == showing) {
             tree.data.getParameterTable().clearTable();
+            if (parentTreeItem.getParentItem() != null) {
+              tree.data.getParameterTable().showInfoMessage();
+            }
           }
           if (!tree.isComponentPresent(showing)) {
             tree.data.getParameterTable().clearTable();
-          }          
-          
+          }
+
           // Make a new ModelCell (overwriting the current). Attach it to the
           // target TreeItem.
-          Port openPort = new Port();
+          Port openPort;
           if (parentTreeItem.getParentItem() != null) {
+            openPort = new Port();
             openPort.setId(portCell.port.getId());
             openPort.isRequired(portCell.port.isRequired());
           } else {
-            openPort.setId("driver"); // This is the top of the ModelTree.
-            openPort.isRequired(true);
+            openPort = tree.initializeTree(); // at root of ModelTree.
           }
           Component infoComponent = Component.makeInfoComponent();
           ModelCell newCell = new ModelCell(openPort, infoComponent);
@@ -589,18 +599,12 @@ public class ModelCell extends Grid implements DropHandler {
           // Update the sensitivity of the DragCells in the ComponentList.
           tree.data.getComponentList().setCellSensitivity();
 
-          // If this is the driver, reset the name of the model & the Model
-          // tab. Otherwise, mark it as unsaved.
+          // Update the title of the Model tab.
           tree.data.modelIsSaved(false);
           if (openPort.getId().matches("driver")) {
             tree.data.saveAttempts++;
-            tree.data.modelHasBeenSaved(false);
-            tree.data.getModel().setName(
-                "Model " + tree.data.saveAttempts.toString());
-            tree.data.getPerspective().getViewCenter().setTabText(0, "Model");
-          } else {
-            tree.data.getPerspective().setModelPanelTitle();
           }
+          tree.data.getPerspective().setModelPanelTitle();
         }
       });
 

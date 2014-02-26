@@ -18,12 +18,12 @@ public class ChoicePanel extends Composite {
   private Button cancelButton;
 
   /**
-   * 
+   * Makes a new choice panel with default "OK" and "Cancel" buttons.
    */
   public ChoicePanel() {
 
-    okButton = new Button("OK");
-    cancelButton = new Button("Cancel");
+    okButton = new Button("<i class='fa fa-check'></i> OK");
+    cancelButton = new Button("<i class='fa fa-ban'></i> Cancel");
     HorizontalPanel buttonPanel = new HorizontalPanel();
     buttonPanel.setSpacing(5); // px
     buttonPanel.add(okButton);
