@@ -97,7 +97,7 @@ def stagein(id):
 
     run_id = str(uuid.uuid4())
 
-    run_dir = os.path.join(site['stage'], run_id)
+    run_dir = os.path.join(site['downloads'], run_id)
 
     os.mkdir(run_dir)
     write_to_readme(run_dir, 'w', user='nobody', start=current_time_as_string())
@@ -108,12 +108,16 @@ def stagein(id):
     return run_id
 
 
+def launch(id):
+    launch_command_on_server(username, host, script, password=password)
+
+
 def run(run_id, id):
     pass
 
 
 def stageout(run_id):
-    run_dir = os.path.join(site['stage'], run_id)
+    run_dir = os.path.join(site['downloads'], run_id)
     dropoff_dir = os.path.join('/data/ftp/pub/users/wmt', run_id)
 
     write_to_readme(run_dir, 'a', stop=current_time_as_string())
