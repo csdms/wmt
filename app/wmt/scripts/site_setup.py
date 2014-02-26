@@ -67,14 +67,19 @@ To finish the installation you'll have to do the following:
 
 1. If you're using Apache, add the following lines to httpd.conf:
 
-    WSGIScriptAlias /wmt/ ${prefix}/bin/wmt_wsgi_main.py/
+    WSGIScriptAlias /wmt/ ${prefix}/bin/start_wmt.wsgi/
 
     Alias /wmt/static ${prefix}/static
-    AddType text/html .py
     <Directory ${prefix}/>
       Order deny,allow
       148   Allow from all
     </Directory>
+
+   This will run your application in *embedded* mode. To run in *daemon* mode,
+   add the following additional lines,
+
+    WSGIDaemonProcess www.site.com threads=15 maximum-requests=10000
+    WSGIProcessGroup www.site.com
 
 2. Be sure the permissions and ownership are correct for the database files.
 
