@@ -90,7 +90,7 @@ class Update(object):
 
 
 _UPLOAD_DIR = '/data/ftp/pub/users/wmt'
-_CHUCK_SIZE = 8192
+_CHUNK_SIZE = 8192
 
 class Upload(object):
     def POST(self):
@@ -110,6 +110,23 @@ class Upload(object):
             'uuid': dest_filename,
             'checksum': checksum.hexdigest(),
         })
+
+
+class Download(object):
+    def GET(self, uuid):
+        filename = 'wmt.tar.gz'
+
+        web.header("Content-Disposition", "attachment; filename=%s" % filename)
+        web.header('Content-type', 'application/x-gzip')
+        web.header('Transfer-encoding', 'chunked')
+
+        with open(os.path.join(_UPLOAD_DIR, uuid, filename), 'r') as fp:
+            while 1:
+                chunk = fp.read(_CHUNK_SIZE)
+                if not chunk:
+                    break
+                yield '%X\r\n%s\r\n' % (len(chunk), chunk)
+        yield '%X\r\n%s\r\n' % (0, '')
 
 
 class Show(object):

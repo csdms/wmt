@@ -8,6 +8,7 @@ __author__ = [
 ]
 __license__ = "public domain"
 
+_UUID_REGEX = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
 URLS = (
     '/', 'wmt.controllers.index.Index',
     '/help', 'wmt.controllers.index.Help',
@@ -43,6 +44,7 @@ URLS = (
     '/run/update/(\d+)', 'wmt.controllers.run.Update',
     '/run/show', 'wmt.controllers.run.Show',
     '/run/upload', 'wmt.controllers.run.Upload',
+    '/run/download/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Download',
 
     '/hosts/new', 'wmt.controllers.hosts.New',
     '/hosts/view/(\d+)', 'wmt.controllers.hosts.View',
