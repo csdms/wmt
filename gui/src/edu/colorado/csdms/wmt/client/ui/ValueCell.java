@@ -51,7 +51,9 @@ public class ValueCell extends HorizontalPanel {
     String value = this.parameter.getValue().getDefault();
     String range = "";
 
-    // Match the type -- choice, file or other.
+    /*
+     * Match the type -- choice, file or other. A big, nasty, block.
+     */
     if (type.matches("choice")) {
 
       ListBox choiceDroplist = new ListBox(false); // no multi select
@@ -103,7 +105,8 @@ public class ValueCell extends HorizontalPanel {
     }
 
     // If appropriate, add a tooltip showing the valid range of the value.
-    if (!type.matches("string") && !type.matches("choice")) {
+    if (!type.matches("string") && !type.matches("choice")
+        && !type.matches("file")) {
       range +=
           "Valid range = ( " + parameter.getValue().getMin() + ", "
               + parameter.getValue().getMax() + " )";
