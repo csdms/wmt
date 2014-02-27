@@ -67,6 +67,7 @@ public class ModelMenu extends DecoratedPopupPanel {
         new ModelMenuItem("Delete Model...", "fa-trash-o");
     ModelMenuItem runModel =
         new ModelMenuItem("Run Model...", "fa-play");
+    ModelMenuItem runStatus = new ModelMenuItem("View Run Status...");    
     ModelMenuItem helpButton = new ModelMenuItem("Help");
     ModelMenuItem aboutButton = new ModelMenuItem("About");
 
@@ -81,6 +82,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     menu.setWidget(menuIndex++, 0, deleteModel);
     menu.setWidget(menuIndex++, 0, new ModelMenuItem());
     menu.setWidget(menuIndex++, 0, runModel);
+    menu.setWidget(menuIndex++, 0, runStatus);
     menu.setWidget(menuIndex++, 0, new ModelMenuItem());
     menu.setWidget(menuIndex++, 0, helpButton);
     menu.setWidget(menuIndex++, 0, aboutButton);
@@ -93,6 +95,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     saveModelAs.addClickHandler(new SaveModelAsHandler());
     deleteModel.addClickHandler(new DeleteModelHandler());
     runModel.addClickHandler(new RunModelHandler());
+    runStatus.addClickHandler(new RunStatusHandler());
     helpButton.addClickHandler(new HelpHandler());
     aboutButton.addClickHandler(new AboutHandler());
 
@@ -323,6 +326,19 @@ public class ModelMenu extends DecoratedPopupPanel {
       ModelMenuItem item = (ModelMenuItem) event.getSource();
       ModelMenu.this.hide();
       Window.alert("Clicked on: " + item.getText(0, 1));
+    }
+  }
+
+  /**
+   * Handles click on the "View Run Status..." button in the ModelMenu.
+   * Displays the API "run/show" page showing the status of all currently
+   * running models.
+   */
+  public class RunStatusHandler implements ClickHandler {
+    @Override
+    public void onClick(ClickEvent event) {
+      ModelMenu.this.hide();
+      Window.open(DataURL.runStatus(), "_blank", null);
     }
   }
 
