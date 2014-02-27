@@ -278,16 +278,15 @@ public class DataTransfer {
   }
 
   /**
-   * Makes an asynchronous HTTP request to POST a model to the server.
+   * Makes an asynchronous HTTP POST request to save a new model, or edits to
+   * an existing model, to the server.
    * 
    * @param data the DataManager object for the WMT session
-   * @param modelName the name the user gave the model
    */
   @SuppressWarnings("unused")
   public static void postModel(DataManager data) {
 
-    Integer modelId =
-        data.getMetadata() != null ? data.getMetadata().getId() : -1;
+    Integer modelId = data.getMetadata().getId();
 
     GWT.log("all modelIds: " + data.modelIdList.toString());
     GWT.log("this modelId: " + modelId.toString());
@@ -313,6 +312,31 @@ public class DataTransfer {
       Request request =
           builder.sendRequest(queryString, new ModelRequestCallback(data, url,
               "new/edit"));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
+   * Makes an asynchronous HTTP POST request to delete a single model from the
+   * WMT database.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param modelId the unique identifier for the model in the database
+   */
+  @SuppressWarnings("unused")
+  public static void deleteModel(DataManager data, Integer modelId) {
+
+    String url = DataURL.deleteModel(data, modelId);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+
+    try {
+      Request request =
+          builder.sendRequest(null, new ModelRequestCallback(data, url,
+              "delete"));
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
@@ -479,8 +503,7 @@ public class DataTransfer {
 
         String rtxt = response.getText();
         GWT.log(rtxt);
-
-        // On successful GET, deserialize the ModelJSO and populate the GUI.
+        
         if (type.matches("show")) {
           ModelJSO jso = parse(rtxt);
           data.setModel(jso);
@@ -491,12 +514,13 @@ public class DataTransfer {
           ModelMetadataJSO jso = parse(rtxt);
           data.setMetadata(jso);
         }
-
-        // On successful POST, update list of saved models in the DataManager.
         if (type.matches("new/edit")) {
           DataTransfer.getModelList(data);
           data.modelIsSaved(true);
           data.getPerspective().setModelPanelTitle();
+        }
+        if (type.matches("delete")) {
+          DataTransfer.getModelList(data);
         }
       } else {
         String msg =

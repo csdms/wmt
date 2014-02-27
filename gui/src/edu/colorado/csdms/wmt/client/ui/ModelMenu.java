@@ -261,12 +261,12 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       ModelMenu.this.hide();
       GWT.log("modelIsSaved = " + data.modelIsSaved() + "; "
-          + "modelHasBeenSaved = " + (data.getMetadata() != null));
+          + "modelHasBeenSaved = " + (data.getMetadata().getId() != -1));
 
       // If the model hasn't been saved previously, show the SaveDialogBox;
       // otherwise, serialize the model and post it to the server.
       if (!data.modelIsSaved()) {
-        if (data.getMetadata().getName() == null) {
+        if (data.getMetadata().getId() == -1) {
           showSaveDialogBox();
         } else {
           data.serialize();
@@ -423,9 +423,13 @@ public class ModelMenu extends DecoratedPopupPanel {
           deleteDialog.getModelPanel().getModelDroplist().getSelectedIndex();
       Integer modelId = data.modelIdList.get(selIndex);
       GWT.log("Deleting model: " + modelId);
-      
-      // TODO
-      Window.alert("When implemented, this would delete model #" + modelId);
+
+      DataTransfer.deleteModel(data, modelId);
+
+      // If the deleted model is currently displayed, close it.
+      if (data.getMetadata().getId() == modelId) {
+        data.getPerspective().reset();
+      }
     }
   }  
   
