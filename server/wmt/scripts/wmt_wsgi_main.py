@@ -1,12 +1,18 @@
 #!/usr/bin/env python
 import os
+import sys
 import web
 
+os.environ.setdefault('WMT_ENABLE_SESSIONS', 'FALSE')
 os.environ.setdefault('WMT_PREFIX',
     os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 )
+
+prefix = '/home/faculty/huttone/Development/wmt/server'
+if prefix not in sys.path:
+    sys.path.insert(0, prefix)
+
 from wmt import URLS
-from wmt.session import add_sessions_to_app
 
 from wsgilog import WsgiLog
 
@@ -31,6 +37,8 @@ def not_found():
 app = web.application(URLS, globals())
 app.notfound = not_found
 
-add_sessions_to_app(app)
+if os.environ['WMT_ENABLE_SESSIONS'].upper() == 'TRUE':
+    from wmt.session import add_sessions_to_app
+    add_sessions_to_app(app)
 
 application = app.wsgifunc(Log)
