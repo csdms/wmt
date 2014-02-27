@@ -39,4 +39,6 @@ site = read_site_config_file()
 db = web.database(dbn='sqlite', db=site['database'])
 submission_db = web.database(dbn='sqlite', db=site['submission_db'])
 palette = load_palette(os.path.join(site['db'], 'components'))
+
+logging.basicConfig()
 logger = logging.getLogger('wmtserver')
