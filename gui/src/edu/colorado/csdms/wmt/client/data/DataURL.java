@@ -28,6 +28,7 @@ public class DataURL {
   private static final String MODEL_SHOW_URL = API_URL + "models/show/";
   private static final String MODEL_NEW_URL = API_URL + "models/new";
   private static final String MODEL_EDIT_URL = API_URL + "models/edit/";
+  private static final String MODEL_DELETE_URL = API_URL + "models/delete/";
 
   /**
    * A wrapper around Window.Location that returns the application URL in
@@ -137,7 +138,22 @@ public class DataURL {
       return MODEL_EDIT_URL + modelId.toString();
     }
   }
-  
+
+  /**
+   * Returns the URL for deleting an existing model from the server, given its
+   * id.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param modelId the id of the model, an Integer set by the API
+   */
+  public static String deleteModel(DataManager data, Integer modelId) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL + "save/saved.json";
+    } else {
+      return MODEL_DELETE_URL + modelId.toString();
+    }
+  }
+
   /**
    * Returns the URL for posting a file associated with an existing model to
    * the server, given the model id.
