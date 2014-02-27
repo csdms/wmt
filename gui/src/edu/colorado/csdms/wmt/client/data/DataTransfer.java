@@ -19,9 +19,9 @@ import com.google.gwt.user.client.Window;
 import edu.colorado.csdms.wmt.client.ui.DataManager;
 
 /**
- * A class that defines static methods for accessing, through asynchronous
- * HTTP GET and POST requests, the JSON files used to set up, configure and
- * run WMT.
+ * A class that defines static methods for accessing, modifying and deleting,
+ * through asynchronous HTTP GET and POST requests, the JSON files used to set
+ * up, configure and run WMT.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -173,7 +173,6 @@ public class DataTransfer {
    * 
    * @param data the DataManager object for the WMT session
    */
-  @SuppressWarnings("unused")
   public static void getComponentList(DataManager data) {
 
     String url = DataURL.listComponents(data);
@@ -183,6 +182,7 @@ public class DataTransfer {
         new RequestBuilder(RequestBuilder.GET, URL.encode(url));
 
     try {
+      @SuppressWarnings("unused")
       Request request =
           builder
               .sendRequest(null, new ComponentListRequestCallback(data, url));
@@ -192,14 +192,13 @@ public class DataTransfer {
   }
 
   /**
-   * Makes an asynchronous HTTP GET request to the server to retrieve data for
-   * a component, including its "provides" and "uses" ports as well as its
-   * parameters.
+   * Makes an asynchronous HTTP GET request to the server to retrieve the data
+   * for a single component.
    * 
    * @param data the DataManager object for the WMT session
-   * @param componentId the identifier of the component in the database
+   * @param componentId the identifier of the component in the database, a
+   *          String
    */
-  @SuppressWarnings("unused")
   public static void getComponent(DataManager data, String componentId) {
 
     String url = DataURL.showComponent(data, componentId);
@@ -209,6 +208,7 @@ public class DataTransfer {
         new RequestBuilder(RequestBuilder.GET, URL.encode(url));
 
     try {
+      @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(null, new ComponentRequestCallback(data, url));
     } catch (RequestException e) {
@@ -222,7 +222,6 @@ public class DataTransfer {
    * 
    * @param data the DataManager object for the WMT session
    */
-  @SuppressWarnings("unused")
   public static void getModelList(DataManager data) {
 
     String url = DataURL.listModels(data);
@@ -232,6 +231,7 @@ public class DataTransfer {
         new RequestBuilder(RequestBuilder.GET, URL.encode(url));
 
     try {
+      @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(null, new ModelListRequestCallback(data, url));
     } catch (RequestException e) {
@@ -244,13 +244,13 @@ public class DataTransfer {
    * metadata from a server.
    * 
    * @param data the DataManager object for the WMT session
-   * @param modelId the unique identifier for the model in the database
+   * @param modelId the unique identifier for the model in the database, an
+   *          Integer
    */
-  @SuppressWarnings("unused")
   public static void getModel(DataManager data, Integer modelId) {
 
-    // The "open" URL returns metadata (name, owner) to a ModelMetadataJSO,
-    // while the "show" URL returns a ModelJSO.
+    // The "open" URL returns metadata (name, owner) in a ModelMetadataJSO,
+    // while the "show" URL returns data in a ModelJSO.
     String openURL = DataURL.openModel(data, modelId);
     GWT.log(openURL);
     String showURL = DataURL.showModel(data, modelId);
@@ -259,6 +259,7 @@ public class DataTransfer {
     RequestBuilder openBuilder =
         new RequestBuilder(RequestBuilder.GET, URL.encode(openURL));
     try {
+      @SuppressWarnings("unused")
       Request openRequest =
           openBuilder.sendRequest(null, new ModelRequestCallback(data, openURL,
               "open"));
@@ -269,6 +270,7 @@ public class DataTransfer {
     RequestBuilder showBuilder =
         new RequestBuilder(RequestBuilder.GET, URL.encode(showURL));
     try {
+      @SuppressWarnings("unused")
       Request showRequest =
           showBuilder.sendRequest(null, new ModelRequestCallback(data, showURL,
               "show"));
@@ -283,13 +285,12 @@ public class DataTransfer {
    * 
    * @param data the DataManager object for the WMT session
    */
-  @SuppressWarnings("unused")
   public static void postModel(DataManager data) {
 
     Integer modelId = data.getMetadata().getId();
 
-    GWT.log("all modelIds: " + data.modelIdList.toString());
-    GWT.log("this modelId: " + modelId.toString());
+    GWT.log("all model ids: " + data.modelIdList.toString());
+    GWT.log("this model id: " + modelId.toString());
 
     String url;
     if (data.modelIdList.contains(modelId)) {
@@ -309,6 +310,7 @@ public class DataTransfer {
 
     try {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(queryString, new ModelRequestCallback(data, url,
               "new/edit"));
@@ -319,12 +321,11 @@ public class DataTransfer {
 
   /**
    * Makes an asynchronous HTTP POST request to delete a single model from the
-   * WMT database.
+   * WMT server.
    * 
    * @param data the DataManager object for the WMT session
    * @param modelId the unique identifier for the model in the database
    */
-  @SuppressWarnings("unused")
   public static void deleteModel(DataManager data, Integer modelId) {
 
     String url = DataURL.deleteModel(data, modelId);
@@ -334,6 +335,7 @@ public class DataTransfer {
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 
     try {
+      @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(null, new ModelRequestCallback(data, url,
               "delete"));
@@ -393,8 +395,10 @@ public class DataTransfer {
   /**
    * A RequestCallback handler class that provides the callback for a GET
    * request of a component. On success,
-   * {@link DataManager#addComponent(ComponentJSO)} is called to store the
-   * component in the DataManager object for the WMT session.
+   * {@link DataManager#addComponent(ComponentJSO)} and
+   * {@link DataManager#addModelComponent(ComponentJSO)} are called to store
+   * the (class) component and the model component in the DataManager object
+   * for the WMT session.
    */
   public static class ComponentRequestCallback implements RequestCallback {
 
