@@ -136,5 +136,20 @@ public class DataURL {
     } else {
       return MODEL_EDIT_URL + modelId.toString();
     }
-  }  
+  }
+  
+  /**
+   * Returns the URL for posting a file associated with an existing model to
+   * the server, given the model id.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param modelId the id of the model, an Integer set by the API
+   */
+  public static String uploadFile(DataManager data, Integer modelId) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL + "save/saved.json";
+    } else {
+      return API_URL + "models/file/" + modelId.toString();
+    }
+  }
 }

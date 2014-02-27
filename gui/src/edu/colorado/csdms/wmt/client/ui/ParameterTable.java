@@ -18,7 +18,7 @@ import edu.colorado.csdms.wmt.client.data.ParameterJSO;
  */
 public class ParameterTable extends FlexTable {
 
-  private DataManager data;
+  public DataManager data;
   private String componentId; // the id of the displayed component
 
   /**

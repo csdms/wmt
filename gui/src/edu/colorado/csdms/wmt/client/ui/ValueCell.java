@@ -11,12 +11,15 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
+import edu.colorado.csdms.wmt.client.data.DataURL;
 import edu.colorado.csdms.wmt.client.data.ParameterJSO;
 
 /**
@@ -30,6 +33,7 @@ import edu.colorado.csdms.wmt.client.data.ParameterJSO;
 public class ValueCell extends HorizontalPanel {
 
   private ParameterJSO parameter;
+  private UploadDialogBox upload;
 
   /**
    * Makes a ValueCell from the information contained in the input
@@ -160,11 +164,30 @@ public class ValueCell extends HorizontalPanel {
   public class UploadHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
-      Test_FileUploadPanel fupload = new Test_FileUploadPanel();
-      PopupPanel pop = new PopupPanel(true);
-      pop.add(fupload);
-      pop.center();
+      
+//      ParameterTable pt = (ParameterTable) ValueCell.this.getParent();
+//      if (pt.data.getMetadata() == null) {
+//        Window.alert("Model must be saved to the server before an upload can occur.");
+//      }
+
+      upload = new UploadDialogBox();
+      upload.setText("Upload File...");
+//      upload.getForm().setAction(DataURL.uploadFile(pt.data, pt.data.getMetadata().getId()));
+      upload.getForm().addSubmitCompleteHandler(new UploadCompleteHandler());
+      upload.center();
     }
   }
 
+  public class UploadCompleteHandler implements FormPanel.SubmitCompleteHandler {
+    @Override
+    public void onSubmitComplete(SubmitCompleteEvent event) {
+      
+      Window.alert(event.getResults());
+      GWT.log(upload.getUpload().getFilename());
+      
+      if (event.getResults() != null) {
+        ;
+      }
+    }
+  }
 }
