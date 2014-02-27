@@ -8,6 +8,7 @@ from ..validators import (not_too_long, not_too_short, not_bad_json)
 from ..cca import rc_from_json
 from .. import run
 from ..utils.io import chunk_copy
+from ..config import logger
 
 
 class StageIn(object):
@@ -48,7 +49,7 @@ class New(object):
                          not_too_short(3),
                          not_too_long(20),
                          size=30, description='Simulation name:'),
-        web.form.Button('Stage')
+        web.form.Button('Create')
     )
 
     def GET(self):
@@ -74,18 +75,18 @@ class Update(object):
         web.form.Button('Update')
     )
 
-    def GET(self, id):
-        submission = submissions.get_submission(int(id))
+    def GET(self, uuid):
+        submission = submissions.get_submission(uuid)
         form = self.form()
         form.fill(submission)
         return render.update(submission, form)
 
-    def POST(self, id):
+    def POST(self, uuid):
         form = self.form()
-        submission = submissions.get_submission(id)
+        submission = submissions.get_submission(uuid)
         if not form.validates():
             return render.update(submission, form)
-        submissions.update(id, status=form.d.status, message=form.d.message)
+        submissions.update(uuid, status=form.d.status, message=form.d.message)
         raise web.seeother('/run/show')
 
 
@@ -93,34 +94,41 @@ _UPLOAD_DIR = '/data/ftp/pub/users/wmt'
 _CHUNK_SIZE = 8192
 
 class Upload(object):
-    def POST(self):
-        import uuid
-        import hashlib
+    def GET(self, uuid):
+        return """<html><head></head><body>
+<form method="POST" enctype="multipart/form-data" action="">
+<input type="file" name="file"/>
+<br/>
+<input type="submit"/>
+</form>
+</body></html>"""
 
-        dest_filename = str(uuid.uuid4())
+    def POST(self, uuid, filename):
+        user_data = web.input(file={})
+
+        path_to_dest = os.path.join(_UPLOAD_DIR, uuid, user_data['file'].filename)
+
+        import hashlib
         checksum = hashlib.md5()
 
-        path_to_dest = os.path.join(_UPLOAD_DIR, dest_filename)
-
         with open(path_to_dest, 'w') as dest_fp:
-            chunk_copy(web.ctx.env['wsgi.input'], dest_fp,
+            chunk_copy(user_data['file'].file, dest_fp,
                        chunk_size=_CHUNK_SIZE, checksum=checksum)
 
-        return json.dumps({
-            'uuid': dest_filename,
-            'checksum': checksum.hexdigest(),
-        })
+        return json.dumps({'checksum': checksum.hexdigest()})
 
 
 class Download(object):
-    def GET(self, uuid):
-        filename = 'wmt.tar.gz'
-
+    def GET(self, uuid, filename):
         web.header("Content-Disposition", "attachment; filename=%s" % filename)
-        web.header('Content-type', 'application/x-gzip')
+        web.header('Content-type', 'application/octet-stream')
         web.header('Transfer-encoding', 'chunked')
 
-        with open(os.path.join(_UPLOAD_DIR, uuid, filename), 'r') as fp:
+        path_to_file = os.path.join(_UPLOAD_DIR, uuid, filename)
+        if not os.path.isfile(path_to_file):
+            raise web.notfound()
+
+        with open(path_to_file, 'r') as fp:
             while 1:
                 chunk = fp.read(_CHUNK_SIZE)
                 if not chunk:

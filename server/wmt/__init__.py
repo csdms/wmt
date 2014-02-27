@@ -41,10 +41,10 @@ URLS = (
 
     '/run/(\d*)', 'wmt.controllers.run.StageIn',
     '/run/new', 'wmt.controllers.run.New',
-    '/run/update/(\d+)', 'wmt.controllers.run.Update',
+    '/run/update/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Update',
+    '/run/upload/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Upload',
+    '/run/download/(%s)/(.+)' % _UUID_REGEX, 'wmt.controllers.run.Download',
     '/run/show', 'wmt.controllers.run.Show',
-    '/run/upload', 'wmt.controllers.run.Upload',
-    '/run/download/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Download',
 
     '/hosts/new', 'wmt.controllers.hosts.New',
     '/hosts/view/(\d+)', 'wmt.controllers.hosts.View',

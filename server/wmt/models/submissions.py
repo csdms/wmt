@@ -16,24 +16,25 @@ def new(name):
         'updated': now,
         'owner': 'anonymous',
     }
-    return db.insert('submission', **data)
+    db.insert('submission', **data)
+    return data['uuid']
 
 
-def update(id, **kwds):
+def update(uuid, **kwds):
     kwds['updated'] = web.net.httpdate(datetime.datetime.now())
-    db.update('submission', vars=dict(id=id), where='id=$id', **kwds)
+    db.update('submission', vars=dict(uuid=uuid), where='uuid=$uuid', **kwds)
 
 
 def get_submissions():
     return db.select('submission', order='id DESC')
 
 
-def get_submission(id):
+def get_submission(uuid):
     try:
-        return db.select('submission', where='id=$id', vars=locals())[0]
+        return db.select('submission', where='uuid=$uuid', vars=locals())[0]
     except IndexError:
         raise BadIdError(id)
 
 
 def get_status(id):
-    return db.select('submission', what='status', where='id=$id', vars=locals())
+    return db.select('submission', what='status', where='uuid=$uuid', vars=locals())
