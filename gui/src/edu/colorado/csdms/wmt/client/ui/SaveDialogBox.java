@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class SaveDialogBox extends DialogBox {
 
-  private FilePanel filePanel;
+  private FieldPanel fieldPanel;
   private ChoicePanel choicePanel;
   
   /**
@@ -34,26 +34,26 @@ public class SaveDialogBox extends DialogBox {
     this.setModal(true);
     this.setText("Save Model As...");
 
-    filePanel = new FilePanel();
+    fieldPanel = new FieldPanel();
     choicePanel = new ChoicePanel();
 
-    filePanel.setFile(fileName);
+    fieldPanel.setField(fileName);
     choicePanel.getOkButton().setHTML("<i class='fa fa-floppy-o'></i> Save");
     
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-    contents.add(filePanel);
+    contents.add(fieldPanel);
     contents.add(choicePanel);
 
     this.setWidget(contents);
   }
 
-  public FilePanel getFilePanel() {
-    return filePanel;
+  public FieldPanel getFilePanel() {
+    return fieldPanel;
   }
 
-  public void setFilePanel(FilePanel filePanel) {
-    this.filePanel = filePanel;
+  public void setFilePanel(FieldPanel fieldPanel) {
+    this.fieldPanel = fieldPanel;
   }
 
   public ChoicePanel getChoicePanel() {
