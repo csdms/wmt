@@ -30,12 +30,7 @@ class Log(WsgiLog):
         )
 
 
-def not_found():
-    return web.notfound("Sorry, the page you were looking for was not found.")
-
-
 app = web.application(URLS, globals())
-app.notfound = not_found
 
 if os.environ['WMT_ENABLE_SESSIONS'].upper() == 'TRUE':
     from wmt.session import add_sessions_to_app
