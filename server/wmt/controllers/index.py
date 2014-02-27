@@ -1,14 +1,12 @@
 import web
 
-
 from ..render import render
 from ..models import models, hosts
-from ..session import get_session
 
 
 class Index(object):
     def GET(self):
-        return render.index(models.get_models(), hosts.get_hosts(), get_session())
+        return render.index(models.get_models(), hosts.get_hosts())
 
 
 class Help(object):
