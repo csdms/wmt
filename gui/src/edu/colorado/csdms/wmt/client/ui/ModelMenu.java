@@ -238,11 +238,7 @@ public class ModelMenu extends DecoratedPopupPanel {
    * {@link GenericCancelHandler}.
    */
   private void showSaveDialogBox() {
-    saveDialog = new SaveDialogBox();
-    saveDialog.setText("Save Model As...");
-    saveDialog.getChoicePanel().getOkButton().setHTML(
-          "<i class='fa fa-floppy-o'></i> Save");    
-    saveDialog.getFilePanel().setFile(data.getModel().getName());
+    saveDialog = new SaveDialogBox(data.getModel().getName());
     saveDialog.getChoicePanel().getOkButton().addClickHandler(
         new SaveOkHandler());
     saveDialog.getChoicePanel().getCancelButton().addClickHandler(

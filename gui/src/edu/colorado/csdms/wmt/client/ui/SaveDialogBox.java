@@ -19,16 +19,27 @@ public class SaveDialogBox extends DialogBox {
   private ChoicePanel choicePanel;
   
   /**
-   * Makes a new SaveDialogBox.
+   * Makes a SaveDialogBox with a default filename.
    */
   public SaveDialogBox() {
+    this("Model 0");
+  }
+  
+  /**
+   * Makes a SaveDialogBox with a user-supplied filename.
+   */
+  public SaveDialogBox(String fileName) {
 
     super(true); // autohide
     this.setModal(true);
+    this.setText("Save Model As...");
 
     filePanel = new FilePanel();
     choicePanel = new ChoicePanel();
 
+    filePanel.setFile(fileName);
+    choicePanel.getOkButton().setHTML("<i class='fa fa-floppy-o'></i> Save");
+    
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
     contents.add(filePanel);
