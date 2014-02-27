@@ -36,7 +36,8 @@ public class ModelMenu extends DecoratedPopupPanel {
   private HTML menuButton;
   private SaveDialogBox saveDialog;
   private DroplistDialogBox openDialog;
-  private DroplistDialogBox deleteDialog;  
+  private DroplistDialogBox deleteDialog;
+  private RunDialogBox runDialog;
 
   /**
    * Sets up the Model menu, including all its menu items, as well as its
@@ -209,7 +210,7 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       // Populate the ModelDroplist with the available models on the server.
       for (int i = 0; i < data.modelNameList.size(); i++) {
-        openDialog.getModelPanel().getModelDroplist().addItem(
+        openDialog.getModelPanel().getDroplist().addItem(
             data.modelNameList.get(i));
       }
 
@@ -303,7 +304,7 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       // Populate the ModelDroplist with the available models on the server.
       for (int i = 0; i < data.modelNameList.size(); i++) {
-        deleteDialog.getModelPanel().getModelDroplist().addItem(
+        deleteDialog.getModelPanel().getDroplist().addItem(
             data.modelNameList.get(i));
       }
 
@@ -318,14 +319,22 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "Run" button in the ModelMenu.
+   * Handles click on the "Run" button in the ModelMenu. Displays
+   * {@link RunDialogBox}.
    */
   public class RunModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
-      ModelMenuItem item = (ModelMenuItem) event.getSource();
-      ModelMenu.this.hide();
-      Window.alert("Clicked on: " + item.getText(0, 1));
+
+      runDialog = new RunDialogBox();
+      
+      runDialog.getChoicePanel().getOkButton().addClickHandler(
+          new RunOkHandler());
+      runDialog.getChoicePanel().getCancelButton().addClickHandler(
+          new GenericCancelHandler());
+
+      runDialog.center();
+      ModelMenu.this.hide();      
     }
   }
 
@@ -377,7 +386,6 @@ public class ModelMenu extends DecoratedPopupPanel {
     public void onClick(ClickEvent event) {
 
       openDialog.hide();
-      ModelMenu.this.hide();
 
       data.getPerspective().reset();
 
@@ -387,7 +395,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       // and modelName to the ArrayList with the same index. It would be
       // better if they both resided in the same data structure.
       Integer selIndex =
-          openDialog.getModelPanel().getModelDroplist().getSelectedIndex();
+          openDialog.getModelPanel().getDroplist().getSelectedIndex();
       Integer modelId = data.modelIdList.get(selIndex);
 
       // Get the data + metadata for the selected model. On success, #getModel
@@ -407,10 +415,9 @@ public class ModelMenu extends DecoratedPopupPanel {
     public void onClick(ClickEvent event) {
 
       saveDialog.hide();
-      ModelMenu.this.hide();
 
       // Set the model name in the DataManager.
-      String modelName = saveDialog.getFilePanel().getFile();
+      String modelName = saveDialog.getFilePanel().getField();
       if (!data.getModel().getName().matches(modelName)) {
         data.getModel().setName(modelName);
         data.saveAttempts++;
@@ -433,10 +440,9 @@ public class ModelMenu extends DecoratedPopupPanel {
     public void onClick(ClickEvent event) {
 
       deleteDialog.hide();
-      ModelMenu.this.hide();
 
       Integer selIndex =
-          deleteDialog.getModelPanel().getModelDroplist().getSelectedIndex();
+          deleteDialog.getModelPanel().getDroplist().getSelectedIndex();
       Integer modelId = data.modelIdList.get(selIndex);
       GWT.log("Deleting model: " + modelId);
 
@@ -448,7 +454,15 @@ public class ModelMenu extends DecoratedPopupPanel {
       }
     }
   }  
-  
+
+  public class RunOkHandler implements ClickHandler {
+    @Override
+    public void onClick(ClickEvent event) {
+      runDialog.hide();
+      Window.alert("Run!");
+    }
+  }
+
   /**
    * Handles click on the "Cancel" button in any dialog spawned from the
    * ModelMenu. Cancels action and closes both the dialog and the ModelMenu.
@@ -465,7 +479,10 @@ public class ModelMenu extends DecoratedPopupPanel {
       }
       if ((deleteDialog != null) && (deleteDialog.isShowing())) {
         deleteDialog.hide();
-      }      
+      }
+      if ((runDialog != null) && (runDialog.isShowing())) {
+        runDialog.hide();
+      }
     }
   }
 }
