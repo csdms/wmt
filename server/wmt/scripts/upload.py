@@ -1,3 +1,5 @@
+import os
+
 from wmt.utils.io import upload_large_file
 
 
@@ -6,7 +8,11 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('file', help='File to upload')
+    parser.add_argument('uuid', help='Run UUID')
 
     args = parser.parse_args()
 
-    print upload_large_file(args.file, 'http://csdms.colorado.edu/wmt/run/upload').text
+    url = os.path.join('http://csdms.colorado.edu/wmt/run/upload', args.uuid, args.file)
+    resp = upload_large_file(args.file, url)
+
+    print resp.text

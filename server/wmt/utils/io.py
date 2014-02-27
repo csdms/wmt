@@ -1,5 +1,6 @@
 import os
 import requests
+from requests_toolbelt import MultipartEncoder
 
 
 def _copy_a_chunk(src_fp, dest_fp, chunk_size, checksum=None):
@@ -28,7 +29,10 @@ def chunk_copy(src_fp, dest_fp, chunk_size=8192):
 
 def upload_large_file(filename, url):
     with open(filename, 'r') as fp:
-        return requests.post(url, data=fp)
+        m = MultipartEncoder(fields={'file': (args.file, fp, 'application/octet-stream')})
+        resp = requests.post(url, data=m, headers={'Content-Type': m.content_type})
+
+    return resp
 
 
 def download_file(url):
