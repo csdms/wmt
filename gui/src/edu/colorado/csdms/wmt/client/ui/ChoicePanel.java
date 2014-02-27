@@ -1,5 +1,5 @@
 /**
- * 
+ * <License>
  */
 package edu.colorado.csdms.wmt.client.ui;
 
@@ -9,8 +9,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
- * @author Mark Piper (mark.piper@colorado.edu)
+ * A GWT composite widget that displays right-aligned "OK" and "Cancel"
+ * buttons, with icons. Each button's text and icon can be modified.
  * 
+ * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class ChoicePanel extends Composite {
 
@@ -18,7 +20,7 @@ public class ChoicePanel extends Composite {
   private Button cancelButton;
 
   /**
-   * Makes a new choice panel with default "OK" and "Cancel" buttons.
+   * Makes a new ChoicePanel with the default "OK" and "Cancel" buttons.
    */
   public ChoicePanel() {
 
@@ -39,18 +41,30 @@ public class ChoicePanel extends Composite {
     initWidget(contents);
   }
 
+  /**
+   * Returns the "OK" {@link Button} used in a ChoicePanel.
+   */
   public Button getOkButton() {
     return okButton;
   }
 
+  /**
+   * Sets the "OK" {@link Button} used in a ChoicePanel.
+   */
   public void setOkButton(Button okButton) {
     this.okButton = okButton;
   }
 
+  /**
+   * Returns the "Cancel" {@link Button} used in a ChoicePanel.
+   */
   public Button getCancelButton() {
     return cancelButton;
   }
 
+  /**
+   * Sets the "Cancel" {@link Button} used in a ChoicePanel.
+   */
   public void setCancelButton(Button cancelButton) {
     this.cancelButton = cancelButton;
   }

@@ -85,7 +85,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     menu.setWidget(menuIndex++, 0, helpButton);
     menu.setWidget(menuIndex++, 0, aboutButton);
 
-    // Associate event handlers for the menu items.
+    // Associate custom event handlers with the menu items.
     newModel.addClickHandler(new NewModelHandler());
     openModel.addClickHandler(new OpenModelHandler());
     closeModel.addClickHandler(new CloseModelHandler());
@@ -191,8 +191,9 @@ public class ModelMenu extends DecoratedPopupPanel {
 
   /**
    * Handles click on the "Open Model..." button in the ModelMenu. Pops up an
-   * instance of {@link DroplistDialogBox} to prompt the user for a model to open.
-   * Events are sent to {@link OpenOkHandler} and {@link OpenCancelHandler}.
+   * instance of {@link DroplistDialogBox} to prompt the user for a model to
+   * open. Events are sent to {@link OpenOkHandler} and
+   * {@link GenericCancelHandler}.
    */
   public class OpenModelHandler implements ClickHandler {
     @Override
@@ -221,14 +222,12 @@ public class ModelMenu extends DecoratedPopupPanel {
 
   /**
    * Handles click on the "Close Model" button in the ModelMenu. Resets the
-   * WMT GUI to its default state.
+   * WMT GUI to its default state with a call to {@link Perspective#reset()}.
    */
   public class CloseModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
       ModelMenu.this.hide();
-      // ModelMenuItem item = (ModelMenuItem) event.getSource();
-      // Window.alert("Clicked on: " + item.getText(0, 1));
       data.getPerspective().reset();
     }
   }
@@ -236,7 +235,7 @@ public class ModelMenu extends DecoratedPopupPanel {
   /**
    * Pops up an instance of {@link SaveDialogBox} to prompt the user to save
    * the model. Events are sent to {@link SaveOkHandler} and
-   * {@link SaveCancelHandler}.
+   * {@link GenericCancelHandler}.
    */
   private void showSaveDialogBox() {
     saveDialog = new SaveDialogBox();
@@ -253,20 +252,22 @@ public class ModelMenu extends DecoratedPopupPanel {
 
   /**
    * Handles click on the "Save Model" button in the ModelMenu. Saves a
-   * not-previously-saved model or a new model displayed in WMT to the server.
+   * not-previously-saved model or a new model displayed in WMT to the server
+   * with a call to {@link DataTransfer#postModel(DataManager)}.
    */
   public class SaveModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
 
       ModelMenu.this.hide();
-      GWT.log("modelIsSaved = " + data.modelIsSaved() + "; "
-          + "modelHasBeenSaved = " + (data.getMetadata() != null));
 
-      // If the model hasn't been saved previously, show the SaveDialogBox;
-      // otherwise, serialize the model and post it to the server.
+      // If the model hasn't been saved previously (i.e., it has an id of -1),
+      // show the SaveDialogBox; otherwise, serialize the model and post it to
+      // the server.
+      GWT.log("modelIsSaved = " + data.modelIsSaved() + "; "
+          + "modelHasBeenSaved = " + (data.getMetadata().getId() != -1));
       if (!data.modelIsSaved()) {
-        if (data.getMetadata().getName() == null) {
+        if (data.getMetadata().getId() == -1) {
           showSaveDialogBox();
         } else {
           data.serialize();
@@ -289,7 +290,8 @@ public class ModelMenu extends DecoratedPopupPanel {
   }
 
   /**
-   * Handles click on the "Delete" button in the ModelMenu.
+   * Handles click on the "Delete" button in the ModelMenu. It presents an
+   * instance of {@link DroplistDialogBox} with a "Delete" button.
    */
   public class DeleteModelHandler implements ClickHandler {
     @Override
@@ -410,7 +412,9 @@ public class ModelMenu extends DecoratedPopupPanel {
 
   /**
    * Handles click on the "Delete" button in the dialog that appears when the
-   * "Delete Model..." button is clicked in the {@link ModelMenu}.
+   * "Delete Model..." button is clicked in the ModelMenu. Deletes the
+   * selected model from the server with a call to
+   * {@link DataTransfer#deleteModel(DataManager, Integer)}.
    */
   public class DeleteOkHandler implements ClickHandler {
     @Override
@@ -423,16 +427,19 @@ public class ModelMenu extends DecoratedPopupPanel {
           deleteDialog.getModelPanel().getModelDroplist().getSelectedIndex();
       Integer modelId = data.modelIdList.get(selIndex);
       GWT.log("Deleting model: " + modelId);
-      
-      // TODO
-      Window.alert("When implemented, this would delete model #" + modelId);
+
+      DataTransfer.deleteModel(data, modelId);
+
+      // If the deleted model is currently displayed, close it.
+      if (data.getMetadata().getId() == modelId) {
+        data.getPerspective().reset();
+      }
     }
   }  
   
   /**
    * Handles click on the "Cancel" button in any dialog spawned from the
-   * {@link ModelMenu}. Cancels action and closes both the dialog and the
-   * {@link ModelMenu}.
+   * ModelMenu. Cancels action and closes both the dialog and the ModelMenu.
    */
   public class GenericCancelHandler implements ClickHandler {
     @Override

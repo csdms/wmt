@@ -27,13 +27,19 @@ public class ModelMetadataJSO extends JavaScriptObject {
   }-*/;
 
   /**
-   * A JSNI method to get the id of the model, an int used to uniquely identify
-   * it in the database. The user can't modify this id -- it's set by the API.
-   * Be aware that this is different than {@link ModelJSO#getId()}, which is
-   * used to get the id of a component.
+   * A JSNI method to get the id of the model, an int used to uniquely
+   * identify it in the database. The user can't modify this id -- it's set by
+   * the API. Be aware that this is different than {@link ModelJSO#getId()},
+   * which is used to get the id of a component.
+   * <p>
+   * Returns a value of -1 if no model metadata are present.
    */
   public final native int getId() /*-{
-		return this.id;
+		if (typeof this.id == 'undefined') {
+			return -1;
+		} else {
+			return this.id;
+		}
   }-*/;
 
   /**

@@ -12,7 +12,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
- * A GWT composite widget that defines a field for specifying a file name.
+ * A GWT composite widget that defines a label and a field for specifying a
+ * file name.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -54,10 +55,16 @@ public class FilePanel extends Composite {
     initWidget(contents);
   }
 
+  /**
+   * Returns the filename (a String) displayed in the FilePanel.
+   */
   public String getFile() {
     return fileInput.getText();
   }
 
+  /**
+   * Sets the filename (a String) displayed in the FilePanel.
+   */
   public void setFile(String file) {
     fileInput.setText(file);
   }
