@@ -11,8 +11,11 @@ from ..utils.io import chunk_copy
 from ..config import logger
 
 
+class Launch(object):
+    pass
 
-class StageIn(object):
+
+class Stage(object):
     form = web.form.Form(
         web.form.Textbox('name',
                          not_too_short(3),

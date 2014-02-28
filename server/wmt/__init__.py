@@ -39,12 +39,13 @@ URLS = (
     '/models/convert', 'wmt.controllers.actions.Convert',
     '/models/submit', 'wmt.controllers.actions.Submit',
 
-    '/run/(\d*)', 'wmt.controllers.run.StageIn',
     '/run/new', 'wmt.controllers.run.New',
+    '/run/show', 'wmt.controllers.run.Show',
+    '/run/stage/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Stage',
     '/run/update/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Update',
     '/run/upload/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Upload',
     '/run/download/(%s)/(.+)' % _UUID_REGEX, 'wmt.controllers.run.Download',
-    '/run/show', 'wmt.controllers.run.Show',
+    '/run/launch/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Launch',
 
     '/hosts/new', 'wmt.controllers.hosts.New',
     '/hosts/view/(\d+)', 'wmt.controllers.hosts.View',
