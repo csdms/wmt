@@ -15,34 +15,45 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class SaveDialogBox extends DialogBox {
 
-  private FilePanel filePanel;
+  private FieldPanel fieldPanel;
   private ChoicePanel choicePanel;
   
   /**
-   * Makes a new SaveDialogBox.
+   * Makes a SaveDialogBox with a default filename.
    */
   public SaveDialogBox() {
+    this("Model 0");
+  }
+  
+  /**
+   * Makes a SaveDialogBox with a user-supplied filename.
+   */
+  public SaveDialogBox(String fileName) {
 
     super(true); // autohide
     this.setModal(true);
+    this.setText("Save Model As...");
 
-    filePanel = new FilePanel();
+    fieldPanel = new FieldPanel();
     choicePanel = new ChoicePanel();
 
+    fieldPanel.setField(fileName);
+    choicePanel.getOkButton().setHTML("<i class='fa fa-floppy-o'></i> Save");
+    
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-    contents.add(filePanel);
+    contents.add(fieldPanel);
     contents.add(choicePanel);
 
     this.setWidget(contents);
   }
 
-  public FilePanel getFilePanel() {
-    return filePanel;
+  public FieldPanel getFilePanel() {
+    return fieldPanel;
   }
 
-  public void setFilePanel(FilePanel filePanel) {
-    this.filePanel = filePanel;
+  public void setFilePanel(FieldPanel fieldPanel) {
+    this.fieldPanel = fieldPanel;
   }
 
   public ChoicePanel getChoicePanel() {

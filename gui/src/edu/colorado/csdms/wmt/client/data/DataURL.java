@@ -30,6 +30,8 @@ public class DataURL {
   private static final String MODEL_EDIT_URL = API_URL + "models/edit/";
   private static final String MODEL_DELETE_URL = API_URL + "models/delete/";
 
+  private static final String RUN_SHOW_URL = API_URL + "run/show";
+
   /**
    * A wrapper around Window.Location that returns the application URL in
    * either development or production mode.
@@ -167,5 +169,12 @@ public class DataURL {
     } else {
       return API_URL + "models/file/" + modelId.toString();
     }
+  }
+
+  /**
+   * Returns the URL for API page displaying the status of current model runs.
+   */
+  public static String runStatus() {
+    return RUN_SHOW_URL;
   }
 }

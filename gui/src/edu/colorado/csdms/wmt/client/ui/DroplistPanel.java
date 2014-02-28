@@ -10,14 +10,14 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
 /**
- * A GWT composite widget that defines a box listing files and a box showing
- * which file is selected.
+ * A GWT composite widget that defines a label and a droplist of items.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class DroplistPanel extends Composite {
 
-  private ListBox modelDroplist;
+  private Label dropLabel;
+  private ListBox droplist;
 
   /**
    * Defines an empty DroplistPanel.
@@ -27,38 +27,46 @@ public class DroplistPanel extends Composite {
   }
 
   /**
-   * Defines a ListBox with a droplist of model names.
+   * Defines a DroplistPanel filled with model names.
    * 
    * @param modelNames a String[] of model names
    */
   public DroplistPanel(String[] modelNames) {
 
-    Label availableLabel = new Label("Available models:");
-    modelDroplist = new ListBox(false); // multiselect off
+    dropLabel = new Label("Available models:");
+    droplist = new ListBox(false); // multiselect off
     if (modelNames != null) {
       for (int i = 0; i < modelNames.length; i++) {
-        modelDroplist.addItem(modelNames[i]);
+        droplist.addItem(modelNames[i]);
       }
     }
-    modelDroplist.setVisibleItemCount(1); // show 1 item = a droplist
+    droplist.setVisibleItemCount(1); // show 1 item = a droplist
 
     // Styles!
-    modelDroplist.setWidth("25ch");
-    availableLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+    droplist.setWidth("25ch");
+    dropLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
     HorizontalPanel contents = new HorizontalPanel();
     contents.setSpacing(10); // px
-    contents.add(availableLabel);
-    contents.add(modelDroplist);
+    contents.add(dropLabel);
+    contents.add(droplist);
 
     initWidget(contents);
   }
 
-  public ListBox getModelDroplist() {
-    return modelDroplist;
+  public Label getLabel() {
+    return dropLabel;
   }
 
-  public void setModelDroplist(ListBox modelDroplist) {
-    this.modelDroplist = modelDroplist;
+  public void setLabel(Label label) {
+    this.dropLabel = label;
+  }
+
+  public ListBox getDroplist() {
+    return droplist;
+  }
+
+  public void setDroplist(ListBox droplist) {
+    this.droplist = droplist;
   }
 }
