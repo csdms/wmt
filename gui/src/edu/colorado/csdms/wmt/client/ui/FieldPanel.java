@@ -50,7 +50,8 @@ public class FieldPanel extends Composite {
   }
 
   /**
-   * Defines a FieldPanel with user-supplied text, optionally obscured.
+   * Defines a FieldPanel with user-supplied text displayed in the field,
+   * optionally obscured.
    * 
    * @param text the String to display in the field
    * @param secure set to true to obscure text

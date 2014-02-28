@@ -27,17 +27,17 @@ public class DroplistPanel extends Composite {
   }
 
   /**
-   * Defines a DroplistPanel filled with model names.
+   * Defines a DroplistPanel populated with a set of input items.
    * 
-   * @param modelNames a String[] of model names
+   * @param items a String[] of items to display in the droplist
    */
-  public DroplistPanel(String[] modelNames) {
+  public DroplistPanel(String[] items) {
 
     dropLabel = new Label("Available models:");
     droplist = new ListBox(false); // multiselect off
-    if (modelNames != null) {
-      for (int i = 0; i < modelNames.length; i++) {
-        droplist.addItem(modelNames[i]);
+    if (items != null) {
+      for (int i = 0; i < items.length; i++) {
+        droplist.addItem(items[i]);
       }
     }
     droplist.setVisibleItemCount(1); // show 1 item = a droplist
