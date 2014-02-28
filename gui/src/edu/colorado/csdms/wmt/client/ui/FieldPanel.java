@@ -68,7 +68,6 @@ public class FieldPanel extends Composite {
 
     // Styles!
     field.setWidth("15em");
-    field.getElement().getStyle().setBackgroundColor("#ffc");
     fieldLabel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
     fieldLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
