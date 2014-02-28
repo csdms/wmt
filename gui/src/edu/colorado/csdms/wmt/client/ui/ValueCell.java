@@ -162,20 +162,24 @@ public class ValueCell extends HorizontalPanel {
   }
 
   /**
-   * A class to handle selection in the "files" ListBox.
+   * Handles a click on the Upload button.
    */
   public class UploadHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
-      
-//      ParameterTable pt = (ParameterTable) ValueCell.this.getParent();
-//      if (pt.data.getMetadata() == null) {
-//        Window.alert("Model must be saved to the server before an upload can occur.");
-//      }
+
+      ParameterTable pt = (ParameterTable) ValueCell.this.getParent();
+      if (!pt.data.modelIsSaved()) {
+        String msg = "The model must be saved to the server"
+            + " before files can be uploaded.";
+        Window.alert(msg);
+        return;
+      }
 
       upload = new UploadDialogBox();
       upload.setText("Upload File...");
-//      upload.getForm().setAction(DataURL.uploadFile(pt.data, pt.data.getMetadata().getId()));
+      // upload.getForm().setAction(DataURL.uploadFile(pt.data,
+      // pt.data.getMetadata().getId()));
       upload.getForm().addSubmitCompleteHandler(new UploadCompleteHandler());
       upload.center();
     }

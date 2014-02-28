@@ -326,6 +326,13 @@ public class ModelMenu extends DecoratedPopupPanel {
     @Override
     public void onClick(ClickEvent event) {
 
+      if (!data.modelIsSaved()) {
+        String msg = "The model must be saved to the server"
+            + " before it can be run.";
+        Window.alert(msg);
+        return;
+      }
+      
       runDialog = new RunDialogBox();
 
       // TODO This should be configured.
