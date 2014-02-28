@@ -79,6 +79,20 @@
     }
   },
   {
+    "key":"river_mouth_latitude",
+    "name":"Latitude",
+    "description":"Latitude of the river mouth",
+    "value":{
+      "type":"float",
+      "default": 45.0,
+      "range":{
+        "min": -90.0,
+        "max": 90.0
+      },
+      "units":"degrees"
+    }
+  },
+  {
     "key":"coast_normal",
     "name":"Angle of coast normal",
     "description":"Angle of the coast normal as measured clockwise from north",
