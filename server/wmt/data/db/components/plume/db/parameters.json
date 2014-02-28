@@ -1,0 +1,276 @@
+[
+  {
+    "key":"separator",
+    "name":"River",
+    "description":"River",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"sediment_mass_concentration",
+    "name":"Sediment concentration",
+    "description":"Average mass-concentration of suspended sediment",
+    "value":{
+      "type":"float",
+      "default": 4.0,
+      "range":{
+        "min": 0.01,
+        "max": 10.0
+      },
+      "units":"kg/m^3"
+    }
+  },
+  {
+    "key":"river_mouth_velocity",
+    "name":"River mouth velocity",
+    "description":"Flow velocity at river mouth",
+    "value":{
+      "type":"float",
+      "default": 1.0,
+      "range":{
+        "min": 0.1,
+        "max": 10.0
+      },
+      "units":"m/s"
+    }
+  },
+  {
+    "key":"river_mouth_width",
+    "name":"River mouth width",
+    "description":"Width of river at river mouth",
+    "value":{
+      "type":"float",
+      "default": 100.0,
+      "range":{
+        "min": 10.0,
+        "max": 5000.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"river_mouth_depth",
+    "name":"River mouth depth",
+    "description":"Depth of river at river mouth",
+    "value":{
+      "type":"float",
+      "default": 10.0,
+      "range":{
+        "min": 1.0,
+        "max": 100.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"river_mouth_angle",
+    "name":"River mouth angle",
+    "description":"Angle of the river mouth measured with respect to the coast normal",
+    "value":{
+      "type":"float",
+      "default": 0.0,
+      "range":{
+        "min": -180.0,
+        "max": 180.0
+      },
+      "units":"degrees"
+    }
+  },
+  {
+    "key":"coast_normal",
+    "name":"Angle of coast normal",
+    "description":"Angle of the coast normal as measured clockwise from north",
+    "value":{
+      "type":"float",
+      "default": 90.0,
+      "range":{
+        "min": 0.0,
+        "max": 360.0
+      },
+      "units":"degrees"
+    }
+  },
+  {
+    "key":"basin_width",
+    "name":"Basin width",
+    "description":"Width of the ocean/fjord",
+    "value":{
+      "type":"float",
+      "default": 2000.0,
+      "range":{
+        "min": 100.0,
+        "max": 200000.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"basin_length",
+    "name":"Basin length",
+    "description":"Length of the ocean/fjord",
+    "value":{
+      "type":"float",
+      "default": 30000.0,
+      "range":{
+        "min": 1000.0,
+        "max": 200000.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Sediment",
+    "description":"Sediment",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"bulk_density",
+    "name":"Bulk density",
+    "description":"Saturated bulk density of bottom sediments",
+    "value":{
+      "type":"float",
+      "default": 1800.0,
+      "range":{
+        "min": 1000.0,
+        "max": 2650.0
+      },
+      "units":"kg/m^3"
+    }
+  },
+  {
+    "key":"removal_rate",
+    "name":"Removal rate",
+    "description":"Removal rate of susmpended sediment",
+    "value":{
+      "type":"float",
+      "default": 16.8,
+      "range":{
+        "min": 1.0,
+        "max": 100.0
+      },
+      "units":"day^-1"
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Ocean",
+    "description":"Ocean",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"background_ocean_concentration",
+    "name":"Ocean sediment concentration",
+    "description":"Background sediment volume concentration of the ocean",
+    "value":{
+      "type":"float",
+      "default": 0.0,
+      "range":{
+        "min": 0.0,
+        "max": 1.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"normalized_current_width",
+    "name":"Normalized current width",
+    "description":"Normalized width of the along-shore current",
+    "value":{
+      "type":"float",
+      "default": 1.0,
+      "range":{
+        "min": 0.1,
+        "max": 1.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"coastal_current_velocity",
+    "name":"Current velocity",
+    "description":"Along-shore velocity of the coastal current",
+    "value":{
+      "type":"float",
+      "default": 0.0,
+      "range":{
+        "min": -5.0,
+        "max": 5.0
+      },
+      "units":"m/s"
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Advanced",
+    "description":"Advanced",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"grid_nodes_in_river_mouth",
+    "name":"Number of grid nodes in river mouth",
+    "description":"Number of computational grid nodes contained within the river mouth",
+    "value":{
+      "type":"int",
+      "default": 3,
+      "range":{
+        "min": 3,
+        "max": 21
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"ratio_of_cross_shore_to_along_shore_spacing",
+    "name":"Grid spacing ratio",
+    "description":"Ratio of spacing in the along-shore to cross-shore spacing",
+    "value":{
+      "type":"int",
+      "default": 2,
+      "range":{
+        "min": 1,
+        "max": 20
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"along_shore_resolution",
+    "name":"Along-shore resolution",
+    "description":"Resolution of the deposit in the along-shore direction",
+    "value":{
+      "type":"float",
+      "default": 100.0,
+      "range":{
+        "min": 100.0,
+        "max": 1000.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"cross_shore_resolution",
+    "name":"Cross-shore resolution",
+    "description":"Resolution of the deposit in the cross-shore direction",
+    "value":{
+      "type":"float",
+      "default": 100.0,
+      "range":{
+        "min": 100.0,
+        "max": 1000.0
+      },
+      "units":"m"
+    }
+  }
+]
