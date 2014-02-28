@@ -103,7 +103,6 @@ public class ValueCell extends HorizontalPanel {
       valueTextBox.addKeyUpHandler(new TextEditHandler());
 
       valueTextBox.setText(value);
-      valueTextBox.getElement().getStyle().setBackgroundColor("#ffc");
       this.add(valueTextBox);
 
     }
@@ -124,7 +123,7 @@ public class ValueCell extends HorizontalPanel {
    * elegant solution, but ParameterTable knows the component this parameter
    * belongs to and it has access to the DataManager object for storage.
    * 
-   * @param value
+   * @param value the value read from the ValueCell
    */
   public void setValue(String value) {
     ParameterTable pt = (ParameterTable) ValueCell.this.getParent();
@@ -145,8 +144,11 @@ public class ValueCell extends HorizontalPanel {
   }
 
   /**
-   * A class to handle keyboard events in the TextBox -- every key press, so
-   * there could be many. Might consider acting on only Tab or Enter.
+   * A class to handle keyboard events in the TextBox. Also checks for valid
+   * TextBox contents.
+   * <p>
+   * Note that every key press generates an event. It might be worth
+   * considering acting on only Tab or Enter key presses.
    */
   public class TextEditHandler implements KeyUpHandler {
     @Override
@@ -154,6 +156,7 @@ public class ValueCell extends HorizontalPanel {
       GWT.log("(onKeyUp)");
       TextBox textBox = (TextBox) event.getSource();
       String value = textBox.getText();
+      textBox.setStyleDependentName("outofrange", !isInRange(parameter, value));
       setValue(value);
     }
   }
@@ -190,4 +193,59 @@ public class ValueCell extends HorizontalPanel {
       }
     }
   }
+
+  /**
+   * Checks whether a given value is within the established range of values
+   * for a parameter, returning a Boolean. This method operates only on
+   * numeric types.
+   * 
+   * @param parameter a ParameterJSO object
+   * @param value a value
+   */
+  private Boolean isInRange(ParameterJSO parameter, String value) {
+    Boolean rangeOK = true;
+    if (isParameterTypeNumeric(parameter)) {
+      if (!isNumeric(value)) {
+        rangeOK = false;
+      } else {
+        Double newValueD = Double.valueOf(value);
+        String minValue = parameter.getValue().getMin();
+        Double minValueD = Double.valueOf(minValue);
+        String maxValue = parameter.getValue().getMax();
+        Double maxValueD = Double.valueOf(maxValue);
+        if ((newValueD > maxValueD) || (newValueD < minValueD)) {
+          rangeOK = false;
+        }
+      }
+    }
+    return rangeOK;
+  }
+  
+  /**
+   * Checks whether the parameter uses a numeric type value (e.g., float or
+   * int). Returns a Boolean.
+   * 
+   * @param parameter a ParameterJSO object
+   */
+  private Boolean isParameterTypeNumeric(ParameterJSO parameter) {
+    Boolean isNumeric = true;
+    String type = parameter.getValue().getType();
+    if (type.matches("string") || type.matches("choice")
+        || type.matches("file")) {
+      isNumeric = false;
+    }
+    return isNumeric;
+  }
+  
+  /**
+   * Checks whether the input String can be cast to a number.
+   * 
+   * @see <a
+   *      href="http://stackoverflow.com/questions/14206768/how-to-check-if-a-string-is-numeric">This</a>
+   *      discussion. Thanks, stackoverflow!
+   * @param s a String
+   */
+  private Boolean isNumeric(String s) {  
+    return s.matches("[-+]?\\d*\\.?\\d+");  
+  } 
 }
