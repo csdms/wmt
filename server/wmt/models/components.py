@@ -89,6 +89,9 @@ def get_component_formatted_input(name, **kwds):
     input = dict()
     for (filename, contents) in get_component_input(name).items():
         formatted = format.format(contents, **kwds)
+        (base, ext) = os.path.splitext(filename)
+        if ext == '.tmpl':
+            filename = base
         input[filename] = format.format(contents, **kwds)
 
     return input
