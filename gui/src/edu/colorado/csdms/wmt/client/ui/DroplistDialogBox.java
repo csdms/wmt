@@ -24,7 +24,7 @@ public class DroplistDialogBox extends DialogBox {
    */
   public DroplistDialogBox() {
 
-    super(true); // autohide
+    super(false); // autohide
     this.setModal(true);
 
     itemPanel = new DroplistPanel();

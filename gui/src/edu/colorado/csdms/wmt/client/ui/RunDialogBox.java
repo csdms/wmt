@@ -25,7 +25,7 @@ public class RunDialogBox extends DialogBox {
    */
   public RunDialogBox() {
 
-    super(true); // autohide
+    super(false); // autohide
     this.setModal(true);
     this.setText("Run Model...");
 

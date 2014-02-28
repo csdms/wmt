@@ -33,7 +33,7 @@ public class UploadDialogBox extends DialogBox {
    */
   public UploadDialogBox() {
 
-    super(true); // autohide
+    super(false); // autohide
     this.setModal(true);
 
     // Create a FormPanel and point it at a service.
