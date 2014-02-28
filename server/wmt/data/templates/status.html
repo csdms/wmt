@@ -12,8 +12,8 @@ $def with (submissions)
 
 <table id="hor-minimalist-a">
   <tr>
-    <th scope="col">ID</th>
     <th scope="col">UUID</th>
+    <th scope="col">Model</th>
     <th scope="col">Name</th>
     <th scope="col">Status</th>
     <th scope="col">Created</th>
@@ -23,8 +23,8 @@ $def with (submissions)
   </tr>
   $for submission in submissions:
   <tr>
-    <td>$submission.id</td>
     <td>$submission.uuid</td>
+    <td><a href="/wmt/models/edit/$submission.model_id">$submission.model_id</a></td>
     <td>$submission.name</td>
     <td>$submission.status</td>
     <td>$submission.created</td>

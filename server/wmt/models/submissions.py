@@ -5,10 +5,11 @@ import uuid
 from ..config import submission_db as db
 
 
-def new(name):
+def new(name, model_id):
     now = web.net.httpdate(datetime.datetime.now())
     data = {
         'name': name,
+        'model_id': model_id,
         'uuid': str(uuid.uuid4()),
         'status': 'submitted',
         'message': 'Run has been submitted',

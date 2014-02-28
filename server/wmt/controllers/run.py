@@ -11,6 +11,7 @@ from ..utils.io import chunk_copy
 from ..config import logger
 
 
+
 class StageIn(object):
     form = web.form.Form(
         web.form.Textbox('name',
@@ -48,7 +49,11 @@ class New(object):
         web.form.Textbox('name',
                          not_too_short(3),
                          not_too_long(20),
-                         size=30, description='Simulation name:'),
+                         size=30, description='Name:'),
+        web.form.Textbox('description',
+                         size=30, description='Description:'),
+        web.form.Textbox('model_id',
+                         size=30, description='Model id:'),
         web.form.Button('Create')
     )
 
@@ -60,7 +65,7 @@ class New(object):
         if not form.validates():
             return render.stagein(form)
 
-        return submissions.new(form.d.name)
+        return submissions.new(form.d.name, form.d.model_id)
 
 
 class Update(object):
