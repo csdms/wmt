@@ -36,5 +36,5 @@ def get_submission(uuid):
         raise BadIdError(id)
 
 
-def get_status(id):
+def get_status(uuid):
     return db.select('submission', what='status', where='uuid=$uuid', vars=locals())
