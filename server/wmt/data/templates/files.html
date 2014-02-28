@@ -1,0 +1,17 @@
+$def with(files)
+
+<html>
+  <link rel="stylesheet" type="text/css" href="/wmt/static/style.css" />
+<head>
+</head>
+
+<body>
+
+<h1>Input Files</h1>
+$for (name, contents) in files.items():
+  <h2>$name</h2>
+  <pre>
+  $contents
+  </pre>
+
+</body></html>
