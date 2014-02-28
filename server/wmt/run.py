@@ -2,11 +2,10 @@ from __future__ import print_function
 
 import os
 import json
-import uuid
 import shutil
 import datetime
 
-from .models import (models, components)
+from .models import (models, components, submissions)
 from .config import (site, logger)
 
 
@@ -92,33 +91,43 @@ def stage_component(prefix, component):
         hooks['post-stage'].execute(component['parameters'])
 
 
-def stagein(id):
-    model = json.loads(models.get_model(id).json)['model']
+def _model_from_submission(uuid):
+    submission = submissions.get_submission(uuid)
+    model_id = submission.model_id
+    return json.loads(models.get_model(model_id).json)['model']
 
-    run_id = str(uuid.uuid4())
 
-    run_dir = os.path.join(site['downloads'], run_id)
+def _setup_run_dir(uuid):
+    run_dir = os.path.join(site['downloads'], uuid)
+    try:
+        os.mkdir(run_dir)
+    except OSError:
+        pass
 
-    os.mkdir(run_dir)
-    write_to_readme(run_dir, 'w', user='nobody', start=current_time_as_string())
+    write_to_readme(run_dir, 'w', user='nobody',
+                    start=current_time_as_string())
 
-    for component in model:
+    return run_dir
+
+
+def stagein(uuid):
+    run_dir = _setup_run_dir(uuid)
+    for component in _model_from_submision(uuid):
         stage_component(run_dir, component)
+    return run_dir
 
-    return run_id
 
-
-def launch(id):
+def launch(uuid):
     launch_command_on_server(username, host, script, password=password)
 
 
-def run(run_id, id):
+def run(uuid):
     pass
 
 
-def stageout(run_id):
-    run_dir = os.path.join(site['downloads'], run_id)
-    dropoff_dir = os.path.join('/data/ftp/pub/users/wmt', run_id)
+def stageout(uuid):
+    run_dir = os.path.join(site['downloads'], uuid)
+    dropoff_dir = os.path.join('/data/ftp/pub/users/wmt', uuid)
 
     write_to_readme(run_dir, 'a', stop=current_time_as_string())
     shutil.move(run_dir, dropoff_dir)

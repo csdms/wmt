@@ -12,7 +12,8 @@ from ..config import logger
 
 
 class Launch(object):
-    pass
+    def POST(self, uuid):
+        pass
 
 
 class Stage(object):
@@ -27,22 +28,24 @@ class Stage(object):
         web.form.Button('Stage')
     )
 
-    def GET(self, id):
+    def GET(self, uuid):
+        submission = submissions.get_submission(uuid)
+        model_id = submission.model_id
         try:
-            model = models.get_model(int(id))
+            model = models.get_model(model_id)
         except (ValueError, models.BadIdError):
             return render.stagein(self.form())
         else:
             self.form.fill(model)
             return render.stagein(self.form)
 
-    def POST(self, id):
+    def POST(self, uuid):
         form = self.form()
         if not form.validates():
             return render.stagein(form)
 
-        run_id = run.stagein(id)
-        dropoff_dir = run.stageout(run_id)
+        run.stagein(uuid)
+        dropoff_dir = run.stageout(uuid)
 
         return dropoff_dir
 
