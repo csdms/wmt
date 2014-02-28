@@ -1,7 +1,13 @@
-/* ------------------
- styling for the tables
-   ------------------   */
-
+pre
+{
+  border:1px dashed #E1E1E1;
+  color:#333344;
+  background:#FAFAFA;
+  font-family:monospace;
+  overflow:auto;
+  font-size:11px;
+  padding:0.5em;
+}
 
 body
 {
@@ -9,12 +15,6 @@ body
 	line-height: 1.6em;
 	font-size: 12px;
 }
-/*
-p
-{
-	font-size: 12px;
-}
-*/
 
 h1
 {
@@ -25,6 +25,10 @@ h2
 {
 	font-size: 24px;
 }
+
+/* ------------------
+ styling for the tables
+   ------------------   */
 
 #hor-minimalist-a
 {
