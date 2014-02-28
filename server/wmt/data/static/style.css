@@ -1,11 +1,15 @@
 pre
 {
-  border:1px dashed #E1E1E1;
-  color:#333344;
+  border:2px solid #6678b1;
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-left-style: none;
+  border-right-style: none;
+	color: #039;
   background:#FAFAFA;
   font-family:monospace;
   overflow:auto;
-  font-size:11px;
+  font-size:14px;
   padding:0.5em;
 }
 
