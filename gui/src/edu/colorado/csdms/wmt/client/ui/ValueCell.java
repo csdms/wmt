@@ -107,12 +107,12 @@ public class ValueCell extends HorizontalPanel {
 
     }
 
-    // If appropriate, add a tooltip showing the valid range of the value.
-    if (!type.matches("string") && !type.matches("choice")
-        && !type.matches("file")) {
+    // If the parameter type is numeric, add a tooltip showing the valid range
+    // of its value.
+    if (isParameterTypeNumeric(parameter)) {
       range +=
-          "Valid range = ( " + parameter.getValue().getMin() + ", "
-              + parameter.getValue().getMax() + " )";
+          "Valid range: (" + parameter.getValue().getMin() + ", "
+              + parameter.getValue().getMax() + ")";
       this.setTitle(range);
     }
   }
