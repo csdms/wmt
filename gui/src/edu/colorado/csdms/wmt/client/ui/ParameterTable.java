@@ -96,23 +96,21 @@ public class ParameterTable extends FlexTable {
    * {@link DataManager}.
    * 
    * @param parameter the ParameterJSO object for the parameter being modified
-   * @param value the new parameter value, a String
+   * @param newValue the new parameter value, a String
    */
-  public void setValue(ParameterJSO parameter, String value) {
-
-    // TODO Massive amounts of checking on value.
+  public void setValue(ParameterJSO parameter, String newValue) {
 
     String key = parameter.getKey();
     String previousValue =
         data.getModelComponent(componentId).getParameter(key).getValue()
             .getDefault();
-    GWT.log(componentId + ": " + key + ": " + value);
+    GWT.log(componentId + ": " + key + ": " + newValue);
 
     // Don't update state when tabbing between fields or moving within field.
     // XXX Would be better to handle this further upstream.
-    if (!value.matches(previousValue)) {
+    if (!newValue.matches(previousValue)) {
       data.getModelComponent(componentId).getParameter(key).getValue()
-          .setDefault(value);
+          .setDefault(newValue);
       data.modelIsSaved(false);
       data.getPerspective().setModelPanelTitle();
     }

@@ -30,7 +30,7 @@ public class SaveDialogBox extends DialogBox {
    */
   public SaveDialogBox(String fileName) {
 
-    super(true); // autohide
+    super(false); // autohide
     this.setModal(true);
     this.setText("Save Model As...");
 

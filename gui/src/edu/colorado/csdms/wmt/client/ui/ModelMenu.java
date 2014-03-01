@@ -210,7 +210,7 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       // Populate the ModelDroplist with the available models on the server.
       for (int i = 0; i < data.modelNameList.size(); i++) {
-        openDialog.getModelPanel().getDroplist().addItem(
+        openDialog.getDroplistPanel().getDroplist().addItem(
             data.modelNameList.get(i));
       }
 
@@ -304,7 +304,7 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       // Populate the ModelDroplist with the available models on the server.
       for (int i = 0; i < data.modelNameList.size(); i++) {
-        deleteDialog.getModelPanel().getDroplist().addItem(
+        deleteDialog.getDroplistPanel().getDroplist().addItem(
             data.modelNameList.get(i));
       }
 
@@ -326,15 +326,29 @@ public class ModelMenu extends DecoratedPopupPanel {
     @Override
     public void onClick(ClickEvent event) {
 
-      runDialog = new RunDialogBox();
+      if (!data.modelIsSaved()) {
+        String msg = "The model must be saved to the server"
+            + " before it can be run.";
+        Window.alert(msg);
+        return;
+      }
       
+      runDialog = new RunDialogBox();
+
+      // TODO This should be configured.
+      String hosts[] =
+          {"beach.colorado.edu", "river.colorado.edu", "localhost"};
+      for (int i = 0; i < hosts.length; i++) {
+        runDialog.getHostPanel().getDroplist().addItem(hosts[i]);
+      }
+
       runDialog.getChoicePanel().getOkButton().addClickHandler(
           new RunOkHandler());
       runDialog.getChoicePanel().getCancelButton().addClickHandler(
           new GenericCancelHandler());
 
       runDialog.center();
-      ModelMenu.this.hide();      
+      ModelMenu.this.hide();
     }
   }
 
@@ -395,7 +409,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       // and modelName to the ArrayList with the same index. It would be
       // better if they both resided in the same data structure.
       Integer selIndex =
-          openDialog.getModelPanel().getDroplist().getSelectedIndex();
+          openDialog.getDroplistPanel().getDroplist().getSelectedIndex();
       Integer modelId = data.modelIdList.get(selIndex);
 
       // Get the data + metadata for the selected model. On success, #getModel
@@ -442,7 +456,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       deleteDialog.hide();
 
       Integer selIndex =
-          deleteDialog.getModelPanel().getDroplist().getSelectedIndex();
+          deleteDialog.getDroplistPanel().getDroplist().getSelectedIndex();
       Integer modelId = data.modelIdList.get(selIndex);
       GWT.log("Deleting model: " + modelId);
 

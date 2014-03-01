@@ -25,7 +25,7 @@ public class RunDialogBox extends DialogBox {
    */
   public RunDialogBox() {
 
-    super(true); // autohide
+    super(false); // autohide
     this.setModal(true);
     this.setText("Run Model...");
 
@@ -39,9 +39,14 @@ public class RunDialogBox extends DialogBox {
     passwordPanel.getLabel().setText("Password:");
     choicePanel.getOkButton().setHTML("<i class='fa fa-play'></i> Run");
 
+    VerticalPanel panel = new VerticalPanel();
+    panel.setWidth("100%");
+    panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+    panel.add(hostPanel);
+    
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-    contents.add(hostPanel);
+    contents.add(panel);
     contents.add(usernamePanel);
     contents.add(passwordPanel);
     contents.add(choicePanel);
