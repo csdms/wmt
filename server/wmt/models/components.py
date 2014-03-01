@@ -114,3 +114,37 @@ def get_component_pretty_input(name, **kwds):
         format.clear_missing()
 
     return os.linesep.join(lines)
+
+
+def _path_to_hook(name, hook):
+    """Returns the full path to the module that contains *hook*
+    for component, *name*.
+    """
+    return os.path.join(site['data'], 'components', name, 'hooks',
+                        hook + '.py')
+
+
+def get_component_hooks(name):
+    """Get a dictionary of all the hooks for a component.
+    """
+    hooks = {}
+    for hook in _HOOK_NAMES:
+        hooks[hook] = get_component_hook(name, hook)
+    return hooks
+
+
+def get_component_hook(name, hook_name):
+    """Get the hook function named *hook_name*, for the component, *name*.
+    """
+    import imp
+
+    pathname = _path_to_hook(name, hook_name)
+    try:
+        hook = imp.load_source(hook_name, pathname)
+    except (IOError, ImportError):
+        hook = imp.new_module(hook_name)
+        def execute(*args):
+            pass
+        setattr(hook, 'execute', execute)
+
+    return hook
