@@ -59,7 +59,12 @@ class Format(object):
     )
 
     def GET(self, name):
-        return render.format(self.form())
+        x = web.input(defaults='false')
+        if x['defaults'].lower() == 'true':
+            mapping = comps.get_component_defaults(name)
+            return render.files(comps.get_component_formatted_input(name, **mapping))
+        else:
+            return render.format(self.form())
 
     def POST(self, name):
         form = self.form()
