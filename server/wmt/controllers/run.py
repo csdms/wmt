@@ -148,6 +148,38 @@ class Download(object):
         yield '%X\r\n%s\r\n' % (0, '')
 
 
+class DownloadBundle(object):
+    def GET(self, uuid):
+        import tempfile
+        import tarfile
+
+        x = web.input(filename=uuid + '.tar.gz', format='gz')
+
+        if x['format'] not in ['gz', 'bz2']:
+            raise ValueError('%s: unknown format' % x['format'])
+
+        web.header("Content-Disposition", "attachment; filename=%s" % x['filename'])
+        web.header('Content-type', 'application/x-gzip')
+        web.header('Transfer-encoding', 'chunked')
+
+        os.chdir(_UPLOAD_DIR)
+
+        if not os.path.isdir(uuid):
+            raise web.notfound()
+
+        with tempfile.TemporaryFile() as tmp:
+            with tarfile.open(fileobj=tmp, mode='w:' + x['format']) as tar:
+                tar.add(uuid)
+            tmp.seek(0)
+
+            while 1:
+                chunk = tmp.read(_CHUNK_SIZE)
+                if not chunk:
+                    break
+                yield '%X\r\n%s\r\n' % (len(chunk), chunk)
+        yield '%X\r\n%s\r\n' % (0, '')
+
+
 class Show(object):
     def GET(self):
         return render.status(submissions.get_submissions())
