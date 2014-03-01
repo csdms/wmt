@@ -39,6 +39,33 @@ def download_file(url):
     return dest_name
 
 
+def download_run_tarball(uuid):
+    import requests
+
+    url = os.path.join('http://csdms.colorado.edu/wmt/run/download', uuid)
+    resp = requests.get(url, stream=True)
+
+    dest_name = uuid + '.tar.gz'
+    with open(dest_name, 'wb') as fp:
+        for chunk in resp.iter_content():
+            if chunk: # filter out keep-alive new chunks
+                fp.write(chunk)
+                fp.flush()
+
+    return dest_name
+
+def upload_run_tarball(uuid):
+    import requests
+    import requests_toolbelt
+
+    url = os.path.join('http://csdms.colorado.edu/wmt/run/upload', uuid)
+    with open(uuid + '.tar.gz', 'r') as fp:
+        m = MultipartEncoder(fields={'file': (uuid + '.tar.gz', fp, 'application/x.gzip')})
+        resp = requests.post(url, data=m, headers={'Content-Type': m.content_type})
+
+    return resp
+
+
 def download_chunks(url):
     try:
         resp = urllib2.urlopen(url)
@@ -78,23 +105,28 @@ class WmtTask(object):
         try:
             os.makedirs(self.task_dir)
         except os.error:
-            #raise
             pass
 
-        os.chdir(self.task_dir)
+        os.chdir(self._wmt_dir)
 
-        dest = download_file(os.path.join(PICKUP_URL, self.id))
+        dest = download_run_tarball(self.id)
 
         with tarfile.open(dest) as tar:
             tar.extractall()
 
+        os.chdir(self.task_dir)
 
     def run(self):
-        pass
+        os.chdir(self.task_dir)
 
 
     def teardown(self):
-        pass
+        os.chdir(self._wmt_dir)
+
+        with tarfile.open(self.id + '.tar.gz') as tar:
+            tar.add(self.id)
+
+        upload_run_tarball(self.id)
 
 
     def execute(self):
