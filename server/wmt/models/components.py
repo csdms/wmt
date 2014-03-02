@@ -42,6 +42,11 @@ def get_component_params(name):
     return comp['parameters']
 
 
+def get_component_argv(name):
+    comp = get_component(name)
+    return comp['argv']
+
+
 def get_component_defaults(name):
     defaults = {}
 

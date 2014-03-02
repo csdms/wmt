@@ -45,7 +45,7 @@ def _load_table(name, db='.'):
 def _construct_component_from_db(path_to_db):
     desc = _load_table('info', db=path_to_db)
 
-    for table in ['parameters', 'uses', 'provides', 'files']:
+    for table in ['parameters', 'uses', 'provides', 'files', 'argv']:
         desc[table] = _load_table(table, db=path_to_db)
 
     return desc
