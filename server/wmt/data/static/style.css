@@ -40,10 +40,9 @@ pre
 
 body
 {
-	font-family: "FontAwesome";
-	/*font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;*/
+	font-family: "FontAwesome", Sans-Serif;
 	line-height: 1.6em;
-	font-size: 12px;
+	font-size: 14px;
 }
 
 h1
@@ -62,9 +61,8 @@ h2
 
 #hor-minimalist-a
 {
-	font-family: "FontAwesome";
-	/*font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;*/
-	font-size: 12px;
+	font-family: "FontAwesome", Sans-Serif;
+	font-size: 14px;
 	background: #fff;
 	/*margin: 45px; */
 	/*width: 480px;*/
@@ -73,7 +71,7 @@ h2
 }
 #hor-minimalist-a th
 {
-	font-size: 12px;
+	font-size: 14px;
 	font-weight: normal;
 	color: #039;
 	padding: 10px 8px;
