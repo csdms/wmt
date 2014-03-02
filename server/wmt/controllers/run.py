@@ -109,37 +109,30 @@ class New(object):
 
 class Update(object):
     form = web.form.Form(
+        web.form.Textbox('uuid',
+                         valid_uuid,
+                         submission_exists(),
+                         size=80, description='Simulation id:'),
         web.form.Textbox('status',
                          not_too_short(3),
                          not_too_long(20),
-                         size=30, description='status:'),
+                         size=80, description='status:'),
         web.form.Textbox('message',
                          not_too_long(256),
-                         size=30, description='message:'),
+                         size=80, description='message:'),
         web.form.Button('Update')
     )
 
-    def GET(self, uuid):
-        try:
-            submission = submissions.get_submission(uuid)
-        except submissions.IdError:
-            raise web.internalerror(render.error(
-"""
-The given sumbission UUID does not exist. Please see the status table for a
-list of valid submissions.
-"""
-            ))
+    def GET(self):
+        return render.update(self.form())
 
+    def POST(self):
         form = self.form()
-        form.fill(submission)
-        return render.update(submission, form)
-
-    def POST(self, uuid):
-        form = self.form()
-        submission = submissions.get_submission(uuid)
         if not form.validates():
-            return render.update(submission, form)
-        submissions.update(uuid, status=form.d.status, message=form.d.message)
+            return render.update(form)
+        submission = submissions.get_submission(form.d.uuid)
+        submissions.update(form.d.uuid, status=form.d.status,
+                           message=form.d.message)
         raise web.seeother('/run/show')
 
 
