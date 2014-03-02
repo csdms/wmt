@@ -9,7 +9,7 @@ from ..validators import (not_too_long, not_too_short, not_bad_json,
 from ..cca import rc_from_json
 from .. import run
 from ..utils.io import chunk_copy
-from ..config import logger
+from ..config import logger, site
 
 
 class Launch(object):
@@ -31,12 +31,12 @@ class Launch(object):
         web.form.Button('Launch')
     )
     def GET(self):
-        return render.stagein(self.form)
+        return render.titled_form('Launch Simulation', self.form())
 
     def POST(self):
         form = self.form()
         if not form.validates():
-            return render.stagein(form)
+            return render.titled_form('Launch Simulation', form)
 
         submissions.update(form.d.uuid,
             status='launching',
@@ -61,12 +61,12 @@ class Stage(object):
     )
 
     def GET(self):
-        return render.stagein(self.form)
+        return render.titled_form('Stage Simulation', self.form())
 
     def POST(self):
         form = self.form()
         if not form.validates():
-            return render.stagein(form)
+            return render.titled_form('Stage Simulation', form)
 
         submissions.update(form.d.uuid,
             status='staging',
@@ -94,15 +94,14 @@ class New(object):
     )
 
     def GET(self):
-        return render.stagein(self.form)
+        return render.titled_form('Create Simulation', self.form())
 
     def POST(self):
         form = self.form()
         if not form.validates():
-            return render.stagein(form)
+            return render.titled_form('Create Simulation', form))
 
         uuid = submissions.new(form.d.name, form.d.model_id)
-        #run.stagein(uuid)
 
         return uuid
 
@@ -124,12 +123,13 @@ class Update(object):
     )
 
     def GET(self):
-        return render.update(self.form())
+        return render.titled_form('Update Simulation', self.form())
 
     def POST(self):
         form = self.form()
         if not form.validates():
-            return render.update(form)
+            return render.titled_form('Update Simulation', form)
+
         submission = submissions.get_submission(form.d.uuid)
         submissions.update(form.d.uuid, status=form.d.status,
                            message=form.d.message)
@@ -170,9 +170,12 @@ class Download(object):
         web.header('Content-type', 'application/octet-stream')
         web.header('Transfer-encoding', 'chunked')
 
-        path_to_file = os.path.join(_UPLOAD_DIR, uuid, filename)
+        path_to_file = os.path.join(site['downloads'], uuid, filename)
         if not os.path.isfile(path_to_file):
-            raise web.notfound()
+            raise web.internalerror(
+"""Unable to download simulation. This is either a bad simulation UUID or
+the simulation has not yet been staged.
+""")
 
         with open(path_to_file, 'r') as fp:
             while 1:
@@ -184,27 +187,56 @@ class Download(object):
 
 
 class DownloadBundle(object):
-    def GET(self, uuid):
+    form = web.form.Form(
+        web.form.Textbox('uuid',
+                         valid_uuid,
+                         submission_exists(),
+                         size=80, description='Simulation id:'),
+        web.form.Textbox('filename',
+                         not_too_long(256),
+                         size=80, description='filename:'),
+        web.form.Button('Download')
+    )
+    def GET(self):
+        return render.titled_form('Download Tarball', self.form())
+
+    def POST(self):
         import tempfile
         import tarfile
 
-        x = web.input(filename=uuid + '.tar.gz', format='gz')
+        form = self.form()
+        if not form.validates():
+            raise web.internalerror(
+"""Unable to download simulation. This is either a bad simulation UUID or
+the simulation has not yet been staged.
+""")
 
-        if x['format'] not in ['gz', 'bz2']:
+        filename = form.d.filename
+        if len(filename) == 0:
+            filename = form.d.uuid
+
+        if not filename.endswith('.tar.gz'):
+            filename = filename + '.tar.gz'
+
+        format = 'gz'
+        if format not in ['gz', 'bz2']:
             raise ValueError('%s: unknown format' % x['format'])
 
-        web.header("Content-Disposition", "attachment; filename=%s" % x['filename'])
+        web.header("Content-Disposition", "attachment; filename=%s" % filename)
         web.header('Content-type', 'application/x-gzip')
         web.header('Transfer-encoding', 'chunked')
 
-        os.chdir(_UPLOAD_DIR)
+        os.chdir(site['downloads'])
 
-        if not os.path.isdir(uuid):
-            raise web.notfound()
+        if not os.path.isdir(form.d.uuid):
+            raise web.internalerror(
+"""Unable to download simulation. This is either a bad simulation UUID or
+the simulation has not yet been staged.
+""")
 
         with tempfile.TemporaryFile() as tmp:
-            with tarfile.open(fileobj=tmp, mode='w:' + x['format']) as tar:
-                tar.add(uuid)
+            with tarfile.open(fileobj=tmp, mode='w:' + format) as tar:
+                tar.add(form.d.uuid)
             tmp.seek(0)
 
             while 1:
