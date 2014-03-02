@@ -42,8 +42,12 @@ def download_file(url):
 def download_run_tarball(uuid):
     import requests
 
-    url = os.path.join('http://csdms.colorado.edu/wmt/run/download', uuid)
-    resp = requests.get(url, stream=True)
+    url = os.path.join('http://csdms.colorado.edu/wmt/run/download')
+    resp = requests.post(url, stream=True,
+                         data={
+                             'uuid': uuid,
+                             'filename': '',
+                         })
 
     dest_name = uuid + '.tar.gz'
     with open(dest_name, 'wb') as fp:
@@ -54,9 +58,10 @@ def download_run_tarball(uuid):
 
     return dest_name
 
+
 def upload_run_tarball(uuid):
     import requests
-    import requests_toolbelt
+    from requests_toolbelt import MultipartEncoder
 
     url = os.path.join('http://csdms.colorado.edu/wmt/run/upload', uuid)
     with open(uuid + '.tar.gz', 'r') as fp:
@@ -123,7 +128,7 @@ class WmtTask(object):
     def teardown(self):
         os.chdir(self._wmt_dir)
 
-        with tarfile.open(self.id + '.tar.gz') as tar:
+        with tarfile.open(self.id + '.tar.gz', mode='w:gz') as tar:
             tar.add(self.id)
 
         upload_run_tarball(self.id)
