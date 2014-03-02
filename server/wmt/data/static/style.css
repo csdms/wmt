@@ -1,3 +1,28 @@
+.info, .success, .warning, .error, .validation {
+  border: 1px solid;
+  padding:5px 5px 5px 5px;
+}
+
+.info {
+  color: #00529B;
+  background-color: #BDE5F8;
+}
+
+.success {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+}
+
+.warning {
+  color: #9F6000;
+  background-color: #FEEFB3;
+}
+
+.error {
+  color: #D8000C;
+  background-color: #FFBABA;
+}
+
 pre
 {
   border:2px solid #6678b1;
@@ -15,7 +40,8 @@ pre
 
 body
 {
-	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-family: "FontAwesome";
+	/*font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;*/
 	line-height: 1.6em;
 	font-size: 12px;
 }
@@ -36,7 +62,8 @@ h2
 
 #hor-minimalist-a
 {
-	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-family: "FontAwesome";
+	/*font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;*/
 	font-size: 12px;
 	background: #fff;
 	/*margin: 45px; */
