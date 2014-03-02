@@ -4,6 +4,9 @@ import json
 from ..config import palette, site, logger
 
 
+_HOOK_NAMES = set(['pre-stage', 'post-stage'])
+
+
 class Error(Exception):
     pass
 
@@ -120,7 +123,7 @@ def _path_to_hook(name, hook):
     """Returns the full path to the module that contains *hook*
     for component, *name*.
     """
-    return os.path.join(site['data'], 'components', name, 'hooks',
+    return os.path.join(site['db'], 'components', name, 'hooks',
                         hook + '.py')
 
 
