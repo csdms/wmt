@@ -21,8 +21,8 @@ class Stage(object):
     form = web.form.Form(
         web.form.Textbox('uuid',
                          valid_uuid,
-                         #submission_exists(),
-                         size=30, description='Simulation id:'),
+                         submission_exists(),
+                         size=80, description='Simulation id:'),
         web.form.Button('Stage')
     )
 
@@ -42,7 +42,7 @@ class Stage(object):
 
         submissions.update(form.d.uuid,
             status='staged',
-            message='model simulation is staged and ready to be launched')
+            message='ready for launch')
         raise web.seeother('/run/show')
 
 

@@ -63,7 +63,8 @@ def get_submissions():
 
 
 def get_uuids():
-    return db.select('submission', what='uuid')
+    entries = db.select('submission', what='uuid')
+    return [entry['uuid'] for entry in entries]
 
 
 def get_submission(uuid):
