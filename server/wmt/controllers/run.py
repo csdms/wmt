@@ -13,8 +13,42 @@ from ..config import logger
 
 
 class Launch(object):
-    def POST(self, uuid):
-        pass
+    form = web.form.Form(
+        web.form.Textbox('uuid',
+                         valid_uuid,
+                         submission_exists(),
+                         size=80, description='Simulation id:'),
+        web.form.Textbox('host',
+                         not_too_long(512),
+                         size=30, description='host:'),
+        web.form.Textbox('username',
+                         not_too_long(512),
+                         size=30, description='username:'),
+        web.form.Password('password',
+                          web.form.notnull,
+                          size=30,
+                          description='password:'),
+        web.form.Button('Launch')
+    )
+    def GET(self):
+        return render.stagein(self.form)
+
+    def POST(self):
+        form = self.form()
+        if not form.validates():
+            return render.stagein(form)
+
+        submissions.update(form.d.uuid,
+            status='launching',
+            message='launching the model simulation...')
+
+        submissions.launch(form.d.uuid, form.d.username, form.d.host,
+                           password=form.d.password)
+
+        submissions.update(form.d.uuid,
+            status='launched',
+            message='simulation has launched')
+        raise web.seeother('/run/show')
 
 
 class Stage(object):
