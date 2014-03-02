@@ -25,6 +25,7 @@ URLS = (
     '/components/defaults/(\w+)', 'wmt.controllers.components.Defaults',
     '/components/input/(\w+)', 'wmt.controllers.components.Input',
     '/components/format/(\w+)', 'wmt.controllers.components.Format',
+    '/components/command/(\w+)', 'wmt.controllers.components.Command',
 
     '/models/new', 'wmt.controllers.models.New',
     '/models/open/(\d+)', 'wmt.controllers.models.Open',

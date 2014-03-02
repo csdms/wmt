@@ -81,3 +81,14 @@ class Defaults(object):
         except KeyError:
             raise web.notfound()
 
+
+class Command(object):
+    def GET(self, name):
+        x = web.input(format='json')
+        try:
+            if x['format'] == 'json':
+                return json.dumps(comps.get_component_argv(name))
+            else:
+                return render.code('> ' + ' '.join(comps.get_component_argv(name)))
+        except KeyError:
+            raise web.notfound()
