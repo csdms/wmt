@@ -7,5 +7,6 @@ create table submission (
   created       text,
   updated       text,
   message       text,
-  owner         text
+  owner         text,
+  stage_dir     text
 );
