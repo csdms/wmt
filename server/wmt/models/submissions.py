@@ -8,6 +8,7 @@ from ..config import submission_db as db
 from ..config import site
 from ..utils.io import write_readme, execute_in_dir
 from ..utils.time import current_time_as_string
+from ..utils.ssh import launch_command_on_host
 
 
 class Error(Exception):
@@ -112,8 +113,13 @@ def _create_stage_dir(uuid):
     })
 
 
-def launch(uuid):
-    pass
+def launch(uuid, username, host, password=None):
+    script = os.path.join(os.path.dirname(__file__), '..', 'scripts',
+                          'launch.py')
+    resp = launch_command_on_host(username, host, script, password=password,
+                                 args=[uuid, ])
+
+    return resp
 
 
 def stage(uuid):
