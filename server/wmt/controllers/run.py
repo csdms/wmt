@@ -99,7 +99,7 @@ class New(object):
     def POST(self):
         form = self.form()
         if not form.validates():
-            return render.titled_form('Create Simulation', form))
+            return render.titled_form('Create Simulation', form)
 
         uuid = submissions.new(form.d.name, form.d.model_id)
 
