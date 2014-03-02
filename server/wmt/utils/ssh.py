@@ -3,7 +3,7 @@ import getpass
 import os
 
 
-def launch_command_on_host(username, host, script, password=''):
+def launch_command_on_host(username, host, script, password='', args=[]):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
@@ -19,8 +19,8 @@ def launch_command_on_host(username, host, script, password=''):
     sftp.put(script, os.path.basename(script))
 
     stdin, stdout, stderr = ssh.exec_command(
-        ' '.join(['python',
-                  os.path.join('.', os.path.basename(script))]))
+        ' '.join(
+            ['python', os.path.join('.', os.path.basename(script))] + args))
 
     return {
         'stdout': ''.join(stdout.readlines()),
