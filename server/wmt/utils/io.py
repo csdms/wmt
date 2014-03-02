@@ -1,6 +1,32 @@
+from __future__ import print_function
+
 import os
 import requests
 from requests_toolbelt import MultipartEncoder
+
+
+class execute_in_dir(object):
+    def __init__(self, dir):
+        self._init_dir = os.getcwd()
+        self._exe_dir = dir
+
+    def __enter__(self):
+        os.chdir(self._exe_dir)
+        return os.getcwd()
+
+    def __exit__(self, type, value, traceback):
+        os.chdir(self._init_dir)
+        return isinstance(value, OSError)
+
+
+def write_key_value_pairs(filelike, **kwds):
+    for item in kwds.items():
+        print('%s: %s' % item, file=filelike, end=os.linesep)
+
+
+def write_readme(prefix, mode='w', params={}):
+    with open(os.path.join(prefix, 'README'), mode) as readme:
+        write_key_value_pairs(readme, **params)
 
 
 def _copy_a_chunk(src_fp, dest_fp, chunk_size, checksum=None):
