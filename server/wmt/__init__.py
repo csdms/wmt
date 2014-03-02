@@ -41,7 +41,7 @@ URLS = (
 
     '/run/new', 'wmt.controllers.run.New',
     '/run/show', 'wmt.controllers.run.Show',
-    '/run/stage/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Stage',
+    '/run/stage', 'wmt.controllers.run.Stage',
     '/run/update/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Update',
     '/run/upload/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Upload',
     '/run/download/(%s)/(.+)' % _UUID_REGEX, 'wmt.controllers.run.Download',

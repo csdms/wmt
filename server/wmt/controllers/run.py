@@ -4,7 +4,8 @@ import json
 
 from ..models import (models, users, submissions)
 from ..render import render
-from ..validators import (not_too_long, not_too_short, not_bad_json)
+from ..validators import (not_too_long, not_too_short, not_bad_json,
+                          valid_uuid, submission_exists)
 from ..cca import rc_from_json
 from .. import run
 from ..utils.io import chunk_copy
@@ -18,36 +19,31 @@ class Launch(object):
 
 class Stage(object):
     form = web.form.Form(
-        web.form.Textbox('name',
-                         not_too_short(3),
-                         not_too_long(20),
-                         size=30, description='Simulation name:'),
-        web.form.Textarea('json',
-                          not_bad_json,
-                          rows=40, cols=80, description=None),
+        web.form.Textbox('uuid',
+                         valid_uuid,
+                         #submission_exists(),
+                         size=30, description='Simulation id:'),
         web.form.Button('Stage')
     )
 
-    def GET(self, uuid):
-        submission = submissions.get_submission(uuid)
-        model_id = submission.model_id
-        try:
-            model = models.get_model(model_id)
-        except (ValueError, models.BadIdError):
-            return render.stagein(self.form())
-        else:
-            self.form.fill(model)
-            return render.stagein(self.form)
+    def GET(self):
+        return render.stagein(self.form)
 
-    def POST(self, uuid):
+    def POST(self):
         form = self.form()
         if not form.validates():
             return render.stagein(form)
 
-        run.stagein(uuid)
-        dropoff_dir = run.stageout(uuid)
+        submissions.update(form.d.uuid,
+            status='staging',
+            message='staging the model simulation...')
 
-        return dropoff_dir
+        submissions.stage(form.d.uuid)
+
+        submissions.update(form.d.uuid,
+            status='staged',
+            message='model simulation is staged and ready to be launched')
+        raise web.seeother('/run/show')
 
 
 class New(object):
@@ -71,7 +67,10 @@ class New(object):
         if not form.validates():
             return render.stagein(form)
 
-        return submissions.new(form.d.name, form.d.model_id)
+        uuid = submissions.new(form.d.name, form.d.model_id)
+        #run.stagein(uuid)
+
+        return uuid
 
 
 class Update(object):
@@ -87,7 +86,16 @@ class Update(object):
     )
 
     def GET(self, uuid):
-        submission = submissions.get_submission(uuid)
+        try:
+            submission = submissions.get_submission(uuid)
+        except submissions.IdError:
+            raise web.internalerror(render.error(
+"""
+The given sumbission UUID does not exist. Please see the status table for a
+list of valid submissions.
+"""
+            ))
+
         form = self.form()
         form.fill(submission)
         return render.update(submission, form)
