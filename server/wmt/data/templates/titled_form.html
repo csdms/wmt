@@ -1,0 +1,17 @@
+$def with (title, form)
+
+<html>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/wmt/static/style.css" />
+<head>
+</head>
+<body>
+
+<h1>$title</h1>
+
+<form action='' method='post'>
+  $:form.render()
+</form>
+
+</body>
+</html>
