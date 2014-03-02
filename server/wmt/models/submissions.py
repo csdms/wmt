@@ -59,7 +59,8 @@ def update(uuid, **kwds):
 
 
 def get_submissions():
-    return db.select('submission', order='id DESC')
+    return db.select('submission', order='updated DESC')
+    #return db.select('submission', order='id DESC')
 
 
 def get_uuids():
