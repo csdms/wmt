@@ -67,6 +67,13 @@ public class PortTest {
   }
   
   /**
+   * Test method for {@link Port#Port(edu.colorado.csdms.wmt.client.data.PortJSO)}.
+   */
+  public void testPortJSOCtr() {
+    // TODO Complete with GWTTestCase
+  }
+  
+  /**
    * Test method for {@link edu.colorado.mpiper.client.Port#getId()}.
    */
   @Test
@@ -79,8 +86,9 @@ public class PortTest {
    */
   @Test
   public void testSetId() {
-    port.setId("foo");
-    assertEquals("foo", port.getId());
+    String newId = "foo";
+    port.setId(newId);
+    assertEquals(newId, port.getId());
   }
 
   /**

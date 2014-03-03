@@ -56,6 +56,14 @@ public class ParameterTest {
   }
 
   /**
+   * Test method for {@link Parameter#Parameter(edu.colorado.csdms.wmt.client.data.ParameterJSO)}.
+   */
+  @Test
+  public void testParameterJSOCtr() {
+    // TODO Complete with GWTTestCase
+  }  
+  
+  /**
    * Test method for {@link edu.colorado.csdms.wmt.client.data.Parameter#getKey()}.
    */
   @Test
