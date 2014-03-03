@@ -40,31 +40,11 @@ public class ValueJSO extends JavaScriptObject {
   }-*/;
 
   /**
-   * A JSNI method to set the "default" attribute of a ValueJSO.
+   * A generic JSNI method to set the "default" attribute of a ValueJSO.
    * 
-   * @param value the value to set, a String
+   * @param value the value to set, of type String, Integer or Double
    */
-  public final native void setDefault(String value) /*-{
-    // "default" is reserved in JavaScript; use hash notation to access.
-    this["default"] = value;
-  }-*/;
-
-  /**
-   * A JSNI method to set the "default" attribute of a ValueJSO.
-   * 
-   * @param value the value to set, an Integer
-   */
-  public final native void setDefault(Integer value) /*-{
-    // "default" is reserved in JavaScript; use hash notation to access.
-    this["default"] = value;
-  }-*/;
-
-  /**
-   * A JSNI method to set the "default" attribute of a ValueJSO.
-   * 
-   * @param value the value to set, a Double
-   */
-  public final native void setDefault(Double value) /*-{
+  public final native <T> void setDefault(T value) /*-{
     // "default" is reserved in JavaScript; use hash notation to access.
     this["default"] = value;
   }-*/;
