@@ -1,5 +1,5 @@
 /**
- * 
+ * <License>
  */
 package edu.colorado.csdms.wmt;
 
@@ -37,7 +37,7 @@ public class PortTest {
   @Test
   public void testPortZeroArgCtr() {
     Port port0 = new Port();
-    assertNotEquals(null, port0);
+    assertNotNull(port0);
     assertNull(port0.getId());
     assertFalse(port0.isRequired());
   }
@@ -48,7 +48,7 @@ public class PortTest {
   @Test
   public void testPortOneArgCtr() {
     Port port1 = new Port(id);
-    assertNotEquals(null, port1);
+    assertNotNull(port1);
     assertEquals(id, port1.getId());
     assertFalse(port1.isRequired());
   }
