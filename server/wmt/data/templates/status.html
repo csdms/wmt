@@ -10,9 +10,8 @@ $def with (submission)
 <h1>$submission.uuid</h1>
 
 $if submission.status == 'error':
-  <div class="error"="font-family: monospace;">
+  <div class="bad">
 $else:
-  <div class="success" style="font-family: monospace;">
-$submission.message
+  <div class="good">
+<pre>$submission.message</pre>
 </div>
-

@@ -23,6 +23,33 @@
   background-color: #FFBABA;
 }
 
+.good, .bad {
+  /*border:2px solid #6678b1;*/
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-left-style: none;
+  border-right-style: none;
+	/*color: #039;*/
+  /*background:#FAFAFA;*/
+	font-family: "FontAwesome", monospace;
+  overflow:auto;
+  font-size:14px;
+  padding:0.5em;
+}
+
+.good
+{
+  border:2px solid #4F8A10;
+  color: #4F8A10;
+  background: #DFF2BF;
+}
+
+.bad {
+  border:2px solid #D8000C;
+  color: #D8000C;
+  background: #FFBABA;
+}
+/*
 pre
 {
   border:2px solid #6678b1;
@@ -37,6 +64,7 @@ pre
   font-size:14px;
   padding:0.5em;
 }
+*/
 
 body
 {
