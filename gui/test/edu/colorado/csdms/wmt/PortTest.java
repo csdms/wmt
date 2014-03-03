@@ -20,11 +20,13 @@ public class PortTest {
 
   private Port port;
   private String id;
+  private Boolean requires;
   
   @Before
   public void setUp() throws Exception {
     id = "test";
-    port = new Port(id, true);
+    requires = true;
+    port = new Port(id, requires);
   }
 
   @After
@@ -53,6 +55,17 @@ public class PortTest {
     assertFalse(port1.isRequired());
   }
 
+  /**
+   * Test method for {@link Port#Port(String, Boolean)}.
+   */
+  @Test
+  public void testPortTwoArgCtr() {
+    Port port2 = new Port(id, requires);
+    assertNotNull(port2);
+    assertEquals(id, port2.getId());
+    assertTrue(port2.isRequired());
+  }
+  
   /**
    * Test method for {@link edu.colorado.mpiper.client.Port#getId()}.
    */
