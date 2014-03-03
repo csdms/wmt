@@ -7,6 +7,8 @@ import tarfile
 PICKUP_URL = 'http://csdms.colorado.edu/pub/users/wmt/'
 CHUNK_SIZE_IN_BYTES = 10240
 
+SERVER = 'http://csdms.colorado.edu/wmt'
+
 
 def get_filename_from_header(header):
     try:
@@ -42,7 +44,7 @@ def download_file(url):
 def download_run_tarball(uuid):
     import requests
 
-    url = os.path.join('http://csdms.colorado.edu/wmt/run/download')
+    url = os.path.join(SERVER, 'run/download')
     resp = requests.post(url, stream=True,
                          data={
                              'uuid': uuid,
@@ -57,6 +59,19 @@ def download_run_tarball(uuid):
                 fp.flush()
 
     return dest_name
+
+
+def update_run_status(uuid, status, message):
+    import requests
+
+    url = os.path.join(SERVER, 'run/update')
+    resp = requests.post(url, data={
+        'uuid': uuid,
+        'status': status,
+        'message': message,
+    })
+
+    return resp
 
 
 def upload_run_tarball(uuid):
@@ -107,6 +122,8 @@ class WmtTask(object):
         return self._task_dir
 
     def setup(self):
+        update_run_status(self.id, 'preparing', 'preparing for simulation')
+
         try:
             os.makedirs(self.task_dir)
         except os.error:
@@ -114,12 +131,16 @@ class WmtTask(object):
 
         os.chdir(self._wmt_dir)
 
+        update_run_status(self.id, 'downloading', 'downloading simulation data')
         dest = download_run_tarball(self.id)
 
+        update_run_status(self.id, 'unpacking', 'unpacking simulation data')
         with tarfile.open(dest) as tar:
             tar.extractall()
 
         os.chdir(self.task_dir)
+
+        update_run_status(self.id, 'setup', 'setup complete')
 
     def run(self):
         os.chdir(self.task_dir)
@@ -138,7 +159,6 @@ class WmtTask(object):
         self.setup()
         self.run()
         self.teardown()
-
 
 
 def launch(id):

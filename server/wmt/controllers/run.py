@@ -277,4 +277,4 @@ class Status(object):
 
 class Show(object):
     def GET(self):
-        return render.status(submissions.get_submissions())
+        return render.statustable(submissions.get_submissions())
