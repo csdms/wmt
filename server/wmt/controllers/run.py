@@ -47,14 +47,14 @@ class Launch(object):
 
         if len(resp['stderr']) > 0:
             message = resp['stderr']
-            #raise web.internalerror(render.error(resp['stderr']))
+            status = 'error'
         else:
+            status = 'launched'
             message = 'simulation has launched'
 
         submissions.update(form.d.uuid,
-            status='launched',
+            status=status,
             message=message)
-            #message='simulation has launched')
 
         raise web.seeother('/run/show')
 
