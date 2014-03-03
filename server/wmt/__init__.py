@@ -42,6 +42,7 @@ URLS = (
 
     '/run/new', 'wmt.controllers.run.New',
     '/run/show', 'wmt.controllers.run.Show',
+    '/run/status', 'wmt.controllers.run.Status',
     '/run/stage', 'wmt.controllers.run.Stage',
     '/run/launch', 'wmt.controllers.run.Launch',
     '/run/update', 'wmt.controllers.run.Update',

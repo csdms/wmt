@@ -77,8 +77,8 @@ def get_submission(uuid):
 
 
 def get_status(uuid):
-    return db.select('submission', what='status', where='uuid=$uuid',
-                     vars=locals())[0]['status']
+    return db.select('submission', where='uuid=$uuid',
+                     vars=locals())[0]
 
 
 def get_model_id(uuid):

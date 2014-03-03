@@ -42,12 +42,20 @@ class Launch(object):
             status='launching',
             message='launching the model simulation...')
 
-        submissions.launch(form.d.uuid, form.d.username, form.d.host,
-                           password=form.d.password)
+        resp = submissions.launch(form.d.uuid, form.d.username, form.d.host,
+                                  password=form.d.password)
+
+        if len(resp['stderr']) > 0:
+            message = resp['stderr']
+            #raise web.internalerror(render.error(resp['stderr']))
+        else:
+            message = 'simulation has launched'
 
         submissions.update(form.d.uuid,
             status='launched',
-            message='simulation has launched')
+            message=message)
+            #message='simulation has launched')
+
         raise web.seeother('/run/show')
 
 
@@ -245,6 +253,26 @@ the simulation has not yet been staged.
                     break
                 yield '%X\r\n%s\r\n' % (len(chunk), chunk)
         yield '%X\r\n%s\r\n' % (0, '')
+
+
+class Status(object):
+    form = web.form.Form(
+        web.form.Textbox('uuid',
+                         valid_uuid,
+                         submission_exists(),
+                         size=80, description='Simulation id:'),
+        web.form.Button('Submit'),
+    )
+    def GET(self):
+        return render.titled_form('Get Status', self.form())
+
+    def POST(self):
+        form = self.form()
+        if not form.validates():
+            return render.titled_form('Get Status', form)
+
+        status = submissions.get_status(form.d.uuid)
+        return render.code(status['message'])
 
 
 class Show(object):
