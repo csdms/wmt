@@ -272,7 +272,7 @@ class Status(object):
             return render.titled_form('Get Status', form)
 
         status = submissions.get_status(form.d.uuid)
-        return render.code(status['message'])
+        return render.status(status)
 
 
 class Show(object):

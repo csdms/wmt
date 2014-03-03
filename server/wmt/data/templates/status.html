@@ -1,0 +1,18 @@
+$def with (submission)
+
+<html>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/wmt/static/style.css" />
+<head>
+</head>
+
+<body>
+<h1>$submission.uuid</h1>
+
+$if submission.status == 'error':
+  <div class="error"="font-family: monospace;">
+$else:
+  <div class="success" style="font-family: monospace;">
+$submission.message
+</div>
+
