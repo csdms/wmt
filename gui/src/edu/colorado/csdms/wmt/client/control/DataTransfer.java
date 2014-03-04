@@ -127,22 +127,8 @@ public class DataTransfer {
   }-*/;
 
   /**
-   * A worker that returns a HashMap of entries used in a HTTP query string.
-   * 
-   * @param modelName the name of the model, a String
-   * @param jsonStr the stringified JSON describing the model
-   */
-  private static HashMap<String, String> makeQueryEntries(String modelName,
-      String jsonStr) {
-    HashMap<String, String> m = new HashMap<String, String>();
-    m.put("name", modelName);
-    m.put("json", jsonStr);
-    return m;
-  }
-
-  /**
    * A worker that builds a HTTP query string from a HashMap of key-value
-   * entries (e.g., returned from {@link #makeQueryEntries(String, String)}).
+   * entries.
    * 
    * @param entries a HashMap of key-value pairs
    * @return the query, as a String
@@ -308,8 +294,9 @@ public class DataTransfer {
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 
-    HashMap<String, String> entries =
-        makeQueryEntries(data.getModel().getName(), data.getModelString());
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("name", data.getModel().getName());
+    entries.put("json", data.getModelString());
     String queryString = buildQueryString(entries);
 
     try {
@@ -348,6 +335,12 @@ public class DataTransfer {
     }
   }
 
+  /**
+   * Makes an asynchronous HTTP POST request to initialize a model run on the
+   * selected server.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
   public static void newModelRun(DataManager data) {
 
     String url = DataURL.newModelRun(data);
