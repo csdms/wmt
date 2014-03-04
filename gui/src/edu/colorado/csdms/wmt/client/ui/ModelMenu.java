@@ -362,7 +362,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     @Override
     public void onClick(ClickEvent event) {
       ModelMenu.this.hide();
-      Window.open(DataURL.runStatus(), "_blank", null);
+      Window.open(DataURL.showModelRun(), "_blank", null);
     }
   }
 

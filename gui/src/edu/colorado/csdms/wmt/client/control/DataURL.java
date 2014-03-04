@@ -184,9 +184,10 @@ public class DataURL {
   }
   
   /**
-   * Returns the URL for API page displaying the status of current model runs.
+   * Returns the URL for API page displaying the status of all current model
+   * runs on the server.
    */
-  public static String runStatus() {
+  public static String showModelRun() {
     return RUN_SHOW_URL;
   }
 }
