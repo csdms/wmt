@@ -5,12 +5,12 @@ import shutil
 def execute(env):
     this_dir = os.path.abspath(os.path.dirname(__file__))
 
-    os.mkdir('INPUT')
-    os.mkdir('OUTPUT')
+    os.mkdir('HYDRO_IN')
+    os.mkdir('HYDRO_OUTPUT')
 
-    os.rename('hydrotrend.in.tmpl', 'HYDRO.IN')
-    shutil.move('HYDRO.IN', 'INPUT')
+    os.rename('hydrotrend.in', 'HYDRO.IN')
+    shutil.move('HYDRO.IN', 'HYDRO_IN')
 
     shutil.copy(
         os.path.join(this_dir, '..', 'files', env['hypsometry_file']),
-        os.path.join('INPUT', 'HYDRO0.HYPS'))
+        os.path.join('HYDRO_IN', 'HYDRO0.HYPS'))
