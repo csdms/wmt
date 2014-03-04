@@ -12,7 +12,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    url = os.path.join('http://csdms.colorado.edu/wmt/run/upload', args.uuid, args.file)
+    #url = os.path.join('http://csdms.colorado.edu/wmt/run/upload', args.uuid, args.file)
+    url = os.path.join('http://csdms.colorado.edu/wmt/run/upload')
     resp = upload_large_file(args.file, url)
 
     print resp.text

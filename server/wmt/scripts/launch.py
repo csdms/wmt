@@ -15,6 +15,15 @@ class Error(Exception):
     pass
 
 
+class UploadError(Error):
+    def __init__(self, code, file):
+        self._code = code
+        self._file = file
+
+    def __str__(self):
+        return '%s: unable to upload (error %d)' % (self._file, self._code)
+
+
 class ComponentRunError(Error):
     def __init__(self, msg):
         self._msg = msg
@@ -91,12 +100,17 @@ def upload_run_tarball(uuid):
     import requests
     from requests_toolbelt import MultipartEncoder
 
-    url = os.path.join('http://csdms.colorado.edu/wmt/run/upload', uuid)
-    with open(uuid + '.tar.gz', 'r') as fp:
-        m = MultipartEncoder(fields={'file': (uuid + '.tar.gz', fp, 'application/x.gzip')})
+    tarball = uuid + '.tar.gz'
+
+    url = os.path.join('http://csdms.colorado.edu/wmt/run/upload')
+    with open(tarball, 'r') as fp:
+        m = MultipartEncoder(fields={'file': (tarball, fp, 'application/x-gzip')})
         resp = requests.post(url, data=m, headers={'Content-Type': m.content_type})
 
-    return resp
+    if resp.status_code != 200:
+        raise UploadError(resp.status_code, tarball)
+    else:
+        return resp
 
 
 def download_chunks(url):
@@ -221,7 +235,7 @@ def main():
 
     try:
         launch(args.id)
-    except ComponentRunError as error:
+    except Error as error:
         update_run_status(args.id, 'error', str(error))
     except Exception as error:
         update_run_status(args.id, 'error', traceback.format_exc())
