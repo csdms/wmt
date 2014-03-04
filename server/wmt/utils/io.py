@@ -55,7 +55,7 @@ def chunk_copy(src_fp, dest_fp, chunk_size=8192):
 
 def upload_large_file(filename, url):
     with open(filename, 'r') as fp:
-        m = MultipartEncoder(fields={'file': (args.file, fp, 'application/octet-stream')})
+        m = MultipartEncoder(fields={'file': (filename, fp, 'application/octet-stream')})
         resp = requests.post(url, data=m, headers={'Content-Type': m.content_type})
 
     return resp
