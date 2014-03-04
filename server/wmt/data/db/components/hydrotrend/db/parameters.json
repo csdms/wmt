@@ -45,9 +45,9 @@
       "name":"Hypsometry file",
       "description":"Basin hypsometry file",
       "value":{
-        "type":"choice",
+        "type":"file",
         "default":"waipaoa.hyps",
-        "choices":[
+        "files":[
           "danube.hyps",
           "eel.hyps",
           "ganges.hyps",
