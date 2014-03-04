@@ -45,17 +45,6 @@ class Launch(object):
         resp = submissions.launch(form.d.uuid, form.d.username, form.d.host,
                                   password=form.d.password)
 
-        if len(resp['stderr']) > 0:
-            message = resp['stderr']
-            status = 'error'
-        else:
-            status = 'launched'
-            message = 'simulation has launched'
-
-        submissions.update(form.d.uuid,
-            status=status,
-            message=message)
-
         raise web.seeother('/run/show')
 
 
@@ -125,7 +114,7 @@ class Update(object):
                          not_too_long(20),
                          size=80, description='status:'),
         web.form.Textbox('message',
-                         not_too_long(256),
+                         not_too_long(10240),
                          size=80, description='message:'),
         web.form.Button('Update')
     )
