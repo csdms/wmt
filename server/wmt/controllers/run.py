@@ -159,7 +159,7 @@ class Upload(object):
         if user_data['uuid'] is None:
             path_to_dest = os.path.join(_UPLOAD_DIR, filename)
         else:
-            path_to_dest = os.path.join(_UPLOAD_DIR, user_data['uuid'], filename)
+            path_to_dest = os.path.join(site['downloads'], user_data['uuid'], filename)
 
         with open(path_to_dest, 'w') as dest_fp:
             checksum = chunk_copy(user_data['file'].file, dest_fp,
