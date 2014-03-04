@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.colorado.csdms.wmt;
+package edu.colorado.csdms.wmt.client;
 
 import static org.junit.Assert.*;
 
@@ -43,7 +43,7 @@ public class ParameterTest {
   }
 
   /**
-   * Test method for {@link edu.colorado.csdms.wmt.client.data.Parameter#Parameter()}.
+   * Test method for {@link edu.colorado.csdms.wmt.client.client.data.Parameter#Parameter()}.
    */
   @Test
   public void testParameterZeroArgCtr() {
@@ -56,7 +56,7 @@ public class ParameterTest {
   }
 
   /**
-   * Test method for {@link Parameter#Parameter(edu.colorado.csdms.wmt.client.data.ParameterJSO)}.
+   * Test method for {@link Parameter#Parameter(edu.colorado.csdms.wmt.client.client.data.ParameterJSO)}.
    */
   @Test
   public void testParameterJSOCtr() {
@@ -64,7 +64,7 @@ public class ParameterTest {
   }  
   
   /**
-   * Test method for {@link edu.colorado.csdms.wmt.client.data.Parameter#getKey()}.
+   * Test method for {@link edu.colorado.csdms.wmt.client.client.data.Parameter#getKey()}.
    */
   @Test
   public void testGetKey() {
@@ -72,7 +72,7 @@ public class ParameterTest {
   }
 
   /**
-   * Test method for {@link edu.colorado.csdms.wmt.client.data.Parameter#setKey(java.lang.String)}.
+   * Test method for {@link edu.colorado.csdms.wmt.client.client.data.Parameter#setKey(java.lang.String)}.
    */
   @Test
   public void testSetKey() {
@@ -84,7 +84,7 @@ public class ParameterTest {
   }
 
   /**
-   * Test method for {@link edu.colorado.csdms.wmt.client.data.Parameter#getName()}.
+   * Test method for {@link edu.colorado.csdms.wmt.client.client.data.Parameter#getName()}.
    */
   @Test
   public void testGetName() {
@@ -93,7 +93,7 @@ public class ParameterTest {
 
   /**
    * Test method for
-   * {@link edu.colorado.csdms.wmt.client.data.Parameter#setName(java.lang.String)}
+   * {@link edu.colorado.csdms.wmt.client.client.data.Parameter#setName(java.lang.String)}
    * .
    */
   @Test
@@ -104,7 +104,7 @@ public class ParameterTest {
   }
 
   /**
-   * Test method for {@link edu.colorado.csdms.wmt.client.data.Parameter#getDescription()}.
+   * Test method for {@link edu.colorado.csdms.wmt.client.client.data.Parameter#getDescription()}.
    */
   @Test
   public void testGetDescription() {
@@ -112,7 +112,7 @@ public class ParameterTest {
   }
 
   /**
-   * Test method for {@link edu.colorado.csdms.wmt.client.data.Parameter#setDescription(java.lang.String)}.
+   * Test method for {@link edu.colorado.csdms.wmt.client.client.data.Parameter#setDescription(java.lang.String)}.
    */
   @Test
   public void testSetDescription() {
@@ -122,7 +122,7 @@ public class ParameterTest {
   }
 
   /**
-   * Test method for {@link edu.colorado.csdms.wmt.client.data.Parameter#getValue()}.
+   * Test method for {@link edu.colorado.csdms.wmt.client.client.data.Parameter#getValue()}.
    */
   @Test
   public void testGetValue() {
@@ -130,7 +130,7 @@ public class ParameterTest {
   }
 
   /**
-   * Test method for {@link edu.colorado.csdms.wmt.client.data.Parameter#setValue(edu.colorado.csdms.wmt.client.data.Value)}.
+   * Test method for {@link edu.colorado.csdms.wmt.client.client.data.Parameter#setValue(edu.colorado.csdms.wmt.client.client.data.Value)}.
    */
   @Test
   public void testSetValue() {

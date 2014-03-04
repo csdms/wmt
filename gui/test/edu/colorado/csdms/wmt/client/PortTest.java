@@ -1,7 +1,7 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt;
+package edu.colorado.csdms.wmt.client;
 
 import static org.junit.Assert.*;
 
@@ -67,7 +67,7 @@ public class PortTest {
   }
   
   /**
-   * Test method for {@link Port#Port(edu.colorado.csdms.wmt.client.data.PortJSO)}.
+   * Test method for {@link Port#Port(edu.colorado.csdms.wmt.client.client.data.PortJSO)}.
    */
   public void testPortJSOCtr() {
     // TODO Complete with GWTTestCase

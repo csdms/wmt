@@ -1,4 +1,4 @@
-package edu.colorado.csdms.wmt;
+package edu.colorado.csdms.wmt.client;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
