@@ -42,11 +42,13 @@ public class DataManager {
   private List<ComponentJSO> modelComponents; // "instance" components
   private String draggedComponent;
   private String selectedComponent;
+  
   private ModelJSO model;
   private ModelMetadataJSO metadata;
   private Boolean modelIsSaved = false;
   private String modelString; // stringified JSON
-
+  private String simulationId; // the uuid of a submitted run
+  
   // Experiment with public members, for convenience.
   public List<String> componentIdList;
   public List<Integer> modelIdList;
@@ -348,6 +350,22 @@ public class DataManager {
    */
   public void setModelString(String modelString) {
     this.modelString = modelString;
+  }
+
+  /**
+   * Returns the uuid of a run sumbmitted to a server.
+   */
+  public String getSimulationId() {
+    return simulationId;
+  }
+
+  /**
+   * Stores the uuid of a run submitted to a server.
+   * 
+   * @param simulationId the uuid, a String
+   */
+  public void setSimulationId(String simulationId) {
+    this.simulationId = simulationId;
   }
 
   /**
