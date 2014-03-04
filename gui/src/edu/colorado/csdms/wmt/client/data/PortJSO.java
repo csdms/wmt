@@ -20,7 +20,7 @@ public class PortJSO extends JavaScriptObject {
   }
 
   /**
-   * JSNI method to get the "id" attribute of a Port. If no port is present,
+   * JSNI method to get the "id" attribute of a port. If no port is present,
    * null is returned.
    */
   public final native String getId() /*-{
@@ -28,16 +28,34 @@ public class PortJSO extends JavaScriptObject {
   }-*/;
 
   /**
-   * JSNI method to get the "required" attribute of a Port. If this attribute is
+   * A JSNI method to set the "id" of a port.
+   * 
+   * @param id the port identifier, a String
+   */
+  public final native void setId(String id) /*-{
+		this.id = id;
+  }-*/;
+  
+  /**
+   * JSNI method to get the "required" attribute of a port. If this attribute is
    * not present, false is returned. Note that the return is a JS boolean, not a
    * J Boolean.
    */
   public final native boolean isRequired() /*-{
 		return (typeof this.required == 'undefined') ? false : this.required;
   }-*/;
+  
+  /**
+   * A JSNI method to set the "required" attribute of a port.
+   * 
+   * @param required true if port is required
+   */
+  public final native void isRequired(Boolean required) /*-{
+		this.required = required;
+  }-*/;
 
   /**
-   * A non-JSNI method for stringifying the attributes of a Port. Must be final.
+   * A non-JSNI method for stringifying the attributes of a port. Must be final.
    */
   public final Vector<String> toStringVector() {
 
