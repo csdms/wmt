@@ -47,7 +47,11 @@ public class DataManager {
   private ModelMetadataJSO metadata;
   private Boolean modelIsSaved = false;
   private String modelString; // stringified JSON
+  
   private String simulationId; // the uuid of a submitted run
+  private String hostname;
+  private String username;
+  private String password;
   
   // Experiment with public members, for convenience.
   public List<String> componentIdList;
@@ -366,6 +370,56 @@ public class DataManager {
    */
   public void setSimulationId(String simulationId) {
     this.simulationId = simulationId;
+  }
+
+  /**
+   * Returns the hostname of the machine where the user wants the model to be
+   * run.
+   */
+  public String getHostname() {
+    return hostname;
+  }
+
+  /**
+   * Stores the hostname of the machine where the user wants the model to be
+   * run.
+   * 
+   * @param hostname
+   */
+  public void setHostname(String hostname) {
+    this.hostname = hostname;
+  }
+
+  /**
+   * Returns the user's username for the host on which the model is to be run.
+   */
+  public String getUsername() {
+    return username;
+  }
+
+  /**
+   * Stores the user's username for the host on which the model is to be run.
+   * 
+   * @param username
+   */
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  /**
+   * Returns the user's password for the host on which the model is to be run.
+   */
+  public String getPassword() {
+    return password;
+  }
+
+  /**
+   * Stores the user's password for the host on which the model is to be run.
+   * 
+   * @param password
+   */
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   /**
