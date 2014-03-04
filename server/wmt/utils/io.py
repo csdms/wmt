@@ -61,6 +61,14 @@ def upload_large_file(filename, url):
     return resp
 
 
+def upload_large_file_to_stage(filename, url, uuid):
+    with open(filename, 'r') as fp:
+        m = MultipartEncoder(fields={'file': (filename, fp, 'application/octet-stream'), 'uuid': uuid})
+        resp = requests.post(url, data=m, headers={'Content-Type': m.content_type})
+
+    return resp
+
+
 def download_file(url):
     resp = requests.get(url, stream=True)
 
