@@ -16,6 +16,7 @@ import com.google.gwt.user.client.Window;
 public class DataURL {
 
   private static final String API_URL = "http://csdms.colorado.edu/wmt/";
+  private static final String SECURE_API_URL = "https://csdms.colorado.edu/wmt/";
   private static final String LOCAL_URL = GWT.getHostPageBaseURL();
 
   private static final String COMPONENT_LIST_URL = API_URL + "components/list";
@@ -31,6 +32,7 @@ public class DataURL {
   private static final String RUN_NEW_URL = API_URL + "run/new";  
   private static final String RUN_SHOW_URL = API_URL + "run/show";
   private static final String RUN_STAGE_URL = API_URL + "run/stage";
+  private static final String RUN_LAUNCH_URL = SECURE_API_URL + "run/launch";
 
   /**
    * A wrapper around Window.Location that returns the application URL in
@@ -202,6 +204,20 @@ public class DataURL {
       return LOCAL_URL + "save/saved.json";
     } else {
       return RUN_STAGE_URL;
+    }
+  }
+  
+  /**
+   * Returns the URL used to launch a model run. Note that the URL uses HTTPS
+   * because a username and password are being transferred.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String launchModelRun(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL + "save/saved.json";
+    } else {
+      return RUN_LAUNCH_URL;
     }
   }
 }

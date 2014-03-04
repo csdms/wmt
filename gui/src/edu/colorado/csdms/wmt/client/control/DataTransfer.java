@@ -341,7 +341,7 @@ public class DataTransfer {
    * 
    * @param data the DataManager object for the WMT session
    */
-  public static void newModelRun(DataManager data) {
+  public static void initModelRun(DataManager data) {
 
     String url = DataURL.newModelRun(data);
     GWT.log(url);
@@ -360,7 +360,7 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(queryString, new RunRequestCallback(data, url,
-              "new"));
+              "init"));
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
@@ -394,7 +394,39 @@ public class DataTransfer {
       Window.alert(ERR_MSG + e.getMessage());
     }
   }
-  
+
+  /**
+   * Makes an asynchronous HTTPS POST request to launch a model run on the
+   * selected server.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void launchModelRun(DataManager data) {
+
+    String url = DataURL.launchModelRun(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+    
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("uuid", data.getSimulationId());
+    entries.put("host", data.getHostname());
+    entries.put("username", data.getUsername());
+    entries.put("password", data.getPassword());
+    String queryString = buildQueryString(entries);
+    
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new RunRequestCallback(data, url,
+              "launch"));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }
+  }
+
   /**
    * A RequestCallback handler class that provides the callback for a GET
    * request of the list of available components in the WMT database. On
@@ -613,12 +645,15 @@ public class DataTransfer {
         String rtxt = response.getText();
         GWT.log(rtxt);
         
-        if (type.matches("new")) {
+        if (type.matches("init")) {
           data.setSimulationId(rtxt); // store the run's uuid
           DataTransfer.stageModelRun(data);
         }
         if (type.matches("stage")) {
-          ;
+          DataTransfer.launchModelRun(data);
+        }
+        if (type.matches("launch")) {
+          Window.alert("Success!"); // XXX Remove this.
         }
         
       } else {
