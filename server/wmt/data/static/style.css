@@ -39,13 +39,13 @@
 
 .good
 {
-  border:2px solid #4F8A10;
+  border:1px solid #4F8A10;
   color: #4F8A10;
   background: #DFF2BF;
 }
 
 .bad {
-  border:2px solid #D8000C;
+  border:1px solid #D8000C;
   color: #D8000C;
   background: #FFBABA;
 }
