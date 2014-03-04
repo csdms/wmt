@@ -2,12 +2,25 @@ import os
 import urlparse
 import urllib2
 import tarfile
+import subprocess
 
 
 PICKUP_URL = 'http://csdms.colorado.edu/pub/users/wmt/'
 CHUNK_SIZE_IN_BYTES = 10240
 
 SERVER = 'http://csdms.colorado.edu/wmt'
+
+
+class Error(Exception):
+    pass
+
+
+class ComponentRunError(Error):
+    def __init__(self, msg):
+        self._msg = msg
+
+    def __str__(self):
+        return self._msg
 
 
 def get_filename_from_header(header):
@@ -107,10 +120,20 @@ def download_chunks(url):
     return os.path.abspath(dest_name)
 
 
+def generate_error_message(name, error):
+    try:
+        with open('_%s.err' % name, 'r') as err:
+            stderr = err.read()
+    except IOError:
+        stderr = ''
+
+    return '\n'.join([str(error), stderr, ])
+
+
 class WmtTask(object):
     def __init__(self, id):
         self._id = id
-        self._wmt_dir = os.path.abspath('.wmt')
+        self._wmt_dir = os.path.expanduser('~/.wmt')
         self._task_dir = os.path.join(self._wmt_dir, id)
 
     @property
@@ -143,16 +166,38 @@ class WmtTask(object):
         update_run_status(self.id, 'setup', 'setup complete')
 
     def run(self):
+        update_run_status(self.id, 'running', 'running simulation')
+
         os.chdir(self.task_dir)
+
+        for item in os.listdir('.'):
+            if os.path.isdir(item):
+                os.chdir(item)
+                if os.path.isfile('run.sh'):
+                    update_run_status(self.id, 'running', '%s: running simulation' % item)
+                    (stdout, stderr) = (open('_%s.out' % item, 'w'), open('_%s.err' % item, 'w'))
+                    try:
+                        subprocess.check_call(['/bin/bash', 'run.sh'], stdout=stdout, stderr=stderr)
+                    except subprocess.CalledProcessError as error:
+                        raise ComponentRunError(generate_error_message(item, error))
+                    finally:
+                        stdout.close()
+                        stderr.close()
+                os.chdir('..')
+
+        update_run_status(self.id, 'ran', 'finished simulation')
 
 
     def teardown(self):
+        update_run_status(self.id, 'packaging', 'packing simulation output')
         os.chdir(self._wmt_dir)
 
         with tarfile.open(self.id + '.tar.gz', mode='w:gz') as tar:
             tar.add(self.id)
 
+        update_run_status(self.id, 'uploading', 'uploading simulation')
         upload_run_tarball(self.id)
+        update_run_status(self.id, 'uploaded', 'simulation is now available')
 
 
     def execute(self):
@@ -167,12 +212,19 @@ def launch(id):
 
 
 def main():
+    import traceback
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument('id', help='Run ID')
     args = parser.parse_args()
 
-    launch(args.id)
+    try:
+        launch(args.id)
+    except ComponentRunError as error:
+        update_run_status(args.id, 'error', str(error))
+    except Exception as error:
+        update_run_status(args.id, 'error', traceback.format_exc())
 
 
 if __name__ == '__main__':
