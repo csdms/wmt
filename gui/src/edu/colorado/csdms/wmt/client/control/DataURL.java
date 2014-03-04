@@ -28,6 +28,7 @@ public class DataURL {
   private static final String MODEL_EDIT_URL = API_URL + "models/edit/";
   private static final String MODEL_DELETE_URL = API_URL + "models/delete/";
 
+  private static final String RUN_NEW_URL = API_URL + "run/new";  
   private static final String RUN_SHOW_URL = API_URL + "run/show";
 
   /**
@@ -169,6 +170,19 @@ public class DataURL {
     }
   }
 
+  /**
+   * Returns the URL used to create a new model run.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String newModelRun(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL + "save/saved.json";
+    } else {
+      return RUN_NEW_URL;
+    }
+  }
+  
   /**
    * Returns the URL for API page displaying the status of current model runs.
    */

@@ -348,6 +348,31 @@ public class DataTransfer {
     }
   }
 
+  public static void newModelRun(DataManager data) {
+
+    String url = DataURL.newModelRun(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+    
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("name", data.getModel().getName());
+    entries.put("description", "A model submitted from the WMT GUI."); // XXX
+    entries.put("model_id", ((Integer)data.getMetadata().getId()).toString());
+    String queryString = buildQueryString(entries);
+    
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new RunRequestCallback(data, url,
+              "new"));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }
+  }
+  
   /**
    * A RequestCallback handler class that provides the callback for a GET
    * request of the list of available components in the WMT database. On
@@ -530,6 +555,40 @@ public class DataTransfer {
         if (type.matches("delete")) {
           DataTransfer.getModelList(data);
         }
+      } else {
+        String msg =
+            "The URL '" + url + "' did not give an 'OK' response. "
+                + "Response code: " + response.getStatusCode();
+        Window.alert(msg);
+      }
+    }
+
+    @Override
+    public void onError(Request request, Throwable exception) {
+      Window.alert(ERR_MSG + exception.getMessage());
+    }
+  }
+  
+  /**
+   * TODO
+   */
+  public static class RunRequestCallback implements RequestCallback {
+    
+    private DataManager data;
+    private String url;
+    private String type;
+    
+    public RunRequestCallback(DataManager data, String url, String type) {
+      this.data = data;
+      this.url = url;
+      this.type = type;
+    }
+    
+    @Override
+    public void onResponseReceived(Request request, Response response) {
+      if (Response.SC_OK == response.getStatusCode()) {
+        String rtxt = response.getText();
+        Window.alert(rtxt);
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "

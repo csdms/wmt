@@ -338,7 +338,7 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       // TODO This should be configured.
       String hosts[] =
-          {"beach.colorado.edu", "river.colorado.edu", "localhost"};
+          {"beach.colorado.edu"};
       for (int i = 0; i < hosts.length; i++) {
         runDialog.getHostPanel().getDroplist().addItem(hosts[i]);
       }
@@ -470,11 +470,14 @@ public class ModelMenu extends DecoratedPopupPanel {
     }
   }  
 
+  /**
+   * TODO
+   */
   public class RunOkHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
       runDialog.hide();
-      Window.alert("Run!");
+      DataTransfer.newModelRun(data);
     }
   }
 
