@@ -8,7 +8,7 @@ from ..config import submission_db as db
 from ..config import site
 from ..utils.io import write_readme, execute_in_dir
 from ..utils.time import current_time_as_string
-from ..utils.ssh import launch_command_on_host
+from ..utils.ssh import launch_cmt_on_host
 
 
 class Error(Exception):
@@ -116,8 +116,7 @@ def _create_stage_dir(uuid):
 def launch(uuid, username, host, password=None):
     script = os.path.join(os.path.dirname(__file__), '..', 'scripts',
                           'launch.py')
-    resp = launch_command_on_host(username, host, script, password=password,
-                                 args=[uuid, ])
+    resp = launch_cmt_on_host(uuid, host, username, password=password)
 
     return resp
 
@@ -133,12 +132,17 @@ def stage(uuid):
 
 
 def _component_stagein(component):
+    name = component['class'].lower()
+
     files = components.get_component_formatted_input(
-        component['class'].lower(), **component['parameters'])
+        name, **component['parameters'])
 
     for (filename, contents) in files.items():
         with open(filename, 'w') as f:
             f.write(contents)
+
+    with open('run.sh', 'w') as f:
+        f.write(' '.join(components.get_component_argv(name)))
 
 
 def stage_component(prefix, component):
