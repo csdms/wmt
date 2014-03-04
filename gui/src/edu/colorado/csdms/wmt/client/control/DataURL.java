@@ -30,6 +30,7 @@ public class DataURL {
 
   private static final String RUN_NEW_URL = API_URL + "run/new";  
   private static final String RUN_SHOW_URL = API_URL + "run/show";
+  private static final String RUN_STAGE_URL = API_URL + "run/stage";
 
   /**
    * A wrapper around Window.Location that returns the application URL in
@@ -189,5 +190,18 @@ public class DataURL {
    */
   public static String showModelRun() {
     return RUN_SHOW_URL;
+  }
+
+  /**
+   * Returns the URL used to stage a model run.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String stageModelRun(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL + "save/saved.json";
+    } else {
+      return RUN_STAGE_URL;
+    }
   }
 }

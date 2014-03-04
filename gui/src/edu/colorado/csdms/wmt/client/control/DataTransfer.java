@@ -367,6 +367,35 @@ public class DataTransfer {
   }
   
   /**
+   * Makes an asynchronous HTTP POST request to stage a model run on the
+   * selected server.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void stageModelRun(DataManager data) {
+
+    String url = DataURL.stageModelRun(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+    
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("uuid", data.getSimulationId());
+    String queryString = buildQueryString(entries);
+    
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new RunRequestCallback(data, url,
+              "stage"));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }
+  }
+  
+  /**
    * A RequestCallback handler class that provides the callback for a GET
    * request of the list of available components in the WMT database. On
    * success, the list of component ids are stored in the {@link DataManager}
@@ -580,8 +609,18 @@ public class DataTransfer {
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
+        
         String rtxt = response.getText();
-        Window.alert(rtxt);
+        GWT.log(rtxt);
+        
+        if (type.matches("new")) {
+          data.setSimulationId(rtxt); // store the run's uuid
+          DataTransfer.stageModelRun(data);
+        }
+        if (type.matches("stage")) {
+          ;
+        }
+        
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "
