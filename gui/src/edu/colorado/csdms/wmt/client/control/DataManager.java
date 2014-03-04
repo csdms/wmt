@@ -1,7 +1,7 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.ui;
+package edu.colorado.csdms.wmt.client.control;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,9 +15,13 @@ import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
-import edu.colorado.csdms.wmt.client.data.DataTransfer;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
+import edu.colorado.csdms.wmt.client.ui.ComponentList;
+import edu.colorado.csdms.wmt.client.ui.ModelCell;
+import edu.colorado.csdms.wmt.client.ui.ModelTree;
+import edu.colorado.csdms.wmt.client.ui.ParameterTable;
+import edu.colorado.csdms.wmt.client.ui.Perspective;
 
 /**
  * A class for storing and sharing data, as well as the state of UI elements,

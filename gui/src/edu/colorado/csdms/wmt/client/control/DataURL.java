@@ -1,12 +1,10 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.data;
+package edu.colorado.csdms.wmt.client.control;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
-
-import edu.colorado.csdms.wmt.client.ui.DataManager;
 
 /**
  * A class defining static methods that return URLs for accessing components

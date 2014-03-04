@@ -1,7 +1,7 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.data;
+package edu.colorado.csdms.wmt.client.control;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -16,7 +16,11 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
 
-import edu.colorado.csdms.wmt.client.ui.DataManager;
+import edu.colorado.csdms.wmt.client.data.ComponentJSO;
+import edu.colorado.csdms.wmt.client.data.ComponentListJSO;
+import edu.colorado.csdms.wmt.client.data.ModelJSO;
+import edu.colorado.csdms.wmt.client.data.ModelListJSO;
+import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 
 /**
  * A class that defines static methods for accessing, modifying and deleting,
@@ -106,7 +110,7 @@ public class DataTransfer {
 				if (obj[i] == null || typeof obj[i] != "object")
 					copy[i] = obj[i];
 				else
-					copy[i] = @edu.colorado.csdms.wmt.client.data.DataTransfer::copyImpl(Lcom/google/gwt/core/client/JavaScriptObject;)(obj[i]);
+					copy[i] = @edu.colorado.csdms.wmt.client.control.DataTransfer::copyImpl(Lcom/google/gwt/core/client/JavaScriptObject;)(obj[i]);
 			}
 		} else {
 			copy = {};
@@ -115,7 +119,7 @@ public class DataTransfer {
 					if (obj[attr] == null || typeof obj[attr] != "object")
 						copy[attr] = obj[attr];
 					else
-						copy[attr] = @edu.colorado.csdms.wmt.client.data.DataTransfer::copyImpl(Lcom/google/gwt/core/client/JavaScriptObject;)(obj[attr]);
+						copy[attr] = @edu.colorado.csdms.wmt.client.control.DataTransfer::copyImpl(Lcom/google/gwt/core/client/JavaScriptObject;)(obj[attr]);
 				}
 			}
 		}

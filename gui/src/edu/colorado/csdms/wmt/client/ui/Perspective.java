@@ -16,6 +16,8 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 
+import edu.colorado.csdms.wmt.client.control.DataManager;
+
 /**
  * Defines the initial layout of views (a perspective, in Eclipse parlance)
  * for a WMT instance in a browser window. The Perspective holds four views,

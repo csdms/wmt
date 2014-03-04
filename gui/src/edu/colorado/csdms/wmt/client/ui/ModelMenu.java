@@ -16,8 +16,9 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 
-import edu.colorado.csdms.wmt.client.data.DataTransfer;
-import edu.colorado.csdms.wmt.client.data.DataURL;
+import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.control.DataTransfer;
+import edu.colorado.csdms.wmt.client.control.DataURL;
 
 /**
  * Encapsulates a menu for operations on Models -- e.g., New, Open, Close and
