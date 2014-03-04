@@ -163,20 +163,21 @@ class Database(SiteSubFolder):
                 clobber=True)
         chown_folder_and_files(self.prefix, 'nobody', 'nobody')
 
-        src_path, dst_path = (
-            os.path.join(src_dir, 'components'),
-            os.path.join(self.prefix, 'components')
-        )
+        for dir in ['components', 'hosts', ]:
+            src_path, dst_path = (
+                os.path.join(src_dir, dir),
+                os.path.join(self.prefix, dir)
+            )
 
-        try:
-            shutil.rmtree(dst_path)
-        except OSError:
-            print '%s: unable to remove directory tree' % dst_path
+            try:
+                shutil.rmtree(dst_path)
+            except OSError:
+                print '%s: unable to remove directory tree' % dst_path
 
-        try:
-            shutil.copytree(src_path, dst_path)
-        except OSError:
-            print '%s: unable to copy tree' % dst_path
+            try:
+                shutil.copytree(src_path, dst_path)
+            except OSError:
+                print '%s: unable to copy tree' % dst_path
 
 
 class Bin(SiteSubFolder):
