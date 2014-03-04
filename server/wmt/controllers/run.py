@@ -137,26 +137,33 @@ _UPLOAD_DIR = '/data/ftp/pub/users/wmt'
 _CHUNK_SIZE = 8192
 
 class Upload(object):
-    def GET(self, uuid):
+    def GET(self):
         return """<html><head></head><body>
 <form method="POST" enctype="multipart/form-data" action="">
 <input type="file" name="file"/>
+<input type="text" name="uuid"/>
+<input type="text" name="filename"/>
 <br/>
 <input type="submit"/>
 </form>
 </body></html>"""
 
-    def POST(self, uuid, filename):
-        user_data = web.input(file={})
+    def POST(self):
+        user_data = web.input(file={}, uuid=None, filename=None)
 
-        path_to_dest = os.path.join(_UPLOAD_DIR, uuid, user_data['file'].filename)
+        if user_data['filename'] is None:
+            filename = user_data['file'].filename
+        else:
+            filename = user_data['filename']
 
-        import hashlib
-        checksum = hashlib.md5()
+        if user_data['uuid'] is None:
+            path_to_dest = os.path.join(_UPLOAD_DIR, filename)
+        else:
+            path_to_dest = os.path.join(_UPLOAD_DIR, user_data['uuid'], filename)
 
         with open(path_to_dest, 'w') as dest_fp:
-            chunk_copy(user_data['file'].file, dest_fp,
-                       chunk_size=_CHUNK_SIZE, checksum=checksum)
+            checksum = chunk_copy(user_data['file'].file, dest_fp,
+                                  chunk_size=_CHUNK_SIZE)
 
         return json.dumps({'checksum': checksum.hexdigest()})
 
