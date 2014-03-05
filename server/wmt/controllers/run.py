@@ -11,6 +11,23 @@ from .. import run
 from ..utils.io import chunk_copy
 from ..config import logger, site
 
+import threading
+
+
+def launch_simulation(uuid, username, host, password):
+    resp = submissions.launch(uuid, username, host, password=password)
+
+    if resp['status_code'] == 200:
+        return
+    elif resp['status_code'] == 401:
+        submissions.update(uuid,
+            status='error', message='authentication error of %s' % host)
+    else:
+        submissions.update(
+            uuid,
+            status='error',
+            message='unexpected error launching simulation on %s' % host)
+
 
 class Launch(object):
     form = web.form.Form(
@@ -42,15 +59,15 @@ class Launch(object):
             status='launching',
             message='launching the model simulation...')
 
-        resp = submissions.launch(form.d.uuid, form.d.username, form.d.host,
-                                  password=form.d.password)
+        args = (form.d.uuid, form.d.username, form.d.host, form.d.password)
+        thread = threading.Thread(target=launch_simulation, args=args)
+        thread.start()
 
-        if resp['status_code'] == 200:
-            raise web.seeother('/run/show')
-        elif resp['status_code'] == 401:
-            raise web.internalerror("authentication failed for %s" % form.d.host)
-        else:
-            raise web.internalerror("unexpected error launching simulation")
+        return json.dumps({
+            'uuid': form.d.uuid,
+            'username': form.d.username,
+            'host': form.d.host,
+        })
 
 
 class Stage(object):
