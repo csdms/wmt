@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import paramiko
 import getpass
 import os
@@ -19,9 +21,7 @@ def open_connection_to_host(host, username, password=None, onerror='raise'):
         else:
             ssh.connect(host, username=username, password=getpass.getpass())
 
-    sftp = ssh.open_sftp()
-
-    return (ssh, sftp)
+    return ssh
 
 
 def make_wmt_prefix(ssh, remote_path):
@@ -33,16 +33,27 @@ def copy_launch_file(sftp, local_path, remote_path):
     try:
         sftp.put(local_path, os.path.join(remote_path, filename))
     except IOError as error:
+        raise
         raise ValueError(' -> '.join([local_path, os.path.join(remote_path, filename)]))
 
 
-def execute_launch_command(ssh, remote_path, uuid):
-    cd_to_path = 'cd %s' % remote_path
-    run_script = '/usr/bin/env -i /bin/bash ./launch.sh %s' % uuid
+def execute_launch_command(ssh, wmt_prefix, uuid):
+    wmt_execute = os.path.join(wmt_prefix, 'bin', 'wmt-execute.sh')
+    run_command = '/usr/bin/env -i /bin/bash %s %s' % (wmt_execute, uuid)
 
-    stdin, stdout, stderr = ssh.exec_command(cd_to_path + ' && ' + run_script + ' &')
+    stdin, stdout, stderr = ssh.exec_command(run_command)
 
     return (stdin, stdout, stderr)
+
+
+def get_host_wmt_prefix(host):
+    import json
+    path_to_info = os.path.join(site['db'], 'hosts', host, 'db', 'info.json')
+
+    with open(path_to_info, 'r') as fp:
+        info = json.loads(fp.read())
+
+    return info['wmt_prefix']
 
 
 def get_host_launch_files(host):
@@ -54,7 +65,7 @@ def get_host_launch_files(host):
 
 def launch_cmt_on_host(uuid, host, username, password=None, args=[]):
     try:
-        (ssh, sftp) = open_connection_to_host(host, username, password=password)
+        ssh = open_connection_to_host(host, username, password=password)
     except paramiko.AuthenticationException:
         resp = {
             'status_code': 401,
@@ -66,16 +77,16 @@ def launch_cmt_on_host(uuid, host, username, password=None, args=[]):
 
         make_wmt_prefix(ssh, remote_path)
 
-        for file in get_host_launch_files(host):
-            copy_launch_file(sftp, file, remote_path)
-
-        (_, stdout, stderr) = execute_launch_command(ssh, remote_path, uuid)
+        prefix = get_host_wmt_prefix(host)
+        (_, stdout, stderr) = execute_launch_command(ssh, prefix, uuid)
 
         resp = {
             'status_code': 200,
             'stdout': ''.join(stdout.readlines()),
             'stderr': ''.join(stderr.readlines()),
         }
+    finally:
+        ssh.close()
 
     return resp
 
