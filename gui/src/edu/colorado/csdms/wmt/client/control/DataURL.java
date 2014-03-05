@@ -1,12 +1,10 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.data;
+package edu.colorado.csdms.wmt.client.control;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
-
-import edu.colorado.csdms.wmt.client.ui.DataManager;
 
 /**
  * A class defining static methods that return URLs for accessing components
@@ -18,6 +16,7 @@ import edu.colorado.csdms.wmt.client.ui.DataManager;
 public class DataURL {
 
   private static final String API_URL = "http://csdms.colorado.edu/wmt/";
+  private static final String SECURE_API_URL = "https://csdms.colorado.edu/wmt/";
   private static final String LOCAL_URL = GWT.getHostPageBaseURL();
 
   private static final String COMPONENT_LIST_URL = API_URL + "components/list";
@@ -30,7 +29,10 @@ public class DataURL {
   private static final String MODEL_EDIT_URL = API_URL + "models/edit/";
   private static final String MODEL_DELETE_URL = API_URL + "models/delete/";
 
+  private static final String RUN_NEW_URL = API_URL + "run/new";  
   private static final String RUN_SHOW_URL = API_URL + "run/show";
+  private static final String RUN_STAGE_URL = API_URL + "run/stage";
+  private static final String RUN_LAUNCH_URL = SECURE_API_URL + "run/launch";
 
   /**
    * A wrapper around Window.Location that returns the application URL in
@@ -172,9 +174,50 @@ public class DataURL {
   }
 
   /**
-   * Returns the URL for API page displaying the status of current model runs.
+   * Returns the URL used to create a new model run.
+   * 
+   * @param data the DataManager object for the WMT session
    */
-  public static String runStatus() {
+  public static String newModelRun(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL + "save/saved.json";
+    } else {
+      return RUN_NEW_URL;
+    }
+  }
+  
+  /**
+   * Returns the URL for API page displaying the status of all current model
+   * runs on the server.
+   */
+  public static String showModelRun() {
     return RUN_SHOW_URL;
+  }
+
+  /**
+   * Returns the URL used to stage a model run.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String stageModelRun(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL + "save/saved.json";
+    } else {
+      return RUN_STAGE_URL;
+    }
+  }
+  
+  /**
+   * Returns the URL used to launch a model run. Note that the URL uses HTTPS
+   * because a username and password are being transferred.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String launchModelRun(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL + "save/saved.json";
+    } else {
+      return RUN_LAUNCH_URL;
+    }
   }
 }

@@ -9,8 +9,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
-import edu.colorado.csdms.wmt.client.data.DataTransfer;
-import edu.colorado.csdms.wmt.client.ui.DataManager;
+import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.ui.Perspective;
 
 /**

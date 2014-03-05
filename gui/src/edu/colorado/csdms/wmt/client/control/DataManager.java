@@ -1,7 +1,7 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.ui;
+package edu.colorado.csdms.wmt.client.control;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,9 +15,13 @@ import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
-import edu.colorado.csdms.wmt.client.data.DataTransfer;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
+import edu.colorado.csdms.wmt.client.ui.ComponentList;
+import edu.colorado.csdms.wmt.client.ui.ModelCell;
+import edu.colorado.csdms.wmt.client.ui.ModelTree;
+import edu.colorado.csdms.wmt.client.ui.ParameterTable;
+import edu.colorado.csdms.wmt.client.ui.Perspective;
 
 /**
  * A class for storing and sharing data, as well as the state of UI elements,
@@ -38,11 +42,17 @@ public class DataManager {
   private List<ComponentJSO> modelComponents; // "instance" components
   private String draggedComponent;
   private String selectedComponent;
+  
   private ModelJSO model;
   private ModelMetadataJSO metadata;
   private Boolean modelIsSaved = false;
   private String modelString; // stringified JSON
-
+  
+  private String simulationId; // the uuid of a submitted run
+  private String hostname;
+  private String username;
+  private String password;
+  
   // Experiment with public members, for convenience.
   public List<String> componentIdList;
   public List<Integer> modelIdList;
@@ -344,6 +354,72 @@ public class DataManager {
    */
   public void setModelString(String modelString) {
     this.modelString = modelString;
+  }
+
+  /**
+   * Returns the uuid of a run sumbmitted to a server.
+   */
+  public String getSimulationId() {
+    return simulationId;
+  }
+
+  /**
+   * Stores the uuid of a run submitted to a server.
+   * 
+   * @param simulationId the uuid, a String
+   */
+  public void setSimulationId(String simulationId) {
+    this.simulationId = simulationId;
+  }
+
+  /**
+   * Returns the hostname of the machine where the user wants the model to be
+   * run.
+   */
+  public String getHostname() {
+    return hostname;
+  }
+
+  /**
+   * Stores the hostname of the machine where the user wants the model to be
+   * run.
+   * 
+   * @param hostname
+   */
+  public void setHostname(String hostname) {
+    this.hostname = hostname;
+  }
+
+  /**
+   * Returns the user's username for the host on which the model is to be run.
+   */
+  public String getUsername() {
+    return username;
+  }
+
+  /**
+   * Stores the user's username for the host on which the model is to be run.
+   * 
+   * @param username
+   */
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  /**
+   * Returns the user's password for the host on which the model is to be run.
+   */
+  public String getPassword() {
+    return password;
+  }
+
+  /**
+   * Stores the user's password for the host on which the model is to be run.
+   * 
+   * @param password
+   */
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   /**

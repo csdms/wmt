@@ -16,8 +16,9 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 
-import edu.colorado.csdms.wmt.client.data.DataTransfer;
-import edu.colorado.csdms.wmt.client.data.DataURL;
+import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.control.DataTransfer;
+import edu.colorado.csdms.wmt.client.control.DataURL;
 
 /**
  * Encapsulates a menu for operations on Models -- e.g., New, Open, Close and
@@ -337,7 +338,7 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       // TODO This should be configured.
       String hosts[] =
-          {"beach.colorado.edu", "river.colorado.edu", "localhost"};
+          {"beach.colorado.edu"};
       for (int i = 0; i < hosts.length; i++) {
         runDialog.getHostPanel().getDroplist().addItem(hosts[i]);
       }
@@ -361,7 +362,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     @Override
     public void onClick(ClickEvent event) {
       ModelMenu.this.hide();
-      Window.open(DataURL.runStatus(), "_blank", null);
+      Window.open(DataURL.showModelRun(), "_blank", null);
     }
   }
 
@@ -469,11 +470,37 @@ public class ModelMenu extends DecoratedPopupPanel {
     }
   }  
 
+  /**
+   * Handles click on the "Run" button in the dialog that appears when the
+   * "Run Model..." button is clicked in the ModelMenu. Initializes a model
+   * run with a call to {@link DataTransfer#initModelRun(DataManager)}.
+   */
   public class RunOkHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
+      
       runDialog.hide();
-      Window.alert("Run!");
+
+      // Get host.
+      Integer selIndex =
+          runDialog.getHostPanel().getDroplist().getSelectedIndex();
+      String hostName =
+          runDialog.getHostPanel().getDroplist().getItemText(selIndex);
+      data.setHostname(hostName);
+      GWT.log(data.getHostname());
+      
+      // Get username.
+      String userName = runDialog.getUsernamePanel().getField();
+      data.setUsername(userName);
+      GWT.log(data.getUsername());
+
+      // Get password.
+      String password = runDialog.getPasswordPanel().getField();
+      data.setPassword(password);
+      GWT.log(data.getPassword());
+
+      // Initialize the model run.
+      DataTransfer.initModelRun(data);
     }
   }
 

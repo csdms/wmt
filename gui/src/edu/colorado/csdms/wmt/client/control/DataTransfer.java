@@ -1,7 +1,7 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.data;
+package edu.colorado.csdms.wmt.client.control;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -16,7 +16,11 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
 
-import edu.colorado.csdms.wmt.client.ui.DataManager;
+import edu.colorado.csdms.wmt.client.data.ComponentJSO;
+import edu.colorado.csdms.wmt.client.data.ComponentListJSO;
+import edu.colorado.csdms.wmt.client.data.ModelJSO;
+import edu.colorado.csdms.wmt.client.data.ModelListJSO;
+import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 
 /**
  * A class that defines static methods for accessing, modifying and deleting,
@@ -106,7 +110,7 @@ public class DataTransfer {
 				if (obj[i] == null || typeof obj[i] != "object")
 					copy[i] = obj[i];
 				else
-					copy[i] = @edu.colorado.csdms.wmt.client.data.DataTransfer::copyImpl(Lcom/google/gwt/core/client/JavaScriptObject;)(obj[i]);
+					copy[i] = @edu.colorado.csdms.wmt.client.control.DataTransfer::copyImpl(Lcom/google/gwt/core/client/JavaScriptObject;)(obj[i]);
 			}
 		} else {
 			copy = {};
@@ -115,7 +119,7 @@ public class DataTransfer {
 					if (obj[attr] == null || typeof obj[attr] != "object")
 						copy[attr] = obj[attr];
 					else
-						copy[attr] = @edu.colorado.csdms.wmt.client.data.DataTransfer::copyImpl(Lcom/google/gwt/core/client/JavaScriptObject;)(obj[attr]);
+						copy[attr] = @edu.colorado.csdms.wmt.client.control.DataTransfer::copyImpl(Lcom/google/gwt/core/client/JavaScriptObject;)(obj[attr]);
 				}
 			}
 		}
@@ -123,22 +127,8 @@ public class DataTransfer {
   }-*/;
 
   /**
-   * A worker that returns a HashMap of entries used in a HTTP query string.
-   * 
-   * @param modelName the name of the model, a String
-   * @param jsonStr the stringified JSON describing the model
-   */
-  private static HashMap<String, String> makeQueryEntries(String modelName,
-      String jsonStr) {
-    HashMap<String, String> m = new HashMap<String, String>();
-    m.put("name", modelName);
-    m.put("json", jsonStr);
-    return m;
-  }
-
-  /**
    * A worker that builds a HTTP query string from a HashMap of key-value
-   * entries (e.g., returned from {@link #makeQueryEntries(String, String)}).
+   * entries.
    * 
    * @param entries a HashMap of key-value pairs
    * @return the query, as a String
@@ -304,8 +294,9 @@ public class DataTransfer {
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 
-    HashMap<String, String> entries =
-        makeQueryEntries(data.getModel().getName(), data.getModelString());
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("name", data.getModel().getName());
+    entries.put("json", data.getModelString());
     String queryString = buildQueryString(entries);
 
     try {
@@ -339,6 +330,101 @@ public class DataTransfer {
       Request request =
           builder.sendRequest(null, new ModelRequestCallback(data, url,
               "delete"));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
+   * Makes an asynchronous HTTP POST request to initialize a model run on the
+   * selected server.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void initModelRun(DataManager data) {
+
+    String url = DataURL.newModelRun(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+    
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("name", data.getModel().getName());
+    entries.put("description", "A model submitted from the WMT GUI."); // XXX
+    entries.put("model_id", ((Integer)data.getMetadata().getId()).toString());
+    String queryString = buildQueryString(entries);
+    Window.alert("Init URL = " + url + "; Init query = " + queryString);
+    
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new RunRequestCallback(data, url,
+              "init"));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }
+  }
+  
+  /**
+   * Makes an asynchronous HTTP POST request to stage a model run on the
+   * selected server.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void stageModelRun(DataManager data) {
+
+    String url = DataURL.stageModelRun(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+    
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("uuid", data.getSimulationId());
+    String queryString = buildQueryString(entries);
+    Window.alert("Stage URL = " + url + "; Stage query = " + queryString);
+    
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new RunRequestCallback(data, url,
+              "stage"));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
+   * Makes an asynchronous HTTPS POST request to launch a model run on the
+   * selected server.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void launchModelRun(DataManager data) {
+
+    String url = DataURL.launchModelRun(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+    
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("uuid", data.getSimulationId());
+    entries.put("host", data.getHostname());
+    entries.put("username", data.getUsername());
+    entries.put("password", data.getPassword());
+    String queryString = buildQueryString(entries);
+    Window.alert("Launch URL = " + url + "; Launch query = " + queryString);
+    
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new RunRequestCallback(data, url,
+              "launch"));
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
@@ -526,6 +612,55 @@ public class DataTransfer {
         if (type.matches("delete")) {
           DataTransfer.getModelList(data);
         }
+      } else {
+        String msg =
+            "The URL '" + url + "' did not give an 'OK' response. "
+                + "Response code: " + response.getStatusCode();
+        Window.alert(msg);
+      }
+    }
+
+    @Override
+    public void onError(Request request, Throwable exception) {
+      Window.alert(ERR_MSG + exception.getMessage());
+    }
+  }
+  
+  /**
+   * TODO
+   */
+  public static class RunRequestCallback implements RequestCallback {
+    
+    private DataManager data;
+    private String url;
+    private String type;
+    
+    public RunRequestCallback(DataManager data, String url, String type) {
+      this.data = data;
+      this.url = url;
+      this.type = type;
+    }
+    
+    @Override
+    public void onResponseReceived(Request request, Response response) {
+      if (Response.SC_OK == response.getStatusCode()) {
+        
+        String rtxt = response.getText();
+        GWT.log(rtxt);
+        
+        if (type.matches("init")) {
+          data.setSimulationId(rtxt); // store the run's uuid
+          Window.alert("Run uuid = " + rtxt);
+          DataTransfer.stageModelRun(data);
+        }
+        if (type.matches("stage")) {
+          Window.alert("Stage successful");
+          DataTransfer.launchModelRun(data);
+        }
+        if (type.matches("launch")) {
+          Window.alert("Success!"); // XXX Remove this.
+        }
+        
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "
