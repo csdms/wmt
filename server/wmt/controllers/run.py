@@ -45,7 +45,12 @@ class Launch(object):
         resp = submissions.launch(form.d.uuid, form.d.username, form.d.host,
                                   password=form.d.password)
 
-        raise web.seeother('/run/show')
+        if resp['status_code'] == 200:
+            raise web.seeother('/run/show')
+        elif resp['status_code'] == 401:
+            raise web.internalerror("authentication failed for %s" % form.d.host)
+        else:
+            raise web.internalerror("unexpected error launching simulation")
 
 
 class Stage(object):

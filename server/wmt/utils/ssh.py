@@ -5,14 +5,19 @@ import os
 from ..config import site
 
 
-def open_connection_to_host(host, username, password=None):
+def open_connection_to_host(host, username, password=None, onerror='raise'):
+    assert(onerror in ['raise', 'prompt'])
+
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
     try:
         ssh.connect(host, username=username, password=password)
     except paramiko.AuthenticationException:
-        ssh.connect(host, username=username, password=getpass.getpass())
+        if onerror == 'raise':
+            raise
+        else:
+            ssh.connect(host, username=username, password=getpass.getpass())
 
     sftp = ssh.open_sftp()
 
@@ -48,21 +53,31 @@ def get_host_launch_files(host):
 
 
 def launch_cmt_on_host(uuid, host, username, password=None, args=[]):
-    (ssh, sftp) = open_connection_to_host(host, username, password=password)
+    try:
+        (ssh, sftp) = open_connection_to_host(host, username, password=password)
+    except paramiko.AuthenticationException:
+        resp = {
+            'status_code': 401,
+            'stdout': '',
+            'stderr': '',
+        }
+    else:
+        remote_path = os.path.join('.wmt', uuid)
 
-    remote_path = os.path.join('.wmt', uuid)
+        make_wmt_prefix(ssh, remote_path)
 
-    make_wmt_prefix(ssh, remote_path)
+        for file in get_host_launch_files(host):
+            copy_launch_file(sftp, file, remote_path)
 
-    for file in get_host_launch_files(host):
-        copy_launch_file(sftp, file, remote_path)
+        (_, stdout, stderr) = execute_launch_command(ssh, remote_path, uuid)
 
-    (_, stdout, stderr) = execute_launch_command(ssh, remote_path, uuid)
+        resp = {
+            'status_code': 200,
+            'stdout': ''.join(stdout.readlines()),
+            'stderr': ''.join(stderr.readlines()),
+        }
 
-    return {
-        'stdout': ''.join(stdout.readlines()),
-        'stderr': ''.join(stderr.readlines()),
-    }
+    return resp
 
 
 def launch_command_on_host(username, host, script, password='', args=[]):
