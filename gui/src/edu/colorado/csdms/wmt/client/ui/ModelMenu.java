@@ -471,13 +471,36 @@ public class ModelMenu extends DecoratedPopupPanel {
   }  
 
   /**
-   * TODO
+   * Handles click on the "Run" button in the dialog that appears when the
+   * "Run Model..." button is clicked in the ModelMenu. Initializes a model
+   * run with a call to {@link DataTransfer#initModelRun(DataManager)}.
    */
   public class RunOkHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
+      
       runDialog.hide();
-      DataTransfer.newModelRun(data);
+
+      // Get host.
+      Integer selIndex =
+          runDialog.getHostPanel().getDroplist().getSelectedIndex();
+      String hostName =
+          runDialog.getHostPanel().getDroplist().getItemText(selIndex);
+      data.setHostname(hostName);
+      GWT.log(data.getHostname());
+      
+      // Get username.
+      String userName = runDialog.getUsernamePanel().getField();
+      data.setUsername(userName);
+      GWT.log(data.getUsername());
+
+      // Get password.
+      String password = runDialog.getPasswordPanel().getField();
+      data.setPassword(password);
+      GWT.log(data.getPassword());
+
+      // Initialize the model run.
+      DataTransfer.initModelRun(data);
     }
   }
 
