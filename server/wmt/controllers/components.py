@@ -55,14 +55,22 @@ class Format(object):
         web.form.Textarea('json',
                           not_too_long(4096),
                           rows=40, cols=80, description=None),
+        web.form.Textbox('format', size=40, description="Format"),
         web.form.Button('Submit')
     )
 
     def GET(self, name):
-        x = web.input(defaults='false')
+        x = web.input(defaults='false', format='html')
         if x['defaults'].lower() == 'true':
             mapping = comps.get_component_defaults(name)
-            return render.files(comps.get_component_formatted_input(name, **mapping))
+            if x['format'].lower() == 'html':
+                return render.files(comps.get_component_formatted_input(name, **mapping))
+            elif x['format'].lower() == 'json':
+                return json.dumps(mapping)
+            elif x['format'].lower() == 'text':
+                files = comps.get_component_formatted_input(name, **mapping)
+                return '\n'.join([
+                    '>>> start: {0}\n{1}\n<<< end: {0}\n'.format(item) for item in files.items()])
         else:
             return render.format(self.form())
 
