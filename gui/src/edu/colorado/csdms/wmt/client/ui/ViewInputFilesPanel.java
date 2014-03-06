@@ -19,9 +19,11 @@ public class ViewInputFilesPanel extends Grid {
 
   private String componentId;
   private String urlHTML;
-  
+  private String urlText;
+  private String urlJSON;
+
   /**
-   * Creates a new ViewInputFilesPanel with links built for the current state 
+   * Creates a new ViewInputFilesPanel with links built for the current state
    * of a model component parameter.
    * 
    * @param componentId the id of the model component, a String
@@ -34,12 +36,13 @@ public class ViewInputFilesPanel extends Grid {
     this.setCellPadding(5); // px
 
     // TODO Should use DataURL.
-    urlHTML =
-        "http://csdms.colorado.edu/wmt/components/format/" + this.componentId
-            + "?defaults=True";
+    String baseURL = "http://csdms.colorado.edu/wmt/components/format/";
+    urlHTML = baseURL + this.componentId + "?defaults=True&format=html";
+    urlText = baseURL + this.componentId + "?defaults=True&format=text";
+    urlJSON = baseURL + this.componentId + "?defaults=True&format=json";
     HTML viewHTML = new HTML("<a href='" + urlHTML + "'>HTML</a>");
-    HTML viewText = new HTML("text"); // TODO Add link.
-    HTML viewJSON = new HTML("JSON"); // TODO Add link.
+    HTML viewText = new HTML("<a href='" + urlHTML + "'>text</a>");
+    HTML viewJSON = new HTML("<a href='" + urlHTML + "'>JSON</a>");
 
     viewHTML.getElement().getStyle().setCursor(Cursor.POINTER);
     viewText.getElement().getStyle().setCursor(Cursor.POINTER);
@@ -52,17 +55,27 @@ public class ViewInputFilesPanel extends Grid {
     this.setWidget(0, 4, new HTML("|"));
     this.setWidget(0, 5, viewJSON);
 
-    /*
-     * Intercepts the click on the link in the viewHTML cell and directs it
-     * to open in another tab/window.
-     */
-    viewHTML.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        event.preventDefault();
-        Window.open(urlHTML, "viewInputFiles", null);
-      }
-    });
+    viewHTML.addClickHandler(new InterceptClickHandler(urlHTML));
+    viewText.addClickHandler(new InterceptClickHandler(urlText));
+    viewJSON.addClickHandler(new InterceptClickHandler(urlJSON));
   }
 
+  /**
+   * Intercepts the click on the link in the HTML, text or JSON cell and
+   * directs it to open in another tab/window.
+   */
+  public class InterceptClickHandler implements ClickHandler {
+
+    private String url;
+
+    public InterceptClickHandler(String url) {
+      this.url = url;
+    }
+
+    @Override
+    public void onClick(ClickEvent event) {
+      event.preventDefault();
+      Window.open(url, "viewInputFiles", null);
+    }
+  }
 }
