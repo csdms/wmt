@@ -70,7 +70,7 @@ class Format(object):
             elif x['format'].lower() == 'text':
                 files = comps.get_component_formatted_input(name, **mapping)
                 return '\n'.join([
-                    '>>> start: {0}\n{1}\n<<< end: {0}\n'.format(item) for item in files.items()])
+                    '>>> start: {0}\n{1}\n<<< end: {0}\n'.format(*item) for item in files.items()])
         else:
             return render.format(self.form())
 
