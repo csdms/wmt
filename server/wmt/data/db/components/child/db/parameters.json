@@ -88,7 +88,7 @@
     "description":"How to place points in mesh (0=uniform, 1=perturbed unif., 2=random)",
     "value":{
       "type":"choice",
-      "default":1
+      "default": 1,
       "choices": [ 0, 1, 2 ]
     }
   },
@@ -98,7 +98,7 @@
     "description":"Specify open boundary location (0=corner, 1=side, 2= 2 sides, 3=4 sides, 4=specify",
     "value":{
       "type":"choice",
-      "default":1
+      "default": 1,
       "choices": [ 0, 1, 2, 3, 4 ]
     }
   },
@@ -280,7 +280,7 @@
     "description":"Bedrock erodibility coefficient (NOTE: unknown units)",
     "value":{
       "type":"float",
-      "default":0.0005
+      "default":0.0005,
       "range":{
         "min":0.0,
         "max":10.0
@@ -294,7 +294,7 @@
     "description":"Regolith erodibility coefficient (NOTE: unknown units)",
     "value":{
       "type":"float",
-      "default":0.0005
+      "default":0.0005,
       "range":{
         "min":0.0,
         "max":10.0
@@ -308,7 +308,7 @@
     "description":"Shear stress (or stream power) coefficient (NOTE: unknown units)",
     "value":{
       "type":"float",
-      "default":1000.0
+      "default":1000.0,
       "range":{
         "min":0.0,
         "max":100000.0
