@@ -60,7 +60,7 @@ public class ViewInputFilesPanel extends Grid {
       @Override
       public void onClick(ClickEvent event) {
         event.preventDefault();
-        Window.open(urlHTML, "_blank", null);
+        Window.open(urlHTML, "viewInputFiles", null);
       }
     });
   }
