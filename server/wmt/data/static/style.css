@@ -49,8 +49,8 @@
   color: #D8000C;
   background: #FFBABA;
 }
-/*
-pre
+
+.file
 {
   border:2px solid #6678b1;
   border-top-style: solid;
@@ -64,7 +64,6 @@ pre
   font-size:14px;
   padding:0.5em;
 }
-*/
 
 body
 {

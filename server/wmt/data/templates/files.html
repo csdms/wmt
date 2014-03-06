@@ -11,8 +11,8 @@ $def with(files)
 <h1>Input Files</h1>
 $for (name, contents) in files.items():
   <h2>$name</h2>
-  <pre>
-  $contents
-  </pre>
+  <div class="file">
+    <pre>$contents</pre>
+  </div>
 
 </body></html>
