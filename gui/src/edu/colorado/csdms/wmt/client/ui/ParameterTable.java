@@ -7,6 +7,7 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.data.ParameterJSO;
@@ -51,7 +52,8 @@ public class ParameterTable extends FlexTable {
 
   /**
    * A worker that loads the ParameterTable with parameter values for the
-   * selected model component.
+   * selected model component. Displays a {@link ViewInputFilesPanel} at the 
+   * bottom of the table.
    */
   public void loadTable() {
 
@@ -90,6 +92,13 @@ public class ParameterTable extends FlexTable {
       }
       parameterIndex++;
     }
+
+    // Append links to view input files.
+    ViewInputFilesPanel viewFilesPanel = new ViewInputFilesPanel(componentId);
+    this.setWidget(parameterIndex, 0, viewFilesPanel);
+    this.getFlexCellFormatter().setColSpan(parameterIndex, 0, 2);
+    this.getFlexCellFormatter().setHorizontalAlignment(parameterIndex, 0,
+        HasHorizontalAlignment.ALIGN_CENTER);
   }
 
   /**

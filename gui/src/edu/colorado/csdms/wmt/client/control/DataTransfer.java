@@ -354,7 +354,6 @@ public class DataTransfer {
     entries.put("description", "A model submitted from the WMT GUI."); // XXX
     entries.put("model_id", ((Integer)data.getMetadata().getId()).toString());
     String queryString = buildQueryString(entries);
-    Window.alert("Init URL = " + url + "; Init query = " + queryString);
     
     try {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -384,7 +383,6 @@ public class DataTransfer {
     HashMap<String, String> entries = new HashMap<String, String>();
     entries.put("uuid", data.getSimulationId());
     String queryString = buildQueryString(entries);
-    Window.alert("Stage URL = " + url + "; Stage query = " + queryString);
     
     try {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -417,7 +415,6 @@ public class DataTransfer {
     entries.put("username", data.getUsername());
     entries.put("password", data.getPassword());
     String queryString = buildQueryString(entries);
-    Window.alert("Launch URL = " + url + "; Launch query = " + queryString);
     
     try {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -650,11 +647,9 @@ public class DataTransfer {
         
         if (type.matches("init")) {
           data.setSimulationId(rtxt); // store the run's uuid
-          Window.alert("Run uuid = " + rtxt);
           DataTransfer.stageModelRun(data);
         }
         if (type.matches("stage")) {
-          Window.alert("Stage successful");
           DataTransfer.launchModelRun(data);
         }
         if (type.matches("launch")) {
