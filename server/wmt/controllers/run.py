@@ -179,7 +179,7 @@ class Upload(object):
             filename = user_data['filename']
 
         if user_data['uuid'] is None:
-            path_to_dest = os.path.join(_UPLOAD_DIR, filename)
+            path_to_dest = os.path.join(_UPLOAD_DIR, os.path.basename(filename))
         else:
             path_to_dest = os.path.join(site['downloads'], user_data['uuid'], filename)
 
