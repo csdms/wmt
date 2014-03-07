@@ -182,7 +182,7 @@ class Upload(object):
     def POST(self):
         user_data = web.input(file={}, id=None, filename=None)
 
-        if user_data['filename'] is None:
+        if user_data['filename'] is None or len(user_data['filename']) == 0:
             filename = user_data['file'].filename
         else:
             filename = user_data['filename']
