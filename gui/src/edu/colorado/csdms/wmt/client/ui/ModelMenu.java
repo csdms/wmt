@@ -244,6 +244,8 @@ public class ModelMenu extends DecoratedPopupPanel {
    */
   private void showSaveDialogBox() {
     saveDialog = new SaveDialogBox(data.getModel().getName());
+    saveDialog.getFilePanel().setTitle(
+        "Enter a unique name for the model. No file extension is needed.");
     saveDialog.getChoicePanel().getOkButton().addClickHandler(
         new SaveOkHandler());
     saveDialog.getChoicePanel().getCancelButton().addClickHandler(
