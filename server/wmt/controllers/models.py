@@ -1,10 +1,13 @@
 import web
 import json
+import os
 
 from ..models import (models, users)
 from ..render import render
 from ..validators import (not_too_short, not_bad_json)
 from ..cca import rc_from_json
+from ..config import site
+from ..utils.io import chunk_copy
 
 
 class New(object):
@@ -168,3 +171,29 @@ class Export(object):
     def GET(self, id):
         model = models.get_model(id)
         return render.code(rc_from_json(model.json))
+
+_CHUNK_SIZE = 10240
+
+
+class Upload(object):
+    def GET(self):
+        return render.uploadform("id")
+
+    def POST(self):
+        user_data = web.input(file={}, id=None, filename=None)
+
+        if user_data['filename'] is None:
+            filename = user_data['file'].filename
+        else:
+            filename = user_data['filename']
+
+        model_upload_dir = models.get_model_upload_dir(user_data['id'])
+        path_to_dest = os.path.join(model_upload_dir, filename)
+
+        with open(path_to_dest, 'w') as dest_fp:
+            checksum = chunk_copy(user_data['file'].file, dest_fp,
+                                  chunk_size=_CHUNK_SIZE)
+
+        return json.dumps({'checksum': checksum.hexdigest()})
+
+
