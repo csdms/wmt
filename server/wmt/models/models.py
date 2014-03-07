@@ -19,12 +19,21 @@ class BadIdError(Error):
 
 
 def new_model(name, text, owner=''):
-    return db.insert('models', name=name, json=text, owner=owner,
+    id = db.insert('models', name=name, json=text, owner=owner,
                     date=web.net.httpdate(datetime.now()))
+    create_model_upload_dir(id)
+    return id
 
 
 def del_model(id):
     db.delete('models', where='id=$id', vars=locals())
+    try:
+        os.removedirs(get_model_upload_dir(id))
+    except os.error as error:
+        if error.errno == 2:
+            pass
+        else:
+            raise
 
 
 def update_model(id, name, text):
@@ -41,3 +50,12 @@ def get_model(id):
         return db.select('models', where='id=$id', vars=locals())[0]
     except IndexError:
         raise BadIdError(id)
+
+
+def get_model_upload_dir(id):
+    return os.path.join(site['uploads'], str(id))
+
+
+def create_model_upload_dir(id):
+    model_upload_dir = get_model_upload_dir(id)
+    os.makedirs(model_upload_dir)
