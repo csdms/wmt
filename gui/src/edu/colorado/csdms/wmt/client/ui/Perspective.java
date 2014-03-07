@@ -204,7 +204,7 @@ public class Perspective extends DockLayoutPanel {
       String marker = data.modelIsSaved() ? "" : "*";
       tabTitle += " (" + marker + data.getModel().getName() + ")";
     } else {
-      data.getModel().setName(tabTitle + data.saveAttempts.toString());
+      data.getModel().setName("Model " + data.saveAttempts.toString());
     }
     viewCenter.setTabHTML(0, tabTitle);
   }

@@ -244,6 +244,8 @@ public class ModelMenu extends DecoratedPopupPanel {
    */
   private void showSaveDialogBox() {
     saveDialog = new SaveDialogBox(data.getModel().getName());
+    saveDialog.getFilePanel().setTitle(
+        "Enter a name for the model. No file extension is needed.");
     saveDialog.getChoicePanel().getOkButton().addClickHandler(
         new SaveOkHandler());
     saveDialog.getChoicePanel().getCancelButton().addClickHandler(
@@ -433,6 +435,9 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       // Set the model name in the DataManager.
       String modelName = saveDialog.getFilePanel().getField();
+      if (modelName.isEmpty()) {
+        return;
+      }      
       if (!data.getModel().getName().matches(modelName)) {
         data.getModel().setName(modelName);
         data.saveAttempts++;
