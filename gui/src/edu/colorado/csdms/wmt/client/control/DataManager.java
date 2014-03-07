@@ -532,10 +532,15 @@ public class DataManager {
    */
   public void deserialize() {
 
-    // TODO Refactor to improve clarity. And performance.
+    perspective.setModelPanelTitle();
+    
+    /*
+     * What I hope this looks like when finished.
+     */
+    ModelSerializer serializer = new ModelSerializer(this);
+    serializer.deserialize();
+    
 
-//    perspective.setModelPanelTitle();
-//
 //    Integer nModelComponents = model.getComponents().length();
 //    Integer nModelComponentsUsed = 0;
 //

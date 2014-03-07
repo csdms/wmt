@@ -1,6 +1,8 @@
 package edu.colorado.csdms.wmt.client.control;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -10,6 +12,7 @@ import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ModelComponentConnectionsJSO;
 import edu.colorado.csdms.wmt.client.data.ModelComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ModelComponentParametersJSO;
+import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.ui.ModelCell;
 
 /**
@@ -21,6 +24,8 @@ public class ModelSerializer {
   
   private DataManager data;
   private TreeItem treeItem;
+  private Integer nModelComponents;
+  private Integer nModelComponentsUsed;
 
   /**
    * Instatiates a ModelSerializer and stores a reference to the
@@ -30,6 +35,8 @@ public class ModelSerializer {
    */
   public ModelSerializer(DataManager data) {
     this.data = data;
+    nModelComponents = data.getModel().getComponents().length();
+    nModelComponentsUsed = 0;
   }
 
   /**
@@ -161,4 +168,35 @@ public class ModelSerializer {
     }
     return modelComponentConnections;
   }
+
+  /**
+   * Extracts the information contained in the {@link ModelJSO} object
+   * returned from opening a model (model menu > "Open Model...") and uses it
+   * to populate the ModelTree.
+   */
+  public void deserialize() {
+
+    // Load the model components into an ArrayList.
+    List<ModelComponentJSO> modelComponents = new ArrayList<ModelComponentJSO>();
+    for (int i = 0; i < nModelComponents; i++) {
+      modelComponents.add(data.getModel().getComponents().get(i));
+    }
+
+    // Get the driver.
+    ModelComponentJSO driver = getDriver(modelComponents);
+  }
+
+  private ModelComponentJSO getDriver(List<ModelComponentJSO> modelComponents) {
+
+    Iterator<ModelComponentJSO> iter = modelComponents.iterator();
+    while (iter.hasNext()) {
+      ModelComponentJSO modelComponent = (ModelComponentJSO) iter.next();
+      if (modelComponent.isDriver()) {
+        return modelComponent;
+      }
+    }
+    
+    return null;
+  }
+
 }
