@@ -42,6 +42,7 @@ class New(object):
         return render.new(self.form())
 
     def POST(self):
+        web.header('Content-Type', 'application/json; charset=utf-8')
         form = self.form()
         if not form.validates():
             return render.new(form)
@@ -81,6 +82,7 @@ class Save(object):
         else:
             models.update_model(id, form.d.name, form.d.json)
 
+        web.header('Content-Type', 'application/json; charset=utf-8')
         return json.dumps(int(id))
 
 
@@ -133,6 +135,7 @@ class View(object):
 
 class Open(object):
     def GET(self, id):
+        web.header('Content-Type', 'application/json; charset=utf-8')
         try:
             model = models.get_model(id)
         except models.BadIdError:
@@ -144,6 +147,7 @@ class Open(object):
 
 class Show(object):
     def GET(self, id):
+        web.header('Content-Type', 'application/json; charset=utf-8')
         try:
             model = models.get_model(str(id))
         except models.BadIdError:
@@ -154,6 +158,7 @@ class Show(object):
 
 class List(object):
     def GET(self):
+        web.header('Content-Type', 'application/json; charset=utf-8')
         all_models = models.get_models()
         resp = []
         for model in all_models:
@@ -180,6 +185,8 @@ class Upload(object):
         return render.uploadform("id")
 
     def POST(self):
+        web.header('Content-Type', 'application/json; charset=utf-8')
+
         user_data = web.input(file={}, id=None, filename=None)
 
         if user_data['filename'] is None or len(user_data['filename']) == 0:
