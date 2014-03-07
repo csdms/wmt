@@ -435,6 +435,9 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       // Set the model name in the DataManager.
       String modelName = saveDialog.getFilePanel().getField();
+      if (modelName.isEmpty()) {
+        return;
+      }      
       if (!data.getModel().getName().matches(modelName)) {
         data.getModel().setName(modelName);
         data.saveAttempts++;
