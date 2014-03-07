@@ -160,15 +160,7 @@ _CHUNK_SIZE = 8192
 
 class Upload(object):
     def GET(self):
-        return """<html><head></head><body>
-<form method="POST" enctype="multipart/form-data" action="">
-<input type="file" name="file"/>
-<input type="text" name="uuid"/>
-<input type="text" name="filename"/>
-<br/>
-<input type="submit"/>
-</form>
-</body></html>"""
+        return render.uploadform("uuid")
 
     def POST(self):
         user_data = web.input(file={}, uuid=None, filename=None)
