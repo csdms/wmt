@@ -42,7 +42,7 @@ public class ModelJSO extends JavaScriptObject {
    * Gets the JsArray of the components, including their parameters and their
    * connections, that make up a model. This is a JSNI method.
    */
-  public final native JsArray<ModelJSO> getComponents() /*-{
+  public final native JsArray<ModelComponentJSO> getComponents() /*-{
 		return this.model;
   }-*/;
 
