@@ -18,9 +18,9 @@ import com.google.gwt.user.client.ui.HTML;
 public class ViewInputFilesPanel extends Grid {
 
   private String componentId;
-  private String urlHTML;
+  private String urlHtml;
   private String urlText;
-  private String urlJSON;
+  private String urlJson;
 
   /**
    * Creates a new ViewInputFilesPanel with links built for the current state
@@ -37,12 +37,12 @@ public class ViewInputFilesPanel extends Grid {
 
     // TODO Should use DataURL.
     String baseURL = "http://csdms.colorado.edu/wmt/components/format/";
-    urlHTML = baseURL + this.componentId + "?defaults=True&format=html";
+    urlHtml = baseURL + this.componentId + "?defaults=True&format=html";
     urlText = baseURL + this.componentId + "?defaults=True&format=text";
-    urlJSON = baseURL + this.componentId + "?defaults=True&format=json";
-    HTML viewHTML = new HTML("<a href='" + urlHTML + "'>HTML</a>");
-    HTML viewText = new HTML("<a href='" + urlHTML + "'>text</a>");
-    HTML viewJSON = new HTML("<a href='" + urlHTML + "'>JSON</a>");
+    urlJson = baseURL + this.componentId + "?defaults=True&format=json";
+    HTML viewHTML = new HTML("<a href='" + urlHtml + "'>HTML</a>");
+    HTML viewText = new HTML("<a href='" + urlText + "'>text</a>");
+    HTML viewJSON = new HTML("<a href='" + urlJson + "'>JSON</a>");
 
     viewHTML.getElement().getStyle().setCursor(Cursor.POINTER);
     viewText.getElement().getStyle().setCursor(Cursor.POINTER);
@@ -59,9 +59,9 @@ public class ViewInputFilesPanel extends Grid {
     this.setWidget(0, 4, new HTML("|"));
     this.setWidget(0, 5, viewJSON);
 
-    viewHTML.addClickHandler(new InterceptClickHandler(urlHTML));
+    viewHTML.addClickHandler(new InterceptClickHandler(urlHtml));
     viewText.addClickHandler(new InterceptClickHandler(urlText));
-    viewJSON.addClickHandler(new InterceptClickHandler(urlJSON));
+    viewJSON.addClickHandler(new InterceptClickHandler(urlJson));
   }
 
   /**
