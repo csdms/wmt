@@ -127,9 +127,15 @@ def stage(uuid):
         'staged_on': current_time_as_string()
     })
 
-    for component in get_components(uuid):
-        stage_component(path, component)
+    #raise ValueError(str(get_components(uuid)))
 
+    update(uuid, status='staging',
+           message='staging components...')
+           #message='staging components %s...' % ', '.join(get_components(uuid)))
+    for component in get_components(uuid):
+        update(uuid,
+            status='staging', message='staging %s...' % component['class'])
+        stage_component(path, component)
 
 def _component_stagein(component):
     name = component['class'].lower()
