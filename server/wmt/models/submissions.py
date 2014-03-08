@@ -61,7 +61,6 @@ def update(uuid, **kwds):
 
 def get_submissions():
     return db.select('submission', order='updated DESC')
-    #return db.select('submission', order='id DESC')
 
 
 def get_uuids():
@@ -127,11 +126,7 @@ def stage(uuid):
         'staged_on': current_time_as_string()
     })
 
-    #raise ValueError(str(get_components(uuid)))
-
-    update(uuid, status='staging',
-           message='staging components...')
-           #message='staging components %s...' % ', '.join(get_components(uuid)))
+    update(uuid, status='staging', message='staging components...')
     for component in get_components(uuid):
         update(uuid,
             status='staging', message='staging %s...' % component['class'])
