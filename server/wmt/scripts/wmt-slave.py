@@ -145,7 +145,6 @@ class open_logs(object):
     def __exit__(self, type, value, traceback):
         self._out.close()
         self._err.close()
-        return True
 
 
 class WmtSlave(object):
@@ -155,7 +154,6 @@ class WmtSlave(object):
         self._sim_dir = create_user_execution_dir(id, prefix=self._wmt_dir)
         self._server = server
         self._env = env
-
 
     @property
     def id(self):
@@ -202,7 +200,8 @@ class WmtSlave(object):
 
     def run_component(self, name, dir='.'):
         with open_logs(name, dir=dir) as (stdout, stderr):
-            run_component(stdout=stdout, stderr=stderr, env=self._env, cwd=dir)
+            run_component(name, stdout=stdout, stderr=stderr, env=self._env,
+                          cwd=dir)
 
     def download_tarball(self, dir='.'):
         ans = download_run_tarball(self._server, self.id, dir=dir)
