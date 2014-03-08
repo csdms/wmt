@@ -5,7 +5,7 @@ import json
 from ..models import (models, users, submissions)
 from ..render import render
 from ..validators import (not_too_long, not_too_short, not_bad_json,
-                          valid_uuid, submission_exists)
+                          valid_uuid, submission_exists, model_exists)
 from ..cca import rc_from_json
 from .. import run
 from ..utils.io import chunk_copy
@@ -63,6 +63,7 @@ class Launch(object):
         thread = threading.Thread(target=launch_simulation, args=args)
         thread.start()
 
+        web.header('Content-Type', 'application/json; charset=utf-8')
         return json.dumps({
             'uuid': form.d.uuid,
             'username': form.d.username,
@@ -91,12 +92,17 @@ class Stage(object):
             status='staging',
             message='staging the model simulation...')
 
-        submissions.stage(form.d.uuid)
+        try:
+            submissions.stage(form.d.uuid)
+        except Exception as error:
+            submissions.update(form.d.uuid, status='error', message=str(error))
+            raise web.internalerror("Error staging simulation: %s" % str(error))
 
         submissions.update(form.d.uuid,
             status='staged',
             message='ready for launch')
-        raise web.seeother('/run/show')
+
+        #raise web.seeother('/run/show')
 
 
 class New(object):
@@ -108,6 +114,7 @@ class New(object):
         web.form.Textbox('description',
                          size=30, description='Description:'),
         web.form.Textbox('model_id',
+                         model_exists,
                          size=30, description='Model id:'),
         web.form.Button('Create')
     )
@@ -122,7 +129,8 @@ class New(object):
 
         uuid = submissions.new(form.d.name, form.d.model_id)
 
-        return uuid
+        web.header('Content-Type', 'application/json; charset=utf-8')
+        return json.dumps(uuid)
 
 
 class Update(object):
@@ -173,7 +181,7 @@ class Upload(object):
         if user_data['uuid'] is None:
             path_to_dest = os.path.join(_UPLOAD_DIR, os.path.basename(filename))
         else:
-            path_to_dest = os.path.join(site['downloads'], user_data['uuid'], filename)
+            path_to_dest = os.path.join(_UPLOAD_DIR, user_data['uuid'], filename)
 
         with open(path_to_dest, 'w') as dest_fp:
             checksum = chunk_copy(user_data['file'].file, dest_fp,
