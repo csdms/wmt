@@ -52,6 +52,11 @@ def get_model(id):
         raise BadIdError(id)
 
 
+def get_model_ids():
+    entries = db.select('models', what='id')
+    return [str(entry['id']) for entry in entries]
+
+
 def get_model_upload_dir(id):
     return os.path.join(site['uploads'], str(id))
 
