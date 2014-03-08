@@ -8,6 +8,10 @@ def submission_exists():
     return web.form.Validator(
         "Unable to find submission", lambda text: text in get_uuids())
 
+def model_exists():
+    return web.form.Validator(
+        "Unable to find model", lambda text: text in get_model_ids())
+
 
 def not_too_short(min_len):
     return web.form.Validator("Must be more than %d characters" % min_len,
