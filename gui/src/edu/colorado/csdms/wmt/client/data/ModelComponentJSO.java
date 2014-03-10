@@ -113,10 +113,11 @@ public class ModelComponentJSO extends JavaScriptObject {
 
   /**
    * JSNI method to get the "connect" attribute of a ModelComponentJSO, a
-   * {@link ModelComponentConnectionsJSO} object.
+   * {@link ModelComponentConnectionsJSO} object. This attribute may not be 
+   * present, so a null check is included.
    */
   public final native ModelComponentConnectionsJSO getConnections() /*-{
-		return this.connect;
+		return (typeof this.connect != 'undefined') ? this.connect : null;
   }-*/;
   
   /**
