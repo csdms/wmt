@@ -526,5 +526,511 @@
       },
       "units":"m"
     }
+  },
+  {
+    "key":"separator",
+    "name":"Weathering",
+    "description":"Chemical and Physical Weathering",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"chemical_weathering_law",
+    "name":"Chemical Weathering Law",
+    "description":"Chemical weathering law (possible values 0-1: 0 = None; 1 = Dissolution)",
+    "value":{
+      "type":"choice",
+      "default":0,
+      "choices": [0, 1]
+    }
+  },
+  {
+    "key":"maximum_dissolution_rate",
+    "name":"Max Dissolution Rate",
+    "description":"Maximum dissolution rate",
+    "value":{
+      "type":"float",
+      "default":0.099,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"kg m^-3 yr^-3"
+    }
+  },
+  {
+    "key":"chemical_depth",
+    "name":"depth scale for dissolution",
+    "description":"depth scale for dissolution",
+    "value":{
+      "type":"float",
+      "default":0.18,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"rock_density_initial",
+    "name":"Init rock density",
+    "description":"Initial rock density",
+    "value":{
+      "type":"float",
+      "default":2270.0,
+      "range":{
+        "min":0.0,
+        "max":1000.0
+      },
+      "units":"kg m^-3"
+    }
+  },
+  {
+    "key":"production_law",
+    "name":"Production law",
+    "description":"Production law (possible values 0-2: 0 = None; 1 = exponential law; 2 = exp. with density dep.)",
+    "value":{
+      "type":"choice",
+      "default": 0,
+      "choices": [0, 1, 2]
+    }
+  },
+  {
+    "key":"soil_production_rate_intercept",
+    "name":"Soil production rate intercept",
+    "description":"density-dependent soil production rate intercept",
+    "value":{
+      "type":"float",
+      "default":0.00055,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"m yr-1"
+    }
+  },
+  {
+    "key":"soil_production_rate_slope",
+    "name":"Soil production rate slope",
+    "description":"density-dependent soil production rate slope",
+    "value":{
+      "type":"float",
+      "default":0.00000017,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"(m yr^-1) / (kg m^-3)"
+    }
+  },
+  {
+    "key":"soil_production_rate_depth",
+    "name":"Soil production rate depth",
+    "description":"Depth scale for soil production rate",
+    "value":{
+      "type":"float",
+      "default":0.3,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"soil_bulk_density",
+    "name":"Soil bulk density",
+    "description":"Soil bulk density",
+    "value":{
+      "type":"float",
+      "default":740.0,
+      "range":{
+        "min":0.0,
+        "max":10000.0
+      },
+      "units":"kg m^-3"
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Tectonics",
+    "description":"Tectonics",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"uplift_type",
+    "name":"Type of uplift",
+    "description":"type of uplift (0=none, 1=uniform, 2=block, etc)",
+    "value":{
+      "type":"choice",
+      "default":2,
+      "choices": [0, 1, 2]
+    }
+  },
+  {
+    "key":"uplift_duration",
+    "name":"Uplift duration",
+    "description":"Duration of uplift",
+    "value":{
+      "type":"float",
+      "default":1.0,
+      "range":{
+        "min":0.0,
+        "max":1000000.0
+      },
+      "units":"yr"
+    }
+  },
+  {
+    "key":"uplift_rate",
+    "name":"Uplift rate",
+    "description":"Rate of uplift",
+    "value":{
+      "type":"float",
+      "default":30.0,
+      "range":{
+        "min":0.0,
+        "max":1000000.0
+      },
+      "units":"m yr^-1"
+    }
+  },
+  {
+    "key":"subsidence_rate",
+    "name":"Subsidence rate",
+    "description":"Rate of subsidence",
+    "value":{
+      "type":"float",
+      "default":50.0,
+      "range":{
+        "min":0.0,
+        "max":1000000.0
+      },
+      "units":"m yr^-1"
+    }
+  },
+  {
+    "key":"fault_position",
+    "name":"Fault position",
+    "description":"Fault position (does not apply to all uplift functions)",
+    "value":{
+      "type":"float",
+      "default":30000.0,
+      "range":{
+        "min":0.0,
+        "max":1000000.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Grain Size",
+    "description":"Grain Size",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"num_grain_size",
+    "name":"Number of grain size classes",
+    "description":"Number of grain size classes",
+    "value":{
+      "type":"choice",
+      "default":1,
+      "choices": [1, 2]
+    }
+  },
+  {
+    "key":"regolith_proportion_1",
+    "name":"Regolith proportion 1",
+    "description":"Proportion of sediments of grain class 1 in regolith",
+    "value":{
+      "type":"float",
+      "default":1.0,
+      "range":{
+        "min":0.0,
+        "max":1.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"bedrock_proportion_1",
+    "name":"Bedrock proportion 1",
+    "description":"Proportion of sediments of grain class 1 in bedrock",
+    "value":{
+      "type":"float",
+      "default":1.0,
+      "range":{
+        "min":0.0,
+        "max":1.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"grain_diameter_1",
+    "name":"Grain 1 diameter",
+    "description":"Representative diameter of grain class 1",
+    "value":{
+      "type":"float",
+      "default":0.001,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"regolith_proportion_2",
+    "name":"Regolith proportion 2",
+    "description":"Proportion of sediments of grain class 2 in regolith",
+    "value":{
+      "type":"float",
+      "default":0.1,
+      "range":{
+        "min":0.0,
+        "max":1.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"bedrock_proportion_2",
+    "name":"Bedrock proportion 2",
+    "description":"Proportion of sediments of grain class 2 in bedrock",
+    "value":{
+      "type":"float",
+      "default":0.1,
+      "range":{
+        "min":0.0,
+        "max":1.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"grain_diameter_2",
+    "name":"Grain 2 diameter",
+    "description":"Representative diameter of grain class 2",
+    "value":{
+      "type":"float",
+      "default":0.05,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"hiding_exponent",
+    "name":"Hiding exponent",
+    "description":"Hiding/protrusion exponent for multiple grain sizes",
+    "value":{
+      "type":"float",
+      "default":0.75,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Channel Geometry",
+    "description":"Channel Geometry",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"channel_geometry_model",
+    "name":"Type of channel geometry",
+    "description":"Option for channel width closure (1 = empirical model: Wb = Kw Qb ^ wb, W / Wb = ( Q / Qb ) ^ ws 2 = Parker width closure: tau / tauc = const)",
+    "value":{
+      "type":"choice",
+      "default":1,
+      "choices": [1, 2]
+    }
+  },
+  {
+    "key":"hydraulic_width_coeff_downstream",
+    "name":"Coefficient on downstream hydraulic width",
+    "description":"Coefficient on downstream hydraulic width",
+    "value":{
+      "type":"float",
+      "default":10.0,
+      "range":{
+        "min":0.0,
+        "max":1000.0
+      },
+      "units":"m / (m^3 s^-1)^e"
+    }
+  },
+  {
+    "key":"hydraulic_width_exp_downstream",
+    "name":"Downstream hydraulic width exponent",
+    "description":"Downstream hydraulic width exponent",
+    "value":{
+      "type":"float",
+      "default":0.5,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"hydraulic_width_exp_station",
+    "name":"Exponent on at-a-station hydraulic width relation",
+    "description":"Exponent on at-a-station hydraulic width relation",
+    "value":{
+      "type":"float",
+      "default":0.5,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"hydraulic_depth_coeff_downstream",
+    "name":"Downstream hydraulic depth coefficient",
+    "description":"Coefficient on downstream hydraulic depth (NOTE: Unknown units)",
+    "value":{
+      "type":"float",
+      "default":1.0,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"?"
+    }
+  },
+  {
+    "key":"hydraulic_depth_exp_downstream",
+    "name":"Exponent on downstream hydraulic depth",
+    "description":"Exponent on downstream hydraulic depth",
+    "value":{
+      "type":"float",
+      "default":0.0,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"hydraulic_depth_exp_station",
+    "name":"Downstream hydraulic roughness coefficient",
+    "description":"Coefficient on downstream hydraulic roughness (Manning n)",
+    "value":{
+      "type":"float",
+      "default":0.03,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"hydraulic_roughness_coeff_downstream",
+    "name":"Downstream hydraulic roughness coefficient",
+    "description":"Coefficient on downstream hydraulic roughness (Manning n)",
+    "value":{
+      "type":"float",
+      "default":0.0,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"hydraulic_roughness_exp_downstream",
+    "name":"Downstream hydraulic roughness exponent",
+    "description":"Exponent on downstream hydraulic roughness",
+    "value":{
+      "type":"float",
+      "default":0.0,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"hydraulic_roughness_exp_station",
+    "name":"At-a-station hydraulic roughness exponent",
+    "description":"Exponent on at-a-station hydraulic roughness",
+    "value":{
+      "type":"float",
+      "default":0.0,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"bank_roughness_coeff",
+    "name":"Downstream bank roughness coefficient",
+    "description":"Coefficient downstream bank roughness (for meand only)",
+    "value":{
+      "type":"float",
+      "default":15.0,
+      "range":{
+        "min":0.0,
+        "max":100.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"bank_roughness_exp",
+    "name":"Downstream bank roughness exponent",
+    "description":"Exponent downstream bank roughness (for meand only)",
+    "value":{
+      "type":"float",
+      "default":0.80,
+      "range":{
+        "min":0.0,
+        "max":10.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"bank_full_event",
+    "name":"Bankfull precipitation",
+    "description":"Precipitation rate of a bankfull event",
+    "value":{
+      "type":"float",
+      "default":13.6,
+      "range":{
+        "min":0.0,
+        "max":1000.0
+      },
+      "units":"m yr^-1"
+    }
   }
 ]
