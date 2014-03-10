@@ -2,6 +2,7 @@ import web
 
 from .cca.json import check_json_is_valid
 from .models.submissions import get_uuids
+from .models.models import get_model_ids
 
 
 def submission_exists():

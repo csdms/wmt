@@ -114,7 +114,7 @@ class New(object):
         web.form.Textbox('description',
                          size=30, description='Description:'),
         web.form.Textbox('model_id',
-                         model_exists,
+                         model_exists(),
                          size=30, description='Model id:'),
         web.form.Button('Create')
     )
