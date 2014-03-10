@@ -126,11 +126,17 @@ def stage(uuid):
         'staged_on': current_time_as_string()
     })
 
+    os.environ['WMT_INPUT_FILE_PATH'] = os.pathsep.join([
+        models.get_model_upload_dir(get_model_id(uuid)),
+        os.getcwd(),
+    ])
+
     update(uuid, status='staging', message='staging components...')
     for component in get_components(uuid):
         update(uuid,
             status='staging', message='staging %s...' % component['class'])
         stage_component(path, component)
+
 
 def _component_stagein(component):
     name = component['class'].lower()
@@ -146,19 +152,33 @@ def _component_stagein(component):
         f.write(' '.join(components.get_component_argv(name)))
 
 
-def stage_component(prefix, component):
+def _make_stage_dir(dir, ifexists='pass'):
     import errno
-
-    name = component['class'].lower()
-    stage_dir = os.path.join(prefix, name)
-
     try:
-        os.mkdir(stage_dir)
+        os.mkdir(dir)
     except OSError as error:
-        if error.errno == errno.EEXIST:
+        if error.errno == errno.EEXIST and ifexists == 'pass':
             pass
         else:
             raise error
+
+def prepend_to_path(envvar, path):
+    try:
+        paths = os.environ[envvar].split(os.pathsep)
+    except KeyError:
+        paths = []
+    paths.insert(0, path)
+    os.environ[envvar] = os.pathsep.join(paths)
+
+
+def stage_component(prefix, component):
+    name = component['class'].lower()
+    stage_dir = os.path.join(prefix, name)
+
+    _make_stage_dir(stage_dir, ifexists='pass')
+
+    prepend_to_path('WMT_INPUT_FILE_PATH',
+        os.path.join(site['db'], 'components', name, 'files'))
 
     hooks = components.get_component_hooks(name)
 
