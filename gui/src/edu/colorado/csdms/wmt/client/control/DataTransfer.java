@@ -661,6 +661,11 @@ public class DataTransfer {
             "The URL '" + url + "' did not give an 'OK' response. "
                 + "Response code: " + response.getStatusCode();
         Window.alert(msg);
+
+        // XXX For debugging; remove when finished.
+        String responseText = response.getText();
+        String headers = response.getHeadersAsString();
+        Window.alert("Response text: " + responseText + "; " + "Headers: " + headers);
       }
     }
 
