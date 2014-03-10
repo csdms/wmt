@@ -84,10 +84,11 @@ public class ModelComponentJSO extends JavaScriptObject {
   
   /**
    * JSNI method to get the "parameters" attribute of a ModelComponentJSO, a
-   * {@link ModelComponentParametersJSO} object.
+   * {@link ModelComponentParametersJSO} object. Include a null check for a 
+   * component without parameters.
    */
   public final native ModelComponentParametersJSO getParameters() /*-{
-		return this.parameters;
+		return (typeof this.parameters != 'undefined') ? this.parameters: null;
   }-*/;
   
   /**
@@ -113,10 +114,11 @@ public class ModelComponentJSO extends JavaScriptObject {
 
   /**
    * JSNI method to get the "connect" attribute of a ModelComponentJSO, a
-   * {@link ModelComponentConnectionsJSO} object.
+   * {@link ModelComponentConnectionsJSO} object. A component may have no
+   * connections, so a null check is included.
    */
   public final native ModelComponentConnectionsJSO getConnections() /*-{
-		return this.connect;
+		return (typeof this.connect != 'undefined') ? this.connect : null;
   }-*/;
   
   /**
