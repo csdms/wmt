@@ -39,6 +39,17 @@ public class ModelJSO extends JavaScriptObject {
   }-*/;
 
   /**
+   * A convenience method that returns the number of components a model has.
+   */
+  public final native int nComponents() /*-{
+    var n = 0;
+		if (typeof this.model != 'undefined') {
+			n = Object.keys(this.model).length;
+		}
+    return n;
+  }-*/;
+
+  /**
    * Gets the JsArray of the components, including their parameters and their
    * connections, that make up a model. This is a JSNI method.
    */
