@@ -646,7 +646,8 @@ public class DataTransfer {
         GWT.log(rtxt);
 
         if (type.matches("init")) {
-          data.setSimulationId(rtxt); // store the run's uuid
+          String uuid = rtxt.replaceAll("^\"|\"$", "");
+          data.setSimulationId(uuid); // store the run's uuid
           DataTransfer.stageModelRun(data);
         }
         if (type.matches("stage")) {
