@@ -24,8 +24,8 @@
   },
   {
     "key":"separator",
-    "name":"Input Files",
-    "description":"Input Files",
+    "name":"Bathymetry",
+    "description":"Bathymetry",
     "value":{
       "type":"string",
       "default":""
@@ -36,8 +36,28 @@
     "name":"Bathymetry file",
     "description":"CSV-formatted bathymetry file",
     "value":{
+      "type":"file",
+      "default":"sedflux2d_bathy.csv",
+      "files": [ "sedflux2d_bathy_adriatic.csv", "sedflux2d_bathy.csv" ]
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Sea Level",
+    "description":"Sea Level",
+    "value":{
       "type":"string",
-      "default":"sedflux2d_bathy.csv"
+      "default":""
+    }
+  },
+  {
+    "key":"sea_level_method",
+    "name":"Linear sea level rise/fall",
+    "description":"Use a linear rise/fall in sea level or user-defined",
+    "value":{
+      "type":"choice",
+      "default":"linear",
+      "choices": ["linear", "user"]
     }
   },
   {
@@ -45,8 +65,41 @@
     "name":"Sea-level file",
     "description":"CSV-formatted sea-level file",
     "value":{
-      "type":"string",
-      "default":"sedflux2d_sea_level_constant.csv"
+      "type":"file",
+      "default":"sedflux2d_sea_level_constant.csv",
+      "files": [
+        "sedflux2d_sea_level_constant.csv",
+        "sedflux2d_sea_level_falling.csv",
+        "sedflux2d_sea_level_rising.csv"
+      ]
+    }
+  },
+  {
+    "key":"starting_sea_level_elevation",
+    "name":"Initial sea level",
+    "description":"Sea level at simulation start",
+    "value":{
+      "type":"float",
+      "default": 0.0,
+      "range":{
+        "min": -1000.0,
+        "max": 1000.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"ending_sea_level_elevation",
+    "name":"Final sea level",
+    "description":"Sea level at simulation end",
+    "value":{
+      "type":"float",
+      "default": 0.0,
+      "range":{
+        "min": -1000.0,
+        "max": 1000.0
+      },
+      "units":"m"
     }
   },
   {
