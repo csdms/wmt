@@ -287,7 +287,7 @@ public class ModelSerializer {
     for (int i = 0; i < modelComponent.nConnections(); i++) {
 
       // Get the "portId @ componentId" of the connection.
-      String portId = modelComponent.getConnections().getPortNames().get(i);
+      String portId = modelComponent.getConnections().getPortIds().get(i);
       String componentId =
           modelComponent.getConnections().getConnection(portId);
       GWT.log(modelComponent.getId() + ": " + portId + "@" + componentId);
