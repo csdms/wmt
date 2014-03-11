@@ -9,16 +9,10 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.gwt.core.client.JsArray;
-import com.google.gwt.core.shared.GWT;
-import com.google.gwt.user.client.ui.TreeItem;
-
-import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.ui.ComponentList;
-import edu.colorado.csdms.wmt.client.ui.ModelCell;
 import edu.colorado.csdms.wmt.client.ui.ModelTree;
 import edu.colorado.csdms.wmt.client.ui.ParameterTable;
 import edu.colorado.csdms.wmt.client.ui.Perspective;
@@ -533,98 +527,8 @@ public class DataManager {
   public void deserialize() {
 
     perspective.setModelPanelTitle();
-    
-    /*
-     * What I hope this looks like when finished.
-     */
+
     ModelSerializer serializer = new ModelSerializer(this);
     serializer.deserialize();
-    
-
-//    Integer nModelComponents = model.getComponents().length();
-//    Integer nModelComponentsUsed = 0;
-//
-//    // Locate the driver.
-//    Integer driverIndex = 0;
-//    for (int i = 0; i < nModelComponents; i++) {
-//      if (model.getComponents().get(i).isDriver()) {
-//        driverIndex = i;
-//        break;
-//      }
-//    }
-//
-//    // Set up the root of the ModelTree with the driver.
-//    ModelJSO driver = model.getComponents().get(driverIndex);
-//    Component driverComponent =
-//        new Component(getModelComponent(driver.getId()));
-//    TreeItem root = modelTree.getItem(0);
-//    modelTree.setComponent(driverComponent, root);
-//    root.setState(true);
-//    nModelComponentsUsed++;
-//
-//    // Find matches for the driver's open ports supplied by the model.
-//    List<ModelCell> openCells = modelTree.findOpenModelCells();
-//    if (driver.nPorts() > 0) {
-//      for (int i = 0; i < driver.nPorts(); i++) {
-//        String portId = driver.getPorts().get(i);
-//        String componentId = driver.getConnection(portId);
-//        GWT.log(portId + ":" + componentId);
-//        if (componentId == null) {
-//          continue;
-//        }
-//        for (int j = 0; j < openCells.size(); j++) {
-//          if (openCells.get(j).getPortCell().getPort().getId().matches(portId)) {
-//            Component component = new Component(getModelComponent(componentId));
-//            TreeItem leaf = openCells.get(j).getParentTreeItem();
-//            modelTree.setComponent(component, leaf);
-//            leaf.setState(true);
-//            nModelComponentsUsed++;
-//          }
-//        }
-//      }
-//    }
-//
-//    // Loop to fill in open ports in ModelTree with the remaining components
-//    // in the model.
-//    Integer index = 0;
-//    while (nModelComponentsUsed < nModelComponents) {
-//      ModelJSO mc = model.getComponents().get(index);
-//      index++;
-//      List<ModelCell> cells = modelTree.findOpenModelCells();
-//
-//      if (mc.nPorts() > 0) {
-//        for (int i = 0; i < mc.nPorts(); i++) {
-//          String portId = mc.getPorts().get(i);
-//          String componentId = mc.getConnection(portId);
-//          GWT.log(portId + ":" + componentId);
-//          if (componentId == null) {
-//            continue;
-//          }
-//          for (int j = 0; j < cells.size(); j++) {
-//            if (cells.get(j).getPortCell().getPort().getId().matches(portId)) {
-//              Component component =
-//                  new Component(getModelComponent(componentId));
-//              TreeItem leaf = cells.get(j).getParentTreeItem();
-//              modelTree.setComponent(component, leaf);
-//              leaf.setState(true);
-//              nModelComponentsUsed++;
-//            }
-//          }
-//        }
-//      }
-//    }
-//
-//    // Loop to load the parameters for the components in the model.
-//    for (int i = 0; i < nModelComponents; i++) {
-//      ModelJSO mc = model.getComponents().get(i);
-//      ComponentJSO mcJSO = getModelComponent(mc.getId());
-//      if (mc.nParameters() > 0) {
-//        for (int j = 0; j < mc.nParameters(); j++) {
-//          String key = mc.getParameters().get(j);
-//          String value = mc.getValue(key);
-//          mcJSO.getParameter(key).getValue().setDefault(value);
-//        }
-//      }
-//    }
   }
 }

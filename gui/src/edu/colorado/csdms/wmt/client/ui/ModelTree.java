@@ -175,8 +175,8 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
   /**
    * Iterate through the {@link TreeItem}s of this ModelTree, finding what
    * {@link ModelCell}s have open PortCells. Add the cell to the
-   * openModelCells List. The iterator chooses how to descend the tree, which
-   * may not be by level.
+   * openModelCells List. The iterator descends the tree from top to bottom,
+   * ignoring the level (and sublevels, etc.) of the children. 
    * 
    * @return a List of ModelCells with open ports
    */
