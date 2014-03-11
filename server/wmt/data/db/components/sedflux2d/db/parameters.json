@@ -32,6 +32,16 @@
     }
   },
   {
+    "key":"bathymetry_method",
+    "name":"Linear bathymetry",
+    "description":"Use a bathymetry with a linear shelf and slope",
+    "value":{
+      "type":"choice",
+      "default":"linear",
+      "choices": ["linear", "user"]
+    }
+  },
+  {
     "key":"bathymetry_file",
     "name":"Bathymetry file",
     "description":"CSV-formatted bathymetry file",
@@ -39,6 +49,62 @@
       "type":"file",
       "default":"sedflux2d_bathy.csv",
       "files": [ "sedflux2d_bathy_adriatic.csv", "sedflux2d_bathy.csv" ]
+    }
+  },
+  {
+    "key":"shelf_gradient",
+    "name":"Gradient of shelf",
+    "description":"Gradient of shelf",
+    "value":{
+      "type":"float",
+      "default": 0.001,
+      "range":{
+        "min": 0.0,
+        "max": 0.01
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"slope_gradient",
+    "name":"Gradient of slope",
+    "description":"Gradient of slope",
+    "value":{
+      "type":"float",
+      "default": 0.01,
+      "range":{
+        "min": 0.0,
+        "max": 0.1
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"shelf_width",
+    "name":"Width of shelf",
+    "description":"Width of shelf",
+    "value":{
+      "type":"float",
+      "default": 100000.0,
+      "range":{
+        "min": 1000.0,
+        "max": 1000000.0
+      },
+      "units":"m"
+    }
+  },
+  {
+    "key":"domain_width",
+    "name":"Width of model domain",
+    "description":"Width of model domain",
+    "value":{
+      "type":"float",
+      "default": 200000.0,
+      "range":{
+        "min": 0.0,
+        "max": 10000000.0
+      },
+      "units":"m"
     }
   },
   {
@@ -395,6 +461,262 @@
         "max": 21
       },
       "units":"-"
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Bed-Load",
+    "description":"Bed-Load",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"bed_load_sediment_grain_size",
+    "name":"Bed load grain size",
+    "description":"Grain size of bed-load sediment",
+    "value":{
+      "type":"float",
+      "default":400.0,
+      "range":{
+        "min":0.1,
+        "max":5000.0
+      },
+      "units":"um"
+    }
+  },
+  {
+    "key":"bed_load_sediment_grain_density",
+    "name":"Bed load grain density",
+    "description":"Grain density of bed-load sediment",
+    "value":{
+      "type":"float",
+      "default": 2625.0,
+      "range":{
+        "min":1000.0,
+        "max":2650.0
+      },
+      "units":"kg m^-3"
+    }
+  },
+  {
+    "key":"bed_load_sediment_saturated_density",
+    "name":"Bed load saturated density",
+    "description":"Saturated bulk-density of bed-load sediment",
+    "value":{
+      "type":"float",
+      "default": 1850.0,
+      "range":{
+        "min":1000.0,
+        "max":2650.0
+      },
+      "units":"kg m^-3"
+    }
+  },
+  {
+    "key":"bed_load_sediment_minimum_void_ratio",
+    "name":"Bed load min void ratio",
+    "description":"Void ratio of bed-load sediment in closest-packed state",
+    "value":{
+      "type":"float",
+      "default": 0.3,
+      "range":{
+        "min":0.0,
+        "max":1.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"bed_load_sediment_diffusion_coefficient",
+    "name":"Bed load diffusion coefficient",
+    "description":"Diffusion coefficient of bed-load sediment",
+    "value":{
+      "type":"float",
+      "default": 0.25,
+      "range":{
+        "min":0.0,
+        "max":1.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"separator",
+    "name":"Suspended-Load",
+    "description":"Suspended-Load",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
+    "key":"suspended_load_sediment_1_grain_size",
+    "name":"Suspended load 1 grain size",
+    "description":"Grain size of suspended-load sediment class 1",
+    "value":{
+      "type":"float",
+      "default":150.0,
+      "range":{
+        "min":0.1,
+        "max":5000.0
+      },
+      "units":"um"
+    }
+  },
+  {
+    "key":"suspended_load_sediment_2_grain_size",
+    "name":"Suspended load 2 grain size",
+    "description":"Grain size of suspended-load sediment class 2",
+    "value":{
+      "type":"float",
+      "default":50.0,
+      "range":{
+        "min":0.1,
+        "max":5000.0
+      },
+      "units":"um"
+    }
+  },
+  {
+    "key":"suspended_load_sediment_1_grain_density",
+    "name":"Suspended grain 1 density",
+    "description":"Grain density of suspended-load sediment class 1",
+    "value":{
+      "type":"float",
+      "default": 2600.0,
+      "range":{
+        "min":1000.0,
+        "max":2650.0
+      },
+      "units":"kg m^-3"
+    }
+  },
+  {
+    "key":"suspended_load_sediment_2_grain_density",
+    "name":"Suspended grain 2 density",
+    "description":"Grain density of suspended-load sediment class 2",
+    "value":{
+      "type":"float",
+      "default": 2400.0,
+      "range":{
+        "min":1000.0,
+        "max":2650.0
+      },
+      "units":"kg m^-3"
+    }
+  },
+  {
+    "key":"suspended_load_sediment_1_saturated_density",
+    "name":"Suspended load 1 saturated density",
+    "description":"Saturated bulk-density of suspended-load sediment class 1",
+    "value":{
+      "type":"float",
+      "default": 1800.0,
+      "range":{
+        "min":1000.0,
+        "max":2650.0
+      },
+      "units":"kg m^-3"
+    }
+  },
+  {
+    "key":"suspended_load_sediment_2_saturated_density",
+    "name":"Suspended load 2 saturated density",
+    "description":"Saturated bulk-density of suspended-load sediment class 2",
+    "value":{
+      "type":"float",
+      "default": 1600.0,
+      "range":{
+        "min":1000.0,
+        "max":2650.0
+      },
+      "units":"kg m^-3"
+    }
+  },
+  {
+    "key":"suspended_load_sediment_1_minimum_void_ratio",
+    "name":"Suspended load 1 min void ratio",
+    "description":"Void ratio of suspended-load sediment class 1 in closest-packed state",
+    "value":{
+      "type":"float",
+      "default": 0.2,
+      "range":{
+        "min":0.0,
+        "max":1.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"suspended_load_sediment_2_minimum_void_ratio",
+    "name":"Suspended load 2 min void ratio",
+    "description":"Void ratio of suspended-load sediment class 2 in closest-packed state",
+    "value":{
+      "type":"float",
+      "default": 0.1,
+      "range":{
+        "min":0.0,
+        "max":1.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"suspended_load_sediment_1_diffusion_coefficient",
+    "name":"Suspended load 1 diffusion coefficient",
+    "description":"Diffusion coefficient of suspended-load sediment class 1",
+    "value":{
+      "type":"float",
+      "default": 0.25,
+      "range":{
+        "min":0.0,
+        "max":1.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"suspended_load_sediment_2_diffusion_coefficient",
+    "name":"Suspended load 2 diffusion coefficient",
+    "description":"Diffusion coefficient of suspended-load sediment class 2",
+    "value":{
+      "type":"float",
+      "default": 0.25,
+      "range":{
+        "min":0.0,
+        "max":1.0
+      },
+      "units":"-"
+    }
+  },
+  {
+    "key":"suspended_load_sediment_1_removal_rate",
+    "name":"Suspended load 1 removal rate",
+    "description":"Removal rate of suspended-load sediment class 1",
+    "value":{
+      "type":"float",
+      "default": 16.8,
+      "range":{
+        "min":0.1,
+        "max":100.0
+      },
+      "units":"d^-1"
+    }
+  },
+  {
+    "key":"suspended_load_sediment_2_removal_rate",
+    "name":"Suspended load 2 removal rate",
+    "description":"Removal rate of suspended-load sediment class 2",
+    "value":{
+      "type":"float",
+      "default": 1.0,
+      "range":{
+        "min":0.1,
+        "max":100.0
+      },
+      "units":"d^-1"
     }
   }
 ]
