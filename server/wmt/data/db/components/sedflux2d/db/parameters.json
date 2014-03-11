@@ -465,8 +465,8 @@
   },
   {
     "key":"separator",
-    "name":"Bed-Load",
-    "description":"Bed-Load",
+    "name":"Bed Load",
+    "description":"Bed Load",
     "value":{
       "type":"string",
       "default":""
@@ -544,8 +544,8 @@
   },
   {
     "key":"separator",
-    "name":"Suspended-Load",
-    "description":"Suspended-Load",
+    "name":"Suspended Load",
+    "description":"Suspended Load",
     "value":{
       "type":"string",
       "default":""
