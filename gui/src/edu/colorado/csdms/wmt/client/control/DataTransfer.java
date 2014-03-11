@@ -408,14 +408,14 @@ public class DataTransfer {
 
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
-    
+
     HashMap<String, String> entries = new HashMap<String, String>();
     entries.put("uuid", data.getSimulationId());
     entries.put("host", data.getHostname());
     entries.put("username", data.getUsername());
     entries.put("password", data.getPassword());
     String queryString = buildQueryString(entries);
-    
+
     try {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
       @SuppressWarnings("unused")
@@ -641,21 +641,28 @@ public class DataTransfer {
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
-        
+
         String rtxt = response.getText();
         GWT.log(rtxt);
-        
+
         if (type.matches("init")) {
-          data.setSimulationId(rtxt); // store the run's uuid
+          String uuid = rtxt.replaceAll("^\"|\"$", "");
+          data.setSimulationId(uuid); // store the run's uuid
           DataTransfer.stageModelRun(data);
         }
         if (type.matches("stage")) {
           DataTransfer.launchModelRun(data);
         }
         if (type.matches("launch")) {
-          Window.alert("Success!"); // XXX Remove this.
+          // TODO Display an info dialog (#27)
+
+          // XXX For debugging; remove when finished.
+          String responseText = response.getText();
+          String headers = response.getHeadersAsString();
+          Window.alert("Success! Response text: " + responseText + "; "
+              + "Headers: " + headers);
         }
-        
+
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "

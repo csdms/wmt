@@ -28,7 +28,6 @@ import edu.colorado.csdms.wmt.client.data.Port;
 public class ModelTree extends Tree implements DragOverHandler, DropHandler {
 
   public DataManager data; // experimenting with a public member variable
-  private List<ModelCell> openModelCells;
 
   /**
    * Creates a ModelTree with an open "driver" port.
@@ -38,8 +37,6 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
   public ModelTree(DataManager data) {
 
     this.data = data;
-    this.openModelCells = new ArrayList<ModelCell>();
-
     initializeTree();
     this.data.setModelTree(this);
 
@@ -176,15 +173,16 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
   }
 
   /**
-   * Iterate through the TreeItems of this ModelTree, finding what ModelCells
-   * have open PortCells. Add the cell to the openModelCells List.
+   * Iterate through the {@link TreeItem}s of this ModelTree, finding what
+   * {@link ModelCell}s have open PortCells. Add the cell to the
+   * openModelCells List. The iterator chooses how to descend the tree, which
+   * may not be by level.
    * 
-   * @return a Vector of ModelCells with open ports.
+   * @return a List of ModelCells with open ports
    */
   public List<ModelCell> findOpenModelCells() {
 
-    // Always start with a fresh list.
-    openModelCells.clear();
+    List<ModelCell> openModelCells = new ArrayList<ModelCell>();
 
     Iterator<TreeItem> iter = this.treeItemIterator();
     while (iter.hasNext()) {
@@ -199,6 +197,32 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
   }
 
   /**
+   * Finds the open {@link ModelCell}s among the children of a specified
+   * {@link TreeItem} in the ModelTree. This search doesn't descend lower than
+   * the children of the input parent TreeItem.
+   * 
+   * @param parent a TreeItem in the ModelTree
+   * @return a List of ModelCells with open ports
+   */
+  public List<ModelCell> findOpenModelCells(TreeItem parent) {
+
+    List<ModelCell> openModelCells = new ArrayList<ModelCell>();
+
+    if (parent != null) {
+      for (int i = 0; i < parent.getChildCount(); i++) {
+        TreeItem child = parent.getChild(i);
+        ModelCell cell = (ModelCell) child.getWidget();
+        if (cell.getComponentCell().getComponent().getId() == null) {
+          openModelCells.add(cell);
+        }
+      }
+    }
+
+    return openModelCells;
+  }
+  
+  
+  /**
    * Checks whether a given component is present in the ModelTree. This is an
    * overloaded version of {@link #isComponentPresent(String)}.
    * 
@@ -206,7 +230,6 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
    * @return true if the component is in the ModelTree
    */
   public Boolean isComponentPresent(Component component) {
-
     String componentId = component.getId();
     return isComponentPresent(componentId);
   }

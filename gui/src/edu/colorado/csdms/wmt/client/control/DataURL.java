@@ -15,8 +15,8 @@ import com.google.gwt.user.client.Window;
  */
 public class DataURL {
 
-  private static final String API_URL = "http://csdms.colorado.edu/wmt/";
-  private static final String SECURE_API_URL = "https://csdms.colorado.edu/wmt/";
+  // By same-origin policy, must use HTTPS consistently across all URLs.
+  private static final String API_URL = "https://csdms.colorado.edu/wmt/";
   private static final String LOCAL_URL = GWT.getHostPageBaseURL();
 
   private static final String COMPONENT_LIST_URL = API_URL + "components/list";
@@ -32,7 +32,7 @@ public class DataURL {
   private static final String RUN_NEW_URL = API_URL + "run/new";  
   private static final String RUN_SHOW_URL = API_URL + "run/show";
   private static final String RUN_STAGE_URL = API_URL + "run/stage";
-  private static final String RUN_LAUNCH_URL = SECURE_API_URL + "run/launch";
+  private static final String RUN_LAUNCH_URL = API_URL + "run/launch";
 
   /**
    * A wrapper around Window.Location that returns the application URL in
