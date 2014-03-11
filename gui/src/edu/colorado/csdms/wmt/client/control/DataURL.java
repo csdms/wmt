@@ -28,8 +28,9 @@ public class DataURL {
   private static final String MODEL_NEW_URL = API_URL + "models/new";
   private static final String MODEL_EDIT_URL = API_URL + "models/edit/";
   private static final String MODEL_DELETE_URL = API_URL + "models/delete/";
+  private static final String MODEL_UPLOAD_URL = API_URL + "models/upload";
 
-  private static final String RUN_NEW_URL = API_URL + "run/new";  
+  private static final String RUN_NEW_URL = API_URL + "run/new";
   private static final String RUN_SHOW_URL = API_URL + "run/show";
   private static final String RUN_STAGE_URL = API_URL + "run/stage";
   private static final String RUN_LAUNCH_URL = API_URL + "run/launch";
@@ -43,7 +44,7 @@ public class DataURL {
   public static String applicationURL(DataManager data) {
     return Window.Location.getHref();
   }
-  
+
   /**
    * Returns the URL for the list of available components on the server.
    * 
@@ -127,7 +128,7 @@ public class DataURL {
       return MODEL_NEW_URL;
     }
   }
-  
+
   /**
    * Returns the URL for updating an existing model on the server, given its
    * id.
@@ -159,17 +160,15 @@ public class DataURL {
   }
 
   /**
-   * Returns the URL for posting a file associated with an existing model to
-   * the server, given the model id.
+   * Returns the URL for posting a file associated with a model to the server.
    * 
    * @param data the DataManager object for the WMT session
-   * @param modelId the id of the model, an Integer set by the API
    */
-  public static String uploadFile(DataManager data, Integer modelId) {
+  public static String uploadFile(DataManager data) {
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "save/saved.json";
     } else {
-      return API_URL + "models/file/" + modelId.toString();
+      return MODEL_UPLOAD_URL;
     }
   }
 
@@ -185,7 +184,7 @@ public class DataURL {
       return RUN_NEW_URL;
     }
   }
-  
+
   /**
    * Returns the URL for API page displaying the status of all current model
    * runs on the server.
@@ -206,7 +205,7 @@ public class DataURL {
       return RUN_STAGE_URL;
     }
   }
-  
+
   /**
    * Returns the URL used to launch a model run. Note that the URL uses HTTPS
    * because a username and password are being transferred.
