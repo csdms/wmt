@@ -95,14 +95,14 @@ class Stage(object):
         try:
             submissions.stage(form.d.uuid)
         except Exception as error:
+            import traceback
             submissions.update(form.d.uuid, status='error', message=str(error))
-            raise web.internalerror("Error staging simulation: %s" % str(error))
+            raise web.internalerror("Error staging simulation: %s" %
+                                    traceback.format_exc())
 
         submissions.update(form.d.uuid,
             status='staged',
             message='ready for launch')
-
-        #raise web.seeother('/run/show')
 
 
 class New(object):
@@ -290,7 +290,7 @@ class Status(object):
             return render.titled_form('Get Status', form)
 
         status = submissions.get_status(form.d.uuid)
-        return render.status(status)
+        return render.status(form.d.uuid, status)
 
 
 class Show(object):
