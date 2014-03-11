@@ -37,6 +37,7 @@ URLS = (
     '/models/show/(\d+)', 'wmt.controllers.models.Show',
     '/models/export/(\d+)', 'wmt.controllers.models.Export',
     '/models/upload', 'wmt.controllers.models.Upload',
+    '/models/validate', 'wmt.controllers.models.Validate',
 
     '/models/convert', 'wmt.controllers.actions.Convert',
     '/models/submit', 'wmt.controllers.actions.Submit',

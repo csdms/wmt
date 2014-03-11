@@ -10,6 +10,34 @@ from ..config import site
 from ..utils.io import chunk_copy
 
 
+from collections import namedtuple
+
+
+Status = namedtuple('Status', ['status', 'message'])
+
+
+class Validate(object):
+    form = web.form.Form(
+        web.form.Textarea('json',
+                          rows=40, cols=80, description=None),
+        web.form.Button('Validate')
+    )
+
+    def GET(self):
+        return render.titled_form('JSON Lint', self.form())
+
+    def POST(self):
+        web.header('Content-Type', 'text/html; charset=utf-8')
+        form = self.form()
+        if not form.validates():
+            return render.new(form)
+        try:
+            json.loads(form.d.json)
+        except ValueError as error:
+            return render.status('Error', Status('error', str(error)))
+        return render.status('Success', Status('success', 'Valid JSON'))
+
+
 class New(object):
     """
     Create a new model. To create a new model, go here:
