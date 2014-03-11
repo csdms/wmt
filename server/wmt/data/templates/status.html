@@ -1,4 +1,4 @@
-$def with (submission)
+$def with (title, submission)
 
 <html>
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
@@ -7,7 +7,7 @@ $def with (submission)
 </head>
 
 <body>
-<h1>$submission.uuid</h1>
+<h1>$title</h1>
 
 $if submission.status == 'error':
   <div class="bad">
