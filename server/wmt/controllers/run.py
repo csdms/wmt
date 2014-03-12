@@ -187,7 +187,9 @@ class Upload(object):
             checksum = chunk_copy(user_data['file'].file, dest_fp,
                                   chunk_size=_CHUNK_SIZE)
 
-        return json.dumps({'checksum': checksum.hexdigest()})
+        return json.dumps({
+            'checksum': checksum.hexdigest(),
+            'url': 'http://csdms.colorado.edu/pub/users/wmt/' + os.path.basename(path_to_dest)})
 
 
 class Download(object):
