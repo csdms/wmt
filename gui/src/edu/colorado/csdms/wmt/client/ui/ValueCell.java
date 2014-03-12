@@ -24,9 +24,9 @@ import edu.colorado.csdms.wmt.client.data.ParameterJSO;
 
 /**
  * Used to display the value of a parameter in a {@link ParameterTable}, a
- * ValueCell renders as a ListBox (droplist) if the parameter type = "choice"
- * or "file"; otherwise, it renders as an editable TextBox. Changes to the
- * value in a ValueCell are stored in the WMT DataManager.
+ * ValueCell renders as a ListBox (droplist) if the parameter type = "choice" or
+ * "file"; otherwise, it renders as an editable TextBox. Changes to the value in
+ * a ValueCell are stored in the WMT DataManager.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -147,8 +147,8 @@ public class ValueCell extends HorizontalPanel {
    * A class to handle keyboard events in the TextBox. Also checks for valid
    * TextBox contents.
    * <p>
-   * Note that every key press generates an event. It might be worth
-   * considering acting on only Tab or Enter key presses.
+   * Note that every key press generates an event. It might be worth considering
+   * acting on only Tab or Enter key presses.
    */
   public class TextEditHandler implements KeyUpHandler {
     @Override
@@ -170,16 +170,20 @@ public class ValueCell extends HorizontalPanel {
 
       ParameterTable pt = (ParameterTable) ValueCell.this.getParent();
       if (!pt.data.modelIsSaved()) {
-        String msg = "The model must be saved to the server"
-            + " before files can be uploaded.";
+        String msg =
+            "The model must be saved to the server"
+                + " before files can be uploaded.";
         Window.alert(msg);
         return;
       }
 
       upload = new UploadDialogBox();
       upload.setText("Upload File...");
-      // upload.getForm().setAction(DataURL.uploadFile(pt.data,
-      // pt.data.getMetadata().getId()));
+
+      String modelId = ((Integer) pt.data.getMetadata().getId()).toString(); 
+      upload.getHidden().setValue(modelId);
+
+      upload.getForm().setAction(DataURL.uploadFile(pt.data));
       upload.getForm().addSubmitCompleteHandler(new UploadCompleteHandler());
       upload.center();
     }
@@ -188,10 +192,11 @@ public class ValueCell extends HorizontalPanel {
   public class UploadCompleteHandler implements FormPanel.SubmitCompleteHandler {
     @Override
     public void onSubmitComplete(SubmitCompleteEvent event) {
-      
-      Window.alert(event.getResults());
-      GWT.log(upload.getUpload().getFilename());
-      
+
+      upload.hide();
+      Window.alert("Filename: " + upload.getUpload().getFilename()
+          + "; Results: " + event.getResults());
+
       if (event.getResults() != null) {
         ;
       }
@@ -199,9 +204,9 @@ public class ValueCell extends HorizontalPanel {
   }
 
   /**
-   * Checks whether a given value is within the established range of values
-   * for a parameter, returning a Boolean. This method operates only on
-   * numeric types.
+   * Checks whether a given value is within the established range of values for
+   * a parameter, returning a Boolean. This method operates only on numeric
+   * types.
    * 
    * @param parameter a ParameterJSO object
    * @param value a value
@@ -224,7 +229,7 @@ public class ValueCell extends HorizontalPanel {
     }
     return rangeOK;
   }
-  
+
   /**
    * Checks whether the parameter uses a numeric type value (e.g., float or
    * int). Returns a Boolean.
@@ -240,7 +245,7 @@ public class ValueCell extends HorizontalPanel {
     }
     return isNumeric;
   }
-  
+
   /**
    * Checks whether the input String can be cast to a number.
    * 
@@ -249,7 +254,7 @@ public class ValueCell extends HorizontalPanel {
    *      discussion. Thanks, stackoverflow!
    * @param s a String
    */
-  private Boolean isNumeric(String s) {  
-    return s.matches("[-+]?\\d*\\.?\\d+");  
-  } 
+  private Boolean isNumeric(String s) {
+    return s.matches("[-+]?\\d*\\.?\\d+");
+  }
 }
