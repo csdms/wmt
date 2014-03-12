@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitHandler;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -26,6 +27,7 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 public class UploadDialogBox extends DialogBox {
   
   private FormPanel form;
+  private Hidden hidden;
   private FileUpload upload;
 
   /**
@@ -36,9 +38,8 @@ public class UploadDialogBox extends DialogBox {
     super(false); // autohide
     this.setModal(true);
 
-    // Create a FormPanel and point it at a service.
+    // Create a FormPanel. When employed, point it at a service.
     form = new FormPanel();
-    form.setAction("http://localhost");
     this.setWidget(form);
 
     // Set the form to use the POST method with multipart MIME encoding.
@@ -49,17 +50,22 @@ public class UploadDialogBox extends DialogBox {
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
     form.setWidget(contents);
 
+    // Make a hidden field with name "id". When employed, set value.
+    hidden = new Hidden();
+    hidden.setName("id");
+    
     HorizontalPanel filePanel = new HorizontalPanel();
     filePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     filePanel.setHeight("3em");
     filePanel.setSpacing(5); // px
     contents.add(filePanel);
 
+    // Make an upload panel with name "file".
     Label fileLabel = new Label("File:");
     fileLabel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
     fileLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
     upload = new FileUpload();
-    upload.setName("fileUploadFormElement");
+    upload.setName("file");
     filePanel.add(fileLabel);
     filePanel.add(upload);
 
@@ -105,6 +111,14 @@ public class UploadDialogBox extends DialogBox {
     this.form = formPanel;
   }
 
+  public Hidden getHidden() {
+    return hidden;
+  }
+
+  public void setHidden(Hidden hidden) {
+    this.hidden = hidden;
+  }
+  
   public FileUpload getUpload() {
     return upload;
   }
@@ -112,4 +126,5 @@ public class UploadDialogBox extends DialogBox {
   public void setUpload(FileUpload upload) {
     this.upload = upload;
   }
+  
 }

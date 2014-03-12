@@ -21,7 +21,7 @@ public class ModelComponentConnectionsJSO extends JavaScriptObject {
    * Returns, as a JsArrayString, the ids of the all the ports of a model
    * component. Index this array with JsArrayString#get. This is a JSNI method.
    */
-  public final native JsArrayString getPortNames() /*-{
+  public final native JsArrayString getPortIds() /*-{
 		var keys = Object.keys(this);
 		return keys;
   }-*/;  
