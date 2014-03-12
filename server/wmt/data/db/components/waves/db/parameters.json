@@ -51,7 +51,7 @@
     }
   },
   {
-    "key":"highness_factor",
+    "key":"angle_highness_factor",
     "name":"Highness factor",
     "description":"Highness factor for incoming wave angles",
     "value":{
@@ -64,7 +64,7 @@
     }
   },
   {
-    "key":"asymmetry",
+    "key":"angle_asymmetry",
     "name":"Asymmetry",
     "description":"Asymmetry of incoming wave angles",
     "value":{
