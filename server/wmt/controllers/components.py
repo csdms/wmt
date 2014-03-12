@@ -71,7 +71,8 @@ class Format(object):
                 return render.files(comps.get_component_formatted_input(name, **mapping))
             elif x['format'].lower() == 'json':
                 web.header('Content-Type', 'application/json; charset=utf-8')
-                return json.dumps(mapping)
+                mapping.pop('separator')
+                return json.dumps(mapping, sort_keys=True, indent=4, separators=(',', ': '))
             elif x['format'].lower() == 'text':
                 files = comps.get_component_formatted_input(name, **mapping)
                 return '\n'.join([
