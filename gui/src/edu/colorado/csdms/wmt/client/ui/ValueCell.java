@@ -55,26 +55,53 @@ public class ValueCell extends HorizontalPanel {
     String value = this.parameter.getValue().getDefault();
     String range = "";
 
-    /*
-     * Match the type -- choice, file or other. A big, nasty, block.
-     */
+    // Make a cell to match the type -- choice, file or other.
     if (type.matches("choice")) {
-
-      ListBox choiceDroplist = new ListBox(false); // no multi select
-      choiceDroplist.addChangeHandler(new ListSelectionHandler());
-
-      Integer nChoices = this.parameter.getValue().getChoices().length();
-      for (int i = 0; i < nChoices; i++) {
-        choiceDroplist.addItem(this.parameter.getValue().getChoices().get(i));
-        if (choiceDroplist.getItemText(i).matches(value)) {
-          choiceDroplist.setSelectedIndex(i);
-        }
-      }
-      choiceDroplist.setVisibleItemCount(1); // show one item -- a droplist
-      this.add(choiceDroplist);
-
+      makeChoiceCell(value);
     } else if (type.matches("file")) {
+      makeFileCell(value);
+    } else {
+      makeTextCell(value);
+    }
 
+    // If the parameter type is numeric, add a tooltip showing the valid range
+    // of its value.
+    if (isParameterTypeNumeric(parameter)) {
+      range +=
+          "Valid range: (" + parameter.getValue().getMin() + ", "
+              + parameter.getValue().getMax() + ")";
+      this.setTitle(range);
+    }
+  }
+
+  /**
+   * A worker that makes the {@link ValueCell} display a droplist for the
+   * "choice" parameter type.
+   * 
+   * @param value the value of the parameter.
+   */
+  private void makeChoiceCell(String value) {
+    ListBox choiceDroplist = new ListBox(false); // no multi select
+    choiceDroplist.addChangeHandler(new ListSelectionHandler());
+
+    Integer nChoices = this.parameter.getValue().getChoices().length();
+    for (int i = 0; i < nChoices; i++) {
+      choiceDroplist.addItem(this.parameter.getValue().getChoices().get(i));
+      if (choiceDroplist.getItemText(i).matches(value)) {
+        choiceDroplist.setSelectedIndex(i);
+      }
+    }
+    choiceDroplist.setVisibleItemCount(1); // show one item -- a droplist
+    this.add(choiceDroplist);
+  }
+  
+  /**
+   * A worker that makes the {@link ValueCell} display a droplist and a file
+   * upload button for the "file" parameter type.
+   * 
+   * @param value the value of the parameter.
+   */
+  private void makeFileCell(String value) {
       ListBox fileDroplist = new ListBox(false); // no multi select
       fileDroplist.addChangeHandler(new ListSelectionHandler());
 
@@ -96,25 +123,20 @@ public class ValueCell extends HorizontalPanel {
 
       this.setCellVerticalAlignment(fileDroplist, ALIGN_MIDDLE);
       uploadButton.getElement().getStyle().setMarginLeft(3, Unit.PX);
+  }
 
-    } else {
+  /**
+   * A worker that makes the {@link ValueCell} display a text box. This is the
+   * default for "float", "int", etc., parameter types.
+   * 
+   * @param value the value of the parameter.
+   */
+  private void makeTextCell(String value) {
+    TextBox valueTextBox = new TextBox();
+    valueTextBox.addKeyUpHandler(new TextEditHandler());
 
-      TextBox valueTextBox = new TextBox();
-      valueTextBox.addKeyUpHandler(new TextEditHandler());
-
-      valueTextBox.setText(value);
-      this.add(valueTextBox);
-
-    }
-
-    // If the parameter type is numeric, add a tooltip showing the valid range
-    // of its value.
-    if (isParameterTypeNumeric(parameter)) {
-      range +=
-          "Valid range: (" + parameter.getValue().getMin() + ", "
-              + parameter.getValue().getMax() + ")";
-      this.setTitle(range);
-    }
+    valueTextBox.setText(value);
+    this.add(valueTextBox);
   }
 
   /**
