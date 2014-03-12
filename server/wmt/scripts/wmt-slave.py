@@ -5,6 +5,7 @@ import urllib2
 import tarfile
 import subprocess
 import shutil
+import json
 
 
 class Error(Exception):
@@ -86,12 +87,17 @@ def upload_run_tarball(server, tarball):
         return resp
 
 
-def generate_error_message(name, error):
+def generate_error_message(name, error, **kwds):
+    cwd = kwds.get('cwd', '.')
+
     try:
-        with open('_%s.err' % name, 'r') as err:
+        path_to_error_log = os.path.join(cwd, '_%s.err' % name)
+        with open(path_to_error_log, 'r') as err:
             stderr = err.read()
     except IOError:
-        stderr = ''
+        stderr = """
+(There should be an error log here but I had trouble reading it.)
+"""
 
     return '\n'.join([str(error), stderr, ])
 
@@ -128,7 +134,7 @@ def run_component(name, **kwds):
     try:
         subprocess.check_call(['/bin/bash', 'run.sh'], **kwds)
     except subprocess.CalledProcessError as error:
-        raise ComponentRunError(generate_error_message(name, error))
+        raise ComponentRunError(generate_error_message(name, error, **kwds))
 
 
 class open_logs(object):
@@ -145,6 +151,7 @@ class open_logs(object):
     def __exit__(self, type, value, traceback):
         self._out.close()
         self._err.close()
+        #return True
 
 
 class WmtSlave(object):
@@ -154,6 +161,7 @@ class WmtSlave(object):
         self._sim_dir = create_user_execution_dir(id, prefix=self._wmt_dir)
         self._server = server
         self._env = env
+        self._result = {}
 
     @property
     def id(self):
@@ -162,6 +170,10 @@ class WmtSlave(object):
     @property
     def sim_dir(self):
         return self._sim_dir
+
+    @property
+    def result(self):
+        return self._result
 
     def setup(self):
         self.update_status('downloading', 'downloading simulation data')
@@ -212,14 +224,17 @@ class WmtSlave(object):
             tar.extractall(path=self._wmt_dir)
 
     def pack_tarball(self):
-        tarball = os.path.join(self._wmt_dir, self.id + '.tar.gz')
+        os.chdir(self._wmt_dir)
+
+        tarball = self.id + '.tar.gz'
         with tarfile.open(tarball, mode='w:gz') as tar:
-            tar.add(self._sim_dir)
-        return tarball
+            tar.add(self.id)
+
+        return os.path.abspath(tarball)
 
     def upload_tarball(self, path):
-        ans = upload_run_tarball(self._server, path)
-        return ans
+        resp = upload_run_tarball(self._server, path)
+        self._result = json.loads(resp.text)
 
 
 def launch(id, url, dir='~/.wmt'):
@@ -235,6 +250,8 @@ def launch(id, url, dir='~/.wmt'):
 
     task = WmtSlave(id, url, env=env, dir=dir)
     task.execute()
+
+    return task.result
 
 
 class EnsureHttps(argparse.Action):
@@ -259,15 +276,16 @@ def main():
     args = parser.parse_args()
 
     try:
-        launch(args.id, args.server_url, dir=args.exec_dir)
+        result = launch(args.id, args.server_url, dir=args.exec_dir)
     except Error as error:
         update_run_status(args.server_url, args.id, 'error', str(error))
     except Exception as error:
         update_run_status(args.server_url, args.id, 'error',
                           traceback.format_exc())
     else:
+        message = '<a href=%s>pickup</a>' % result['url']
         update_run_status(args.server_url, args.id, 'success',
-                          'simulation is complete')
+                          'simulation is complete and available for %s' % message)
 
 
 if __name__ == '__main__':
