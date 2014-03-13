@@ -204,10 +204,13 @@ public class ValueCell extends HorizontalPanel {
       upload = new UploadDialogBox();
       upload.setText("Upload File...");
 
+      // Get the id of the model this file belongs to.
       String modelId = ((Integer) pt.data.getMetadata().getId()).toString(); 
       upload.getHidden().setValue(modelId);
 
+      // Where the form is to be submitted.
       upload.getForm().setAction(DataURL.uploadFile(pt.data));
+      
       upload.getForm().addSubmitCompleteHandler(new UploadCompleteHandler());
       upload.center();
     }
@@ -216,13 +219,9 @@ public class ValueCell extends HorizontalPanel {
   public class UploadCompleteHandler implements FormPanel.SubmitCompleteHandler {
     @Override
     public void onSubmitComplete(SubmitCompleteEvent event) {
-
       upload.hide();
-      Window.alert("Filename: " + upload.getUpload().getFilename()
-          + "; Results: " + event.getResults());
-
       if (event.getResults() != null) {
-        ;
+        Window.alert("File uploaded!");
       }
     }
   }
