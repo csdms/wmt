@@ -340,7 +340,9 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       // TODO This should be configured.
       String hosts[] =
-          {"beach.colorado.edu"};
+          {"CSDMS supercomputer (Beach)", 
+          "University of Colorado supercomputer (Janus)",
+          "Localhost"};
       for (int i = 0; i < hosts.length; i++) {
         runDialog.getHostPanel().getDroplist().addItem(hosts[i]);
       }
