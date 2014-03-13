@@ -102,25 +102,23 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
   public void addComponent(Component component, TreeItem target) {
 
     GWT.log("Adding component: " + component.getName());
-
-    // Mark the model as unsaved with an asterisk. Is this the driver port? If
-    // so, also suggest a model name.
-    if (this.getItem(0).equals(target)) {
-      data.getModel().setName(
-          component.getName() + " " + data.saveAttempts.toString());
-    }
-    data.modelIsSaved(false);
-    data.getPerspective().setModelPanelTitle();
-
     this.setComponent(component, target);
 
     // Ensure that the (class) component replaces the model component.
     data.replaceModelComponent(data.getComponent(component.getId()));
 
-    if (!data.getParameterTable().isCellPresent(0, 0)) {
-      data.getParameterTable().showInfoMessage();
+    // Is this the driver? If so, display the component's parameters. Also
+    // suggest a model name. 
+    if (this.getItem(0).equals(target)) {
+      data.getModel().setName(
+          component.getName() + " " + data.saveAttempts.toString());
+      data.setSelectedComponent(component.getId());
+      data.getParameterTable().loadTable();
     }
-
+    
+    // Mark the model state as unsaved.
+    data.modelIsSaved(false);
+    data.getPerspective().setModelPanelTitle();
   }
 
   /**
