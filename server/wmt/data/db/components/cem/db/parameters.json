@@ -35,9 +35,9 @@
       }
     },
     {
-      "key":"row_spacing",
-      "name":"Row spacing",
-      "description":"Grid resolution in cross-shore (row) direction",
+      "key":"grid_spacing",
+      "name":"Row and columns spacing",
+      "description":"Grid resolution in cross and along-shore direction",
       "value":{
         "type":"float",
         "default":100.0,
@@ -60,6 +60,58 @@
           "max":1.79769e308
         },
         "units":"m"
+      }
+    },
+    {
+      "key":"sediment_flux_flag",
+      "name":"Sediment flux flag",
+      "description":"Sediment flux flag",
+      "value":{
+        "type":"choice",
+        "default":1,
+        "choices": [0, 1]
+      }
+    },
+    {
+      "key":"shoreface_slope",
+      "name":"Shoreface slope",
+      "description":"Gradient of the shoreface",
+      "value":{
+        "type":"float",
+        "default":0.01,
+        "range":{
+          "min":0.001,
+          "max":1.0
+        },
+        "units":"-"
+      }
+    },
+    {
+      "key":"shoreface_depth",
+      "name":"Shoreface dept",
+      "description":"Water depth of the shoreface",
+      "value":{
+        "type":"float",
+        "default":10.0,
+        "range":{
+          "min":0.0,
+          "max":100.0
+        },
+        "units":"m"
+      }
+    },
+    {
+      "key":"shelf_slope",
+      "name":"Shelf slope",
+      "description":"Gradient of the shelf",
+      "value":{
+        "type":"float",
+        "default":0.001,
+        "range":{
+          "min":0.0001,
+          "max":100.0
+        },
+        "units":"-"
       }
     },
     {
