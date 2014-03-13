@@ -1,0 +1,5 @@
+[
+  "sedflux", "-3", "--silent", "--no-signals",
+  "--init-file=init.kvf",
+  "--input-dir=."
+]
