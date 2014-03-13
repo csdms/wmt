@@ -1,11 +1,11 @@
 [
     {
-      "key":"simulation_name",
-      "name":"Simulation name",
-      "description":"Name of the simulation",
+      "key":"separator",
+      "name":"Grid",
+      "description":"Grid",
       "value":{
         "type":"string",
-        "default":"CEM"
+        "default":""
       }
     },
     {
@@ -49,27 +49,12 @@
       }
     },
     {
-      "key":"column_spacing",
-      "name":"Column spacing",
-      "description":"Grid resolution in along-shore (column) direction",
+      "key":"separator",
+      "name":"Coastal Geometry",
+      "description":"Coastal Geometry",
       "value":{
-        "type":"float",
-        "default":100.0,
-        "range":{
-          "min":1.0,
-          "max":1.79769e308
-        },
-        "units":"m"
-      }
-    },
-    {
-      "key":"sediment_flux_flag",
-      "name":"Sediment flux flag",
-      "description":"Sediment flux flag",
-      "value":{
-        "type":"choice",
-        "default":1,
-        "choices": [0, 1]
+        "type":"string",
+        "default":""
       }
     },
     {
@@ -115,16 +100,13 @@
       }
     },
     {
-      "key":"output_format",
-      "name":"Output format",
-      "description":"File format for output files",
+      "key":"sediment_flux_flag",
+      "name":"Sediment flux flag",
+      "description":"Sediment flux flag",
       "value":{
         "type":"choice",
-        "default":"netcdf",
-        "choices":[
-          "netcdf",
-          "vtk"
-        ]
+        "default":1,
+        "choices": [0, 1]
       }
     }
 ]
