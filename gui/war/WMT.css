@@ -252,7 +252,7 @@
    color: #039;
 }
 
-.gwt-TextBox-inrange {
+.gwt-TextBox {
    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif !important;
    background-color: #ffc;
 }
@@ -266,8 +266,20 @@
    font-size: initial;
 }
 
+.gwt-Button {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
 .gwt-Button-slim {
    padding: 3px 7px !important;
+}
+
+.gwt-Label {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.gwt-DialogBox .Caption {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif !important;
 }
 
 .gwt-PasswordTextBox {

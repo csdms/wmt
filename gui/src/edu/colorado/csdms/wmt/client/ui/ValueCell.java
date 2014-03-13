@@ -135,7 +135,6 @@ public class ValueCell extends HorizontalPanel {
    */
   private void makeTextCell(String value) {
     TextBox valueTextBox = new TextBox();
-    valueTextBox.setStyleDependentName("inrange", true);
     valueTextBox.addKeyUpHandler(new TextEditHandler());
 
     valueTextBox.setText(value);
