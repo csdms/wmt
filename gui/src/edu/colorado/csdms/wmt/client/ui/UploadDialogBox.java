@@ -3,6 +3,7 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -20,9 +21,13 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 
 /**
+ * A dialog box with a {@link FormPanel} that holds a {@link FileUpload}
+ * widget and a {@link ChoicePanel}. Use it to choose a file for upload to the
+ * WMT server.
  * 
+ * @see <a href="http://davidwalsh.name/fakepath">This</a> blog post on
+ *      <code>C:\fakepath</code> and file uploads.
  * @author Mark Piper (mark.piper@colorado.edu)
- *
  */
 public class UploadDialogBox extends DialogBox {
   
@@ -31,7 +36,10 @@ public class UploadDialogBox extends DialogBox {
   private FileUpload upload;
 
   /**
-   * 
+   * Creates an {@link UploadDialogBox}.
+   * <p>
+   * Note that the form action and value of the hidden field need to be set
+   * when this dialog is employed. (Enforcing MVP separation of M and V.)
    */
   public UploadDialogBox() {
 
@@ -78,6 +86,16 @@ public class UploadDialogBox extends DialogBox {
     choicePanel.getOkButton().addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
+
+        String hope = upload.getElement().getString();
+        GWT.log("Upload: " + hope);
+        
+        String msg =
+            upload.getName() + " = " + upload.getFilename() + "; "
+                + hidden.getName() + " = " + hidden.getValue() + "; "
+                + "URL = " + form.getAction();
+        Window.alert(msg);
+
         form.submit();
       }
     });
