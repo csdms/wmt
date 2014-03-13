@@ -116,6 +116,7 @@ public class ValueCell extends HorizontalPanel {
       this.add(fileDroplist);
 
       Button uploadButton = new Button("<i class='fa fa-cloud-upload'></i>");
+      uploadButton.setStyleDependentName("slim", true);
       uploadButton.addClickHandler(new UploadHandler());
 
       uploadButton.setTitle("Upload file to server");
@@ -133,6 +134,7 @@ public class ValueCell extends HorizontalPanel {
    */
   private void makeTextCell(String value) {
     TextBox valueTextBox = new TextBox();
+    valueTextBox.setStyleDependentName("inrange", true);
     valueTextBox.addKeyUpHandler(new TextEditHandler());
 
     valueTextBox.setText(value);
