@@ -34,6 +34,7 @@ public class ValueCell extends HorizontalPanel {
 
   private ParameterJSO parameter;
   private UploadDialogBox upload;
+  private ListBox fileDroplist;
 
   /**
    * Makes a ValueCell from the information contained in the input
@@ -102,7 +103,7 @@ public class ValueCell extends HorizontalPanel {
    * @param value the value of the parameter.
    */
   private void makeFileCell(String value) {
-      ListBox fileDroplist = new ListBox(false); // no multi select
+      fileDroplist = new ListBox(false); // no multi select
       fileDroplist.addChangeHandler(new ListSelectionHandler());
 
       Integer nFiles = this.parameter.getValue().getFiles().length();
@@ -139,6 +140,14 @@ public class ValueCell extends HorizontalPanel {
 
     valueTextBox.setText(value);
     this.add(valueTextBox);
+  }
+
+  public ListBox getFileDroplist() {
+    return fileDroplist;
+  }
+
+  public void setFileDroplist(ListBox fileDroplist) {
+    this.fileDroplist = fileDroplist;
   }
 
   /**
@@ -216,12 +225,46 @@ public class ValueCell extends HorizontalPanel {
     }
   }
 
+  /**
+   * When the upload is complete and successful, add the name of the uploaded
+   * file to the {@link ValueCell} fileDroplist and select it.
+   */
   public class UploadCompleteHandler implements FormPanel.SubmitCompleteHandler {
     @Override
     public void onSubmitComplete(SubmitCompleteEvent event) {
+      
       upload.hide();
+      
       if (event.getResults() != null) {
+        
+        // Strip the fakepath from the filename.
+        String fileName =
+            upload.getUpload().getFilename().replace("C:\\fakepath\\", "");
+        
+        // Add the filename to the fileDroplist, but only if it's not there
+        // already.
+        Boolean isInList = false;
+        Integer listIndex = 0;
+        for (int i = 0; i < fileDroplist.getItemCount(); i++) {
+          if (fileDroplist.getItemText(i).matches(fileName)) {
+            isInList = true;
+            listIndex = i;
+          }
+        }
+        if (!isInList) {
+          fileDroplist.addItem(fileName);
+          fileDroplist.setItemSelected(fileDroplist.getItemCount() - 1, true);
+        } else {
+          fileDroplist.setItemSelected(listIndex, true);
+        }
+        
+        // Say everything is alright.
         Window.alert("File uploaded!");
+        
+        // Mark the model as unsaved.
+        ParameterTable pt = (ParameterTable) ValueCell.this.getParent();
+        pt.data.modelIsSaved(false);
+        pt.data.getPerspective().setModelPanelTitle();
       }
     }
   }
