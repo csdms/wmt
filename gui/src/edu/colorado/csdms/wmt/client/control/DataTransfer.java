@@ -21,6 +21,7 @@ import edu.colorado.csdms.wmt.client.data.ComponentListJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelListJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
+import edu.colorado.csdms.wmt.client.ui.RunInfoDialogBox;
 
 /**
  * A class that defines static methods for accessing, modifying and deleting,
@@ -654,13 +655,8 @@ public class DataTransfer {
           DataTransfer.launchModelRun(data);
         }
         if (type.matches("launch")) {
-          // TODO Display an info dialog (#27)
-
-          // XXX For debugging; remove when finished.
-          String responseText = response.getText();
-          String headers = response.getHeadersAsString();
-          Window.alert("Success! Response text: " + responseText + "; "
-              + "Headers: " + headers);
+          RunInfoDialogBox runInfo = new RunInfoDialogBox();
+          runInfo.center();
         }
 
       } else {
