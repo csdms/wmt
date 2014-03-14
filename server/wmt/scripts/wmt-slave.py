@@ -268,7 +268,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('id', help='run ID')
     parser.add_argument('--server-url',
-                        default='https://csdms.colorado.edu/wmt',
+                        default='https://csdms.colorado.edu/wmt-server',
                         action=EnsureHttps, help='URL of WMT server')
     parser.add_argument('--exec-dir', default=os.path.expanduser('~/.wmt'),
                         help='path to execution directory')
