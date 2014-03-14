@@ -275,24 +275,33 @@ the simulation has not yet been staged.
         yield '%X\r\n%s\r\n' % (0, '')
 
 
-class Status(object):
-    form = web.form.Form(
-        web.form.Textbox('uuid',
-                         valid_uuid,
-                         submission_exists(),
-                         size=80, description='Simulation id:'),
-        web.form.Button('Submit'),
-    )
+class Get(object):
+    def GET(self, uuid):
+        try:
+            info = submissions.get_submission(uuid)
+        except submissions.IdError:
+            raise web.internalerror("Unable to find submission %s" % uuid)
+
+        web.header('Content-Type', 'application/json; charset=utf-8')
+        return json.dumps(dict(info))
+
+
+class GetAll(object):
     def GET(self):
-        return render.titled_form('Get Status', self.form())
+        infos = submissions.get_submissions()
 
-    def POST(self):
-        form = self.form()
-        if not form.validates():
-            return render.titled_form('Get Status', form)
+        web.header('Content-Type', 'application/json; charset=utf-8')
+        return json.dumps([dict(info) for info in infos])
 
-        status = submissions.get_status(form.d.uuid)
-        return render.status(form.d.uuid, status)
+
+class Status(object):
+    def GET(self, uuid):
+        try:
+            status = submissions.get_status(uuid)
+        except submissions.IdError:
+            raise web.internalerror("Unable to find submission %s" % uuid)
+
+        return render.status(uuid, status)
 
 
 class Show(object):

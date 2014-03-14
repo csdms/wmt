@@ -51,6 +51,9 @@ URLS = (
     '/run/upload', 'wmt.controllers.run.Upload',
     '/run/download/(%s)/(.+)' % _UUID_REGEX, 'wmt.controllers.run.Download',
     '/run/download', 'wmt.controllers.run.DownloadBundle',
+    '/run/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Get',
+    '/run/(%s)/status' % _UUID_REGEX, 'wmt.controllers.run.Status',
+    '/run/', 'wmt.controllers.run.GetAll',
 
     '/hosts/new', 'wmt.controllers.hosts.New',
     '/hosts/view/(\d+)', 'wmt.controllers.hosts.View',
