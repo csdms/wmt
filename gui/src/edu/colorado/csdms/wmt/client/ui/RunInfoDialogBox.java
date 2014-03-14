@@ -58,7 +58,7 @@ public class RunInfoDialogBox extends DialogBox {
       @Override
       public void onClick(ClickEvent event) {
         event.preventDefault();
-      Window.open(DataURL.showModelRun(), "viewInputFiles", null);
+      Window.open(DataURL.showModelRun(), "runInfoDialog", null);
       }
     });
     
