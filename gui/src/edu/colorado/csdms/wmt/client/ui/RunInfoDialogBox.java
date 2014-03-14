@@ -50,25 +50,26 @@ public class RunInfoDialogBox extends DialogBox {
     contents.add(closeButton);
     
     this.setWidget(contents);
+
+    /*
+     * Intercepts click on link in dialog and opens the URL in a new tab.
+     */
+    msgHtml.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        event.preventDefault();
+      Window.open(DataURL.showModelRun(), "viewInputFiles", null);
+      }
+    });
     
-    msgHtml.addClickHandler(new InterceptClickHandler());
+    /*
+     * Hides the dialog box.
+     */
     closeButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
         RunInfoDialogBox.this.hide();
       }
     });
-  }
-
-  /**
-   * Intercepts the click on the link in the HTML, text or JSON cell and
-   * directs it to open in another tab/window.
-   */
-  public class InterceptClickHandler implements ClickHandler {
-    @Override
-    public void onClick(ClickEvent event) {
-      event.preventDefault();
-      Window.open(DataURL.showModelRun(), "viewInputFiles", null);
-    }
   }
 }
