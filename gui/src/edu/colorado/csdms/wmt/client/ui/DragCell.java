@@ -11,6 +11,10 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DragStartEvent;
 import com.google.gwt.event.dom.client.DragStartHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -26,13 +30,15 @@ import edu.colorado.csdms.wmt.client.data.Port;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class DragCell extends Grid implements DragStartHandler {
+public class DragCell extends Grid implements DragStartHandler, MouseOverHandler, MouseOutHandler {
 
+  private ComponentJSO componentJSO;
   private String label;
   private String id;
   private HTML grabCell;
   private HTML textCell;
   private Boolean sensitive;
+  private ComponentInfoDialogBox componentInfo;
 
   /**
    * Makes a DragCell for the given component.
@@ -44,6 +50,8 @@ public class DragCell extends Grid implements DragStartHandler {
     // A DragCell is a Grid with one row and two columns. And it's draggable.
     super(1, 2);
     this.getElement().setDraggable(Element.DRAGGABLE_TRUE);
+    
+    this.componentJSO = componentJSO;
     
     // The name doesn't really do anything, though it is what GWT native DnD
     // shows on drag. The id is key -- it's what is picked up in the ModelTree
@@ -71,6 +79,8 @@ public class DragCell extends Grid implements DragStartHandler {
     // Associate event handlers.
     addDomHandler(this, DragStartEvent.getType());
     grabCell.addClickHandler(new GrabCellClickHandler());
+    addDomHandler(this, MouseOverEvent.getType());
+    addDomHandler(this, MouseOutEvent.getType());
   }
 
   /**
@@ -81,7 +91,18 @@ public class DragCell extends Grid implements DragStartHandler {
   public void onDragStart(DragStartEvent event) {
     event.setData("text", this.id);
   }
-  
+
+  @Override
+  public void onMouseOver(MouseOverEvent event) {
+    componentInfo = new ComponentInfoDialogBox(componentJSO);
+    componentInfo.center();
+  }
+
+  @Override
+  public void onMouseOut(MouseOutEvent event) {
+    componentInfo.hide();
+  }
+
   /**
    * A worker that queries the component to get information to display in the
    * tooltip.
@@ -198,5 +219,5 @@ public class DragCell extends Grid implements DragStartHandler {
         }
       }
     }
-  }  
+  } 
 }

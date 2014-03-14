@@ -338,11 +338,15 @@ public class ModelMenu extends DecoratedPopupPanel {
       
       runDialog = new RunDialogBox();
 
-      // TODO This should be configured.
+      // TODO This should be configured. Can't desensitize ListBox elements.
+//      String hosts[] =
+//          {"CSDMS supercomputer (Beach)", 
+//          "University of Colorado supercomputer (Janus)",
+//          "Localhost"};
       String hosts[] =
-          {"CSDMS supercomputer (Beach)", 
-          "University of Colorado supercomputer (Janus)",
-          "Localhost"};
+          {"beach.colorado.edu", 
+          "janus.colorado.edu",
+          "localhost"};
       for (int i = 0; i < hosts.length; i++) {
         runDialog.getHostPanel().getDroplist().addItem(hosts[i]);
       }
@@ -366,7 +370,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     @Override
     public void onClick(ClickEvent event) {
       ModelMenu.this.hide();
-      Window.open(DataURL.showModelRun(), "_blank", null);
+      Window.open(DataURL.showModelRun(), "runInfoDialog", null);
     }
   }
 

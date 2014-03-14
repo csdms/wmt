@@ -16,7 +16,8 @@ import com.google.gwt.user.client.Window;
 public class DataURL {
 
   // By same-origin policy, must use HTTPS consistently across all URLs.
-  private static final String API_URL = "https://csdms.colorado.edu/wmt/";
+  private static final String BASE_URL = "https://csdms.colorado.edu/";
+  private static final String API_URL = BASE_URL + "wmt-server/";
   private static final String LOCAL_URL = GWT.getHostPageBaseURL();
 
   private static final String COMPONENT_LIST_URL = API_URL + "components/list";

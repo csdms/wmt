@@ -103,28 +103,37 @@ public class ValueCell extends HorizontalPanel {
    * @param value the value of the parameter.
    */
   private void makeFileCell(String value) {
-      fileDroplist = new ListBox(false); // no multi select
-      fileDroplist.addChangeHandler(new ListSelectionHandler());
+    fileDroplist = new ListBox(false); // no multi select
+    fileDroplist.addChangeHandler(new ListSelectionHandler());
 
-      Integer nFiles = this.parameter.getValue().getFiles().length();
-      for (int i = 0; i < nFiles; i++) {
-        fileDroplist.addItem(this.parameter.getValue().getFiles().get(i));
-        if (fileDroplist.getItemText(i).matches(value)) {
-          fileDroplist.setSelectedIndex(i);
-        }
+    // Load the droplist. If the value of the incoming parameter isn't listed
+    // in the component, append it to the end of the list and select it.
+    Integer nFiles = this.parameter.getValue().getFiles().length();
+    Integer selectedIndex = -1;
+    for (int i = 0; i < nFiles; i++) {
+      fileDroplist.addItem(this.parameter.getValue().getFiles().get(i));
+      if (fileDroplist.getItemText(i).matches(value)) {
+        selectedIndex = i;
       }
-      fileDroplist.setVisibleItemCount(1); // show one item -- a droplist
-      this.add(fileDroplist);
+    }
+    if (selectedIndex > 0) {
+      fileDroplist.setSelectedIndex(selectedIndex);
+    } else {
+      fileDroplist.addItem(value);
+      fileDroplist.setSelectedIndex(fileDroplist.getItemCount() - 1);
+    }
+    fileDroplist.setVisibleItemCount(1); // show one item -- a droplist
+    this.add(fileDroplist);
 
-      Button uploadButton = new Button("<i class='fa fa-cloud-upload'></i>");
-      uploadButton.setStyleDependentName("slim", true);
-      uploadButton.addClickHandler(new UploadHandler());
+    Button uploadButton = new Button("<i class='fa fa-cloud-upload'></i>");
+    uploadButton.setStyleDependentName("slim", true);
+    uploadButton.addClickHandler(new UploadHandler());
 
-      uploadButton.setTitle("Upload file to server");
-      this.add(uploadButton);
+    uploadButton.setTitle("Upload file to server");
+    this.add(uploadButton);
 
-      this.setCellVerticalAlignment(fileDroplist, ALIGN_MIDDLE);
-      uploadButton.getElement().getStyle().setMarginLeft(3, Unit.PX);
+    this.setCellVerticalAlignment(fileDroplist, ALIGN_MIDDLE);
+    uploadButton.getElement().getStyle().setMarginLeft(3, Unit.PX);
   }
 
   /**
@@ -139,14 +148,6 @@ public class ValueCell extends HorizontalPanel {
 
     valueTextBox.setText(value);
     this.add(valueTextBox);
-  }
-
-  public ListBox getFileDroplist() {
-    return fileDroplist;
-  }
-
-  public void setFileDroplist(ListBox fileDroplist) {
-    this.fileDroplist = fileDroplist;
   }
 
   /**
@@ -226,7 +227,8 @@ public class ValueCell extends HorizontalPanel {
 
   /**
    * When the upload is complete and successful, add the name of the uploaded
-   * file to the {@link ValueCell} fileDroplist and select it.
+   * file to the {@link ValueCell} fileDroplist, select it, and save it as the
+   * value of this parameter.
    */
   public class UploadCompleteHandler implements FormPanel.SubmitCompleteHandler {
     @Override
@@ -234,7 +236,7 @@ public class ValueCell extends HorizontalPanel {
       
       upload.hide();
       
-      if (event.getResults() != null) {
+      if (event.getResults() != null) {        
         
         // Strip the fakepath from the filename.
         String fileName =
@@ -242,20 +244,21 @@ public class ValueCell extends HorizontalPanel {
         
         // Add the filename to the fileDroplist, but only if it's not there
         // already.
-        Boolean isInList = false;
-        Integer listIndex = 0;
+        Integer listIndex = -1;
         for (int i = 0; i < fileDroplist.getItemCount(); i++) {
           if (fileDroplist.getItemText(i).matches(fileName)) {
-            isInList = true;
             listIndex = i;
           }
         }
-        if (!isInList) {
-          fileDroplist.addItem(fileName);
-          fileDroplist.setItemSelected(fileDroplist.getItemCount() - 1, true);
+        if (listIndex > 0) {
+          fileDroplist.setSelectedIndex(listIndex);
         } else {
-          fileDroplist.setItemSelected(listIndex, true);
+          fileDroplist.addItem(fileName);
+          fileDroplist.setSelectedIndex(fileDroplist.getItemCount() - 1);
         }
+        
+        // Like, important.
+        setValue(fileName);
         
         // Say everything is alright.
         Window.alert("File uploaded!");
