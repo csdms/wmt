@@ -26,9 +26,12 @@ def new_model(name, text, owner=''):
 
 
 def del_model(id):
+    import shutil
+
+
     db.delete('models', where='id=$id', vars=locals())
     try:
-        os.removedirs(get_model_upload_dir(id))
+        shutil.rmtree(get_model_upload_dir(id))
     except os.error as error:
         if error.errno == 2:
             pass
