@@ -563,7 +563,7 @@ public class ModelCell extends Grid implements DropHandler {
 
           // If the deleted Component is the selectedComponent, unset it.
           String selected = tree.data.getSelectedComponent();
-          if (deleted == selected) {
+          if (deleted.contains(selected)) {
             tree.data.setSelectedComponent(null);
           }
 
@@ -571,7 +571,7 @@ public class ModelCell extends Grid implements DropHandler {
           // displaying their parameters in the ParameterTable, clear the
           // ParameterTable. If this isn't the driver, show the info message.
           String showing = tree.data.getParameterTable().getComponentId();
-          if (deleted == showing) {
+          if (deleted.contains(showing)) {
             tree.data.getParameterTable().clearTable();
             if (parentTreeItem.getParentItem() != null) {
               tree.data.getParameterTable().showInfoMessage();

@@ -530,5 +530,13 @@ public class DataManager {
 
     ModelSerializer serializer = new ModelSerializer(this);
     serializer.deserialize();
+
+    // Locate the driver of the model and display its parameters.
+    for (int i = 0; i < model.nComponents(); i++) {
+      if (model.getComponents().get(0).isDriver()) {
+        setSelectedComponent(model.getComponents().get(0).getId());
+        parameterTable.loadTable();
+      }
+    }
   }
 }

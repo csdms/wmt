@@ -103,8 +103,17 @@ public class ValueJSO extends JavaScriptObject {
    */
   public final native JsArrayString getFiles() /*-{
 		return this.files;
-  }-*/;  
-  
+  }-*/;
+
+  /**
+   * A JSNI method to set the "files" attribute of a ValueJSO.
+   * 
+   * @param files a JsArrayString of filenames
+   */
+  public final native void setFiles(JsArrayString files) /*-{
+		this.files = files;
+  }-*/;
+
   /**
    * A non-JSNI method for stringifying the attributes of a ValueJSO. Must be
    * final.

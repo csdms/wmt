@@ -3,7 +3,6 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -11,6 +10,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitHandler;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 
 /**
  * A dialog box with a {@link FormPanel} that holds a {@link FileUpload}
@@ -26,7 +25,8 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
  * WMT server.
  * 
  * @see <a href="http://davidwalsh.name/fakepath">This</a> blog post on
- *      <code>C:\fakepath</code> and file uploads.
+ *      <code>C:\fakepath</code> and file uploads. Doesn't matter, though; the
+ *      browser takes care of this.
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class UploadDialogBox extends DialogBox {
@@ -54,13 +54,15 @@ public class UploadDialogBox extends DialogBox {
     form.setEncoding(FormPanel.ENCODING_MULTIPART);
     form.setMethod(FormPanel.METHOD_POST);
 
+    // Everything in this "contents" panel can be included in the form.
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
     form.setWidget(contents);
 
     // Make a hidden field with name "id". When employed, set value.
     hidden = new Hidden();
-    hidden.setName("id");
+    hidden.setName("id"); // to match API
+    contents.add(hidden);
     
     HorizontalPanel filePanel = new HorizontalPanel();
     filePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -73,7 +75,7 @@ public class UploadDialogBox extends DialogBox {
     fileLabel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
     fileLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
     upload = new FileUpload();
-    upload.setName("file");
+    upload.setName("file"); // to match API
     filePanel.add(fileLabel);
     filePanel.add(upload);
 
@@ -82,26 +84,20 @@ public class UploadDialogBox extends DialogBox {
         "<i class='fa fa-cloud-upload'></i> Upload");
     contents.add(choicePanel);
 
-    // Event handler for the "Upload" button. Submits the form.
+    /*
+     * Event handler for the "Upload" button. Submits the form.
+     */
     choicePanel.getOkButton().addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-
-        String hope = upload.getElement().getString();
-        GWT.log("Upload: " + hope);
-        
-        String msg =
-            upload.getName() + " = " + upload.getFilename() + "; "
-                + hidden.getName() + " = " + hidden.getValue() + "; "
-                + "URL = " + form.getAction();
-        Window.alert(msg);
-
         form.submit();
       }
     });
 
-    // This handler is called just before the form is submitted. Perform
-    // validation.
+    /*
+     * This handler is called just before the form is submitted. Can be used to
+     * perform validation.
+     */
     form.addSubmitHandler(new SubmitHandler() {
       @Override
       public void onSubmit(SubmitEvent event) {
@@ -112,7 +108,9 @@ public class UploadDialogBox extends DialogBox {
       }
     });
     
-    // Event handler for the "Cancel" button. Closes UploadDialogBox.
+    /*
+     * Event handler for the "Cancel" button. Closes UploadDialogBox.
+     */
     choicePanel.getCancelButton().addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
