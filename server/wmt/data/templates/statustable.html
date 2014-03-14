@@ -2,7 +2,7 @@ $def with (submissions)
 
 <html>
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/wmt/static/style.css" />
+  <link rel="stylesheet" type="text/css" href="/wmt-server/static/style.css" />
 <head>
 </head>
 
@@ -12,23 +12,23 @@ $def with (submissions)
 <table id="hor-minimalist-a">
   <tr>
     <th scope="col">UUID</th>
-    <th scope="col">Model</th>
+    <!--th scope="col">Model</th-->
     <th scope="col">Name</th>
+    <!--th scope="col">Created</th-->
+    <th scope="col">Updated</th>
+    <!--th scope="col">Owner</th-->
     <th scope="col">Status</th>
-    <th scope="col">Created</th>
-    <th scope="col">Last Changed</th>
-    <th scope="col">Owner</th>
     <th scope="col">Message</th>
   </tr>
   $for submission in submissions:
   <tr>
     <td>$submission.uuid</td>
-    <td><a href="/wmt/models/edit/$submission.model_id">$submission.model_id</a></td>
+    <!--td><a href="/wmt/models/edit/$submission.model_id">$submission.model_id</a></td-->
     <td>$submission.name</td>
-    <td>$submission.status</td>
-    <td>$submission.created</td>
+    <!--td>$submission.created</td-->
     <td>$submission.updated</td>
-    <td>$submission.owner</td>
+    <!--td>$submission.owner</td-->
+    <td>$submission.status</td>
     <td>$:submission.message</td>
   </tr>
 </table>
