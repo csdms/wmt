@@ -1,5 +1,8 @@
 {
   "id":"plume",
   "name":"Plume",
-  "url":"http://csdms.colorado.edu/wiki/Model:Plume"
+  "summary": "Simulates a hypopycnal sediment plume.",
+  "url":"http://csdms.colorado.edu/wiki/Model:Plume",
+  "author": "Eric Hutton",
+  "doi": "10.1594/IEDA/100152"
 }

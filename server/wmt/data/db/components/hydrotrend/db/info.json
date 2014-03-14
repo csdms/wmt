@@ -1,6 +1,7 @@
 {
   "id":"hydrotrend",
   "name":"HydroTrend",
+  "summary": "Climate-driven hydrological water balance and transport model that simulates water discharge and sediment load at a river outlet.",
   "url":"http://csdms.colorado.edu/wiki/Model_help:HydroTrend",
   "author": "Albert Kettner",
   "email": "albert.kettner@colorado.edu",

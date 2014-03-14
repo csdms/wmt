@@ -1,5 +1,9 @@
 {
   "id":"sedflux3d",
   "name":"Sedflux3D",
-  "url":"http://csdms.colorado.edu/wiki/Model_help:Sedflux"
+  "summary": "Basin filling stratigraphic model.",
+  "url":"http://csdms.colorado.edu/wiki/Model_help:Sedflux",
+  "author": "Eric Hutton",
+  "version": "2.1",
+  "doi": "10.1594/IEDA/100161"
 }
