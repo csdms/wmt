@@ -1,9 +1,1086 @@
 {
+  "files":[
+    "child.in.tmpl"
+  ],
+  "doi":"10.1594/IEDA/100102",
   "name":"CHILD",
   "parameters":[
-    
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"Run Parameters",
+      "key":"separator",
+      "description":"Run Parameters"
+    },
+    {
+      "value":{
+        "default":"Child",
+        "type":"string"
+      },
+      "name":"Simulation name",
+      "key":"simulation_name",
+      "description":"Simulation name"
+    },
+    {
+      "value":{
+        "default":36500.0,
+        "units":"d",
+        "range":{
+          "max":1.79769313486e+308,
+          "min":1.0
+        },
+        "type":"float"
+      },
+      "name":"Run duration",
+      "key":"run_duration",
+      "description":"Simulation run time"
+    },
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"Mesh",
+      "key":"separator",
+      "description":"Options"
+    },
+    {
+      "value":{
+        "default":20000.0,
+        "units":"m",
+        "range":{
+          "max":1.79769313486e+308,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Grid length",
+      "key":"grid_x_size",
+      "description":"Length of grid in x-direction"
+    },
+    {
+      "value":{
+        "default":40000.0,
+        "units":"m",
+        "range":{
+          "max":1.79769313486e+308,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Grid width",
+      "key":"grid_y_size",
+      "description":"Length of grid in y-direction"
+    },
+    {
+      "value":{
+        "default":1000.0,
+        "units":"m",
+        "range":{
+          "max":10000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Node spacing",
+      "key":"grid_node_spacing",
+      "description":"Mean distance between grid nodes"
+    },
+    {
+      "value":{
+        "default":1,
+        "type":"choice",
+        "choices":[
+          "0",
+          "1",
+          "2"
+        ]
+      },
+      "name":"Point placement option",
+      "key":"opt_point_placement",
+      "description":"How to place points in mesh (0=uniform, 1=perturbed unif., 2=random)"
+    },
+    {
+      "value":{
+        "default":1,
+        "type":"choice",
+        "choices":[
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ]
+      },
+      "name":"Boundary type",
+      "key":"boundary_type",
+      "description":"Specify open boundary location (0=corner, 1=side, 2= 2 sides, 3=4 sides, 4=specify"
+    },
+    {
+      "value":{
+        "default":0.0,
+        "units":"m",
+        "range":{
+          "max":1000000.0,
+          "min":-1000000.0
+        },
+        "type":"float"
+      },
+      "name":"Mean elevation",
+      "key":"mean_elevation",
+      "description":"Mean of initial node elevations"
+    },
+    {
+      "value":{
+        "default":1.0,
+        "units":"m",
+        "range":{
+          "max":1000000.0,
+          "min":-1000000.0
+        },
+        "type":"float"
+      },
+      "name":"Random noise amplitude",
+      "key":"random_noise_elevation_amplitude",
+      "description":"Maximum amplitude of random noise applied to initial topography"
+    },
+    {
+      "value":{
+        "default":0.0,
+        "units":"-",
+        "range":{
+          "max":1000000.0,
+          "min":-1000000.0
+        },
+        "type":"float"
+      },
+      "name":"Sloped surface option",
+      "key":"opt_sloped_surface",
+      "description":"Option for sloping initial surface"
+    },
+    {
+      "value":{
+        "default":30.0,
+        "units":"m",
+        "range":{
+          "max":1000000.0,
+          "min":-1000000.0
+        },
+        "type":"float"
+      },
+      "name":"Elevation of upper boundary",
+      "key":"upper_boundary_elevation",
+      "description":"Elevation of upper boundary"
+    },
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"Climate",
+      "key":"separator",
+      "description":"Climate"
+    },
+    {
+      "value":{
+        "default":13.6,
+        "units":"m/yr",
+        "range":{
+          "max":1000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Mean rainfall intensity",
+      "key":"st_pmean",
+      "description":"Mean rainfall intensity (13.6 m/yr = Denver July)"
+    },
+    {
+      "value":{
+        "default":1.0,
+        "units":"yr",
+        "range":{
+          "max":1000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Mean storm duration",
+      "key":"st_stdur",
+      "description":"Mean storm duration (Denver July = 0.00057 yrs = 5 hrs)"
+    },
+    {
+      "value":{
+        "default":9.0,
+        "units":"yr",
+        "range":{
+          "max":1000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Mean time between storms",
+      "key":"st_istdur",
+      "description":"Mean time between storms (yr) (Denver July = 0.01yr = 88hrs)"
+    },
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"Sediment Transport",
+      "key":"separator",
+      "description":"Sediment Transport"
+    },
+    {
+      "value":{
+        "default":617.0,
+        "units":"-",
+        "range":{
+          "max":10000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Sediment transport efficiency factor",
+      "key":"kf",
+      "description":"Sediment transport efficiency factor (dims vary but incls conv s->y)"
+    },
+    {
+      "value":{
+        "default":0.66667,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Sediment transport capacity discharge exponent",
+      "key":"mf",
+      "description":"Sediment transport capacity discharge exponent"
+    },
+    {
+      "value":{
+        "default":0.66667,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Sediment transport capacity slope exponent",
+      "key":"nf",
+      "description":"Sediment transport capacity slope exponent"
+    },
+    {
+      "value":{
+        "default":1.5,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Excess shear stress exponent",
+      "key":"pf",
+      "description":"Excess shear stress (sic) exponent"
+    },
+    {
+      "value":{
+        "default":0.0005,
+        "units":"?",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Bedrock erodibility coefficient",
+      "key":"kb",
+      "description":"Bedrock erodibility coefficient (NOTE: unknown units)"
+    },
+    {
+      "value":{
+        "default":0.0005,
+        "units":"?",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Regolith erodibility coefficient",
+      "key":"kr",
+      "description":"Regolith erodibility coefficient (NOTE: unknown units)"
+    },
+    {
+      "value":{
+        "default":1000.0,
+        "units":"?",
+        "range":{
+          "max":100000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Shear stress coefficient",
+      "key":"kt",
+      "description":"Shear stress (or stream power) coefficient (NOTE: unknown units)"
+    },
+    {
+      "value":{
+        "default":0.66667,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Bedrock erodibility specific discharge exponent",
+      "key":"mb",
+      "description":"Bedrock erodibility specific (not total!) discharge exponent"
+    },
+    {
+      "value":{
+        "default":0.66667,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Bedrock erodibility slope exponent",
+      "key":"nb",
+      "description":"Bedrock erodibility slope exponent"
+    },
+    {
+      "value":{
+        "default":1.5,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Excess erosion capacity exponent",
+      "key":"pb",
+      "description":"Exponent on excess erosion capacity (e.g., excess shear stress)"
+    },
+    {
+      "value":{
+        "default":5.0,
+        "units":"kg/m/s^2",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Critical shear stress",
+      "key":"tau_critical",
+      "description":"Critical shear stress for detachment-limited-erosion"
+    },
+    {
+      "value":{
+        "default":5.0,
+        "units":"kg/m/s^2",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Critical shear stress",
+      "key":"tau_cb",
+      "description":"Critical shear stress for detachment-limited-erosion"
+    },
+    {
+      "value":{
+        "default":0.01,
+        "units":"m^2 yr^-1",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Diffusivity coefficient",
+      "key":"kd",
+      "description":"Diffusivity coefficient"
+    },
+    {
+      "value":{
+        "default":0,
+        "type":"choice",
+        "choices":[
+          "0",
+          "1"
+        ]
+      },
+      "name":"Diffusivity deposition",
+      "key":"opt_diffusion_deposition",
+      "description":"Diffusion deposition option (1 = diffusion only erodes, never deposits)"
+    },
+    {
+      "value":{
+        "default":0.0,
+        "units":"m^2 yr^-1",
+        "range":{
+          "max":10000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Diffusion threshold",
+      "key":"diffusion_threshold",
+      "description":"Diffusion threshold for F(Qs) models"
+    },
+    {
+      "value":{
+        "default":0,
+        "type":"choice",
+        "choices":[
+          "0",
+          "1"
+        ]
+      },
+      "name":"Diffusivity deposition",
+      "key":"opt_depth_dependent_diffusion",
+      "description":"Depth-dependent diffusivity (1 = diffusion only erodes, never deposits)"
+    },
+    {
+      "value":{
+        "default":1000.0,
+        "units":"kg m^-3",
+        "range":{
+          "max":10000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Soil bulk density",
+      "key":"soil_bulk_density",
+      "description":"Soil bulk density"
+    },
+    {
+      "value":{
+        "default":1.0,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Critical slope",
+      "key":"critical_slope",
+      "description":"Critical gradient for non-linear diffusion"
+    },
+    {
+      "value":{
+        "default":1.0,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Beta",
+      "key":"beta",
+      "description":"Fraction of sediment to bedload (for F(Qs) rules only)"
+    },
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"Bedrock",
+      "key":"separator",
+      "description":"Bedrock"
+    },
+    {
+      "value":{
+        "default":1000000.0,
+        "units":"m",
+        "range":{
+          "max":1.79769313486e+308,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Depth of bedrock",
+      "key":"bedrock_depth",
+      "description":"Initial depth of bedrock (make this arbitrarily large)"
+    },
+    {
+      "value":{
+        "default":0.0,
+        "units":"m",
+        "range":{
+          "max":1.79769313486e+308,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Initial regolith thickness",
+      "key":"regolith_initial_thickness",
+      "description":"Initial regolith thickness"
+    },
+    {
+      "value":{
+        "default":1.0,
+        "units":"m",
+        "range":{
+          "max":1.79769313486e+308,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Max regolith depth",
+      "key":"maximum_regolith_depth",
+      "description":"Maximum depth of a single regolith layer (also \"active layer\")"
+    },
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"Weathering",
+      "key":"separator",
+      "description":"Chemical and Physical Weathering"
+    },
+    {
+      "value":{
+        "default":0,
+        "type":"choice",
+        "choices":[
+          "0",
+          "1"
+        ]
+      },
+      "name":"Chemical Weathering Law",
+      "key":"chemical_weathering_law",
+      "description":"Chemical weathering law (possible values 0-1: 0 = None; 1 = Dissolution)"
+    },
+    {
+      "value":{
+        "default":0.099,
+        "units":"kg m^-3 yr^-3",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Max Dissolution Rate",
+      "key":"maximum_dissolution_rate",
+      "description":"Maximum dissolution rate"
+    },
+    {
+      "value":{
+        "default":0.18,
+        "units":"m",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"depth scale for dissolution",
+      "key":"chemical_depth",
+      "description":"depth scale for dissolution"
+    },
+    {
+      "value":{
+        "default":2270.0,
+        "units":"kg m^-3",
+        "range":{
+          "max":1000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Init rock density",
+      "key":"rock_density_initial",
+      "description":"Initial rock density"
+    },
+    {
+      "value":{
+        "default":0,
+        "type":"choice",
+        "choices":[
+          "0",
+          "1",
+          "2"
+        ]
+      },
+      "name":"Production law",
+      "key":"production_law",
+      "description":"Production law (possible values 0-2: 0 = None; 1 = exponential law; 2 = exp. with density dep.)"
+    },
+    {
+      "value":{
+        "default":0.00055,
+        "units":"m yr-1",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Soil production rate intercept",
+      "key":"soil_production_rate_intercept",
+      "description":"density-dependent soil production rate intercept"
+    },
+    {
+      "value":{
+        "default":1.7e-07,
+        "units":"(m yr^-1) / (kg m^-3)",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Soil production rate slope",
+      "key":"soil_production_rate_slope",
+      "description":"density-dependent soil production rate slope"
+    },
+    {
+      "value":{
+        "default":0.3,
+        "units":"m",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Soil production rate depth",
+      "key":"soil_production_rate_depth",
+      "description":"Depth scale for soil production rate"
+    },
+    {
+      "value":{
+        "default":740.0,
+        "units":"kg m^-3",
+        "range":{
+          "max":10000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Soil bulk density",
+      "key":"soil_bulk_density",
+      "description":"Soil bulk density"
+    },
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"Tectonics",
+      "key":"separator",
+      "description":"Tectonics"
+    },
+    {
+      "value":{
+        "default":2,
+        "type":"choice",
+        "choices":[
+          "0",
+          "1",
+          "2"
+        ]
+      },
+      "name":"Type of uplift",
+      "key":"uplift_type",
+      "description":"type of uplift (0=none, 1=uniform, 2=block, etc)"
+    },
+    {
+      "value":{
+        "default":1.0,
+        "units":"yr",
+        "range":{
+          "max":1000000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Uplift duration",
+      "key":"uplift_duration",
+      "description":"Duration of uplift"
+    },
+    {
+      "value":{
+        "default":30.0,
+        "units":"m yr^-1",
+        "range":{
+          "max":1000000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Uplift rate",
+      "key":"uplift_rate",
+      "description":"Rate of uplift"
+    },
+    {
+      "value":{
+        "default":50.0,
+        "units":"m yr^-1",
+        "range":{
+          "max":1000000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Subsidence rate",
+      "key":"subsidence_rate",
+      "description":"Rate of subsidence"
+    },
+    {
+      "value":{
+        "default":30000.0,
+        "units":"m",
+        "range":{
+          "max":1000000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Fault position",
+      "key":"fault_position",
+      "description":"Fault position (does not apply to all uplift functions)"
+    },
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"Grain Size",
+      "key":"separator",
+      "description":"Grain Size"
+    },
+    {
+      "value":{
+        "default":1,
+        "type":"choice",
+        "choices":[
+          "1",
+          "2"
+        ]
+      },
+      "name":"Number of grain size classes",
+      "key":"num_grain_size",
+      "description":"Number of grain size classes"
+    },
+    {
+      "value":{
+        "default":1.0,
+        "units":"-",
+        "range":{
+          "max":1.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Regolith proportion 1",
+      "key":"regolith_proportion_1",
+      "description":"Proportion of sediments of grain class 1 in regolith"
+    },
+    {
+      "value":{
+        "default":1.0,
+        "units":"-",
+        "range":{
+          "max":1.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Bedrock proportion 1",
+      "key":"bedrock_proportion_1",
+      "description":"Proportion of sediments of grain class 1 in bedrock"
+    },
+    {
+      "value":{
+        "default":0.001,
+        "units":"m",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Grain 1 diameter",
+      "key":"grain_diameter_1",
+      "description":"Representative diameter of grain class 1"
+    },
+    {
+      "value":{
+        "default":0.1,
+        "units":"-",
+        "range":{
+          "max":1.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Regolith proportion 2",
+      "key":"regolith_proportion_2",
+      "description":"Proportion of sediments of grain class 2 in regolith"
+    },
+    {
+      "value":{
+        "default":0.1,
+        "units":"-",
+        "range":{
+          "max":1.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Bedrock proportion 2",
+      "key":"bedrock_proportion_2",
+      "description":"Proportion of sediments of grain class 2 in bedrock"
+    },
+    {
+      "value":{
+        "default":0.05,
+        "units":"m",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Grain 2 diameter",
+      "key":"grain_diameter_2",
+      "description":"Representative diameter of grain class 2"
+    },
+    {
+      "value":{
+        "default":0.75,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Hiding exponent",
+      "key":"hiding_exponent",
+      "description":"Hiding/protrusion exponent for multiple grain sizes"
+    },
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"Channel Geometry",
+      "key":"separator",
+      "description":"Channel Geometry"
+    },
+    {
+      "value":{
+        "default":1,
+        "type":"choice",
+        "choices":[
+          "1",
+          "2"
+        ]
+      },
+      "name":"Type of channel geometry",
+      "key":"channel_geometry_model",
+      "description":"Option for channel width closure (1 = empirical model: Wb = Kw Qb ^ wb, W / Wb = ( Q / Qb ) ^ ws 2 = Parker width closure: tau / tauc = const)"
+    },
+    {
+      "value":{
+        "default":10.0,
+        "units":"m / (m^3 s^-1)^e",
+        "range":{
+          "max":1000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Coefficient on downstream hydraulic width",
+      "key":"hydraulic_width_coeff_downstream",
+      "description":"Coefficient on downstream hydraulic width"
+    },
+    {
+      "value":{
+        "default":0.5,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Downstream hydraulic width exponent",
+      "key":"hydraulic_width_exp_downstream",
+      "description":"Downstream hydraulic width exponent"
+    },
+    {
+      "value":{
+        "default":0.5,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Exponent on at-a-station hydraulic width relation",
+      "key":"hydraulic_width_exp_station",
+      "description":"Exponent on at-a-station hydraulic width relation"
+    },
+    {
+      "value":{
+        "default":1.0,
+        "units":"?",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Downstream hydraulic depth coefficient",
+      "key":"hydraulic_depth_coeff_downstream",
+      "description":"Coefficient on downstream hydraulic depth (NOTE: Unknown units)"
+    },
+    {
+      "value":{
+        "default":0.0,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Exponent on downstream hydraulic depth",
+      "key":"hydraulic_depth_exp_downstream",
+      "description":"Exponent on downstream hydraulic depth"
+    },
+    {
+      "value":{
+        "default":0.03,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Downstream hydraulic roughness coefficient",
+      "key":"hydraulic_depth_exp_station",
+      "description":"Coefficient on downstream hydraulic roughness (Manning n)"
+    },
+    {
+      "value":{
+        "default":0.0,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Downstream hydraulic roughness coefficient",
+      "key":"hydraulic_roughness_coeff_downstream",
+      "description":"Coefficient on downstream hydraulic roughness (Manning n)"
+    },
+    {
+      "value":{
+        "default":0.0,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Downstream hydraulic roughness exponent",
+      "key":"hydraulic_roughness_exp_downstream",
+      "description":"Exponent on downstream hydraulic roughness"
+    },
+    {
+      "value":{
+        "default":0.0,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"At-a-station hydraulic roughness exponent",
+      "key":"hydraulic_roughness_exp_station",
+      "description":"Exponent on at-a-station hydraulic roughness"
+    },
+    {
+      "value":{
+        "default":15.0,
+        "units":"-",
+        "range":{
+          "max":100.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Downstream bank roughness coefficient",
+      "key":"bank_roughness_coeff",
+      "description":"Coefficient downstream bank roughness (for meand only)"
+    },
+    {
+      "value":{
+        "default":0.8,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Downstream bank roughness exponent",
+      "key":"bank_roughness_exp",
+      "description":"Exponent downstream bank roughness (for meand only)"
+    },
+    {
+      "value":{
+        "default":13.6,
+        "units":"m yr^-1",
+        "range":{
+          "max":1000.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Bankfull precipitation",
+      "key":"bank_full_event",
+      "description":"Precipitation rate of a bankfull event"
+    }
   ],
+  "author":"Greg Tucker",
   "url":"http://csdms.colorado.edu/wiki/Model_help:CHILD",
+  "argv":[
+    "child",
+    "child.in"
+  ],
+  "summary":"Computes the time evolution of a topographic surface z(x,y,t) by fluvial and hillslope erosion and sediment transport.",
+  "version":"2010.07.06",
   "uses":[
     {
       "required":false,

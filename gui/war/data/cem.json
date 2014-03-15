@@ -1,14 +1,18 @@
 {
+  "files":[
+    "cem.txt.tmpl"
+  ],
+  "doi":"10.1594/IEDA/100100",
   "name":"CEM",
   "parameters":[
     {
       "value":{
-        "default":"CEM",
+        "default":"",
         "type":"string"
       },
-      "name":"Simulation name",
-      "key":"simulation_name",
-      "description":"Name of the simulation"
+      "name":"Grid",
+      "key":"separator",
+      "description":"Grid"
     },
     {
       "value":{
@@ -46,39 +50,82 @@
         },
         "type":"float"
       },
-      "name":"Row spacing",
-      "key":"row_spacing",
-      "description":"Grid resolution in cross-shore (row) direction"
+      "name":"Row and columns spacing",
+      "key":"grid_spacing",
+      "description":"Grid resolution in cross and along-shore direction"
     },
     {
       "value":{
-        "default":100.0,
-        "units":"m",
+        "default":"",
+        "type":"string"
+      },
+      "name":"Coastal Geometry",
+      "key":"separator",
+      "description":"Coastal Geometry"
+    },
+    {
+      "value":{
+        "default":0.01,
+        "units":"-",
         "range":{
-          "max":1.79769e+308,
-          "min":1.0
+          "max":1.0,
+          "min":0.001
         },
         "type":"float"
       },
-      "name":"Column spacing",
-      "key":"column_spacing",
-      "description":"Grid resolution in along-shore (column) direction"
+      "name":"Shoreface slope",
+      "key":"shoreface_slope",
+      "description":"Gradient of the shoreface"
     },
     {
       "value":{
-        "default":"netcdf",
+        "default":10.0,
+        "units":"m",
+        "range":{
+          "max":100.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Shoreface dept",
+      "key":"shoreface_depth",
+      "description":"Water depth of the shoreface"
+    },
+    {
+      "value":{
+        "default":0.001,
+        "units":"-",
+        "range":{
+          "max":100.0,
+          "min":0.0001
+        },
+        "type":"float"
+      },
+      "name":"Shelf slope",
+      "key":"shelf_slope",
+      "description":"Gradient of the shelf"
+    },
+    {
+      "value":{
+        "default":1,
         "type":"choice",
         "choices":[
-          "netcdf",
-          "vtk"
+          "0",
+          "1"
         ]
       },
-      "name":"Output format",
-      "key":"output_format",
-      "description":"File format for output files"
+      "name":"Sediment flux flag",
+      "key":"sediment_flux_flag",
+      "description":"Sediment flux flag"
     }
   ],
+  "author":"A. Brad Murray",
   "url":"http://csdms.colorado.edu/wiki/Model_help:CEM",
+  "argv":[
+    
+  ],
+  "summary":"The Coastline Evolution Model addresses predominately sandy, wave-dominated coastlines on time-scales ranging from years to millenia and on spatial scales ranging from kilometers to hundreds of kilometers.",
+  "version":"0.1.1",
   "uses":[
     {
       "required":false,
