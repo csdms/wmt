@@ -94,13 +94,14 @@ public class DragCell extends Grid implements DragStartHandler {
    * @param componentJSO the ComponentJSO object representing the component
    */
   public void setTooltip(ComponentJSO componentJSO) {
-    String text = "Provides: ";
+    String text = null;
     Integer nPortsProvided = componentJSO.getPortsProvided().length();
     if (nPortsProvided == 0) {
-      text += "none";
+      text = "No ports provided";
     } else {
       for (int i = 0; i < componentJSO.getPortsProvided().length(); i++) {
-        text += componentJSO.getPortsProvided().get(i).getId();
+        text = "Drag to " + componentJSO.getPortsProvided().get(i).getId()
+            + " port to instantiate";
       }
     }
     setTitle(text);
