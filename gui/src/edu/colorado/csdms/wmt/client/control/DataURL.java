@@ -22,6 +22,8 @@ public class DataURL {
 
   private static final String COMPONENT_LIST_URL = API_URL + "components/list";
   private static final String COMPONENT_SHOW_URL = API_URL + "components/show/";
+  private static final String COMPONENT_FORMAT_URL = API_URL
+      + "components/format/";
 
   private static final String MODEL_LIST_URL = API_URL + "models/list";
   private static final String MODEL_OPEN_URL = API_URL + "models/open/";
@@ -70,6 +72,20 @@ public class DataURL {
       return LOCAL_URL + "data/" + componentId + ".json";
     } else {
       return COMPONENT_SHOW_URL + componentId;
+    }
+  }
+
+  /**
+   * Returns the URL to format the parameters of a component, given its id.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param componentId the id of the desired component
+   */
+  public static String formatComponent(DataManager data, String componentId) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL + "save/model_list.json";
+    } else {
+      return COMPONENT_FORMAT_URL + componentId;
     }
   }
 
