@@ -2,91 +2,11 @@
 
 <p>Available sub-commands,</p>
 <ul>
-  <li> <a href="https://csdms.colorado.edu/wmt/help/view">View</a> </li>
-  <li> <a href="https://csdms.colorado.edu/wmt/help/show">Show</a> </li>
-  <li> <a href="https://csdms.colorado.edu/wmt/help/new">New</a> </li>
-  <li> <a href="https://csdms.colorado.edu/wmt/help/delete">Delete</a> </li>
-  <li> <a href="https://csdms.colorado.edu/wmt/help/export">Export</a> </li>
-  <li> <a href="https://csdms.colorado.edu/wmt/help/convert">Convert</a> </li>
+  <li> <a href="https://csdms.colorado.edu/wmt-server/help/view">View</a> </li>
+  <li> <a href="https://csdms.colorado.edu/wmt-server/help/show">Show</a> </li>
+  <li> <a href="https://csdms.colorado.edu/wmt-server/help/new">New</a> </li>
+  <li> <a href="https://csdms.colorado.edu/wmt-server/help/delete">Delete</a> </li>
+  <li> <a href="https://csdms.colorado.edu/wmt-server/help/export">Export</a> </li>
+  <li> <a href="https://csdms.colorado.edu/wmt-server/help/convert">Convert</a> </li>
 </ul>
 
-<hr>
-
-<!--h2>list</h2>
-<p>Go here to get a list of all known components,</p>
-<a href="https://csdms.colorado.edu/wmt/list">https://csdms.colorado.edu/wmt/list </a>
-
-
-<h2>show</h2>
-<p>Go here to show information about a specific component. For instance, to
-  see a JSON description of the avulsion component,</p>
-<a href="https://csdms.colorado.edu/wmt/show/avulsion">https://csdms.colorado.edu/wmt/show/avulsion</a>
-
-<p>If you just want to see the value of a particular attribute of a component,
-  specify the attribute in the following way,</p>
-<a href="https://csdms.colorado.edu/wmt/show/avulsion?var=id">https://csdms.colorado.edu/wmt/show/avulsion?var=id</a>
-
-
-<h2>rc</h2>
-
-<p>Get resource files used by the Component Modeling Tool. Resource files describe
-  how to connect a set of components to run.</p>
-
-<p>Paste a JSON description of a connected set of components into the textbox
-  and click Submit.</p>
-<a href="https://csdms.colorado.edu/wmt/rc">https://csdms.colorado.edu/wmt/rc</a>
-
-<p>You can use the <tt>curl</tt> command to get the RC file. Here is an example
-  of such a command,</p>
-<pre><code>
-> curl -i -X POST -F model=@model.json https://csdms.colorado.edu/wmt/rc
-</code></pre>
-
-<p>Here is an example of a JSON description of group of connected components.</p>
-
-<pre><code>
-{
-  "model": [
-    {
-      "id": "avulsion",
-      "name": "Avulsion",
-      "parameters": {
-          "var1": "value",
-          "var2": "another value"
-      },
-      "connect" : {
-        "discharge": "discharge@hydrotrend",
-        "elevation": "elevation@cem"
-      }
-    },
-    {
-      "id": "cem",
-      "name": "CEM",
-      "parameters": {
-        "var1": "value",
-        "var2": "another value"
-      },
-      "connect" : {
-        "river": "river@avulsion",
-        "waves": "waves@waves"
-      }
-    },
-    {
-      "id": "hydrotrend",
-      "name": "Hydrotrend",
-      "parameters": {
-        "var1": "value",
-        "var2": "another value"
-      }
-    },
-    {
-      "id": "waves",
-      "name": "Waves",
-      "parameters": {
-        "var1": "value",
-        "var2": "another value"
-      }
-    }
-  ]
-}
-</pre></code-->
