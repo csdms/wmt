@@ -11,10 +11,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DragStartEvent;
 import com.google.gwt.event.dom.client.DragStartHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -30,7 +26,7 @@ import edu.colorado.csdms.wmt.client.data.Port;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class DragCell extends Grid implements DragStartHandler, MouseOverHandler, MouseOutHandler {
+public class DragCell extends Grid implements DragStartHandler {
 
   private ComponentJSO componentJSO;
   private String label;
@@ -38,7 +34,7 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
   private HTML grabCell;
   private HTML textCell;
   private Boolean sensitive;
-  private ComponentInfoDialogBox componentInfo;
+  private ComponentInfoDialogBox componentInfoDialogBox;
 
   /**
    * Makes a DragCell for the given component.
@@ -50,9 +46,9 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
     // A DragCell is a Grid with one row and two columns. And it's draggable.
     super(1, 2);
     this.getElement().setDraggable(Element.DRAGGABLE_TRUE);
-    
+
     this.componentJSO = componentJSO;
-    
+
     // The name doesn't really do anything, though it is what GWT native DnD
     // shows on drag. The id is key -- it's what is picked up in the ModelTree
     // on drop. Use the id to figure out what model is being dragged, whether
@@ -72,35 +68,23 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
 
     // Set the pointy-hand cursor when over a DragCell.
     this.getElement().getStyle().setCursor(Cursor.POINTER);
-    
+
     // Set a tooltip on the component.
     setTooltip(componentJSO);
 
     // Associate event handlers.
     addDomHandler(this, DragStartEvent.getType());
     grabCell.addClickHandler(new GrabCellClickHandler());
-    addDomHandler(this, MouseOverEvent.getType());
-    addDomHandler(this, MouseOutEvent.getType());
+    textCell.addClickHandler(new TextCellClickHandler());
   }
 
   /**
-   * The drag start event handler. The component id is the data carried 
-   * in the draggable element.
+   * The drag start event handler. The component id is the data carried in the
+   * draggable element.
    */
   @Override
   public void onDragStart(DragStartEvent event) {
     event.setData("text", this.id);
-  }
-
-  @Override
-  public void onMouseOver(MouseOverEvent event) {
-    componentInfo = new ComponentInfoDialogBox(componentJSO);
-    componentInfo.center();
-  }
-
-  @Override
-  public void onMouseOut(MouseOutEvent event) {
-    componentInfo.hide();
   }
 
   /**
@@ -110,22 +94,23 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
    * @param componentJSO the ComponentJSO object representing the component
    */
   public void setTooltip(ComponentJSO componentJSO) {
-    String text = "Provides: ";
+    String text = null;
     Integer nPortsProvided = componentJSO.getPortsProvided().length();
     if (nPortsProvided == 0) {
-      text += "none";
+      text = "No ports provided";
     } else {
       for (int i = 0; i < componentJSO.getPortsProvided().length(); i++) {
-        text += componentJSO.getPortsProvided().get(i).getId();
+        text = "Drag to " + componentJSO.getPortsProvided().get(i).getId()
+            + " port to instantiate";
       }
     }
-    setTitle(text);    
+    setTitle(text);
   }
-  
+
   public String getId() {
     return this.id;
   }
-  
+
   public void setId(String id) {
     this.id = id;
   }
@@ -145,7 +130,7 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
   public void setTextCell(HTML textCell) {
     this.textCell = textCell;
   }
-  
+
   public Boolean getSensitive() {
     return sensitive;
   }
@@ -157,17 +142,17 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
    * @param sensitive
    */
   public void setSensitive(Boolean sensitive) {
-    
+
     this.sensitive = sensitive;
     this.getGrabCell().setStyleDependentName("notallowed", !this.sensitive);
     this.getTextCell().setStyleDependentName("notallowed", !this.sensitive);
-    
+
     // TODO Not a huge deal, but this is not working.
     String isDraggable =
-          this.sensitive ? Element.DRAGGABLE_TRUE : Element.DRAGGABLE_FALSE;
+        this.sensitive ? Element.DRAGGABLE_TRUE : Element.DRAGGABLE_FALSE;
     this.getElement().setDraggable(isDraggable);
   }
-  
+
   /**
    * Handles click on the grabby handle button in a DragCell. Attempt to match
    * the selected component with an open "uses" port in the ModelTree.
@@ -186,8 +171,8 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
 
       // Find what "uses" ports in the ModelTree are currently open. If there
       // are none, short-circuit the method.
-      List<ModelCell> openCells = 
-          parent.data.getModelTree().findOpenModelCells();      
+      List<ModelCell> openCells =
+          parent.data.getModelTree().findOpenModelCells();
       if (openCells.size() == 0) {
         return;
       }
@@ -219,5 +204,19 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
         }
       }
     }
-  } 
+  }
+
+  /**
+   * Displays the {@link ComponentInfoDialogBox} when the mouse is clicked on
+   * the component name in the {@link DragCell}.
+   */
+  public class TextCellClickHandler implements ClickHandler {
+    @Override
+    public void onClick(ClickEvent event) {
+      ComponentList componentList = (ComponentList) DragCell.this.getParent();
+      componentInfoDialogBox = componentList.getInfoDialogBox();
+      componentInfoDialogBox.update(componentJSO);
+      componentInfoDialogBox.center();
+    }
+  }
 }

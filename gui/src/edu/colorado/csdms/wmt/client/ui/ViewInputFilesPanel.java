@@ -36,7 +36,7 @@ public class ViewInputFilesPanel extends Grid {
     this.setCellPadding(5); // px
 
     // TODO Should use DataURL.
-    String baseUrl = "http://csdms.colorado.edu/wmt/components/format/";
+    String baseUrl = "http://csdms.colorado.edu/wmt-server/components/format/";
     urlHtml = baseUrl + this.componentId + "?defaults=True&format=html";
     urlText = baseUrl + this.componentId + "?defaults=True&format=text";
     urlJson = baseUrl + this.componentId + "?defaults=True&format=json";

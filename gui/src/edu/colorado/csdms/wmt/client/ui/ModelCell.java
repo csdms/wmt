@@ -12,9 +12,9 @@ import com.google.gwt.event.dom.client.DragLeaveEvent;
 import com.google.gwt.event.dom.client.DragLeaveHandler;
 import com.google.gwt.event.dom.client.DropEvent;
 import com.google.gwt.event.dom.client.DropHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.data.Component;
@@ -22,9 +22,9 @@ import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.Port;
 
 /**
- * A 1 x 4 Grid holding HTML widgets for a port, a connector, a component, and a
- * control, each with custom styles and behaviors. Used as input for a TreeItem
- * in creating a {@link ModelTree}.
+ * A 1 x 4 Grid holding HTML widgets for a port, a connector, a component, and
+ * a control, each with custom styles and behaviors. Used as input for a
+ * TreeItem in creating a {@link ModelTree}.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -74,8 +74,8 @@ public class ModelCell extends Grid implements DropHandler {
 
   /**
    * An alternate constructor for ModelCell that uses the id of a {@link Port}
-   * and the name of a {@link Component}. Be sure to set the other properties of
-   * the Port and Component afterward using their mutators.
+   * and the name of a {@link Component}. Be sure to set the other properties
+   * of the Port and Component afterward using their mutators.
    * 
    * @param portId The id of the port to create, as a String.
    * @param componentName The name of the component, as a String.
@@ -196,9 +196,9 @@ public class ModelCell extends Grid implements DropHandler {
   }
 
   /**
-   * Handles the drop of a Component into the targeted ComponentCell. Adds a new
-   * ComponentCell to the PortCell, as well as new TreeItems with PortCells for
-   * the uses ports of the new Component.
+   * Handles the drop of a Component into the targeted ComponentCell. Adds a
+   * new ComponentCell to the PortCell, as well as new TreeItems with
+   * PortCells for the uses ports of the new Component.
    */
   @Override
   public void onDrop(DropEvent event) {
@@ -217,10 +217,11 @@ public class ModelCell extends Grid implements DropHandler {
     }
 
     // Get the component id from the drag element, then determine which
-    // component it is using a helper method defined on the DataManager object.
+    // component it is using a helper method defined on the DataManager
+    // object.
     String componentId = event.getData("text");
     ModelTree tree = (ModelTree) parentTreeItem.getTree();
-    Component component = new Component(tree.data.getComponent(componentId));    
+    Component component = new Component(tree.data.getComponent(componentId));
 
     // Install the Component in the targeted TreeItem.
     tree.addComponent(component, parentTreeItem);
@@ -230,8 +231,8 @@ public class ModelCell extends Grid implements DropHandler {
   }
 
   /**
-   * Cell 1/4 of a ModelCell, it's a display and event handling wrapper around a
-   * port. An inner class.
+   * Cell 1/4 of a ModelCell, it's a display and event handling wrapper around
+   * a port. An inner class.
    */
   public class PortCell extends HTML implements DragEnterHandler,
       DragLeaveHandler {
@@ -297,15 +298,15 @@ public class ModelCell extends Grid implements DropHandler {
 
     /**
      * When a drag item enters the PortCell, tell the ModelCell's parent
-     * TreeItem that it's the selected item in the ModelTree. (Oh $DEITY is this
-     * ugly.)
+     * TreeItem that it's the selected item in the ModelTree. (Oh $DEITY is
+     * this ugly.)
      * 
-     * Because Chrome adheres closely to the HTML5 spec, event.getData can't be
-     * called directly inside onDragEnter. (Does work in Firefox.) To work
+     * Because Chrome adheres closely to the HTML5 spec, event.getData can't
+     * be called directly inside onDragEnter. (Does work in Firefox.) To work
      * around this, I've implemented a simple data manager object that can be
-     * passed into ModelTree and ComponentList. Use this data manager object to
-     * determine whether the provides port of the dragged component matches the
-     * uses port of the selected PortCell.
+     * passed into ModelTree and ComponentList. Use this data manager object
+     * to determine whether the provides port of the dragged component matches
+     * the uses port of the selected PortCell.
      */
     @Override
     public void onDragEnter(DragEnterEvent event) {
@@ -369,8 +370,8 @@ public class ModelCell extends Grid implements DropHandler {
   } // ConnectorCell inner class
 
   /**
-   * Cell 3/4 of a ModelCell, it's a display and event handling wrapper around a
-   * component. An inner class.
+   * Cell 3/4 of a ModelCell, it's a display and event handling wrapper around
+   * a component. An inner class.
    */
   public class ComponentCell extends HTML implements ClickHandler,
       DragEnterHandler, DragLeaveHandler {
@@ -387,13 +388,13 @@ public class ModelCell extends Grid implements DropHandler {
 
       super(component.getName());
       setComponent(component);
-      
+
       String tooltip = "";
       if (component.getName().contains("</i>")) {
         tooltip = "Drag component here";
       } else {
         tooltip = "Model Component: " + component.getName();
-      }   
+      }
       setTitle(tooltip);
 
       setStyleName("wmt-ComponentCell");
@@ -420,7 +421,7 @@ public class ModelCell extends Grid implements DropHandler {
     public void setComponent(Component component) {
       this.component = component;
     }
-    
+
     /**
      * Does this ComponentCell hold a link to another instance of a component?
      * Returns status as a Boolean.
@@ -430,7 +431,7 @@ public class ModelCell extends Grid implements DropHandler {
     }
 
     /**
-     * Sets whether the ComponentCell holds a link to another instance of a 
+     * Sets whether the ComponentCell holds a link to another instance of a
      * component.
      * 
      * @param linked the "linked" setting, a Boolean
@@ -438,7 +439,7 @@ public class ModelCell extends Grid implements DropHandler {
     public void isLinked(Boolean linked) {
       this.linked = linked;
     }
-    
+
     /**
      * On a mouse click, stores the id of the selected component in the
      * DataManager.
@@ -452,15 +453,15 @@ public class ModelCell extends Grid implements DropHandler {
 
     /**
      * When a drag item enters the ComponentCell, tell the ModelCell's parent
-     * TreeItem that it's the selected item in the ModelTree. (Oh $DEITY is this
-     * ugly.)
+     * TreeItem that it's the selected item in the ModelTree. (Oh $DEITY is
+     * this ugly.)
      * 
-     * Because Chrome adheres closely to the HTML5 spec, event.getData can't be
-     * called directly inside onDragEnter. (Does work in Firefox.) To work
+     * Because Chrome adheres closely to the HTML5 spec, event.getData can't
+     * be called directly inside onDragEnter. (Does work in Firefox.) To work
      * around this, I've implemented a simple data manager object that can be
-     * passed into ModelTree and ComponentList. Use this data manager object to
-     * determine whether the provides port of the dragged component matches the
-     * uses port of the selected PortCell.
+     * passed into ModelTree and ComponentList. Use this data manager object
+     * to determine whether the provides port of the dragged component matches
+     * the uses port of the selected PortCell.
      */
     @Override
     public void onDragEnter(DragEnterEvent event) {
@@ -519,8 +520,8 @@ public class ModelCell extends Grid implements DropHandler {
     private HTML infoButton;
 
     /**
-     * Constructor. The ControlCell is hidden on an open port, then shown when a
-     * component is attached to the port (see ModelCell#setComponentCell).
+     * Constructor. The ControlCell is hidden on an open port, then shown when
+     * a component is attached to the port (see ModelCell#setComponentCell).
      */
     public ControlCell() {
 
@@ -544,10 +545,11 @@ public class ModelCell extends Grid implements DropHandler {
       infoButton.setTitle("View the component's parameters");
 
       /*
-       * Clicking the delete button in the ControlCell removes the Component, as
-       * well as anything beneath it in the ModelTree.
+       * Clicking the delete button in the ControlCell removes the Component,
+       * as well as anything beneath it in the ModelTree.
        * 
-       * TODO This is really close to ModelTree#addComponent. Make #removeComponent?
+       * TODO This is really close to ModelTree#addComponent. Make
+       * #removeComponent?
        */
       deleteButton.addClickHandler(new ClickHandler() {
         @Override
@@ -609,15 +611,31 @@ public class ModelCell extends Grid implements DropHandler {
       });
 
       /*
-       * Clicking the help button opens the web page for the Component on the
-       * CSDMS website.
-       * 
-       * @see developer.mozilla.org/en/DOM/window.open
+       * Clicking the help button displays a dialog box with information about
+       * the component, including a link to its web page on the CSDMS website.
        */
       helpButton.addClickHandler(new ClickHandler() {
         @Override
-        public void onClick(ClickEvent event) {
-          Window.open(componentCell.getComponent().getUrl(), "_blank", null);
+        public void onClick(final ClickEvent event) {
+
+          ModelTree tree = (ModelTree) parentTreeItem.getTree();
+          String componentId = componentCell.getComponent().getId();
+          ComponentJSO componentJso = tree.data.getComponent(componentId);
+
+          final ComponentInfoDialogBox componentInfoDialogBox =
+              tree.data.getComponentList().getInfoDialogBox();
+          componentInfoDialogBox.update(componentJso);
+          componentInfoDialogBox
+              .setPopupPositionAndShow(new PositionCallback() {
+                Integer x = event.getClientX();
+                Integer y = event.getClientY();
+
+                @Override
+                public void setPosition(int offsetWidth, int offsetHeight) {
+                  Integer nudge = 5; // px
+                  componentInfoDialogBox.setPopupPosition(x + nudge, y + nudge);
+                }
+              });
         }
       });
     }
