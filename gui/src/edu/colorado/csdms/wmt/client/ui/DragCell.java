@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.data.Component;
@@ -30,7 +31,8 @@ import edu.colorado.csdms.wmt.client.data.Port;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class DragCell extends Grid implements DragStartHandler, MouseOverHandler, MouseOutHandler {
+public class DragCell extends Grid implements DragStartHandler,
+    MouseOverHandler, MouseOutHandler {
 
   private ComponentJSO componentJSO;
   private String label;
@@ -38,7 +40,7 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
   private HTML grabCell;
   private HTML textCell;
   private Boolean sensitive;
-  private ComponentInfoDialogBox componentInfo;
+  private ComponentInfoDialogBox componentInfoDialogBox;
 
   /**
    * Makes a DragCell for the given component.
@@ -50,9 +52,9 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
     // A DragCell is a Grid with one row and two columns. And it's draggable.
     super(1, 2);
     this.getElement().setDraggable(Element.DRAGGABLE_TRUE);
-    
+
     this.componentJSO = componentJSO;
-    
+
     // The name doesn't really do anything, though it is what GWT native DnD
     // shows on drag. The id is key -- it's what is picked up in the ModelTree
     // on drop. Use the id to figure out what model is being dragged, whether
@@ -72,9 +74,9 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
 
     // Set the pointy-hand cursor when over a DragCell.
     this.getElement().getStyle().setCursor(Cursor.POINTER);
-    
+
     // Set a tooltip on the component.
-    setTooltip(componentJSO);
+    // setTooltip(componentJSO);
 
     // Associate event handlers.
     addDomHandler(this, DragStartEvent.getType());
@@ -84,23 +86,39 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
   }
 
   /**
-   * The drag start event handler. The component id is the data carried 
-   * in the draggable element.
+   * The drag start event handler. The component id is the data carried in the
+   * draggable element.
    */
   @Override
   public void onDragStart(DragStartEvent event) {
     event.setData("text", this.id);
   }
 
+  /**
+   * Displays the {@link ComponentInfoDialogBox} when the mouse moves over the
+   * {@link DragCell}.
+   */
   @Override
   public void onMouseOver(MouseOverEvent event) {
-    componentInfo = new ComponentInfoDialogBox(componentJSO);
-    componentInfo.center();
+    componentInfoDialogBox = new ComponentInfoDialogBox(componentJSO);
+    final Integer x = event.getClientX();
+    final Integer y = event.getClientY();
+    componentInfoDialogBox.setPopupPositionAndShow(new PositionCallback() {
+      @Override
+      public void setPosition(int offsetWidth, int offsetHeight) {
+        Integer nudge = 5; // px
+        componentInfoDialogBox.setPopupPosition(x + nudge, y);
+      }
+    });
   }
 
+  /**
+   * Closes the component info dialog box when the mouse leaves the
+   * {@link DragCell}.
+   */
   @Override
   public void onMouseOut(MouseOutEvent event) {
-    componentInfo.hide();
+    componentInfoDialogBox.hide();
   }
 
   /**
@@ -119,13 +137,13 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
         text += componentJSO.getPortsProvided().get(i).getId();
       }
     }
-    setTitle(text);    
+    setTitle(text);
   }
-  
+
   public String getId() {
     return this.id;
   }
-  
+
   public void setId(String id) {
     this.id = id;
   }
@@ -145,7 +163,7 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
   public void setTextCell(HTML textCell) {
     this.textCell = textCell;
   }
-  
+
   public Boolean getSensitive() {
     return sensitive;
   }
@@ -157,17 +175,17 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
    * @param sensitive
    */
   public void setSensitive(Boolean sensitive) {
-    
+
     this.sensitive = sensitive;
     this.getGrabCell().setStyleDependentName("notallowed", !this.sensitive);
     this.getTextCell().setStyleDependentName("notallowed", !this.sensitive);
-    
+
     // TODO Not a huge deal, but this is not working.
     String isDraggable =
-          this.sensitive ? Element.DRAGGABLE_TRUE : Element.DRAGGABLE_FALSE;
+        this.sensitive ? Element.DRAGGABLE_TRUE : Element.DRAGGABLE_FALSE;
     this.getElement().setDraggable(isDraggable);
   }
-  
+
   /**
    * Handles click on the grabby handle button in a DragCell. Attempt to match
    * the selected component with an open "uses" port in the ModelTree.
@@ -186,8 +204,8 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
 
       // Find what "uses" ports in the ModelTree are currently open. If there
       // are none, short-circuit the method.
-      List<ModelCell> openCells = 
-          parent.data.getModelTree().findOpenModelCells();      
+      List<ModelCell> openCells =
+          parent.data.getModelTree().findOpenModelCells();
       if (openCells.size() == 0) {
         return;
       }
@@ -219,5 +237,5 @@ public class DragCell extends Grid implements DragStartHandler, MouseOverHandler
         }
       }
     }
-  } 
+  }
 }
