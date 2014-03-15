@@ -40,15 +40,15 @@ public class RunInfoDialogBox extends DialogBox {
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
     contents.setWidth("25em");
-    
+
     HTML msgHtml = new HTML(MSG);
     contents.add(msgHtml);
-    
+
     Button closeButton = new Button("<i class='fa fa-times'></i> Close");
     closeButton.getElement().getStyle().setMarginTop(1, Unit.EM);
     closeButton.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
     contents.add(closeButton);
-    
+
     this.setWidget(contents);
 
     /*
@@ -58,10 +58,10 @@ public class RunInfoDialogBox extends DialogBox {
       @Override
       public void onClick(ClickEvent event) {
         event.preventDefault();
-      Window.open(DataURL.showModelRun(), "runInfoDialog", null);
+        Window.open(DataURL.showModelRun(), "runInfoDialog", null);
       }
     });
-    
+
     /*
      * Hides the dialog box.
      */

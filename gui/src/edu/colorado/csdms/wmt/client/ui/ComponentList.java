@@ -25,6 +25,7 @@ public class ComponentList extends Grid implements DragStartHandler {
 
   public DataManager data; // experiment with public data
   private DragCell[] cells;
+  private ComponentInfoDialogBox infoDialogBox;
 
   /**
    * Makes a ComponentList, used in the "Components" tab of a WMT session.
@@ -36,7 +37,8 @@ public class ComponentList extends Grid implements DragStartHandler {
     super(data.getComponents().size(), 1);
     this.data = data;
     this.cells = new DragCell[data.getComponents().size()];
-
+    this.setInfoDialogBox(new ComponentInfoDialogBox());
+    
     for (int i = 0; i < data.getComponents().size(); i++) {
       cells[i] = new DragCell(data.getComponent(i));
       this.setWidget(i, 0, cells[i]);
@@ -54,6 +56,14 @@ public class ComponentList extends Grid implements DragStartHandler {
   public void onDragStart(DragStartEvent event) {
     GWT.log("Dragging component: " + event.getData("text"));
     data.setDraggedComponent(event.getData("text"));
+  }
+
+  public ComponentInfoDialogBox getInfoDialogBox() {
+    return infoDialogBox;
+  }
+
+  public void setInfoDialogBox(ComponentInfoDialogBox infoDialogBox) {
+    this.infoDialogBox = infoDialogBox;
   }
 
   /**

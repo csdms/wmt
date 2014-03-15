@@ -11,13 +11,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DragStartEvent;
 import com.google.gwt.event.dom.client.DragStartHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.data.Component;
@@ -31,8 +26,7 @@ import edu.colorado.csdms.wmt.client.data.Port;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class DragCell extends Grid implements DragStartHandler,
-    MouseOverHandler, MouseOutHandler {
+public class DragCell extends Grid implements DragStartHandler {
 
   private ComponentJSO componentJSO;
   private String label;
@@ -76,13 +70,12 @@ public class DragCell extends Grid implements DragStartHandler,
     this.getElement().getStyle().setCursor(Cursor.POINTER);
 
     // Set a tooltip on the component.
-    // setTooltip(componentJSO);
+    setTooltip(componentJSO);
 
     // Associate event handlers.
     addDomHandler(this, DragStartEvent.getType());
     grabCell.addClickHandler(new GrabCellClickHandler());
-    addDomHandler(this, MouseOverEvent.getType());
-    addDomHandler(this, MouseOutEvent.getType());
+    textCell.addClickHandler(new TextCellClickHandler());
   }
 
   /**
@@ -92,33 +85,6 @@ public class DragCell extends Grid implements DragStartHandler,
   @Override
   public void onDragStart(DragStartEvent event) {
     event.setData("text", this.id);
-  }
-
-  /**
-   * Displays the {@link ComponentInfoDialogBox} when the mouse moves over the
-   * {@link DragCell}.
-   */
-  @Override
-  public void onMouseOver(MouseOverEvent event) {
-    componentInfoDialogBox = new ComponentInfoDialogBox(componentJSO);
-    final Integer x = event.getClientX();
-    final Integer y = event.getClientY();
-    componentInfoDialogBox.setPopupPositionAndShow(new PositionCallback() {
-      @Override
-      public void setPosition(int offsetWidth, int offsetHeight) {
-        Integer nudge = 5; // px
-        componentInfoDialogBox.setPopupPosition(x + nudge, y);
-      }
-    });
-  }
-
-  /**
-   * Closes the component info dialog box when the mouse leaves the
-   * {@link DragCell}.
-   */
-  @Override
-  public void onMouseOut(MouseOutEvent event) {
-    componentInfoDialogBox.hide();
   }
 
   /**
@@ -236,6 +202,20 @@ public class DragCell extends Grid implements DragStartHandler,
           break;
         }
       }
+    }
+  }
+
+  /**
+   * Displays the {@link ComponentInfoDialogBox} when the mouse is clicked on
+   * the component name in the {@link DragCell}.
+   */
+  public class TextCellClickHandler implements ClickHandler {
+    @Override
+    public void onClick(ClickEvent event) {
+      ComponentList componentList = (ComponentList) DragCell.this.getParent();
+      componentInfoDialogBox = componentList.getInfoDialogBox();
+      componentInfoDialogBox.update(componentJSO);
+      componentInfoDialogBox.center();
     }
   }
 }
