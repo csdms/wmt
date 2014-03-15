@@ -603,9 +603,11 @@ public class DataTransfer {
           data.setMetadata(jso);
         }
         if (type.matches("new/edit")) {
-          DataTransfer.getModelList(data);
           data.modelIsSaved(true);
           data.getPerspective().setModelPanelTitle();
+          DataTransfer.getModelList(data);
+          Integer modelId = Integer.valueOf(rtxt);
+          data.getMetadata().setId(modelId);
         }
         if (type.matches("delete")) {
           DataTransfer.getModelList(data);
