@@ -567,7 +567,8 @@ public class DataTransfer {
       if (Response.SC_OK == response.getStatusCode()) {
         String rtxt = response.getText();
         GWT.log(rtxt);
-        ViewInputFilesDialogBox box = new ViewInputFilesDialogBox(rtxt);
+        ModelComponentParametersJSO jso = DataTransfer.parse(rtxt);
+        ViewInputFilesDialogBox box = new ViewInputFilesDialogBox(jso, type);
         box.center();
       } else {
         String msg =

@@ -83,7 +83,7 @@ public class DataURL {
    */
   public static String formatComponent(DataManager data, String componentId) {
     if (data.isDevelopmentMode()) {
-      return LOCAL_URL + "save/model_list.json";
+      return LOCAL_URL + "data/" + componentId + ".json";
     } else {
       return COMPONENT_FORMAT_URL + componentId;
     }
