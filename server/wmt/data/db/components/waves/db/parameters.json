@@ -1,5 +1,14 @@
 [
   {
+    "key":"separator",
+    "name":"Run Parameters",
+    "description":"Run Parameters",
+    "value":{
+      "type":"string",
+      "default":""
+    }
+  },
+  {
     "key":"simulation_name",
     "name":"Simulation name",
     "description":"Name of the simulation",
@@ -11,7 +20,7 @@
   {
     "key":"model_end_time",
     "name":"Model end time",
-    "description":"(MP) Number of days over which simulation occurs",
+    "description":"Number of days over which simulation occurs",
     "value":{
       "type":"int",
       "default":10,
