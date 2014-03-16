@@ -18,10 +18,12 @@ import com.google.gwt.user.client.Window;
 
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ComponentListJSO;
+import edu.colorado.csdms.wmt.client.data.ModelComponentParametersJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelListJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.ui.RunInfoDialogBox;
+import edu.colorado.csdms.wmt.client.ui.ViewInputFilesDialogBox;
 
 /**
  * A class that defines static methods for accessing, modifying and deleting,
@@ -207,6 +209,37 @@ public class DataTransfer {
     }
   }
 
+  public static void viewInputFiles(DataManager data, String componentId,
+      String type) {
+
+    String url = DataURL.formatComponent(data, componentId);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+
+    ModelSerializer serializer = new ModelSerializer(data);
+    ComponentJSO componentJso = data.getModelComponent(componentId);
+    ModelComponentParametersJSO parameterJso =
+        serializer.serializeParameters(componentJso);
+    String parameterString = stringify(parameterJso);
+
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("json", parameterString);
+    entries.put("format", type);
+    String queryString = buildQueryString(entries);
+
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new ViewInputFilesRequestCallback(
+              data, url, type));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }
+  }
+
   /**
    * Makes an asynchronous HTTP GET request to retrieve the list of models
    * stored in the WMT database.
@@ -349,13 +382,13 @@ public class DataTransfer {
 
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
-    
+
     HashMap<String, String> entries = new HashMap<String, String>();
     entries.put("name", data.getModel().getName());
     entries.put("description", "A model submitted from the WMT GUI."); // XXX
-    entries.put("model_id", ((Integer)data.getMetadata().getId()).toString());
+    entries.put("model_id", ((Integer) data.getMetadata().getId()).toString());
     String queryString = buildQueryString(entries);
-    
+
     try {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
       @SuppressWarnings("unused")
@@ -366,7 +399,7 @@ public class DataTransfer {
       Window.alert(ERR_MSG + e.getMessage());
     }
   }
-  
+
   /**
    * Makes an asynchronous HTTP POST request to stage a model run on the
    * selected server.
@@ -380,11 +413,11 @@ public class DataTransfer {
 
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
-    
+
     HashMap<String, String> entries = new HashMap<String, String>();
     entries.put("uuid", data.getSimulationId());
     String queryString = buildQueryString(entries);
-    
+
     try {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
       @SuppressWarnings("unused")
@@ -516,6 +549,40 @@ public class DataTransfer {
     }
   }
 
+  public static class ViewInputFilesRequestCallback implements RequestCallback {
+
+    private DataManager data;
+    private String url;
+    private String type;
+
+    public ViewInputFilesRequestCallback(DataManager data, String url,
+        String type) {
+      this.data = data;
+      this.url = url;
+      this.type = type;
+    }
+
+    @Override
+    public void onResponseReceived(Request request, Response response) {
+      if (Response.SC_OK == response.getStatusCode()) {
+        String rtxt = response.getText();
+        GWT.log(rtxt);
+        ViewInputFilesDialogBox box = new ViewInputFilesDialogBox(rtxt);
+        box.center();
+      } else {
+        String msg =
+            "The URL '" + url + "' did not give an 'OK' response. "
+                + "Response code: " + response.getStatusCode();
+        Window.alert(msg);
+      }
+    }
+
+    @Override
+    public void onError(Request request, Throwable exception) {
+      Window.alert(ERR_MSG + exception.getMessage());
+    }
+  }
+
   /**
    * A RequestCallback handler class that provides the callback for a GET
    * request of the list of available models in the WMT database. On success,
@@ -591,7 +658,7 @@ public class DataTransfer {
 
         String rtxt = response.getText();
         GWT.log(rtxt);
-        
+
         if (type.matches("show")) {
           ModelJSO jso = parse(rtxt);
           data.setModel(jso);
@@ -625,22 +692,22 @@ public class DataTransfer {
       Window.alert(ERR_MSG + exception.getMessage());
     }
   }
-  
+
   /**
    * TODO
    */
   public static class RunRequestCallback implements RequestCallback {
-    
+
     private DataManager data;
     private String url;
     private String type;
-    
+
     public RunRequestCallback(DataManager data, String url, String type) {
       this.data = data;
       this.url = url;
       this.type = type;
     }
-    
+
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
@@ -674,4 +741,5 @@ public class DataTransfer {
       Window.alert(ERR_MSG + exception.getMessage());
     }
   }
+
 }

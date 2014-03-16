@@ -4,9 +4,12 @@ import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
+
+import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.control.DataTransfer;
+import edu.colorado.csdms.wmt.client.control.DataURL;
 
 /**
  * Supplies a Grid with links for viewing or downloading the input
@@ -17,29 +20,28 @@ import com.google.gwt.user.client.ui.HTML;
  */
 public class ViewInputFilesPanel extends Grid {
 
+  private DataManager data;
   private String componentId;
-  private String urlHtml;
-  private String urlText;
-  private String urlJson;
 
   /**
    * Creates a new ViewInputFilesPanel with links built for the current state
    * of a model component parameter.
    * 
+   * @param data the DataManager object for the WMT session
    * @param componentId the id of the model component, a String
    */
-  public ViewInputFilesPanel(String componentId) {
+  public ViewInputFilesPanel(DataManager data, String componentId) {
 
     super(1, 6);
+    this.data = data;
     this.componentId = componentId;
     this.getElement().getStyle().setMarginTop(2, Unit.EM);
     this.setCellPadding(5); // px
 
-    // TODO Should use DataURL.
-    String baseUrl = "http://csdms.colorado.edu/wmt-server/components/format/";
-    urlHtml = baseUrl + this.componentId + "?defaults=True&format=html";
-    urlText = baseUrl + this.componentId + "?defaults=True&format=text";
-    urlJson = baseUrl + this.componentId + "?defaults=True&format=json";
+    String formatUrl = DataURL.formatComponent(data, componentId);
+    String urlHtml = formatUrl + "?format=html";
+    String urlText = formatUrl + "?format=text";
+    String urlJson = formatUrl + "?format=json";
     HTML viewHtml = new HTML("<a href='" + urlHtml + "'>HTML</a>");
     HTML viewText = new HTML("<a href='" + urlText + "'>text</a>");
     HTML viewJson = new HTML("<a href='" + urlJson + "'>JSON</a>");
@@ -59,9 +61,9 @@ public class ViewInputFilesPanel extends Grid {
     this.setWidget(0, 4, new HTML("|"));
     this.setWidget(0, 5, viewJson);
 
-    viewHtml.addClickHandler(new InterceptClickHandler(urlHtml));
-    viewText.addClickHandler(new InterceptClickHandler(urlText));
-    viewJson.addClickHandler(new InterceptClickHandler(urlJson));
+    viewHtml.addClickHandler(new InterceptClickHandler("html"));
+    viewText.addClickHandler(new InterceptClickHandler("text"));
+    viewJson.addClickHandler(new InterceptClickHandler("json"));
   }
 
   /**
@@ -70,16 +72,16 @@ public class ViewInputFilesPanel extends Grid {
    */
   public class InterceptClickHandler implements ClickHandler {
 
-    private String url;
+    private String type;
 
-    public InterceptClickHandler(String url) {
-      this.url = url;
+    public InterceptClickHandler(String type) {
+      this.type = type;
     }
 
     @Override
     public void onClick(ClickEvent event) {
       event.preventDefault();
-      Window.open(url, "_blank", null);
+      DataTransfer.viewInputFiles(data, componentId, type);
     }
   }
 }
