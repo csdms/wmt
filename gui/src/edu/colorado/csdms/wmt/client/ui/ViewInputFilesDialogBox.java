@@ -20,19 +20,22 @@ public class ViewInputFilesDialogBox extends DialogBox {
     this.setText("View Input Files");
 
     Integer nKeys = jso.getKeys().length();
-    String content;
+    String content = "";
     if (nKeys == 0) {
-      content = "No files are available for this component";
+      content += "No files are available for this component";
     } else {
-      String key = jso.getKeys().get(0);
-      String value = jso.getValues().get(0);
-      if (type.matches("text")) {
-        content =
-            "<p><pre>" + key + "</pre></p>" + "<p><pre>" + value + "</pre></p>";
-      } else if (type.matches("html")) {
-        content = "<h2>" + key + "</h2>" + "<p><pre>" + value + "</pre></p>";
-      } else {
-        content = DataTransfer.stringify(jso);
+      for (int i = 0; i < nKeys; i++) {
+        String key = jso.getKeys().get(i);
+        String value = jso.getValues().get(i);
+        if (type.matches("text")) {
+          content +=
+              "<p><pre>" + key + "</pre></p>" + "<p><pre>" + value
+                  + "</pre></p>";
+        } else if (type.matches("html")) {
+          content += "<h2>" + key + "</h2>" + "<p><pre>" + value + "</pre></p>";
+        } else {
+          content += DataTransfer.stringify(jso);
+        }
       }
     }
     HTML html = new HTML(content);
