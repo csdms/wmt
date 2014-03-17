@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.data.ModelComponentParametersJSO;
 
+@Deprecated
 public class ViewInputFilesDialogBox extends DialogBox {
 
   public ViewInputFilesDialogBox(ModelComponentParametersJSO jso, String type) {

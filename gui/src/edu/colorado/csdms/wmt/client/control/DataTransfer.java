@@ -18,12 +18,10 @@ import com.google.gwt.user.client.Window;
 
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ComponentListJSO;
-import edu.colorado.csdms.wmt.client.data.ModelComponentParametersJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelListJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.ui.RunInfoDialogBox;
-import edu.colorado.csdms.wmt.client.ui.ViewInputFilesDialogBox;
 
 /**
  * A class that defines static methods for accessing, modifying and deleting,
@@ -204,37 +202,6 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(null, new ComponentRequestCallback(data, url));
-    } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
-    }
-  }
-
-  public static void viewInputFiles(DataManager data, String componentId,
-      String type) {
-
-    String url = DataURL.formatComponent(data, componentId);
-    GWT.log(url);
-
-    RequestBuilder builder =
-        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
-
-    ModelSerializer serializer = new ModelSerializer(data);
-    ComponentJSO componentJso = data.getModelComponent(componentId);
-    ModelComponentParametersJSO parameterJso =
-        serializer.serializeParameters(componentJso);
-    String parameterString = stringify(parameterJso);
-
-    HashMap<String, String> entries = new HashMap<String, String>();
-    entries.put("json", parameterString);
-    entries.put("format", type);
-    String queryString = buildQueryString(entries);
-
-    try {
-      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
-      @SuppressWarnings("unused")
-      Request request =
-          builder.sendRequest(queryString, new ViewInputFilesRequestCallback(
-              data, url, type));
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
@@ -535,41 +502,6 @@ public class DataTransfer {
         ComponentJSO jso = parse(rtxt);
         data.addComponent(jso); // "class" component
         data.addModelComponent(copy(jso)); // "instance" component, for model
-      } else {
-        String msg =
-            "The URL '" + url + "' did not give an 'OK' response. "
-                + "Response code: " + response.getStatusCode();
-        Window.alert(msg);
-      }
-    }
-
-    @Override
-    public void onError(Request request, Throwable exception) {
-      Window.alert(ERR_MSG + exception.getMessage());
-    }
-  }
-
-  public static class ViewInputFilesRequestCallback implements RequestCallback {
-
-    private DataManager data;
-    private String url;
-    private String type;
-
-    public ViewInputFilesRequestCallback(DataManager data, String url,
-        String type) {
-      this.data = data;
-      this.url = url;
-      this.type = type;
-    }
-
-    @Override
-    public void onResponseReceived(Request request, Response response) {
-      if (Response.SC_OK == response.getStatusCode()) {
-        String rtxt = response.getText();
-        GWT.log(rtxt);
-        ModelComponentParametersJSO jso = DataTransfer.parse(rtxt);
-        ViewInputFilesDialogBox box = new ViewInputFilesDialogBox(jso, type);
-        box.center();
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "
