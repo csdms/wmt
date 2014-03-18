@@ -91,16 +91,16 @@ public class ModelMenu extends DecoratedPopupPanel {
     menu.setWidget(menuIndex++, 0, aboutButton);
 
     // Associate custom event handlers with the menu items.
-    newModel.addClickHandler(new NewModelHandler());
-    openModel.addClickHandler(new OpenModelHandler());
-    closeModel.addClickHandler(new CloseModelHandler());
-    saveModel.addClickHandler(new SaveModelHandler());
-    saveModelAs.addClickHandler(new SaveModelAsHandler());
-    deleteModel.addClickHandler(new DeleteModelHandler());
-    runModel.addClickHandler(new RunModelHandler());
-    runStatus.addClickHandler(new RunStatusHandler());
-    helpButton.addClickHandler(new HelpHandler());
-    aboutButton.addClickHandler(new AboutHandler());
+    newModel.addClickHandler(new MenuNewModelHandler());
+    openModel.addClickHandler(new MenuOpenModelHandler());
+    closeModel.addClickHandler(new MenuCloseModelHandler());
+    saveModel.addClickHandler(new MenuSaveModelHandler());
+    saveModelAs.addClickHandler(new MenuSaveModelAsHandler());
+    deleteModel.addClickHandler(new MenuDeleteModelHandler());
+    runModel.addClickHandler(new MenuRunModelHandler());
+    runStatus.addClickHandler(new MenuRunStatusHandler());
+    helpButton.addClickHandler(new MenuHelpHandler());
+    aboutButton.addClickHandler(new MenuAboutHandler());
 
     // Set up, but don't display, the "hamburger" icon for the Model menu.
     menuButton = new HTML("<i class='fa fa-bars fa-2x'></i>");
@@ -187,7 +187,7 @@ public class ModelMenu extends DecoratedPopupPanel {
    * Handles click on the "New Model" button in the ModelMenu. Opens a new
    * instance of WMT in a new browser tab.
    */
-  public class NewModelHandler implements ClickHandler {
+  public class MenuNewModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
       ModelMenu.this.hide();
@@ -198,10 +198,10 @@ public class ModelMenu extends DecoratedPopupPanel {
   /**
    * Handles click on the "Open Model..." button in the ModelMenu. Pops up an
    * instance of {@link DroplistDialogBox} to prompt the user for a model to
-   * open. Events are sent to {@link OpenOkHandler} and
+   * open. Events are sent to {@link OpenModelHandler} and
    * {@link GenericCancelHandler}.
    */
-  public class OpenModelHandler implements ClickHandler {
+  public class MenuOpenModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
 
@@ -217,7 +217,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       }
 
       openDialog.getChoicePanel().getOkButton().addClickHandler(
-          new OpenOkHandler());
+          new OpenModelHandler());
       openDialog.getChoicePanel().getCancelButton().addClickHandler(
           new DialogCancelHandler(openDialog));
 
@@ -230,7 +230,7 @@ public class ModelMenu extends DecoratedPopupPanel {
    * Handles click on the "Close Model" button in the ModelMenu. Resets the
    * WMT GUI to its default state with a call to {@link Perspective#reset()}.
    */
-  public class CloseModelHandler implements ClickHandler {
+  public class MenuCloseModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
       ModelMenu.this.hide();
@@ -240,7 +240,7 @@ public class ModelMenu extends DecoratedPopupPanel {
 
   /**
    * Pops up an instance of {@link SaveDialogBox} to prompt the user to save
-   * the model. Events are sent to {@link SaveOkHandler} and
+   * the model. Events are sent to {@link SaveModelHandler} and
    * {@link GenericCancelHandler}.
    */
   private void showSaveDialogBox() {
@@ -248,7 +248,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     saveDialog.getFilePanel().setTitle(
         "Enter a name for the model. No file extension is needed.");
     saveDialog.getChoicePanel().getOkButton().addClickHandler(
-        new SaveOkHandler());
+        new SaveModelHandler());
     saveDialog.getChoicePanel().getCancelButton().addClickHandler(
         new DialogCancelHandler(saveDialog));
     saveDialog.center();
@@ -259,7 +259,7 @@ public class ModelMenu extends DecoratedPopupPanel {
    * not-previously-saved model or a new model displayed in WMT to the server
    * with a call to {@link DataTransfer#postModel(DataManager)}.
    */
-  public class SaveModelHandler implements ClickHandler {
+  public class MenuSaveModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
 
@@ -285,7 +285,7 @@ public class ModelMenu extends DecoratedPopupPanel {
    * Handles click on the "Save Model As..." button in the ModelMenu. Prompts
    * the user for a model name using {@link ModelMenu#showSaveDialogBox()}.
    */
-  public class SaveModelAsHandler implements ClickHandler {
+  public class MenuSaveModelAsHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
       ModelMenu.this.hide();
@@ -297,7 +297,7 @@ public class ModelMenu extends DecoratedPopupPanel {
    * Handles click on the "Delete" button in the ModelMenu. It presents an
    * instance of {@link DroplistDialogBox} with a "Delete" button.
    */
-  public class DeleteModelHandler implements ClickHandler {
+  public class MenuDeleteModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
       
@@ -313,7 +313,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       }
 
       deleteDialog.getChoicePanel().getOkButton().addClickHandler(
-          new DeleteOkHandler());
+          new DeleteModelHandler());
       deleteDialog.getChoicePanel().getCancelButton().addClickHandler(
           new DialogCancelHandler(deleteDialog));
 
@@ -326,7 +326,7 @@ public class ModelMenu extends DecoratedPopupPanel {
    * Handles click on the "Run" button in the ModelMenu. Displays
    * {@link RunDialogBox}.
    */
-  public class RunModelHandler implements ClickHandler {
+  public class MenuRunModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
 
@@ -353,7 +353,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       }
 
       runDialog.getChoicePanel().getOkButton().addClickHandler(
-          new RunOkHandler());
+          new RunModelHandler());
       runDialog.getChoicePanel().getCancelButton().addClickHandler(
           new DialogCancelHandler(runDialog));
 
@@ -367,7 +367,7 @@ public class ModelMenu extends DecoratedPopupPanel {
    * Displays the API "run/show" page showing the status of all currently
    * running models.
    */
-  public class RunStatusHandler implements ClickHandler {
+  public class MenuRunStatusHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
       ModelMenu.this.hide();
@@ -378,7 +378,7 @@ public class ModelMenu extends DecoratedPopupPanel {
   /**
    * Handles click on the "Help" button in the ModelMenu.
    */
-  public class HelpHandler implements ClickHandler {
+  public class MenuHelpHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
       ModelMenuItem item = (ModelMenuItem) event.getSource();
@@ -390,7 +390,7 @@ public class ModelMenu extends DecoratedPopupPanel {
   /**
    * Handles click on the "About" button in the ModelMenu.
    */
-  public class AboutHandler implements ClickHandler {
+  public class MenuAboutHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
       ModelMenuItem item = (ModelMenuItem) event.getSource();
@@ -405,7 +405,7 @@ public class ModelMenu extends DecoratedPopupPanel {
    * {@link DataTransfer#getModel(DataManager, Integer)} to pull the selected
    * model from the server.
    */
-  public class OpenOkHandler implements ClickHandler {
+  public class OpenModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
 
@@ -434,7 +434,7 @@ public class ModelMenu extends DecoratedPopupPanel {
    * {@link DataManager#serialize()} to serialize the model, then posts it to
    * the server with {@link DataTransfer#postModel(DataManager)}.
    */
-  public class SaveOkHandler implements ClickHandler {
+  public class SaveModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
 
@@ -462,7 +462,7 @@ public class ModelMenu extends DecoratedPopupPanel {
    * selected model from the server with a call to
    * {@link DataTransfer#deleteModel(DataManager, Integer)}.
    */
-  public class DeleteOkHandler implements ClickHandler {
+  public class DeleteModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
 
@@ -487,7 +487,7 @@ public class ModelMenu extends DecoratedPopupPanel {
    * "Run Model..." button is clicked in the ModelMenu. Initializes a model
    * run with a call to {@link DataTransfer#initModelRun(DataManager)}.
    */
-  public class RunOkHandler implements ClickHandler {
+  public class RunModelHandler implements ClickHandler {
     @Override
     public void onClick(ClickEvent event) {
       

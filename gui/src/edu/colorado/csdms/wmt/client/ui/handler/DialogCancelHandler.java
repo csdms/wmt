@@ -14,6 +14,12 @@ public class DialogCancelHandler implements ClickHandler {
 
   private DialogBox box;
   
+  /**
+   * Creates a new {@link DialogCancelHandler} for the "Cancel" button in a 
+   * dialog box.
+   * 
+   * @param box the reference for the dialog box
+   */
   public DialogCancelHandler(DialogBox box) {
     this.box = box;
   }
