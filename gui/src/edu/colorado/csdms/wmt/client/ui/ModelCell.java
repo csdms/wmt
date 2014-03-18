@@ -142,6 +142,7 @@ public class ModelCell extends Grid implements DropHandler {
     portCell.removeStyleDependentName("required");
     portCell.removeStyleDependentName("optional");
     portCell.addStyleDependentName("connected");
+    portCell.setTitle("This port is connected.");
   }
 
   /**
@@ -252,12 +253,23 @@ public class ModelCell extends Grid implements DropHandler {
       setPort(port);
 
       setStyleName("wmt-PortCell");
+      String tooltipText;
       if (port.isRequired()) {
         addStyleDependentName("required");
+        tooltipText = "This is a required port.";
       } else {
         addStyleDependentName("optional");
+        tooltipText = "This is an optional port.";
       }
-      setTitle("Port: " + port.getId());
+      if (port.getId().matches("driver")) {
+        tooltipText +=
+            " Drag over a component to act as the driver of the model.";
+      } else {
+        tooltipText +=
+            " Drag over a component that provides a \"" + port.getId()
+                + "\" port to fill it.";
+      }
+      setTitle(tooltipText);
 
       // Associate event handlers.
       addDomHandler(this, DragEnterEvent.getType());
@@ -392,9 +404,10 @@ public class ModelCell extends Grid implements DropHandler {
 
       String tooltip = "";
       if (component.getName().contains("</i>")) {
-        tooltip = "Drag component here";
+        tooltip = "Drag a component here to add it to the model.";
       } else {
-        tooltip = "Model Component: " + component.getName();
+        tooltip = "Model component: " + component.getName() 
+            + ". Click to view its parameters.";
       }
       setTitle(tooltip);
 
