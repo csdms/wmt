@@ -1,18 +1,8 @@
 $def with(files)
 
-<html>
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/wmt-server/static/style.css" />
-<head>
-</head>
-
-<body>
-
 <h1>Input Files</h1>
 $for (name, contents) in files.items():
   <h2>$name</h2>
   <div class="file">
     <pre>$contents</pre>
   </div>
-
-</body></html>

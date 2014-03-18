@@ -1,12 +1,5 @@
 $def with (models, hosts)
 
-<html>
-  <link rel="stylesheet" type="text/css" href="/wmt-server/static/style.css" />
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-<head>
-</head>
-
-<body>
 <h1>wmt</h1>
 
 <h2>Saved models:</h2>
@@ -24,10 +17,7 @@ $def with (models, hosts)
     <td>$model.id</td>
     <td>$model.name</td>
     <td>$model.date</td>
-    <td><a href="/wmt-server/models/edit/$model.id">Edit</a></td>
-    <td><a href="/wmt-server/models/export/$model.id">Resource File</a></td>
+    <td><a href="/$PREFIX/models/edit/$model.id">Edit</a></td>
+    <td><a href="/$PREFIX/models/export/$model.id">Resource File</a></td>
   </tr>
 </table>
-
-</body>
-</html>

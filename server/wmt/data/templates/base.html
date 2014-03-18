@@ -2,24 +2,10 @@ $def with (page)
 
 <html>
 <head>
-  <title>Component Modeling Tool</title>
-  <style>
-    #menu {
-      width: 200px;
-      float: right;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="$PREFIX/static/style.css" />
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 </head>
-
 <body>
-  <ul>
-    <li><a href="/wmt-server">Home</a></li>
-    <li><a href="/wmt-server/models/new">New Model</a></li>
-    <li><a href="/wmt-server/help">Help</a></li>
-  </ul>
-
-  <hr>
-
-  $:page
+$:page
 </body>
 </html>
