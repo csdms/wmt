@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataURL;
+import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 
 /**
  * A dialog box that shows information about a successfully submitted model
@@ -52,6 +53,11 @@ public class RunInfoDialogBox extends DialogBox {
     this.setWidget(contents);
 
     /*
+     * Hides the dialog box.
+     */
+    closeButton.addClickHandler(new DialogCancelHandler(this));
+    
+    /*
      * Intercepts click on link in dialog and opens the URL in a new tab.
      */
     msgHtml.addClickHandler(new ClickHandler() {
@@ -59,16 +65,6 @@ public class RunInfoDialogBox extends DialogBox {
       public void onClick(ClickEvent event) {
         event.preventDefault();
         Window.open(DataURL.showModelRun(), "runInfoDialog", null);
-      }
-    });
-
-    /*
-     * Hides the dialog box.
-     */
-    closeButton.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        RunInfoDialogBox.this.hide();
       }
     });
   }
