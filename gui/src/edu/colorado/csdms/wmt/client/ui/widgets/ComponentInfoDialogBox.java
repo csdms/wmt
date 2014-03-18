@@ -7,12 +7,10 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -30,6 +28,7 @@ public class ComponentInfoDialogBox extends DialogBox {
   private static String[] LABELS = {
       "id", "summary", "url", "author", "email", "version", "license", "doi"};
   private Grid grid;
+  private ClosePanel closePanel;
 
   /**
    * Creates an {@link ComponentInfoDialogBox}. It must be populated later by
@@ -56,20 +55,15 @@ public class ComponentInfoDialogBox extends DialogBox {
     contents.add(grid);
     contents.setWidth("40em");
 
-    Button closeButton = new Button("<i class='fa fa-times'></i> Close");
-    closeButton.getElement().getStyle().setMarginTop(1, Unit.EM);
-    closeButton.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-
-    HorizontalPanel buttonPanel = new HorizontalPanel();
-    buttonPanel.setWidth("100%");
-    buttonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-    buttonPanel.add(closeButton);
-    contents.add(buttonPanel);
+    closePanel = new ClosePanel();
+    contents.add(closePanel);
 
     this.setWidget(contents);
 
-    // Hides the dialog box.
-    closeButton.addClickHandler(new DialogCancelHandler(this));
+    /*
+     * Hides the dialog box.
+     */
+    closePanel.getButton().addClickHandler(new DialogCancelHandler(this));
   }
 
   /**
@@ -103,7 +97,7 @@ public class ComponentInfoDialogBox extends DialogBox {
     }
 
     /*
-     *  Intercept the click on the component URL and open it in a new tab.
+     *  Intercepts the click on the component URL and opens it in a new tab.
      */
     urlHtml.addClickHandler(new ClickHandler() {
       @Override

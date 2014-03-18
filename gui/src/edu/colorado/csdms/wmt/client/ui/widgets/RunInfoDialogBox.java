@@ -1,10 +1,8 @@
 package edu.colorado.csdms.wmt.client.ui.widgets;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -28,6 +26,7 @@ public class RunInfoDialogBox extends DialogBox {
           + "<i class='fa fa-bars fa-lg'></i> menu, or by visiting:</p>"
           + "<a href='https://csdms.colorado.edu/wmt/run/show'>"
           + "https://csdms.colorado.edu/wmt/run/show</a>";
+  private ClosePanel closePanel;
 
   /**
    * Displays a {@link RunInfoDialogBox}.
@@ -45,17 +44,16 @@ public class RunInfoDialogBox extends DialogBox {
     HTML msgHtml = new HTML(MSG);
     contents.add(msgHtml);
 
-    Button closeButton = new Button("<i class='fa fa-beer'></i> Close");
-    closeButton.getElement().getStyle().setMarginTop(1, Unit.EM);
-    closeButton.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-    contents.add(closeButton);
+    closePanel = new ClosePanel();
+    closePanel.getButton().setHTML("<i class='fa fa-beer'></i> Close");
+    contents.add(closePanel);
 
     this.setWidget(contents);
 
     /*
      * Hides the dialog box.
      */
-    closeButton.addClickHandler(new DialogCancelHandler(this));
+    closePanel.getButton().addClickHandler(new DialogCancelHandler(this));
     
     /*
      * Intercepts click on link in dialog and opens the URL in a new tab.
