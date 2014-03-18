@@ -12,7 +12,6 @@ import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 
@@ -149,43 +148,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     this.menuButton = html;
   }
 
-  /**
-   * An inner class for making the menu items that appear on the Model menu.
-   */
-  public class ModelMenuItem extends Grid {
 
-    /**
-     * The zero-element constructor makes a separator from an HTML "hr"
-     * element.
-     */
-    public ModelMenuItem() {
-      super(1, 1);
-      this.setWidget(0, 0, new HTML("<hr>"));
-      this.setStyleName("wmt-ModelMenuSeparator");
-    }
-
-    /**
-     * Makes a menu item for the Model menu.
-     * 
-     * @param menuText the text to display in the menu item
-     */
-    public ModelMenuItem(String menuText) {
-      super(1, 1);
-      this.setWidget(0, 0, new HTML(menuText));
-    }
-
-    /**
-     * Makes a menu item for the Model menu that includes an icon.
-     * 
-     * @param menuText the text to display in the menu item
-     * @param faIcon a Font Awesome icon name
-     */
-    public ModelMenuItem(String menuText, String faIcon) {
-      super(1, 2);
-      this.setWidget(0, 0, new HTML("<i class='fa " + faIcon + " fa-fw'>"));
-      this.setWidget(0, 1, new HTML(menuText));
-    }
-  }
 
   /**
    * Handles click on the "New Model" button in the ModelMenu. Opens a new
