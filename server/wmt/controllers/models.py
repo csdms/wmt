@@ -2,7 +2,7 @@ import web
 import json
 import os
 
-from ..models import (models, users)
+from ..models import (models, users, components)
 from ..render import render
 from ..validators import (not_too_short, not_bad_json)
 from ..cca import rc_from_json
@@ -232,3 +232,33 @@ class Upload(object):
         return json.dumps({'checksum': checksum.hexdigest()})
 
 
+class Format(object):
+    def GET(self, id, name):
+        x = web.input(defaults='false', format='html')
+
+        if int(id) in [-1, 0]:
+            mapping = components.get_component_defaults(name)
+        else:
+            try:
+                component = models.get_model_component(int(id), name)
+            except models.BadIdError as error:
+                raise web.internalerror("%s" % error)
+            except KeyError as error:
+                raise web.internalerror("%s" % error)
+            except Exception as error:
+                raise web.internalerror("%s" % error)
+
+            mapping = component['parameters']
+
+        #return render.files(components.get_component_formatted_input(name, **mapping))
+
+        if x['format'].lower() == 'html':
+            return render.files(components.get_component_formatted_input(name, **mapping))
+        elif x['format'].lower() == 'json':
+            web.header('Content-Type', 'application/json; charset=utf-8')
+            #mapping.pop('separator')
+            return json.dumps(mapping, sort_keys=True, indent=4, separators=(',', ': '))
+        else:
+            files = components.get_component_formatted_input(name, **mapping)
+            return '\n'.join([
+                '>>> start: {0}\n{1}\n<<< end: {0}\n'.format(*item) for item in files.items()])
