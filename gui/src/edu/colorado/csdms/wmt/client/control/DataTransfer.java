@@ -21,7 +21,7 @@ import edu.colorado.csdms.wmt.client.data.ComponentListJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelListJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
-import edu.colorado.csdms.wmt.client.ui.RunInfoDialogBox;
+import edu.colorado.csdms.wmt.client.ui.widgets.RunInfoDialogBox;
 
 /**
  * A class that defines static methods for accessing, modifying and deleting,

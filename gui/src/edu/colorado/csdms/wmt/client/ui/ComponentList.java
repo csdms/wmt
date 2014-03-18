@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Grid;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.PortJSO;
+import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 
 /**
  * The ComponentList holds a list of Components, each encapsulated in a

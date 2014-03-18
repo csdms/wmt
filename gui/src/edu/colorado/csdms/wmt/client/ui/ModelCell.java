@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.Port;
+import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 
 /**
  * A 1 x 4 Grid holding HTML widgets for a port, a connector, a component, and

@@ -1,7 +1,7 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.ui;
+package edu.colorado.csdms.wmt.client.ui.widgets;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -18,6 +18,8 @@ import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 
 /**
  * A dialog box with a {@link FormPanel} that holds a {@link FileUpload}
@@ -63,7 +65,7 @@ public class UploadDialogBox extends DialogBox {
     hidden = new Hidden();
     hidden.setName("id"); // to match API
     contents.add(hidden);
-    
+
     HorizontalPanel filePanel = new HorizontalPanel();
     filePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     filePanel.setHeight("3em");
@@ -85,6 +87,12 @@ public class UploadDialogBox extends DialogBox {
     contents.add(choicePanel);
 
     /*
+     * Event handler for the "Cancel" button. Closes UploadDialogBox.
+     */
+    choicePanel.getCancelButton()
+        .addClickHandler(new DialogCancelHandler(this));
+
+    /*
      * Event handler for the "Upload" button. Submits the form.
      */
     choicePanel.getOkButton().addClickHandler(new ClickHandler() {
@@ -95,8 +103,8 @@ public class UploadDialogBox extends DialogBox {
     });
 
     /*
-     * This handler is called just before the form is submitted. Can be used to
-     * perform validation.
+     * This handler is called just before the form is submitted. Can be used
+     * to perform validation.
      */
     form.addSubmitHandler(new SubmitHandler() {
       @Override
@@ -105,16 +113,6 @@ public class UploadDialogBox extends DialogBox {
           Window.alert("Please choose a file for upload.");
           event.cancel();
         }
-      }
-    });
-    
-    /*
-     * Event handler for the "Cancel" button. Closes UploadDialogBox.
-     */
-    choicePanel.getCancelButton().addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        UploadDialogBox.this.hide();
       }
     });
   }

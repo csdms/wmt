@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.Port;
+import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 
 /**
  * A draggable (using native GWT DnD) widget that displays a text item with a
