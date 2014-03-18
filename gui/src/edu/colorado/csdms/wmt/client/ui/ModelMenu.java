@@ -22,6 +22,7 @@ import edu.colorado.csdms.wmt.client.control.DataURL;
 import edu.colorado.csdms.wmt.client.ui.handler.DeleteModelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.OpenModelHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.SaveModelHandler;
 
 /**
  * Encapsulates a menu for operations on Models -- e.g., New, Open, Close and
@@ -289,7 +290,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     saveDialog.getFilePanel().setTitle(
         "Enter a name for the model. No file extension is needed.");
     saveDialog.getChoicePanel().getOkButton().addClickHandler(
-        new SaveModelHandler());
+        new SaveModelHandler(data, saveDialog));
     saveDialog.getChoicePanel().getCancelButton().addClickHandler(
         new DialogCancelHandler(saveDialog));
     saveDialog.center();
@@ -398,34 +399,6 @@ public class ModelMenu extends DecoratedPopupPanel {
       ModelMenuItem item = (ModelMenuItem) event.getSource();
       ModelMenu.this.hide();
       Window.alert("Clicked on: " + item.getText(0, 0));
-    }
-  }
-
-  /**
-   * Handles click on the "OK" button in the save dialog that appears when the
-   * "Save Model As..." button is clicked in the ModelMenu. Uses
-   * {@link DataManager#serialize()} to serialize the model, then posts it to
-   * the server with {@link DataTransfer#postModel(DataManager)}.
-   */
-  public class SaveModelHandler implements ClickHandler {
-    @Override
-    public void onClick(ClickEvent event) {
-
-      saveDialog.hide();
-
-      // Set the model name in the DataManager.
-      String modelName = saveDialog.getFilePanel().getField();
-      if (modelName.isEmpty()) {
-        return;
-      }      
-      if (!data.getModel().getName().matches(modelName)) {
-        data.getModel().setName(modelName);
-        data.saveAttempts++;
-      }
-
-      // Serialize the model from the GUI and post it to the server.
-      data.serialize();
-      DataTransfer.postModel(data);
     }
   }
 
