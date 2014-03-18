@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.control.DataURL;
+import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 
 /**
  * Encapsulates a menu for operations on Models -- e.g., New, Open, Close and
@@ -218,7 +219,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       openDialog.getChoicePanel().getOkButton().addClickHandler(
           new OpenOkHandler());
       openDialog.getChoicePanel().getCancelButton().addClickHandler(
-          new GenericCancelHandler());
+          new DialogCancelHandler(openDialog));
 
       openDialog.center();
       ModelMenu.this.hide();
@@ -249,7 +250,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     saveDialog.getChoicePanel().getOkButton().addClickHandler(
         new SaveOkHandler());
     saveDialog.getChoicePanel().getCancelButton().addClickHandler(
-        new GenericCancelHandler());
+        new DialogCancelHandler(saveDialog));
     saveDialog.center();
   }
 
@@ -314,7 +315,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       deleteDialog.getChoicePanel().getOkButton().addClickHandler(
           new DeleteOkHandler());
       deleteDialog.getChoicePanel().getCancelButton().addClickHandler(
-          new GenericCancelHandler());
+          new DialogCancelHandler(deleteDialog));
 
       deleteDialog.center();
       ModelMenu.this.hide();      
@@ -354,7 +355,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       runDialog.getChoicePanel().getOkButton().addClickHandler(
           new RunOkHandler());
       runDialog.getChoicePanel().getCancelButton().addClickHandler(
-          new GenericCancelHandler());
+          new DialogCancelHandler(runDialog));
 
       runDialog.center();
       ModelMenu.this.hide();
@@ -512,29 +513,6 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       // Initialize the model run.
       DataTransfer.initModelRun(data);
-    }
-  }
-
-  /**
-   * Handles click on the "Cancel" button in any dialog spawned from the
-   * ModelMenu. Cancels action and closes both the dialog and the ModelMenu.
-   */
-  public class GenericCancelHandler implements ClickHandler {
-    @Override
-    public void onClick(ClickEvent event) {
-      ModelMenu.this.hide();
-      if ((openDialog != null) && (openDialog.isShowing())) {
-        openDialog.hide();
-      }
-      if ((saveDialog != null) && (saveDialog.isShowing())) {
-        saveDialog.hide();
-      }
-      if ((deleteDialog != null) && (deleteDialog.isShowing())) {
-        deleteDialog.hide();
-      }
-      if ((runDialog != null) && (runDialog.isShowing())) {
-        runDialog.hide();
-      }
     }
   }
 }
