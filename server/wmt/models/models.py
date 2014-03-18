@@ -55,6 +55,14 @@ def get_model(id):
         raise BadIdError(id)
 
 
+def get_model_component(id, component):
+    model = json.loads(get_model(id)['json'])
+    for item in model['model']:
+        if item['id'] == component:
+            return item
+    raise KeyError(component)
+
+
 def get_model_ids():
     entries = db.select('models', what='id')
     return [str(entry['id']) for entry in entries]
