@@ -6,8 +6,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
-import edu.colorado.csdms.wmt.client.ui.DroplistDialogBox;
 import edu.colorado.csdms.wmt.client.ui.ModelMenu;
+import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
 
 /**
  * Handles click on the "Delete" button in the dialog that appears when the

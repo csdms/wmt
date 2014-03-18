@@ -23,6 +23,9 @@ import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.OpenModelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.RunModelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SaveModelHandler;
+import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
+import edu.colorado.csdms.wmt.client.ui.widgets.RunDialogBox;
+import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
 
 /**
  * Encapsulates a menu for operations on Models -- e.g., New, Open, Close and

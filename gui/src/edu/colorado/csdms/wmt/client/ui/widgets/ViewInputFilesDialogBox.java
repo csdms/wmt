@@ -1,4 +1,4 @@
-package edu.colorado.csdms.wmt.client.ui;
+package edu.colorado.csdms.wmt.client.ui.widgets;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

@@ -1,7 +1,7 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.ui;
+package edu.colorado.csdms.wmt.client.ui.widgets;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;

@@ -1,7 +1,7 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.ui;
+package edu.colorado.csdms.wmt.client.ui.widgets;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;

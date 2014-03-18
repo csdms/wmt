@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.TextBox;
 
 import edu.colorado.csdms.wmt.client.control.DataURL;
 import edu.colorado.csdms.wmt.client.data.ParameterJSO;
+import edu.colorado.csdms.wmt.client.ui.widgets.UploadDialogBox;
 
 /**
  * Used to display the value of a parameter in a {@link ParameterTable}, a

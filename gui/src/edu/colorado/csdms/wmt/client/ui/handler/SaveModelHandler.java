@@ -6,7 +6,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.ui.ModelMenu;
-import edu.colorado.csdms.wmt.client.ui.SaveDialogBox;
+import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
 
 /**
  * Handles click on the "OK" button in the save dialog that appears when the
