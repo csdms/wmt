@@ -22,7 +22,8 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
  * Defines the initial layout of views (a perspective, in Eclipse parlance)
  * for a WMT instance in a browser window. The Perspective holds four views,
  * named North, West, Center and South. The top-level organizing panel for the
- * GUI is a DockLayoutPanel.
+ * GUI is a DockLayoutPanel. Includes getters and setters for the UI elements
+ * that are arrayed on the Perspective.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -54,6 +55,9 @@ public class Perspective extends DockLayoutPanel {
   private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
   private ModelMenu modelMenu;
+  private ComponentList componentList;
+  private ModelTree modelTree;
+  private ParameterTable parameterTable;
 
   /**
    * Draws the panels and their children that compose the basic WMT GUI.
@@ -186,6 +190,24 @@ public class Perspective extends DockLayoutPanel {
     this.scrollComponents = scrollComponents;
   }
 
+  /**
+   * Returns a reference to the {@link ComponentList} used in the "Components"
+   * tab of a WMT session.
+   */
+  public ComponentList getComponentList() {
+    return componentList;
+  }
+
+  /**
+   * Stores a reference to the {@link ComponentList} used in the "Components"
+   * tab of a WMT session.
+   * 
+   * @param componentList the ComponentList instance
+   */
+  public void setComponentList(ComponentList componentList) {
+    this.componentList = componentList;
+  }
+
   public ScrollPanel getModelPanel() {
     return scrollModel;
   }
@@ -209,6 +231,22 @@ public class Perspective extends DockLayoutPanel {
     viewCenter.setTabHTML(0, tabTitle);
   }
 
+  /**
+   * Returns a reference to the {@link ModelTree} used in a WMT session.
+   */
+  public ModelTree getModelTree() {
+    return modelTree;
+  }
+
+  /**
+   * Stores a reference to the {@link ModelTree} used in a WMT session.
+   * 
+   * @param modelTree the ModelTree instance
+   */
+  public void setModelTree(ModelTree modelTree) {
+    this.modelTree = modelTree;
+  }
+
   public ScrollPanel getParametersPanel() {
     return scrollParameters;
   }
@@ -229,6 +267,24 @@ public class Perspective extends DockLayoutPanel {
       tabTitle += " (" + componentName + ")";
     }
     viewEast.setTabHTML(0, tabTitle);
+  }
+
+  /**
+   * Returns a reference to the {@link ParameterTable} used in the
+   * "Parameters" tab of a WMT session.
+   */
+  public ParameterTable getParameterTable() {
+    return parameterTable;
+  }
+
+  /**
+   * Stores a reference to the {@link ParameterTable} used in the "Parameters"
+   * tab of a WMT session.
+   * 
+   * @param parameterTable the parameterTable to set
+   */
+  public void setParameterTable(ParameterTable parameterTable) {
+    this.parameterTable = parameterTable;
   }
 
   public TabLayoutPanel getViewEast() {
@@ -297,9 +353,9 @@ public class Perspective extends DockLayoutPanel {
     data.setSelectedComponent(null);
     data.resetModelComponents();
 
-    data.getParameterTable().clearTable();
-    data.getModelTree().initializeTree();
-    data.getComponentList().setCellSensitivity();
+    parameterTable.clearTable();
+    modelTree.initializeTree();
+    componentList.setCellSensitivity();
 
     setModelPanelTitle();
   }

@@ -38,7 +38,7 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
 
     this.data = data;
     initializeTree();
-    this.data.setModelTree(this);
+    this.data.getPerspective().setModelTree(this);
 
     // Set up ModelTree event handlers.
     addDomHandler(this, DragOverEvent.getType());
@@ -113,7 +113,7 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
       data.getModel().setName(
           component.getName() + " " + data.saveAttempts.toString());
       data.setSelectedComponent(component.getId());
-      data.getParameterTable().loadTable();
+      data.getPerspective().getParameterTable().loadTable();
     }
     
     // Mark the model state as unsaved.
@@ -167,7 +167,7 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
     }
 
     // Update the sensitivity of the DragCells in the ComponentList.
-    data.getComponentList().setCellSensitivity();
+    data.getPerspective().getComponentList().setCellSensitivity();
   }
 
   /**
