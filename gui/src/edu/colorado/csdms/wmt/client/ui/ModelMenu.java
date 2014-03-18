@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.control.DataURL;
+import edu.colorado.csdms.wmt.client.ui.handler.DeleteModelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.OpenModelHandler;
 
@@ -314,7 +315,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       }
 
       deleteDialog.getChoicePanel().getOkButton().addClickHandler(
-          new DeleteModelHandler());
+          new DeleteModelHandler(data, deleteDialog));
       deleteDialog.getChoicePanel().getCancelButton().addClickHandler(
           new DialogCancelHandler(deleteDialog));
 
@@ -427,32 +428,6 @@ public class ModelMenu extends DecoratedPopupPanel {
       DataTransfer.postModel(data);
     }
   }
-
-  /**
-   * Handles click on the "Delete" button in the dialog that appears when the
-   * "Delete Model..." button is clicked in the ModelMenu. Deletes the
-   * selected model from the server with a call to
-   * {@link DataTransfer#deleteModel(DataManager, Integer)}.
-   */
-  public class DeleteModelHandler implements ClickHandler {
-    @Override
-    public void onClick(ClickEvent event) {
-
-      deleteDialog.hide();
-
-      Integer selIndex =
-          deleteDialog.getDroplistPanel().getDroplist().getSelectedIndex();
-      Integer modelId = data.modelIdList.get(selIndex);
-      GWT.log("Deleting model: " + modelId);
-
-      DataTransfer.deleteModel(data, modelId);
-
-      // If the deleted model is currently displayed, close it.
-      if (data.getMetadata().getId() == modelId) {
-        data.getPerspective().reset();
-      }
-    }
-  }  
 
   /**
    * Handles click on the "Run" button in the dialog that appears when the
