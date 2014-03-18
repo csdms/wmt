@@ -95,6 +95,7 @@
 /* See TreeItem offset. Must factor combined heights of ControlCell icons. */
 .wmt-ModelCell {
    height: 60px;
+   vertical-align: top;
 }
 
 .wmt-PortCell {
@@ -172,31 +173,33 @@
 .wmt-ControlCell {
    /* height: 50px; */
    position: relative;
-   /* top: -15px; */
-   left: -7px;
+   /* top: -10px; */
+   left: -3px;
    margin: 0px;
    padding: 0px;
+   border: 0px;
 }
 
 .wmt-ControlCell-delete {
-   position: relative;
+   /* position: relative; */
    /* height: 10px; */
-   top: -7px;
-   color: #b55;
+   /* top: -7px; */
+   color: #c55;
 }
 
 .wmt-ControlCell-help {
    position: relative;
    /* height: 10px; */
-   top: -11px;
-   color: #55b;
+   /* top: -11px; */
+   left: -1px;
+   color: #55c;
 }
 
-.wmt-ControlCell-info {
-   position: relative;
-   height: 10px;
-   top: -15px;
-   color: #5b5;
+.wmt-ControlCell-run {
+   /* position: relative; */
+   /* height: 10px; */
+   /* top: -15px; */
+   color: #5c5;
 }
 
 /* Makes a grabby handle on the components grid. */

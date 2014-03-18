@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.TreeItem;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
@@ -513,11 +514,11 @@ public class ModelCell extends Grid implements DropHandler {
    * Cell 4/4 of a ModelCell, it holds controls for acting on a ModelCell. An
    * inner class.
    */
-  public class ControlCell extends Grid {
+  public class ControlCell extends VerticalPanel {
 
     private HTML deleteButton;
     private HTML helpButton;
-    private HTML infoButton;
+    private HTML runButton;
 
     /**
      * Constructor. The ControlCell is hidden on an open port, then shown when
@@ -525,24 +526,29 @@ public class ModelCell extends Grid implements DropHandler {
      */
     public ControlCell() {
 
-      super(2, 1); // 2 rows, 1 column
       setVisible(false);
       setStyleName("wmt-ControlCell");
+      this.setHorizontalAlignment(ALIGN_CENTER);
+      this.setVerticalAlignment(ALIGN_TOP);
 
       deleteButton = new HTML("<i class='fa fa-times fa-fw'></i>");
-      this.setWidget(0, 0, deleteButton);
+      this.add(deleteButton);
       deleteButton.addStyleName("wmt-ControlCell-delete");
       deleteButton.setTitle("Remove this component");
 
       helpButton = new HTML("<i class='fa fa-question fa-fw'></i>");
-      this.setWidget(1, 0, helpButton);
+      this.add(helpButton);
       helpButton.addStyleName("wmt-ControlCell-help");
-      helpButton.setTitle("View the help page for this component");
+      helpButton.setTitle("View information about this component");
 
-      infoButton = new HTML("<i class='fa fa-info fa-fw'></i>");
-      // this.setWidget(2, 0, infoButton);
-      infoButton.addStyleName("wmt-ControlCell-info");
-      infoButton.setTitle("View the component's parameters");
+      if (getPortCell().getPort().getId().matches("driver")) {
+        runButton = new HTML("<i class='fa fa-play fa-fw'></i>");
+      } else {
+        runButton = new HTML("<p></p>");
+      }
+      this.add(runButton);
+      runButton.addStyleName("wmt-ControlCell-run");
+      runButton.setTitle("Run the model");
 
       /*
        * Clicking the delete button in the ControlCell removes the Component,
