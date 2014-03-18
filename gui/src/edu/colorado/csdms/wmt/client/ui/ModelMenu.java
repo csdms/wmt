@@ -22,6 +22,7 @@ import edu.colorado.csdms.wmt.client.control.DataURL;
 import edu.colorado.csdms.wmt.client.ui.handler.DeleteModelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.OpenModelHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.RunModelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SaveModelHandler;
 
 /**
@@ -356,7 +357,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       }
 
       runDialog.getChoicePanel().getOkButton().addClickHandler(
-          new RunModelHandler());
+          new RunModelHandler(data, runDialog));
       runDialog.getChoicePanel().getCancelButton().addClickHandler(
           new DialogCancelHandler(runDialog));
 
@@ -399,40 +400,6 @@ public class ModelMenu extends DecoratedPopupPanel {
       ModelMenuItem item = (ModelMenuItem) event.getSource();
       ModelMenu.this.hide();
       Window.alert("Clicked on: " + item.getText(0, 0));
-    }
-  }
-
-  /**
-   * Handles click on the "Run" button in the dialog that appears when the
-   * "Run Model..." button is clicked in the ModelMenu. Initializes a model
-   * run with a call to {@link DataTransfer#initModelRun(DataManager)}.
-   */
-  public class RunModelHandler implements ClickHandler {
-    @Override
-    public void onClick(ClickEvent event) {
-      
-      runDialog.hide();
-
-      // Get host.
-      Integer selIndex =
-          runDialog.getHostPanel().getDroplist().getSelectedIndex();
-      String hostName =
-          runDialog.getHostPanel().getDroplist().getItemText(selIndex);
-      data.setHostname(hostName);
-      GWT.log(data.getHostname());
-      
-      // Get username.
-      String userName = runDialog.getUsernamePanel().getField();
-      data.setUsername(userName);
-      GWT.log(data.getUsername());
-
-      // Get password.
-      String password = runDialog.getPasswordPanel().getField();
-      data.setPassword(password);
-      GWT.log(data.getPassword());
-
-      // Initialize the model run.
-      DataTransfer.initModelRun(data);
     }
   }
 }
