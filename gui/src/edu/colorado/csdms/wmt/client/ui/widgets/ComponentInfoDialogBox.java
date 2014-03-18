@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
+import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 
 /**
  * A dialog box used to display metadata (id, url, author, etc.) about a WMT
@@ -67,15 +68,8 @@ public class ComponentInfoDialogBox extends DialogBox {
 
     this.setWidget(contents);
 
-    /*
-     * Hides the dialog box.
-     */
-    closeButton.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        ComponentInfoDialogBox.this.hide();
-      }
-    });
+    // Hides the dialog box.
+    closeButton.addClickHandler(new DialogCancelHandler(this));
   }
 
   /**
