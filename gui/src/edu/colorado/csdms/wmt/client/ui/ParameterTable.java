@@ -22,6 +22,7 @@ public class ParameterTable extends FlexTable {
 
   public DataManager data;
   private String componentId; // the id of the displayed component
+  private ViewInputFilesPanel viewFilesPanel;
 
   /**
    * Initializes a table of parameters for a single WMT model component. The
@@ -77,9 +78,6 @@ public class ParameterTable extends FlexTable {
     for (int i = 0; i < nParameters; i++) {
       ParameterJSO parameter =
           data.getModelComponent(componentId).getParameters().get(i);
-      if (parameter.getKey().matches("simulation_name")) {
-        continue;
-      }
       this.setWidget(parameterIndex, 0, new DescriptionCell(parameter));
       if (parameter.getKey().matches("separator")) {
         this.getFlexCellFormatter().setColSpan(parameterIndex, 0, 2);
@@ -94,7 +92,7 @@ public class ParameterTable extends FlexTable {
     }
 
     // Append links to view input files.
-    ViewInputFilesPanel viewFilesPanel = new ViewInputFilesPanel(componentId);
+    viewFilesPanel = new ViewInputFilesPanel(data, componentId);
     this.setWidget(parameterIndex, 0, viewFilesPanel);
     this.getFlexCellFormatter().setColSpan(parameterIndex, 0, 2);
     this.getFlexCellFormatter().setHorizontalAlignment(parameterIndex, 0,

@@ -100,10 +100,12 @@ public class DragCell extends Grid implements DragStartHandler {
       text = "No ports provided";
     } else {
       for (int i = 0; i < componentJSO.getPortsProvided().length(); i++) {
-        text = "Drag to " + componentJSO.getPortsProvided().get(i).getId()
-            + " port to instantiate";
+        text = "Drag component to driver or to \"" 
+            + componentJSO.getPortsProvided().get(i).getId()
+            + "\" port to instantiate.";
       }
     }
+    text += " " + "Click component for more information.";
     setTitle(text);
   }
 

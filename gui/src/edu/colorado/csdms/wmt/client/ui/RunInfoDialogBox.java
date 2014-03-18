@@ -44,7 +44,7 @@ public class RunInfoDialogBox extends DialogBox {
     HTML msgHtml = new HTML(MSG);
     contents.add(msgHtml);
 
-    Button closeButton = new Button("<i class='fa fa-times'></i> Close");
+    Button closeButton = new Button("<i class='fa fa-beer'></i> Close");
     closeButton.getElement().getStyle().setMarginTop(1, Unit.EM);
     closeButton.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
     contents.add(closeButton);

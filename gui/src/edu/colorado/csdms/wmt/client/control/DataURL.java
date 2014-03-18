@@ -74,6 +74,29 @@ public class DataURL {
   }
 
   /**
+   * Returns the URL to format the parameters of a component, given its id.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param componentId the id of the desired component
+   * @param format the output format: HTML, text or JSON
+   * @param useDefaults set to true to use the defaults for the component
+   */
+  public static String formatComponent(DataManager data, String componentId,
+      String format, Boolean useDefaults) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL + "data/" + componentId + ".json";
+    } else {
+      String modelId = ((Integer) data.getMetadata().getId()).toString();
+      if (useDefaults) {
+        modelId = "0";
+      }
+      String url = API_URL + "models/" + modelId + "/" + componentId 
+          + "/format?format=" + format;
+      return url;
+    }
+  }
+
+  /**
    * Returns the URL for the list of available models from the server.
    * 
    * @param data the DataManager object for the WMT session

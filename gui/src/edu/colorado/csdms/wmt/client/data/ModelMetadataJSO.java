@@ -4,7 +4,6 @@
 package edu.colorado.csdms.wmt.client.data;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.dev.javac.JsniMethod;
 
 /**
  * A GWT JavaScript overlay (JSO) type that gives the metadata for a WMT

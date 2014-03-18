@@ -349,13 +349,13 @@ public class DataTransfer {
 
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
-    
+
     HashMap<String, String> entries = new HashMap<String, String>();
     entries.put("name", data.getModel().getName());
     entries.put("description", "A model submitted from the WMT GUI."); // XXX
-    entries.put("model_id", ((Integer)data.getMetadata().getId()).toString());
+    entries.put("model_id", ((Integer) data.getMetadata().getId()).toString());
     String queryString = buildQueryString(entries);
-    
+
     try {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
       @SuppressWarnings("unused")
@@ -366,7 +366,7 @@ public class DataTransfer {
       Window.alert(ERR_MSG + e.getMessage());
     }
   }
-  
+
   /**
    * Makes an asynchronous HTTP POST request to stage a model run on the
    * selected server.
@@ -380,11 +380,11 @@ public class DataTransfer {
 
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
-    
+
     HashMap<String, String> entries = new HashMap<String, String>();
     entries.put("uuid", data.getSimulationId());
     String queryString = buildQueryString(entries);
-    
+
     try {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
       @SuppressWarnings("unused")
@@ -591,7 +591,7 @@ public class DataTransfer {
 
         String rtxt = response.getText();
         GWT.log(rtxt);
-        
+
         if (type.matches("show")) {
           ModelJSO jso = parse(rtxt);
           data.setModel(jso);
@@ -625,22 +625,22 @@ public class DataTransfer {
       Window.alert(ERR_MSG + exception.getMessage());
     }
   }
-  
+
   /**
    * TODO
    */
   public static class RunRequestCallback implements RequestCallback {
-    
+
     private DataManager data;
     private String url;
     private String type;
-    
+
     public RunRequestCallback(DataManager data, String url, String type) {
       this.data = data;
       this.url = url;
       this.type = type;
     }
-    
+
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
@@ -674,4 +674,5 @@ public class DataTransfer {
       Window.alert(ERR_MSG + exception.getMessage());
     }
   }
+
 }
