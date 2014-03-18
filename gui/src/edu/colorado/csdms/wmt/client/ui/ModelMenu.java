@@ -21,10 +21,9 @@ import edu.colorado.csdms.wmt.client.control.DataURL;
 import edu.colorado.csdms.wmt.client.ui.handler.DeleteModelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.OpenModelHandler;
-import edu.colorado.csdms.wmt.client.ui.handler.RunModelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SaveModelHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
-import edu.colorado.csdms.wmt.client.ui.widgets.RunDialogBox;
 import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
 
 /**
@@ -45,11 +44,12 @@ public class ModelMenu extends DecoratedPopupPanel {
   private SaveDialogBox saveDialog;
   private DroplistDialogBox openDialog;
   private DroplistDialogBox deleteDialog;
-  private RunDialogBox runDialog;
 
   /**
    * Sets up the Model menu, including all its menu items, as well as its
    * "hamburger" icon. The menu is only shown when the icon is clicked.
+   * 
+   * @param data the DataManager object for the WMT session
    */
   public ModelMenu(DataManager data) {
 
@@ -103,7 +103,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     saveModel.addClickHandler(new MenuSaveModelHandler());
     saveModelAs.addClickHandler(new MenuSaveModelAsHandler());
     deleteModel.addClickHandler(new MenuDeleteModelHandler());
-    runModel.addClickHandler(new MenuRunModelHandler());
+    runModel.addClickHandler(new SetupRunModelHandler(data));
     runStatus.addClickHandler(new MenuRunStatusHandler());
     helpButton.addClickHandler(new MenuHelpHandler());
     aboutButton.addClickHandler(new MenuAboutHandler());
@@ -289,46 +289,6 @@ public class ModelMenu extends DecoratedPopupPanel {
 
       deleteDialog.center();
       ModelMenu.this.hide();      
-    }
-  }
-
-  /**
-   * Handles click on the "Run" button in the ModelMenu. Displays
-   * {@link RunDialogBox}.
-   */
-  public class MenuRunModelHandler implements ClickHandler {
-    @Override
-    public void onClick(ClickEvent event) {
-
-      if (!data.modelIsSaved()) {
-        String msg = "The model must be saved to the server"
-            + " before it can be run.";
-        Window.alert(msg);
-        return;
-      }
-      
-      runDialog = new RunDialogBox();
-
-      // TODO This should be configured. Can't desensitize ListBox elements.
-//      String hosts[] =
-//          {"CSDMS supercomputer (Beach)", 
-//          "University of Colorado supercomputer (Janus)",
-//          "Localhost"};
-      String hosts[] =
-          {"beach.colorado.edu", 
-          "janus.colorado.edu",
-          "localhost"};
-      for (int i = 0; i < hosts.length; i++) {
-        runDialog.getHostPanel().getDroplist().addItem(hosts[i]);
-      }
-
-      runDialog.getChoicePanel().getOkButton().addClickHandler(
-          new RunModelHandler(data, runDialog));
-      runDialog.getChoicePanel().getCancelButton().addClickHandler(
-          new DialogCancelHandler(runDialog));
-
-      runDialog.center();
-      ModelMenu.this.hide();
     }
   }
 
