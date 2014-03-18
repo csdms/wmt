@@ -20,6 +20,7 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.control.DataURL;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.OpenModelHandler;
 
 /**
  * Encapsulates a menu for operations on Models -- e.g., New, Open, Close and
@@ -217,7 +218,7 @@ public class ModelMenu extends DecoratedPopupPanel {
       }
 
       openDialog.getChoicePanel().getOkButton().addClickHandler(
-          new OpenModelHandler());
+          new OpenModelHandler(data, openDialog));
       openDialog.getChoicePanel().getCancelButton().addClickHandler(
           new DialogCancelHandler(openDialog));
 
@@ -236,22 +237,6 @@ public class ModelMenu extends DecoratedPopupPanel {
       ModelMenu.this.hide();
       data.getPerspective().reset();
     }
-  }
-
-  /**
-   * Pops up an instance of {@link SaveDialogBox} to prompt the user to save
-   * the model. Events are sent to {@link SaveModelHandler} and
-   * {@link GenericCancelHandler}.
-   */
-  private void showSaveDialogBox() {
-    saveDialog = new SaveDialogBox(data.getModel().getName());
-    saveDialog.getFilePanel().setTitle(
-        "Enter a name for the model. No file extension is needed.");
-    saveDialog.getChoicePanel().getOkButton().addClickHandler(
-        new SaveModelHandler());
-    saveDialog.getChoicePanel().getCancelButton().addClickHandler(
-        new DialogCancelHandler(saveDialog));
-    saveDialog.center();
   }
 
   /**
@@ -291,6 +276,22 @@ public class ModelMenu extends DecoratedPopupPanel {
       ModelMenu.this.hide();
       showSaveDialogBox();
     }
+  }
+
+  /**
+   * Pops up an instance of {@link SaveDialogBox} to prompt the user to save
+   * the model. Events are sent to {@link SaveModelHandler} and
+   * {@link GenericCancelHandler}.
+   */
+  private void showSaveDialogBox() {
+    saveDialog = new SaveDialogBox(data.getModel().getName());
+    saveDialog.getFilePanel().setTitle(
+        "Enter a name for the model. No file extension is needed.");
+    saveDialog.getChoicePanel().getOkButton().addClickHandler(
+        new SaveModelHandler());
+    saveDialog.getChoicePanel().getCancelButton().addClickHandler(
+        new DialogCancelHandler(saveDialog));
+    saveDialog.center();
   }
 
   /**
@@ -396,35 +397,6 @@ public class ModelMenu extends DecoratedPopupPanel {
       ModelMenuItem item = (ModelMenuItem) event.getSource();
       ModelMenu.this.hide();
       Window.alert("Clicked on: " + item.getText(0, 0));
-    }
-  }
-
-  /**
-   * Handles click on the "OK" button in the open dialog that appears when the
-   * "Open Model..." button is clicked in the ModelMenu. Calls
-   * {@link DataTransfer#getModel(DataManager, Integer)} to pull the selected
-   * model from the server.
-   */
-  public class OpenModelHandler implements ClickHandler {
-    @Override
-    public void onClick(ClickEvent event) {
-
-      openDialog.hide();
-
-      data.getPerspective().reset();
-
-      // Get the selected item from the openDialog. This feels fragile. I'm
-      // using the index of the selected modelName to match up the index of
-      // the modelId. This should work consistently because I add the modelId
-      // and modelName to the ArrayList with the same index. It would be
-      // better if they both resided in the same data structure.
-      Integer selIndex =
-          openDialog.getDroplistPanel().getDroplist().getSelectedIndex();
-      Integer modelId = data.modelIdList.get(selIndex);
-
-      // Get the data + metadata for the selected model. On success, #getModel
-      // calls DataManager#deserialize, which populates the WMT GUI.
-      DataTransfer.getModel(data, modelId);
     }
   }
 
