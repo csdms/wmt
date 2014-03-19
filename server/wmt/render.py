@@ -3,11 +3,13 @@ import urlparse
 
 from .config import site
 
-parts = urlparse.urlsplit('https://csdms.colorado.edu/wmt-server')
+#parts = urlparse.urlsplit('https://csdms.colorado.edu/wmt-server')
+parts = (site['scheme'], site['netloc'], site['path'], '', '')
+
 globals = {
-    'SCHEME': parts.scheme,
-    'HOST': parts.netloc,
-    'PREFIX': parts.path,
+    'SCHEME': parts[0],
+    'HOST': parts[1],
+    'PREFIX': '/' + parts[2],
     'BASE_URL': urlparse.urlunsplit(parts),
 }
 

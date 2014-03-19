@@ -220,19 +220,23 @@ class Site(object):
 
     def to_conf_file(self, filename):
         sections = OrderedDict([
-            ('wmt', OrderedDict([
-                ('prefix', self.prefix),
-                ('templates', self.dir['templates'].prefix),
-                ('files', self.dir['files'].prefix),
-                ('uploads', os.path.join(self.dir['files'].prefix, 'uploads')),
-                ('downloads', os.path.join(self.dir['files'].prefix, 'downloads')),
-                ('static', self.dir['static'].prefix),
-                ('logs', self.dir['logs'].prefix),
-                ('database', os.path.join(self.dir['db'].prefix, 'wmt.db')),
-                ('user_db', os.path.join(self.dir['db'].prefix, 'users.db')),
-                ('submission_db', os.path.join(self.dir['db'].prefix,
-                                               'submission.db')),
-                ('db', self.dir['db'].prefix), ])
+            ('paths', OrderedDict([
+                #('prefix', self.prefix),
+                ('templates', self.dir['templates'].name),
+                ('files', self.dir['files'].name),
+                ('uploads', os.path.join(self.dir['files'].name, 'uploads')),
+                ('downloads', os.path.join(self.dir['files'].name, 'downloads')),
+                ('static', self.dir['static'].name),
+                ('logs', self.dir['logs'].name),
+                ('database', os.path.join('%(db)s', 'wmt.db')),
+                ('user_db', os.path.join('%(db)s', 'users.db')),
+                ('submission_db', os.path.join('%(db)s', 'submission.db')),
+                ('db', self.dir['db'].name), ])
+            ),
+            ('url', OrderedDict([
+                ('scheme', self._options.pop('url_scheme')),
+                ('netloc', self._options.pop('url_netloc')),
+                ('path', self._options.pop('url_path')), ]),
             ),
             ('passlib', OrderedDict([
                 ('schemes', 'sha512_crypt, sha256_crypt'),
@@ -240,7 +244,7 @@ class Site(object):
                 ('sha512_crypt__default_rounds', '100000'), ])
             ),
         ])
-        sections['wmt'].update(self._options)
+        sections['user'] = OrderedDict(self._options)
 
         with open(filename, 'w') as conf_file:
             write_configuration(conf_file, sections)

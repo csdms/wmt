@@ -40,12 +40,17 @@ def main():
                         help='name of contact')
     parser.add_argument('--email', default='<your-email>',
                         help='name of contact')
-    parser.add_argument('--host', default='localhost',
-                        help='name of the host running wmt')
     parser.add_argument('--conf', action='append', default=[],
                         help='give a custom configuration value')
     parser.add_argument('--file', default='site.cfg',
                         help='read options from a files')
+
+    parser.add_argument('--url-scheme', default='https',
+                        help='URL scheme specifier')
+    parser.add_argument('--url-path', default='wmt-server',
+                        help='Hierarchical path to the WMT server')
+    parser.add_argument('--url-netloc', default='localhost',
+                        help='Network location of the WMT server')
 
     args = parser.parse_args()
 
@@ -53,7 +58,9 @@ def main():
     user_vars.update(collect_user_vars(args.conf))
     user_vars.update([('name', args.name),
                       ('email', args.email),
-                      ('host', args.host)])
+                      ('url_scheme', args.url_scheme),
+                      ('url_netloc', args.url_netloc),
+                      ('url_path', args.url_path), ])
 
     setup(args.prefix, user_vars)
 
@@ -78,8 +85,8 @@ To finish the installation you'll have to do the following:
    This will run your application in *embedded* mode. To run in *daemon* mode,
    add the following additional lines,
 
-    WSGIDaemonProcess www.site.com threads=15 maximum-requests=10000
-    WSGIProcessGroup www.site.com
+    WSGIDaemonProcess ${netloc} threads=15 maximum-requests=10000
+    WSGIProcessGroup ${netloc}
 
 2. Be sure the permissions and ownership are correct for the database files.
 
@@ -90,7 +97,7 @@ To finish the installation you'll have to do the following:
     > apachectl -k restart
 """)
 
-    print(epilog.substitute(prefix=args.prefix))
+    print(epilog.substitute(prefix=args.prefix, netloc=args.url_netloc))
 
 
 if __name__ == '__main__':
