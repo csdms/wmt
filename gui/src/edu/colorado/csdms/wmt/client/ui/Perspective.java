@@ -31,7 +31,6 @@ public class Perspective extends DockLayoutPanel {
   private DataManager data;
 
   // Fractional sizes of views.
-  private final static Double VIEW_WEST_FRACTION = 0.20;
   private final static Double VIEW_EAST_FRACTION = 0.40;
 
   // Browser window dimensions (in px) used for setting up UI views.
@@ -45,12 +44,10 @@ public class Perspective extends DockLayoutPanel {
 
   // Primary UI panels.
   private ViewNorth viewNorth;
-  private ViewWest viewWest;
   private ViewCenter viewCenter;
   private ViewEast viewEast;
 
   // Secondary UI panels/widgets.
-  private ScrollPanel scrollComponents;
   private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
   private ModelMenu modelMenu;
@@ -67,8 +64,6 @@ public class Perspective extends DockLayoutPanel {
 
     // Determine initial view sizes based on browser window dimensions.
     browserWindowWidth = Window.getClientWidth();
-    Integer viewWestInitialWidth =
-        (int) Math.round(VIEW_WEST_FRACTION * browserWindowWidth);
     Integer viewEastInitialWidth =
         (int) Math.round(VIEW_EAST_FRACTION * browserWindowWidth);
     Integer headerHeight = 70; // TODO diagnose from largest header elt
@@ -83,8 +78,6 @@ public class Perspective extends DockLayoutPanel {
 
     // The SplitLayoutPanel defines panels which translate to the West, Center
     // and South views of WMT.
-    viewWest = new ViewWest();
-    splitter.addWest(viewWest, viewWestInitialWidth);
     viewEast = new ViewEast();
     splitter.addEast(viewEast, viewEastInitialWidth);
     viewCenter = new ViewCenter();
@@ -129,23 +122,6 @@ public class Perspective extends DockLayoutPanel {
   } // end ViewNorth
 
   /**
-   * An inner class to define the West panel of the WMT GUI.
-   */
-  private class ViewWest extends TabLayoutPanel {
-
-    /**
-     * Makes the West view of the WMT GUI. It holds tabbed panels for the
-     * lists of available components.
-     */
-    public ViewWest() {
-      super(TAB_BAR_HEIGHT, Unit.EM);
-      setComponentsPanel(new ScrollPanel());
-      String tabTitle = data.tabPrefix("component") + "Components";
-      this.add(scrollComponents, tabTitle, true);
-    }
-  } // end ViewWest
-
-  /**
    * An inner class to define the Center panel of the WMT GUI.
    */
   private class ViewCenter extends TabLayoutPanel {
@@ -177,14 +153,6 @@ public class Perspective extends DockLayoutPanel {
       this.add(scrollParameters, tabTitle, true);
     }
   } // end ViewEast
-
-  public ScrollPanel getComponentsPanel() {
-    return scrollComponents;
-  }
-
-  public void setComponentsPanel(ScrollPanel scrollComponents) {
-    this.scrollComponents = scrollComponents;
-  }
 
   public ScrollPanel getModelPanel() {
     return scrollModel;
@@ -279,14 +247,6 @@ public class Perspective extends DockLayoutPanel {
   public void initializeParameterTable() {
     ParameterTable parameterTable = new ParameterTable(data);
     scrollParameters.add(parameterTable);
-  }
-
-  /**
-   * Sets up a list of WMT components, displayed in the "Components" tab.
-   */
-  public void initializeComponentList() {
-    ComponentList componentList = new ComponentList(data);
-    scrollComponents.add(componentList);
   }
 
   /**

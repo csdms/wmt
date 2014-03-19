@@ -156,7 +156,6 @@ public class DataManager {
     this.components.add(component);
     if (this.components.size() == this.componentIdList.size()) {
       sortComponents();
-      perspective.initializeComponentList();
     } // XXX This is fragile.
   }
 
