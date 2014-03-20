@@ -19,6 +19,7 @@ public class ModelGrid extends Grid {
 
   private DataManager data;
   private HTML driverCell;
+  private Boolean driverConnected;
   
   /**
    * 
@@ -43,13 +44,22 @@ public class ModelGrid extends Grid {
     driverCell = new HTML("<i class='fa fa-play fa-lg'></i>");
     driverCell.setStyleName("mwmb-driverCell");
     this.setWidget(0, 0, driverCell);
-    this.setWidget(0, 1, new ComponentCell("Component"));
+    this.setWidget(0, 1, new ComponentCell(data, "Component"));
 
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
     data.setModel(model);
     ModelMetadataJSO metadata =
         (ModelMetadataJSO) ModelMetadataJSO.createObject();
     data.setMetadata(metadata);
+  }
+
+  public Boolean isDriverConnected() {
+    return driverConnected;
+  }
+
+  public void isDriverConnected(Boolean driverConnected) {
+    this.driverConnected = driverConnected;
+    driverCell.setStyleDependentName("connected", this.driverConnected);
   }
 
 }
