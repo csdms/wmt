@@ -5,10 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.DragOverEvent;
-import com.google.gwt.event.dom.client.DragOverHandler;
-import com.google.gwt.event.dom.client.DropEvent;
-import com.google.gwt.event.dom.client.DropHandler;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 
@@ -25,7 +21,7 @@ import edu.colorado.csdms.wmt.client.data.Port;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ModelTree extends Tree implements DragOverHandler, DropHandler {
+public class ModelTree extends Tree {
 
   public DataManager data; // experimenting with a public member variable
 
@@ -39,10 +35,6 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
     this.data = data;
     initializeTree();
     this.data.setModelTree(this);
-
-    // Set up ModelTree event handlers.
-    addDomHandler(this, DragOverEvent.getType());
-    addDomHandler(this, DropEvent.getType());
   }
 
   /**
@@ -294,30 +286,4 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
     return connected;
   }
 
-  /**
-   * Handles events when a drag item hovers over a drop target. Note that
-   * events are continuously spawned, so there can be a lot.
-   * <p>
-   * This method is apparently needed to have drop events.
-   */
-  @Override
-  public void onDragOver(DragOverEvent event) {
-    return;
-  }
-
-  /**
-   * This is needed on Firefox (but not on Chrome or Safari) to prevent a
-   * webpage linked to a keyword == the dragged component id from being loaded
-   * if a component is dropped somewhere in the ModelTree other than the
-   * component drop area. (For example, "avulsion" is currently redirected to
-   * "http://jetflow.com". I think they make hydration backpacks.)
-   * ComponentCell#onDrop is the true drop handler for the ModelTree.
-   * <p>
-   * Whew. Took some detective work.
-   */
-  @Override
-  public void onDrop(DropEvent event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
 }

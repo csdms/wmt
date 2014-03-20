@@ -3,9 +3,6 @@ package edu.colorado.csdms.wmt.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.DragStartEvent;
-import com.google.gwt.event.dom.client.DragStartHandler;
 import com.google.gwt.user.client.ui.Grid;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
@@ -22,7 +19,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
  * @uses {@link DragCell}, {@link DataManager}
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ComponentList extends Grid implements DragStartHandler {
+public class ComponentList extends Grid {
 
   public DataManager data; // experiment with public data
   private DragCell[] cells;
@@ -46,17 +43,6 @@ public class ComponentList extends Grid implements DragStartHandler {
     }
 
     this.data.setComponentList(this);
-    addDomHandler(this, DragStartEvent.getType());
-  }
-
-  /**
-   * Called on DragStart event. Gets the id of the component that's being
-   * dragged and stores it in the DataManager.
-   */
-  @Override
-  public void onDragStart(DragStartEvent event) {
-    GWT.log("Dragging component: " + event.getData("text"));
-    data.setDraggedComponent(event.getData("text"));
   }
 
   public ComponentInfoDialogBox getInfoDialogBox() {

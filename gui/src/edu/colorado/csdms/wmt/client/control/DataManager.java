@@ -30,10 +30,8 @@ public class DataManager {
   private ComponentList componentList;
   private ModelTree modelTree;
 
-
   private List<ComponentJSO> components; // "class" components
   private List<ComponentJSO> modelComponents; // "instance" components
-  private String draggedComponent;
   private String selectedComponent;
   
   private ModelJSO model;
@@ -446,24 +444,6 @@ public class DataManager {
    */
   public void setModelTree(ModelTree modelTree) {
     this.modelTree = modelTree;
-  }
-
-  /**
-   * Returns the id of the Component (a String) being dragged from the
-   * "Components" tab of WMT.
-   */
-  public String getDraggedComponent() {
-    return draggedComponent;
-  }
-
-  /**
-   * Stores the id of the Component (a String) being dragged from the
-   * "Components" tab of WMT.
-   * 
-   * @param draggedComponent the id of the dragged component, a String
-   */
-  public void setDraggedComponent(String draggedComponent) {
-    this.draggedComponent = draggedComponent;
   }
 
   /**
