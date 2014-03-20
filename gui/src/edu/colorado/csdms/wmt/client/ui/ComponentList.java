@@ -41,8 +41,6 @@ public class ComponentList extends Grid {
       cells[i] = new DragCell(data.getComponent(i));
       this.setWidget(i, 0, cells[i]);
     }
-
-    this.data.setComponentList(this);
   }
 
   public ComponentInfoDialogBox getInfoDialogBox() {

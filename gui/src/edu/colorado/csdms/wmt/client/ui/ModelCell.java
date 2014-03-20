@@ -8,14 +8,11 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.data.Component;
-import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.Port;
-import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 
 /**
  * A 1 x 4 Grid holding HTML widgets for a port, a connector, a component, and
@@ -437,9 +434,6 @@ public class ModelCell extends Grid {
           newCell.setParentTreeItem(parentTreeItem);
           parentTreeItem.setWidget(newCell);
 
-          // Update the sensitivity of the DragCells in the ComponentList.
-          tree.data.getComponentList().setCellSensitivity();
-
           // Update the title of the Model tab.
           tree.data.modelIsSaved(false);
           if (openPort.getId().matches("driver")) {
@@ -457,24 +451,24 @@ public class ModelCell extends Grid {
         @Override
         public void onClick(final ClickEvent event) {
 
-          ModelTree tree = (ModelTree) parentTreeItem.getTree();
-          String componentId = componentCell.getComponent().getId();
-          ComponentJSO componentJso = tree.data.getComponent(componentId);
-
-          final ComponentInfoDialogBox componentInfoDialogBox =
-              tree.data.getComponentList().getInfoDialogBox();
-          componentInfoDialogBox.update(componentJso);
-          componentInfoDialogBox
-              .setPopupPositionAndShow(new PositionCallback() {
-                Integer x = event.getClientX();
-                Integer y = event.getClientY();
-
-                @Override
-                public void setPosition(int offsetWidth, int offsetHeight) {
-                  Integer nudge = 5; // px
-                  componentInfoDialogBox.setPopupPosition(x + nudge, y + nudge);
-                }
-              });
+//          ModelTree tree = (ModelTree) parentTreeItem.getTree();
+//          String componentId = componentCell.getComponent().getId();
+//          ComponentJSO componentJso = tree.data.getComponent(componentId);
+//
+//          final ComponentInfoDialogBox componentInfoDialogBox =
+//              tree.data.getComponentList().getInfoDialogBox();
+//          componentInfoDialogBox.update(componentJso);
+//          componentInfoDialogBox
+//              .setPopupPositionAndShow(new PositionCallback() {
+//                Integer x = event.getClientX();
+//                Integer y = event.getClientY();
+//
+//                @Override
+//                public void setPosition(int offsetWidth, int offsetHeight) {
+//                  Integer nudge = 5; // px
+//                  componentInfoDialogBox.setPopupPosition(x + nudge, y + nudge);
+//                }
+//              });
         }
       });
     }

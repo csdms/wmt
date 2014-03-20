@@ -27,7 +27,6 @@ public class DataManager {
   private Boolean developmentMode;
 
   private Perspective perspective;
-  private ComponentList componentList;
   private ModelTree modelTree;
 
   private List<ComponentJSO> components; // "class" components
@@ -410,24 +409,6 @@ public class DataManager {
    */
   public void setPassword(String password) {
     this.password = password;
-  }
-
-  /**
-   * Returns a reference to the {@link ComponentList} used in the "Components"
-   * tab of a WMT session.
-   */
-  public ComponentList getComponentList() {
-    return componentList;
-  }
-
-  /**
-   * Stores a reference to the {@link ComponentList} used in the "Components"
-   * tab of a WMT session.
-   * 
-   * @param componentList the ComponentList instance
-   */
-  public void setComponentList(ComponentList componentList) {
-    this.componentList = componentList;
   }
 
   /**

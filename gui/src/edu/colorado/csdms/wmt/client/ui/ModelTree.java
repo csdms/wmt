@@ -157,9 +157,6 @@ public class ModelTree extends Tree {
         newCell.getComponentCell().isLinked(true);
       }
     }
-
-    // Update the sensitivity of the DragCells in the ComponentList.
-    data.getComponentList().setCellSensitivity();
   }
 
   /**
