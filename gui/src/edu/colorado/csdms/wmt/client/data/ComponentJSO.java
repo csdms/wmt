@@ -99,15 +99,20 @@ public class ComponentJSO extends JavaScriptObject {
     return n;
   }-*/;
 
-  /**
-   * A JSNI method to access the "provides" attribute of a WMT component
-   * model. This attribute is a JsArray of PortJSO objects. It's always
-   * present, but it may be empty.
-   */
+  @Deprecated
   public final native JsArray<PortJSO> getPortsProvided() /*-{
 		return this.provides;
   }-*/;
 
+  /**
+   * A JSNI method to access the "provides" attribute of a WMT component
+   * model. This attribute is a JsArray of PortJSO objects. It's always
+   * present, but it may be empty.
+   */  
+  public final native JsArray<PortJSO> getProvidesPorts() /*-{
+		return this.provides;
+  }-*/;
+  
   /**
    * A convenience method that returns the number of CCA uses ports a
    * component has.
@@ -120,12 +125,17 @@ public class ComponentJSO extends JavaScriptObject {
     return n;
   }-*/;
 
+  @Deprecated
+  public final native JsArray<PortJSO> getPortsUsed() /*-{
+		return this.uses;
+  }-*/;
+
   /**
    * A JSNI method to access the "uses" attribute of a WMT component model.
    * This attribute is a JsArray of PortJSO objects. It's always present, but
    * it may be empty.
    */
-  public final native JsArray<PortJSO> getPortsUsed() /*-{
+  public final native JsArray<PortJSO> getUsesPorts() /*-{
 		return this.uses;
   }-*/;
 
