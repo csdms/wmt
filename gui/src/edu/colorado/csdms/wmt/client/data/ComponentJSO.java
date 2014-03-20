@@ -91,7 +91,7 @@ public class ComponentJSO extends JavaScriptObject {
    * A convenience method that returns the number of CCA provides ports a
    * component has.
    */
-  public final native int nPortsProvided() /*-{
+  public final native int nProvidesPorts() /*-{
     var n = 0;
 		if (typeof this.provides != 'undefined') {
 			n = Object.keys(this.provides).length;
@@ -112,7 +112,7 @@ public class ComponentJSO extends JavaScriptObject {
    * A convenience method that returns the number of CCA uses ports a
    * component has.
    */
-  public final native int nPortsUsed() /*-{
+  public final native int nUsesPorts() /*-{
     var n = 0;
 		if (typeof this.uses != 'undefined') {
 			n = Object.keys(this.uses).length;
