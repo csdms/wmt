@@ -38,7 +38,7 @@ public class ModelSerializer {
    */
   public ModelSerializer(DataManager data) {
     this.data = data;
-    this.modelTree = this.data.getModelTree();
+    this.modelTree = this.data.getPerspective().getModelTree();
     nModelComponents = this.data.getModel().nComponents(); // dev vs. prod mode!
     modelComponents = new ArrayList<ModelComponentJSO>();
   }

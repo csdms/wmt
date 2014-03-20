@@ -33,7 +33,7 @@ public class ParameterTable extends FlexTable {
   public ParameterTable(DataManager data) {
 
     this.data = data;
-    this.data.setParameterTable(this);
+    this.data.getPerspective().setParameterTable(this);
     this.setWidth("100%");
 
     if (this.data.getSelectedComponent() != null) {

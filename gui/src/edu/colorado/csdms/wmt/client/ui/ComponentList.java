@@ -45,7 +45,7 @@ public class ComponentList extends Grid implements DragStartHandler {
       this.setWidget(i, 0, cells[i]);
     }
 
-    this.data.setComponentList(this);
+    this.data.getPerspective().setComponentList(this);
     addDomHandler(this, DragStartEvent.getType());
   }
 
@@ -91,7 +91,8 @@ public class ComponentList extends Grid implements DragStartHandler {
   public void setCellSensitivity() {
 
     // Find what (uses) ports in the ModelTree are currently open.
-    List<ModelCell> openCells = data.getModelTree().findOpenModelCells(); 
+    List<ModelCell> openCells =
+        data.getPerspective().getModelTree().findOpenModelCells();
 
     // A helpful local variable.
     List<String> openPorts = new ArrayList<String>();

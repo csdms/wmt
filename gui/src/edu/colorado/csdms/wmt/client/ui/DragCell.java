@@ -175,7 +175,7 @@ public class DragCell extends Grid implements DragStartHandler {
       // Find what "uses" ports in the ModelTree are currently open. If there
       // are none, short-circuit the method.
       List<ModelCell> openCells =
-          parent.data.getModelTree().findOpenModelCells();
+          parent.data.getPerspective().getModelTree().findOpenModelCells();
       if (openCells.size() == 0) {
         return;
       }
@@ -184,7 +184,8 @@ public class DragCell extends Grid implements DragStartHandler {
       // the selected component and short-circuit the method.
       if (openCells.get(0).getPortCell().getPort().getId().matches("driver")) {
         TreeItem target = openCells.get(0).getParentTreeItem();
-        parent.data.getModelTree().addComponent(component, target);
+        parent.data.getPerspective().getModelTree().addComponent(component,
+            target);
         target.setState(true);
         return;
       }
@@ -201,7 +202,8 @@ public class DragCell extends Grid implements DragStartHandler {
         if (port.getId().matches(cell.getPortCell().getPort().getId())) {
           // GWT.log("Port match!");
           TreeItem target = cell.getParentTreeItem();
-          parent.data.getModelTree().addComponent(component, target);
+          parent.data.getPerspective().getModelTree().addComponent(component,
+              target);
           target.setState(true);
           break;
         }
