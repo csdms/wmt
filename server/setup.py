@@ -4,7 +4,7 @@ from ez_setup import use_setuptools
 
 use_setuptools()
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.command.install import install
 
 from wmt import __version__
@@ -17,7 +17,8 @@ setup(name='wmt',
       author_email='eric.hutton@colorado.edu',
       url=' http://csdms.colorado.edu/',
       install_requires=['web.py', 'PyYAML>=3.10', 'passlib', ],
-      packages=['wmt', 'wmt.scripts', 'wmt.models', ],
+      packages=find_packages(),
+      #packages=['wmt', 'wmt.scripts', 'wmt.models', ],
       long_description="Create, save, edit, run collections of connected components.",
       license="Public domain",
       platforms=["any"],
