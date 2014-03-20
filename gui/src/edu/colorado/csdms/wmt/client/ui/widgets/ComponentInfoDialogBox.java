@@ -25,8 +25,7 @@ import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
  */
 public class ComponentInfoDialogBox extends DialogBox {
 
-  private static String[] LABELS = {
-      "id", "summary", "url", "author", "email", "version", "license", "doi"};
+  private static String[] LABELS = {"summary", "url", "author"};
   private Grid grid;
   private ClosePanel closePanel;
 
@@ -74,17 +73,19 @@ public class ComponentInfoDialogBox extends DialogBox {
    */
   public void update(final ComponentJSO componentJso) {
 
-    this.setText(componentJso.getName());
+    String title = componentJso.getName();
+    if (componentJso.getVersion() != null) {
+      title += " v" + componentJso.getVersion();
+    }
+    if (componentJso.getDoi() != null) {
+      title += " (" + componentJso.getDoi() + ")";
+    }
+    this.setText(title);
 
     String url =
         "<a href='" + componentJso.getURL() + "'>" + componentJso.getURL()
             + "</a>";
-    String[] info =
-        {
-            componentJso.getId(), componentJso.getSummary(), url,
-            componentJso.getAuthor(), componentJso.getEmail(),
-            componentJso.getVersion(), componentJso.getLicense(),
-            componentJso.getDoi()};
+    String[] info = {componentJso.getSummary(), url, componentJso.getAuthor()};
 
     HTML urlHtml = null;
     for (int i = 0; i < LABELS.length; i++) {
