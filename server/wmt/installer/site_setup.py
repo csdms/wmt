@@ -1,10 +1,9 @@
 #! /usr/bin/env python
-from __future__ import absolute_import
 import os
 from string import Template
 from collections import OrderedDict
 
-from wmt.site import Site
+from .site import Site
 
 
 def setup(prefix, options={}):
