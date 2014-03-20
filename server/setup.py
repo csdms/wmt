@@ -30,6 +30,7 @@ setup(name='wmt',
               'wmt_setup = wmt.installer.site_setup:main',
               'wmt_fill_file = wmt.scripts.fill_file:main',
               'wmt_validate = wmt.scripts.validate:main',
+              'wmt_get_db = wmt.installer.components:main',
           ],
       },
      )
