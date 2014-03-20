@@ -3,7 +3,6 @@
  */
 package edu.colorado.csdms.wmt.client.ui.widgets;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -11,7 +10,6 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
@@ -37,24 +35,16 @@ public class ComponentInfoDialogBox extends DialogBox {
 
     this.setAutoHideEnabled(false);
     this.setModal(false);
-
-    grid = new Grid(LABELS.length, 2);
+        
+    grid = new Grid(LABELS.length, 1);
     grid.setCellPadding(5); // px
 
-    for (int i = 0; i < LABELS.length; i++) {
-      Label label = new Label(LABELS[i] + ":");
-      label.getElement().getStyle().setMarginLeft(2, Unit.EM);
-      grid.setWidget(i, 0, label);
-      grid.getCellFormatter().setHorizontalAlignment(i, 0,
-          HasHorizontalAlignment.ALIGN_RIGHT);
-    }
-
+    closePanel = new ClosePanel();
+    
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+    contents.setWidth("35em");
     contents.add(grid);
-    contents.setWidth("40em");
-
-    closePanel = new ClosePanel();
     contents.add(closePanel);
 
     this.setWidget(contents);
@@ -91,9 +81,9 @@ public class ComponentInfoDialogBox extends DialogBox {
     for (int i = 0; i < LABELS.length; i++) {
       if (url.equals(info[i])) {
         urlHtml = new HTML(info[i]);
-        grid.setWidget(i, 1, urlHtml);
+        grid.setWidget(i, 0, urlHtml);
       } else {
-        grid.setWidget(i, 1, new HTML(info[i]));
+        grid.setWidget(i, 0, new HTML(info[i]));
       }
     }
 
