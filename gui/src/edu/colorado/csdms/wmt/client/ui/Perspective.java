@@ -50,6 +50,7 @@ public class Perspective extends DockLayoutPanel {
   // Secondary UI panels/widgets.
   private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
+  private ModelGrid modelGrid;
   private ModelMenu modelMenu;
   private ParameterTable parameterTable;  
 
@@ -178,6 +179,14 @@ public class Perspective extends DockLayoutPanel {
     viewCenter.setTabHTML(0, tabTitle);
   }
 
+  public ModelGrid getModelGrid() {
+    return modelGrid;
+  }
+
+  public void setModelGrid(ModelGrid modelGrid) {
+    this.modelGrid = modelGrid;
+  }
+
   public ScrollPanel getParametersPanel() {
     return scrollParameters;
   }
@@ -245,19 +254,19 @@ public class Perspective extends DockLayoutPanel {
    * the open port for the driver of the model.
    */
   public void initializeModel() {
-    ModelTree modelTree = new ModelTree(data);
-    scrollModel.add(modelTree);
+    modelGrid = new ModelGrid(data);
+    scrollModel.add(modelGrid);
 
-    modelTree.addHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        if (data.getSelectedComponent() != null) {
-          ParameterTable table = (ParameterTable) scrollParameters.getWidget();
-          table.removeAllRows(); // FlexTable
-          table.loadTable();
-        }
-      }
-    }, ClickEvent.getType());
+//    modelTree.addHandler(new ClickHandler() {
+//      @Override
+//      public void onClick(ClickEvent event) {
+//        if (data.getSelectedComponent() != null) {
+//          ParameterTable table = (ParameterTable) scrollParameters.getWidget();
+//          table.removeAllRows(); // FlexTable
+//          table.loadTable();
+//        }
+//      }
+//    }, ClickEvent.getType());
   }
 
   /**

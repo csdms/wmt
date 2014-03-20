@@ -89,6 +89,33 @@
    /* border-left: 1px dotted #bbb; */ /* Close, but not quite. */
 }
 
+
+.mwmb-driverCell {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-style: italic;
+  text-align: center;
+  border: 2px solid #b55;
+  padding: 1em;
+  width: 25px;
+  max-width: 25px;
+}
+
+.mwmb-driverCell-connected {
+  border: 2px solid #5b5;
+  background-color: #efe;
+}
+
+.mwmb-componentItem {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  text-align: center;
+  border: 2px solid #55b;
+  padding: 1em;
+  background-color: #eef;
+  height: 25px;
+  width: 100px;
+  max-width: 100px;
+}
+
 /*
    The following styles are used with a ModelCell.
 */
