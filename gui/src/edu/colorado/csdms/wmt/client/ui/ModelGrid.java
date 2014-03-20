@@ -3,8 +3,11 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
@@ -44,7 +47,7 @@ public class ModelGrid extends Grid {
     driverCell = new HTML("<i class='fa fa-play fa-lg'></i>");
     driverCell.setStyleName("mwmb-driverCell");
     this.setWidget(0, 0, driverCell);
-    this.setWidget(0, 1, new ComponentCell(data, "Component"));
+    this.setWidget(0, 1, new ComponentCell(data, "component"));
 
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
     data.setModel(model);
@@ -62,4 +65,48 @@ public class ModelGrid extends Grid {
     driverCell.setStyleDependentName("connected", this.driverConnected);
   }
 
+  private VerticalPanel makeConnectorCellCorner() {
+    VerticalPanel panel = new VerticalPanel();
+    SimplePanel panel1 = new SimplePanel();
+    panel1.setStyleName("mwmb-connectorCell");
+    panel1.addStyleDependentName("corner");
+    SimplePanel panel2 = new SimplePanel();
+    panel2.setStyleName("mwmb-connectorCell");
+    panel2.addStyleDependentName("empty");
+    panel.add(panel1);
+    panel.add(panel2);
+    return panel;
+  }
+
+  private VerticalPanel makeConnectorCellIntersect() {
+    VerticalPanel panel = new VerticalPanel();
+    SimplePanel panel1 = new SimplePanel();
+    panel1.setStyleName("mwmb-connectorCell");
+    panel1.addStyleDependentName("corner");
+    SimplePanel panel2 = new SimplePanel();
+    panel2.setStyleName("mwmb-connectorCell");
+    panel2.addStyleDependentName("straight");
+    panel.add(panel1);
+    panel.add(panel2);
+    return panel;
+  }
+
+  public void addUsesPorts(String componentId) {
+
+    Integer nPorts = data.getComponent(componentId).getUsesPorts().length();
+    GWT.log(data.getComponent(componentId).getName() + " nPorts = " + nPorts);
+
+    if (nPorts == 0) {
+      return;
+    }
+    
+    resize(getRowCount() + nPorts, getColumnCount() + 1);
+
+    setWidget(1, 2, new ComponentCell(data, data.getComponent(componentId)
+        .getUsesPorts().get(0).getId()));
+    setWidget(1, 1, makeConnectorCellIntersect());
+    setWidget(2, 2, new ComponentCell(data, data.getComponent(componentId)
+        .getUsesPorts().get(1).getId()));
+    setWidget(2, 1, makeConnectorCellCorner());
+  }
 }

@@ -1,3 +1,6 @@
+/**
+ * <License>
+ */
 package edu.colorado.csdms.wmt.client.ui;
 
 import com.google.gwt.core.client.GWT;
@@ -7,15 +10,27 @@ import com.google.gwt.user.client.ui.MenuItem;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 
+/**
+ * Displays a model component in the ModelGrid.
+ * 
+ * @author Mark Piper (mark.piper@colorado.edu)
+ */
 public class ComponentCell extends MenuBar {
 
   private static String[] ACTIONS = {"Show parameters", "Get info", "Delete"};
+  private static Integer TRIM = 12; // the number of characters to display
 
   private DataManager data;
   private MenuBar componentMenu;
   private MenuItem componentItem;
   private MenuBar actionMenu;
 
+  /**
+   * Creates a new {@link ComponentCell}.
+   * 
+   * @param dat the DataManager object for the WMT session
+   * @param displayName the text to display in the cell
+   */
   public ComponentCell(DataManager data, String displayName) {
 
     this.data = data;
@@ -28,14 +43,14 @@ public class ComponentCell extends MenuBar {
     actionMenu = new MenuBar(true); 
     updateActions();
 
-    componentItem = new MenuItem(displayName, componentMenu);
+    componentItem = new MenuItem(trimName(displayName), componentMenu);
     componentItem.setStyleName("mwmb-componentItem");
     this.addItem(componentItem);
   }
 
   /**
-   * A worker that loads the names of the available components into the
-   * componentMenu.
+   * Loads the names of the available components into the {@link ComponentCell}
+   * menu.
    */
   public void updateComponents() {
     componentMenu.clearItems();
@@ -46,8 +61,8 @@ public class ComponentCell extends MenuBar {
   }
   
   /**
-   * A worker that loads the names of the actions that can be performed on a 
-   * component.
+   * Loads the names of the actions that can be performed on a component into
+   * the {@link ComponentCell} menu.
    */
   public void updateActions() {
     actionMenu.clearItems();
@@ -57,32 +72,45 @@ public class ComponentCell extends MenuBar {
   }
   
   /**
-   * Replaces the generic "Component" string with the name of the selected
-   * component from the menu. If the name of the component is too long, it's
-   * trimmed to fit in the Grid cell. Also applies CSS rules to the driverCell.
+   * A worker that trims the name displayed in the {@link ComponentCell} if it's
+   * too long.
+   * 
+   * @param name the name to display
+   * @return the trimmed name
+   */
+  private String trimName(String name) {
+    String trimmedName;
+    if (name.length() > TRIM) {
+      trimmedName = name.substring(0, TRIM) + "\u2026";
+    } else {
+      trimmedName = name;
+    }
+    return trimmedName;
+  }
+  
+  /**
+   * Replaces the generic display name with the name of the selected component
+   * from the menu. If the name of the component is too long, it's trimmed to
+   * fit in the Grid cell. Applies CSS rules to the driverCell.
    */
   public class ComponentSelectionCommand implements Command {
 
-    private final Integer TRIM = 12; // the number of characters to display
     private String componentId;
     private String displayName;
 
     public ComponentSelectionCommand(String componentId) {
       this.componentId = componentId;
       String componentName = data.getComponent(componentId).getName();
-      if (componentName.length() > TRIM) {
-        this.displayName = componentName.substring(0, TRIM) + "\u2026";
-      } else {
-        this.displayName = componentName;
-      }
+      this.displayName = trimName(componentName);
     }
 
     @Override
     public void execute() {
       componentItem.setText(displayName);
+      componentItem.addStyleDependentName("connected");
       componentItem.setSubMenu(actionMenu);
       data.getPerspective().getModelGrid().isDriverConnected(true);
-//      addUsesPorts(componentName);
+      data.getPerspective().getModelGrid().addUsesPorts(componentId);
     }
   }
 
