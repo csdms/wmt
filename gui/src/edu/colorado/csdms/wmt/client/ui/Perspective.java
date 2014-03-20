@@ -51,6 +51,7 @@ public class Perspective extends DockLayoutPanel {
   private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
   private ModelMenu modelMenu;
+  private ParameterTable parameterTable;  
 
   /**
    * Draws the panels and their children that compose the basic WMT GUI.
@@ -199,6 +200,24 @@ public class Perspective extends DockLayoutPanel {
     viewEast.setTabHTML(0, tabTitle);
   }
 
+  /**
+   * Returns a reference to the {@link ParameterTable} used in the
+   * "Parameters" tab of a WMT session.
+   */
+  public ParameterTable getParameterTable() {
+    return parameterTable;
+  }
+
+  /**
+   * Stores a reference to the {@link ParameterTable} used in the "Parameters"
+   * tab of a WMT session.
+   * 
+   * @param parameterTable the parameterTable to set
+   */
+  public void setParameterTable(ParameterTable parameterTable) {
+    this.parameterTable = parameterTable;
+  }
+  
   public TabLayoutPanel getViewEast() {
     return viewEast;
   }
@@ -257,7 +276,7 @@ public class Perspective extends DockLayoutPanel {
     data.setSelectedComponent(null);
     data.resetModelComponents();
 
-    data.getParameterTable().clearTable();
+    parameterTable.clearTable();
     data.getModelTree().initializeTree();
     data.getComponentList().setCellSensitivity();
 

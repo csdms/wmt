@@ -592,15 +592,15 @@ public class ModelCell extends Grid implements DropHandler {
           // If the deleted Component, or any of its children, are currently
           // displaying their parameters in the ParameterTable, clear the
           // ParameterTable. If this isn't the driver, show the info message.
-          String showing = tree.data.getParameterTable().getComponentId();
+          String showing = tree.data.getPerspective().getParameterTable().getComponentId();
           if (deleted.contains(showing)) {
-            tree.data.getParameterTable().clearTable();
+            tree.data.getPerspective().getParameterTable().clearTable();
             if (parentTreeItem.getParentItem() != null) {
-              tree.data.getParameterTable().showInfoMessage();
+              tree.data.getPerspective().getParameterTable().showInfoMessage();
             }
           }
           if (!tree.isComponentPresent(showing)) {
-            tree.data.getParameterTable().clearTable();
+            tree.data.getPerspective().getParameterTable().clearTable();
           }
 
           // Make a new ModelCell (overwriting the current). Attach it to the

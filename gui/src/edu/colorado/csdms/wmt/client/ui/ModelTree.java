@@ -113,7 +113,7 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
       data.getModel().setName(
           component.getName() + " " + data.saveAttempts.toString());
       data.setSelectedComponent(component.getId());
-      data.getParameterTable().loadTable();
+      data.getPerspective().getParameterTable().loadTable();
     }
     
     // Mark the model state as unsaved.

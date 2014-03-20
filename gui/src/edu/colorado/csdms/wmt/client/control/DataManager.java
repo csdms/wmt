@@ -14,7 +14,6 @@ import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.ui.ComponentList;
 import edu.colorado.csdms.wmt.client.ui.ModelTree;
-import edu.colorado.csdms.wmt.client.ui.ParameterTable;
 import edu.colorado.csdms.wmt.client.ui.Perspective;
 
 /**
@@ -30,7 +29,7 @@ public class DataManager {
   private Perspective perspective;
   private ComponentList componentList;
   private ModelTree modelTree;
-  private ParameterTable parameterTable;
+
 
   private List<ComponentJSO> components; // "class" components
   private List<ComponentJSO> modelComponents; // "instance" components
@@ -450,24 +449,6 @@ public class DataManager {
   }
 
   /**
-   * Returns a reference to the {@link ParameterTable} used in the
-   * "Parameters" tab of a WMT session.
-   */
-  public ParameterTable getParameterTable() {
-    return parameterTable;
-  }
-
-  /**
-   * Stores a reference to the {@link ParameterTable} used in the "Parameters"
-   * tab of a WMT session.
-   * 
-   * @param parameterTable the parameterTable to set
-   */
-  public void setParameterTable(ParameterTable parameterTable) {
-    this.parameterTable = parameterTable;
-  }
-
-  /**
    * Returns the id of the Component (a String) being dragged from the
    * "Components" tab of WMT.
    */
@@ -534,7 +515,7 @@ public class DataManager {
     for (int i = 0; i < model.nComponents(); i++) {
       if (model.getComponents().get(0).isDriver()) {
         setSelectedComponent(model.getComponents().get(0).getId());
-        parameterTable.loadTable();
+        getPerspective().getParameterTable().loadTable();
       }
     }
   }
