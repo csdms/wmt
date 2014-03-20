@@ -16,7 +16,6 @@ import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 /**
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
- *
  */
 public class ModelGrid extends Grid {
 
@@ -65,6 +64,9 @@ public class ModelGrid extends Grid {
     driverCell.setStyleDependentName("connected", this.driverConnected);
   }
 
+  /**
+   * Makes a "corner" style grid cell connector.
+   */
   private VerticalPanel makeConnectorCellCorner() {
     VerticalPanel panel = new VerticalPanel();
     SimplePanel panel1 = new SimplePanel();
@@ -78,6 +80,9 @@ public class ModelGrid extends Grid {
     return panel;
   }
 
+  /**
+   * Makes an "intersect" style grid cell connector.
+   */
   private VerticalPanel makeConnectorCellIntersect() {
     VerticalPanel panel = new VerticalPanel();
     SimplePanel panel1 = new SimplePanel();
@@ -91,6 +96,11 @@ public class ModelGrid extends Grid {
     return panel;
   }
 
+  /**
+   * Adds new ComponentCells for the uses ports of the current component.
+   * 
+   * @param componentId the id of the current component
+   */
   public void addUsesPorts(String componentId) {
 
     Integer nPorts = data.getComponent(componentId).getUsesPorts().length();
@@ -101,7 +111,7 @@ public class ModelGrid extends Grid {
     }
     
     resize(getRowCount() + nPorts, getColumnCount() + 1);
-
+    
     setWidget(1, 2, new ComponentCell(data, data.getComponent(componentId)
         .getUsesPorts().get(0).getId()));
     setWidget(1, 1, makeConnectorCellIntersect());
