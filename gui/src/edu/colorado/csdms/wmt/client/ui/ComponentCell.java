@@ -5,49 +5,71 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import edu.colorado.csdms.wmt.client.control.DataManager;
+
 public class ComponentCell extends MenuBar {
 
-  private static String[] COMPONENTS = {
-      "Avulsion", "CEM", "HydroTrend", "SatZoneDarcyLayers"};
   private static String[] ACTIONS = {"Show parameters", "Get info", "Delete"};
 
+  private DataManager data;
+  private MenuBar componentMenu;
   private MenuItem componentItem;
   private MenuBar actionMenu;
 
-  public ComponentCell(String portId) {
+  public ComponentCell(DataManager data, String displayName) {
 
+    this.data = data;
+    
     // Show this menu when selecting a component.
-    MenuBar componentMenu = new MenuBar(true); // menu items stacked vertically
-    for (int i = 0; i < COMPONENTS.length; i++) {
-      componentMenu.addItem(COMPONENTS[i], new ComponentSelectionCommand(
-          COMPONENTS[i]));
-    }
+    componentMenu = new MenuBar(true); // menu items stacked vertically
+    updateComponents();
 
     // Show this menu after a component has been selected.
-    actionMenu = new MenuBar(true); // menu items stacked vertically
-    for (int i = 0; i < ACTIONS.length; i++) {
-      actionMenu.addItem(ACTIONS[i], new ComponentActionCommand(ACTIONS[i]));
-    }
+    actionMenu = new MenuBar(true); 
+    updateActions();
 
-    componentItem = new MenuItem(portId, componentMenu);
+    componentItem = new MenuItem(displayName, componentMenu);
     componentItem.setStyleName("mwmb-componentItem");
     this.addItem(componentItem);
   }
 
-    /**
+  /**
+   * A worker that loads the names of the available components into the
+   * componentMenu.
+   */
+  public void updateComponents() {
+    componentMenu.clearItems();
+    for (int i = 0; i < data.getComponents().size(); i++) {
+      componentMenu.addItem(data.getComponent(i).getName(),
+          new ComponentSelectionCommand(data.getComponent(i).getId()));
+    }
+  }
+  
+  /**
+   * A worker that loads the names of the actions that can be performed on a 
+   * component.
+   */
+  public void updateActions() {
+    actionMenu.clearItems();
+    for (int i = 0; i < ACTIONS.length; i++) {
+      actionMenu.addItem(ACTIONS[i], new ComponentActionCommand(ACTIONS[i]));
+    }
+  }
+  
+  /**
    * Replaces the generic "Component" string with the name of the selected
    * component from the menu. If the name of the component is too long, it's
-   * trimmed to fit in the Grid cell. Also applies CSS rules to the
-   * driverCell.
+   * trimmed to fit in the Grid cell. Also applies CSS rules to the driverCell.
    */
   public class ComponentSelectionCommand implements Command {
 
-    private final Integer TRIM = 12;
-    private String componentName;
+    private final Integer TRIM = 12; // the number of characters to display
+    private String componentId;
     private String displayName;
 
-    public ComponentSelectionCommand(String componentName) {
-      this.componentName = componentName;
+    public ComponentSelectionCommand(String componentId) {
+      this.componentId = componentId;
+      String componentName = data.getComponent(componentId).getName();
       if (componentName.length() > TRIM) {
         this.displayName = componentName.substring(0, TRIM) + "\u2026";
       } else {
@@ -58,8 +80,8 @@ public class ComponentCell extends MenuBar {
     @Override
     public void execute() {
       componentItem.setText(displayName);
-//      driverCell.addStyleDependentName("connected");
       componentItem.setSubMenu(actionMenu);
+      data.getPerspective().getModelGrid().isDriverConnected(true);
 //      addUsesPorts(componentName);
     }
   }

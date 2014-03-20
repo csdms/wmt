@@ -250,8 +250,7 @@ public class Perspective extends DockLayoutPanel {
   }
 
   /**
-   * Sets up the default starting ModelTree in the "Model" tab, showing only
-   * the open port for the driver of the model.
+   * Sets up the default starting {@link ModelGrid} in the "Model" tab.
    */
   public void initializeModel() {
     modelGrid = new ModelGrid(data);
