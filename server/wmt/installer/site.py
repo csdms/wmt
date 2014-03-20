@@ -6,6 +6,8 @@ from collections import OrderedDict
 
 import wmt
 
+from .components import download_and_unpack_from_github
+
 
 _PACKAGE_PREFIX = os.path.abspath(os.path.dirname(wmt.__file__))
 
@@ -163,21 +165,8 @@ class Database(SiteSubFolder):
                 clobber=True)
         chown_folder_and_files(self.prefix, 'nobody', 'nobody')
 
-        for dir in ['components', 'hosts', ]:
-            src_path, dst_path = (
-                os.path.join(src_dir, dir),
-                os.path.join(self.prefix, dir)
-            )
-
-            try:
-                shutil.rmtree(dst_path)
-            except OSError:
-                print '%s: unable to remove directory tree' % dst_path
-
-            try:
-                shutil.copytree(src_path, dst_path)
-            except OSError:
-                print '%s: unable to copy tree' % dst_path
+        download_and_unpack_from_github('csdms/component_metadata',
+                                        os.path.join(self.prefix, 'components'))
 
 
 class Bin(SiteSubFolder):
