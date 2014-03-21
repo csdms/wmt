@@ -46,7 +46,7 @@ public class ModelGrid extends Grid {
     driverCell = new HTML("<i class='fa fa-play fa-lg'></i>");
     driverCell.setStyleName("mwmb-driverCell");
     this.setWidget(0, 0, driverCell);
-    this.setWidget(0, 1, new ComponentCell(data, "component"));
+    this.setWidget(0, 1, new ComponentCell(data, "component", 0, 1));
 
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
     data.setModel(model);
@@ -104,13 +104,20 @@ public class ModelGrid extends Grid {
    * the last of a set of uses ports for the component.
    * 
    * @param componentId the id of the parent component
+   * @param portIndex the index of the uses port, as stored in the component
    * @param irow the row index of the parent component in the ModelGrid
    * @param icol the column index of the parent component in the ModelGrid
    */
-  private void addCornerCell(String componentId, Integer irow, Integer icol) {
-    setWidget(irow, 1, makeConnectorCellCorner());
-    setWidget(irow, 2, new ComponentCell(data, data.getComponent(componentId)
-        .getUsesPorts().get(irow - 1).getId()));
+  private void addCornerCell(String componentId, Integer portIndex,
+      Integer irow, Integer icol) {
+    Integer cRow = irow;
+    Integer cCol = icol + 1;
+    GWT.log("Add "
+        + data.getComponent(componentId).getUsesPorts().get(portIndex).getId()
+        + " at (" + cRow + "," + cCol + ")");
+    setWidget(irow, icol, makeConnectorCellCorner());
+    setWidget(irow, icol + 1, new ComponentCell(data, data.getComponent(
+        componentId).getUsesPorts().get(portIndex).getId(), cRow, cCol));
   }
   
   /**
@@ -121,13 +128,20 @@ public class ModelGrid extends Grid {
    * port is not the last in the set.
    * 
    * @param componentId the id of the parent component
+   * @param portIndex the index of the uses port, as stored in the component
    * @param irow the row index of the parent component in the ModelGrid
    * @param icol the column index of the parent component in the ModelGrid
    */
-  private void addInteriorCell(String componentId, Integer irow, Integer icol) {
-    setWidget(irow, 1, makeConnectorCellInterior());
-    setWidget(irow, 2, new ComponentCell(data, data.getComponent(componentId)
-        .getUsesPorts().get(irow - 1).getId()));
+  private void addInteriorCell(String componentId, Integer portIndex,
+      Integer irow, Integer icol) {
+    Integer cRow = irow;
+    Integer cCol = icol + 1;
+    GWT.log("Add "
+        + data.getComponent(componentId).getUsesPorts().get(portIndex).getId()
+        + " at (" + cRow + "," + cCol + ")");
+    setWidget(irow, icol, makeConnectorCellInterior());
+    setWidget(irow, icol + 1, new ComponentCell(data, data.getComponent(
+        componentId).getUsesPorts().get(portIndex).getId(), cRow, cCol));
   }
   
   /**
@@ -135,27 +149,42 @@ public class ModelGrid extends Grid {
    * component.
    * 
    * @param componentId the id of the current component
+   * @param pRow the row index of the current component
+   * @param pCol the column index of the current component
    */
-  public void addUsesPorts(String componentId) {
+  public void addUsesPorts(String componentId, Integer pRow, Integer pCol) {
 
     Integer nPorts = data.getComponent(componentId).getUsesPorts().length();
-    GWT.log(data.getComponent(componentId).getName() + " nPorts = " + nPorts);
+
+    String logMsg =
+        data.getComponent(componentId).getName() + " nPorts = " + nPorts;
+    if (nPorts > 0) {
+      logMsg += ": ";
+      for (int i = 0; i < nPorts; i++) {
+        logMsg +=
+            data.getComponent(componentId).getUsesPorts().get(i).getId() + " ";
+      }
+    }
+    GWT.log(logMsg);
 
     if (nPorts == 0) {
       return;
     }
 
-    resize(getRowCount() + nPorts, getColumnCount() + 1);
+    resizeColumns(getColumnCount() + 1);
 
     if (nPorts == 1) {
-      addCornerCell(componentId, nPorts, null);
+      insertRow(pRow + nPorts);
+      addCornerCell(componentId, nPorts - 1, nPorts + pRow, pCol);
     }
 
     if (nPorts >= 2) {
       for (int i = 1; i < nPorts; i++) {
-        addInteriorCell(componentId, i, null);
+        insertRow(pRow + i);
+        addInteriorCell(componentId, i - 1, i + pRow, pCol);
       }
-      addCornerCell(componentId, nPorts, null);
+      insertRow(pRow + nPorts);
+      addCornerCell(componentId, nPorts - 1, nPorts + pRow, pCol);
     }
   }
 }

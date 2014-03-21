@@ -21,6 +21,8 @@ public class ComponentCell extends MenuBar {
   private static Integer TRIM = 12; // the number of characters to display
 
   private DataManager data;
+  private Integer iRow = 0;
+  private Integer iCol = 1;
   private MenuBar componentMenu;
   private MenuItem componentItem;
   private MenuBar actionMenu;
@@ -30,17 +32,24 @@ public class ComponentCell extends MenuBar {
    * 
    * @param dat the DataManager object for the WMT session
    * @param displayName the text to display in the cell
+   * @param iRow the row index of the component
+   * @param iCol the column index of the component
    */
-  public ComponentCell(DataManager data, String displayName) {
+  public ComponentCell(DataManager data, String displayName, Integer iRow,
+      Integer iCol) {
 
     this.data = data;
-    
+    if ((iRow != null) && (iCol != null)) {
+      this.iRow = iRow;
+      this.iCol = iCol;
+    }
+
     // Show this menu when selecting a component.
     componentMenu = new MenuBar(true); // menu items stacked vertically
     updateComponents();
 
     // Show this menu after a component has been selected.
-    actionMenu = new MenuBar(true); 
+    actionMenu = new MenuBar(true);
     updateActions();
 
     componentItem = new MenuItem(trimName(displayName), componentMenu);
@@ -110,7 +119,8 @@ public class ComponentCell extends MenuBar {
       componentItem.addStyleDependentName("connected");
       componentItem.setSubMenu(actionMenu);
       data.getPerspective().getModelGrid().isDriverConnected(true);
-      data.getPerspective().getModelGrid().addUsesPorts(componentId);
+      data.getPerspective().getModelGrid()
+          .addUsesPorts(componentId, iRow, iCol);
     }
   }
 
