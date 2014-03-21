@@ -68,32 +68,39 @@ public class ModelGrid extends Grid {
    * Makes a "corner" style grid cell connector.
    */
   private VerticalPanel makeConnectorCellCorner() {
-    VerticalPanel panel = new VerticalPanel();
-    SimplePanel panel1 = new SimplePanel();
-    panel1.setStyleName("mwmb-connectorCell");
-    panel1.addStyleDependentName("corner");
-    SimplePanel panel2 = new SimplePanel();
-    panel2.setStyleName("mwmb-connectorCell");
-    panel2.addStyleDependentName("empty");
-    panel.add(panel1);
-    panel.add(panel2);
-    return panel;
+    VerticalPanel root = new VerticalPanel();
+    root.setStyleName("mwmb-connectorCellRoot");
+    SimplePanel top = new SimplePanel();
+    top.setStyleName("mwmb-connectorCellCorner");
+    root.add(top);
+    return root;
   }
 
   /**
-   * Makes an "interior" style grid cell connector.
+   * Makes an "inner" style grid cell connector.
    */
-  private VerticalPanel makeConnectorCellInterior() {
-    VerticalPanel panel = new VerticalPanel();
-    SimplePanel panel1 = new SimplePanel();
-    panel1.setStyleName("mwmb-connectorCell");
-    panel1.addStyleDependentName("corner");
-    SimplePanel panel2 = new SimplePanel();
-    panel2.setStyleName("mwmb-connectorCell");
-    panel2.addStyleDependentName("straight");
-    panel.add(panel1);
-    panel.add(panel2);
-    return panel;
+  private VerticalPanel makeConnectorCellInner() {
+    VerticalPanel root = new VerticalPanel();
+    root.setStyleName("mwmb-connectorCellRoot");
+    SimplePanel top = new SimplePanel();
+    top.setStyleName("mwmb-connectorCellCorner");
+    root.add(top);
+    SimplePanel bottom = new SimplePanel();
+    bottom.setStyleName("mwmb-connectorCellStraight");
+    root.add(bottom);    
+    return root;
+  }
+
+  /**
+   * Makes an "bridge" style grid cell connector.
+   */
+  private VerticalPanel makeConnectorCellBridge() {
+    VerticalPanel root = new VerticalPanel();
+    root.setStyleName("mwmb-connectorCellRoot");
+    SimplePanel top = new SimplePanel();
+    top.setStyleName("mwmb-connectorCellBridge");
+    root.add(top);    
+    return root;
   }
 
   /**
@@ -115,6 +122,9 @@ public class ModelGrid extends Grid {
     GWT.log("Add "
         + data.getComponent(componentId).getUsesPorts().get(portIndex).getId()
         + " at (" + cRow + "," + cCol + ")");
+    if (icol > 1) {
+      setWidget(irow, icol - 1, makeConnectorCellBridge());
+    }
     setWidget(irow, icol, makeConnectorCellCorner());
     setWidget(irow, icol + 1, new ComponentCell(data, data.getComponent(
         componentId).getUsesPorts().get(portIndex).getId(), cRow, cCol));
@@ -139,7 +149,10 @@ public class ModelGrid extends Grid {
     GWT.log("Add "
         + data.getComponent(componentId).getUsesPorts().get(portIndex).getId()
         + " at (" + cRow + "," + cCol + ")");
-    setWidget(irow, icol, makeConnectorCellInterior());
+    if (icol > 1) {
+      setWidget(irow, icol - 1, makeConnectorCellBridge());
+    }
+    setWidget(irow, icol, makeConnectorCellInner());
     setWidget(irow, icol + 1, new ComponentCell(data, data.getComponent(
         componentId).getUsesPorts().get(portIndex).getId(), cRow, cCol));
   }

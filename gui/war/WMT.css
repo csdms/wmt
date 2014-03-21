@@ -95,9 +95,10 @@
   font-style: italic;
   text-align: center;
   border: 2px solid #b55;
-  padding: 1em;
-  width: 25px;
-  max-width: 25px;
+  /* padding: 1em; */
+  width: 50px;
+  height: 50px;
+  /* max-width: 25px; */
 }
 
 .mwmb-driverCell-connected {
@@ -111,8 +112,8 @@
   text-align: center;
   background-color: white;
   border: 2px solid #55b;
-  padding: 1em;
-  height: 25px;
+  /* padding: 1em; */
+  height: 50px;
   width: 100px;
   max-width: 100px;
 }
@@ -123,28 +124,42 @@
   border: 2px solid #55b;
 }
 
-.mwmb-connectorCell {
-  padding: 1em;
-  margin: -4px 0 0 2px;
-  width: 50px;
-  height: 15px;
+.mwmb-connectorCellRoot {
   position: relative;
-  left: 65px;
 }
 
-.mwmb-connectorCell-corner {
+.mwmb-connectorCellCorner {
   border-left: 1px solid #333;
   border-bottom: 1px solid #333;
   z-index: -1;
+  background-color: #fee;
+  position: absolute;
+  width: 60px;
+  height: 35px;
+  left: 55px;
+  top: -35px;
 }
 
-.mwmb-connectorCell-straight {
+.mwmb-connectorCellStraight {
   border-left: 1px solid #333;
   z-index: -2;
+  background-color: #eee;
+  position: absolute;
+  width: 60px;
+  height: 35px;
+  left: 55px;
+  top: 0px;
 }
 
-.mwmb-connectorCell-empty {
+.mwmb-connectorCellBridge {
+  border-left: 1px solid #333;
   z-index: -2;
+  background-color: #eef;
+  position: absolute;
+  width: 60px;
+  height: 70px;
+  left: 55px;
+  top: -35px;
 }
 
 /*
