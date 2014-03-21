@@ -109,14 +109,24 @@ public class ModelGrid extends Grid {
     if (nPorts == 0) {
       return;
     }
-    
+
     resize(getRowCount() + nPorts, getColumnCount() + 1);
-    
-    setWidget(1, 2, new ComponentCell(data, data.getComponent(componentId)
-        .getUsesPorts().get(0).getId()));
-    setWidget(1, 1, makeConnectorCellIntersect());
-    setWidget(2, 2, new ComponentCell(data, data.getComponent(componentId)
-        .getUsesPorts().get(1).getId()));
-    setWidget(2, 1, makeConnectorCellCorner());
+
+    if (nPorts == 1) {
+      setWidget(1, 2, new ComponentCell(data, data.getComponent(componentId)
+          .getUsesPorts().get(1).getId()));
+      setWidget(1, 1, makeConnectorCellCorner());
+    }
+
+    if (nPorts >= 2) {
+      for (int i = 1; i < nPorts; i++) {
+        setWidget(i, 1, makeConnectorCellIntersect());
+        setWidget(i, 2, new ComponentCell(data, data.getComponent(componentId)
+            .getUsesPorts().get(i - 1).getId()));
+      }
+      setWidget(nPorts, 1, makeConnectorCellCorner());
+      setWidget(nPorts, 2, new ComponentCell(data, data.getComponent(
+          componentId).getUsesPorts().get(nPorts - 1).getId()));
+    }
   }
 }
