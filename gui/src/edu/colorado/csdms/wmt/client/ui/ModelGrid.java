@@ -43,7 +43,7 @@ public class ModelGrid extends Grid {
     this.clear();
     this.resize(1, 2);
 
-    driverCell = new HTML("<i class='fa fa-play fa-lg'></i>");
+    driverCell = new HTML("<i class='fa fa-play-circle fa-2x'></i>");
     driverCell.setStyleName("mwmb-driverCell");
     this.setWidget(0, 0, driverCell);
     this.setWidget(0, 1, new ComponentCell(data, "component", 0, 1));
