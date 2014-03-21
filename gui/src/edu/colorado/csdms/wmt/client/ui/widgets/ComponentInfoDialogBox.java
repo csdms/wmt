@@ -72,10 +72,12 @@ public class ComponentInfoDialogBox extends DialogBox {
     }
     this.setText(title);
 
-    String url =
-        "<a href='" + componentJso.getURL() + "'>" + componentJso.getURL()
-            + "</a>";
-    String[] info = {componentJso.getSummary(), url, componentJso.getAuthor()};
+    String url = "<a href='" + componentJso.getURL() + "'>" 
+        + componentJso.getURL() + "</a>";
+    String author = (componentJso.getAuthor() == null) 
+        ? " " : componentJso.getAuthor();
+    String[] info = {componentJso.getSummary(), url, 
+        "Model developer: " + author};
 
     HTML urlHtml = null;
     for (int i = 0; i < LABELS.length; i++) {
