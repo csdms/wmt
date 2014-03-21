@@ -7,7 +7,6 @@ from ..render import render
 from ..validators import (not_too_long, not_too_short, not_bad_json,
                           valid_uuid, submission_exists, model_exists)
 from ..cca import rc_from_json
-from .. import run
 from ..utils.io import chunk_copy
 from ..config import logger, site
 
