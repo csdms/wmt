@@ -81,9 +81,9 @@ public class ModelGrid extends Grid {
   }
 
   /**
-   * Makes an "intersect" style grid cell connector.
+   * Makes an "interior" style grid cell connector.
    */
-  private VerticalPanel makeConnectorCellIntersect() {
+  private VerticalPanel makeConnectorCellInterior() {
     VerticalPanel panel = new VerticalPanel();
     SimplePanel panel1 = new SimplePanel();
     panel1.setStyleName("mwmb-connectorCell");
@@ -97,7 +97,42 @@ public class ModelGrid extends Grid {
   }
 
   /**
-   * Adds new ComponentCells for the uses ports of the current component.
+   * Adds a "corner" style connector + ComponentCell to the ModelGrid for a uses
+   * port of a component.
+   * <p>
+   * This style is used if the component has only one uses port, or if this is
+   * the last of a set of uses ports for the component.
+   * 
+   * @param componentId the id of the parent component
+   * @param irow the row index of the parent component in the ModelGrid
+   * @param icol the column index of the parent component in the ModelGrid
+   */
+  private void addCornerCell(String componentId, Integer irow, Integer icol) {
+    setWidget(irow, 1, makeConnectorCellCorner());
+    setWidget(irow, 2, new ComponentCell(data, data.getComponent(componentId)
+        .getUsesPorts().get(irow - 1).getId()));
+  }
+  
+  /**
+   * Adds a "interior" style connector + ComponentCell to the ModelGrid for a
+   * uses port of a component.
+   * <p>
+   * This style is used when a component has multiple uses ports, and this uses
+   * port is not the last in the set.
+   * 
+   * @param componentId the id of the parent component
+   * @param irow the row index of the parent component in the ModelGrid
+   * @param icol the column index of the parent component in the ModelGrid
+   */
+  private void addInteriorCell(String componentId, Integer irow, Integer icol) {
+    setWidget(irow, 1, makeConnectorCellInterior());
+    setWidget(irow, 2, new ComponentCell(data, data.getComponent(componentId)
+        .getUsesPorts().get(irow - 1).getId()));
+  }
+  
+  /**
+   * Adds new ComponentCells to the ModelGrid for the uses ports of the current
+   * component.
    * 
    * @param componentId the id of the current component
    */
@@ -113,20 +148,14 @@ public class ModelGrid extends Grid {
     resize(getRowCount() + nPorts, getColumnCount() + 1);
 
     if (nPorts == 1) {
-      setWidget(1, 2, new ComponentCell(data, data.getComponent(componentId)
-          .getUsesPorts().get(1).getId()));
-      setWidget(1, 1, makeConnectorCellCorner());
+      addCornerCell(componentId, nPorts, null);
     }
 
     if (nPorts >= 2) {
       for (int i = 1; i < nPorts; i++) {
-        setWidget(i, 1, makeConnectorCellIntersect());
-        setWidget(i, 2, new ComponentCell(data, data.getComponent(componentId)
-            .getUsesPorts().get(i - 1).getId()));
+        addInteriorCell(componentId, i, null);
       }
-      setWidget(nPorts, 1, makeConnectorCellCorner());
-      setWidget(nPorts, 2, new ComponentCell(data, data.getComponent(
-          componentId).getUsesPorts().get(nPorts - 1).getId()));
+      addCornerCell(componentId, nPorts, null);
     }
   }
 }
