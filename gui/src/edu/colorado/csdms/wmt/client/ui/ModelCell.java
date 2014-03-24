@@ -607,14 +607,14 @@ public class ModelCell extends Grid implements DropHandler {
 
           // Make a new ModelCell (overwriting the current). Attach it to the
           // target TreeItem.
-          Port openPort;
+          Port openPort = null;
           if (parentTreeItem.getParentItem() != null) {
             openPort = new Port();
             openPort.setId(portCell.port.getId());
             openPort.isRequired(portCell.port.isRequired());
           } else {
-            openPort = tree.initializeTree(); // at root of ModelTree.
-          }
+//            openPort = tree.initializeTree(); // at root of ModelTree.
+           }
           Component infoComponent = Component.makeInfoComponent();
           ModelCell newCell = new ModelCell(openPort, infoComponent);
           newCell.setParentTreeItem(parentTreeItem);

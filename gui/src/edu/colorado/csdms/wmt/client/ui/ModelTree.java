@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 
@@ -24,6 +26,7 @@ import edu.colorado.csdms.wmt.client.data.Port;
 public class ModelTree extends Tree {
 
   public DataManager data; // experimenting with a public member variable
+  private HTML driverCell;
 
   /**
    * Creates a ModelTree with an open "driver" port.
@@ -41,22 +44,24 @@ public class ModelTree extends Tree {
    * A worker that sets up the root TreeItem (the "driver") of the ModelTree.
    * It also initializes the {@link ModelJSO} and {@link ModelMetadataJSO}
    * objects used to save the model created with this ModelTree.
-   * <p>
-   * The returned Port is optional.
    */
-  public Port initializeTree() {
+  public void initializeTree() {
 
     this.clear();
-    Port driverPort = new Port("driver", true);
-    addTreeItem(driverPort, null);
-
+    
+    Grid driverGrid = new Grid(1, 2);
+    driverCell = new HTML("<i class='fa fa-play-circle fa-2x'></i>");
+    driverCell.setStyleName("mwmb-driverCell");
+    driverGrid.setWidget(0, 0, driverCell);
+    driverGrid.setWidget(0, 1, new ComponentCell(data, "component"));
+    
+    this.addItem(new TreeItem(driverGrid));
+    
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
     data.setModel(model);
     ModelMetadataJSO metadata =
         (ModelMetadataJSO) ModelMetadataJSO.createObject();
     data.setMetadata(metadata);
-
-    return driverPort;
   }
 
   /**

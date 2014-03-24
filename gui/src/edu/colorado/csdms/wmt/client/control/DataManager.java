@@ -145,7 +145,7 @@ public class DataManager {
    * components.
    * <p>
    * Once all the components have been pulled from the server, sort them
-   * alphabetically and initialize the {@link ComponentList}.
+   * alphabetically and initialize the {@link ModelTree}.
    * 
    * @param component the component to add, a ComponentJSO object
    */
@@ -153,8 +153,8 @@ public class DataManager {
     this.components.add(component);
     if (this.components.size() == this.componentIdList.size()) {
       sortComponents();
-//      perspective.initializeComponentList();
-    } // XXX This is fragile.
+      perspective.initializeModel();
+    } 
   }
 
   /**
