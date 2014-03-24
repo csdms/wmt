@@ -22,6 +22,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
  * @uses {@link DragCell}, {@link DataManager}
  * @author Mark Piper (mark.piper@colorado.edu)
  */
+@Deprecated
 public class ComponentList extends Grid implements DragStartHandler {
 
   public DataManager data; // experiment with public data

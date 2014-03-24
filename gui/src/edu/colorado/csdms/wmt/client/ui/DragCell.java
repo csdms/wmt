@@ -27,6 +27,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
+@Deprecated
 public class DragCell extends Grid implements DragStartHandler {
 
   private ComponentJSO componentJSO;
