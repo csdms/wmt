@@ -7,6 +7,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 
@@ -24,6 +25,7 @@ public class ComponentCell extends MenuBar {
   private MenuBar componentMenu;
   private MenuItem componentItem;
   private MenuBar actionMenu;
+  private TreeItem enclosingTreeItem;
 
   /**
    * Creates a new {@link ComponentCell}.
@@ -88,6 +90,14 @@ public class ComponentCell extends MenuBar {
     return trimmedName;
   }
   
+  public TreeItem getEnclosingTreeItem() {
+    return enclosingTreeItem;
+  }
+
+  public void setEnclosingTreeItem(TreeItem enclosingTreeItem) {
+    this.enclosingTreeItem = enclosingTreeItem;
+  }
+
   /**
    * Replaces the generic display name with the name of the selected component
    * from the menu. If the name of the component is too long, it's trimmed to
@@ -109,7 +119,6 @@ public class ComponentCell extends MenuBar {
       componentItem.setText(displayName);
       componentItem.addStyleDependentName("connected");
       componentItem.setSubMenu(actionMenu);
-//      data.getPerspective().getModelGrid().isDriverConnected(true);
 //      data.getPerspective().getModelGrid()
 //          .addUsesPorts(componentId, iRow, iCol);
     }

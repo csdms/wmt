@@ -26,7 +26,6 @@ import edu.colorado.csdms.wmt.client.data.Port;
 public class ModelTree extends Tree {
 
   public DataManager data; // experimenting with a public member variable
-  private HTML driverCell;
 
   /**
    * Creates a ModelTree with an open "driver" port.
@@ -50,12 +49,15 @@ public class ModelTree extends Tree {
     this.clear();
     
     Grid driverGrid = new Grid(1, 2);
-    driverCell = new HTML("<i class='fa fa-play-circle fa-2x'></i>");
+    HTML driverCell = new HTML("<i class='fa fa-play-circle fa-2x'></i>");
     driverCell.setStyleName("mwmb-driverCell");
+    ComponentCell componentCell = new ComponentCell(data, "component");
     driverGrid.setWidget(0, 0, driverCell);
-    driverGrid.setWidget(0, 1, new ComponentCell(data, "component"));
+    driverGrid.setWidget(0, 1, componentCell);
     
-    this.addItem(new TreeItem(driverGrid));
+    TreeItem driverItem = new TreeItem(driverGrid);
+    componentCell.setEnclosingTreeItem(driverItem);
+    this.addItem(driverItem);
     
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
     data.setModel(model);
