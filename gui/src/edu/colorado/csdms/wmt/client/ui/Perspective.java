@@ -284,17 +284,6 @@ public class Perspective extends DockLayoutPanel {
   public void initializeModel() {
     ModelTree modelTree = new ModelTree(data);
     scrollModel.add(modelTree);
-
-    modelTree.addHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        if (data.getSelectedComponent() != null) {
-          ParameterTable table = (ParameterTable) scrollParameters.getWidget();
-          table.removeAllRows(); // FlexTable
-          table.loadTable();
-        }
-      }
-    }, ClickEvent.getType());
   }
 
   /**
