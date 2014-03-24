@@ -81,18 +81,13 @@
 }
 */
 
-/* TreeItem offset = ModelCell height */
 .wmt-TreeItem {
-   margin-left: 60px !important;
-   /* vertical-align: bottom; */
-   /* padding-bottom: 0px !important; */
-   /* border-left: 1px dotted #bbb; */ /* Close, but not quite. */
+   margin-left: 80px !important;
 }
 
 
 .mwmb-driverCell {
-  padding: 1em;
-  width: 20px;
+  padding: 1em 0 1em 5px;
 }
 
 .mwmb-componentItem {

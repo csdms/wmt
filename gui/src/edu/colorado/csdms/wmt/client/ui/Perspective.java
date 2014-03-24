@@ -32,7 +32,7 @@ public class Perspective extends DockLayoutPanel {
   private DataManager data;
 
   // Fractional sizes of views.
-  private final static Double VIEW_EAST_FRACTION = 0.40;
+  private final static Double VIEW_EAST_FRACTION = 0.50;
 
   // Browser window dimensions (in px) used for setting up UI views.
   private Integer browserWindowWidth;
