@@ -10,6 +10,9 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.ui.handler.ComponentDeleteCommand;
+import edu.colorado.csdms.wmt.client.ui.handler.ComponentGetInformationCommand;
+import edu.colorado.csdms.wmt.client.ui.handler.ComponentShowParametersCommand;
 
 /**
  * Displays a model component in the ModelTree.
@@ -18,11 +21,6 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
  */
 public class ComponentCell extends MenuBar {
 
-  private static String[] ACTION = {"Show parameters", "Get info", "Delete"};
-  private static String[] ACTION_ICON = {
-      "<i class='fa fa-cogs fa-fw'></i> ",
-      "<i class='fa fa-question fa-fw'></i> ",
-      "<i class='fa fa-times fa-fw'></i> "};
   private static String DRIVER_TEXT = "component";
   private static String ALL_COMPONENTS = "__all_components";
   private static String COMPONENT_ICON =
@@ -57,11 +55,6 @@ public class ComponentCell extends MenuBar {
     // Show this menu when selecting a component.
     componentMenu = new MenuBar(true); // menu items stacked vertically
     updateComponents(portId);
-
-    // Show this menu after a component has been selected.
-    actionMenu = new MenuBar(true);
-    updateActions();
-
     componentItem = new MenuItem(trimName(portId), componentMenu);
     componentItem.setStyleName("mwmb-componentItem");
     this.addItem(componentItem);
@@ -129,15 +122,26 @@ public class ComponentCell extends MenuBar {
   }
   
   /**
-   * Loads the names of the actions that can be performed on a component into
-   * the {@link ComponentCell} menu.
+   * Loads the actions that can be performed on a component into the
+   * {@link ComponentCell} menu.
    */
-  public void updateActions() {
+  public void updateActions(String componentId) {
     actionMenu.clearItems();
-    for (int i = 0; i < ACTION.length; i++) {
-      actionMenu.addItem(ACTION_ICON[i] + ACTION[i], true,
-          new ComponentActionCommand(ACTION[i]));
-    }
+
+    MenuItem showParameters =
+        new MenuItem("<i class='fa fa-wrench fa-fw'></i> Show parameters",
+            true, new ComponentShowParametersCommand(data, componentId));
+    actionMenu.addItem(showParameters);
+    
+    MenuItem getInformation  =
+        new MenuItem("<i class='fa fa-question fa-fw'></i> Get information",
+            true, new ComponentGetInformationCommand(data, componentId));
+    actionMenu.addItem(getInformation);
+    
+    MenuItem deleteComponent  =
+        new MenuItem("<i class='fa fa-times fa-fw'></i> Delete",
+            true, new ComponentDeleteCommand(data, componentId));
+    actionMenu.addItem(deleteComponent);
   }
 
   /**
@@ -166,9 +170,7 @@ public class ComponentCell extends MenuBar {
   }
 
   /**
-   * Replaces the generic display name with the name of the selected component
-   * from the menu. If the name of the component is too long, it's trimmed to
-   * fit in the {@link ComponentCell}.
+   * Takes action when the user selects a component from the componentMenu.
    */
   public class ComponentSelectionCommand implements Command {
 
@@ -177,35 +179,25 @@ public class ComponentCell extends MenuBar {
 
     public ComponentSelectionCommand(String componentId) {
       this.componentId = componentId;
-      String componentName = data.getComponent(this.componentId).getName();
+      String componentName = data.getComponent(componentId).getName();
       this.displayName = trimName(componentName);
     }
 
     @Override
     public void execute() {
+      
+      // Display the name of the selected component.
       componentItem.setText(displayName);
       componentItem.addStyleDependentName("connected");
-      componentItem.setSubMenu(actionMenu);
+
+      // Add the component to the ModelTree.
       data.getPerspective().getModelTree().addComponent(componentId,
           enclosingTreeItem);
+
+      // Replace the componentMenu with the actionMenu.
+      actionMenu = new MenuBar(true);
+      componentItem.setSubMenu(actionMenu);
+      updateActions(componentId);
     }
   }
-
-  /**
-   * Performs the actions listed in the actionMenu.
-   */
-  public class ComponentActionCommand implements Command {
-
-    private String action;
-
-    public ComponentActionCommand(String action) {
-      this.action = action;
-    }
-
-    @Override
-    public void execute() {
-      GWT.log("Action performed: " + action);
-    }
-  }
-
 }
