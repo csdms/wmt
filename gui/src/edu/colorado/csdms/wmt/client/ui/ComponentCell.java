@@ -26,7 +26,7 @@ public class ComponentCell extends MenuBar {
   private static String DRIVER_TEXT = "component";
   private static String ALL_COMPONENTS = "__all_components";
   private static String COMPONENT_ICON =
-      "<i class='fa fa-plus-square fa-fw'></i> ";
+      "<i class='fa fa-plus fa-fw'></i> ";
   private static Integer TRIM = 12; // the number of characters to display
 
   private DataManager data;
@@ -91,8 +91,7 @@ public class ComponentCell extends MenuBar {
     // Load all available components into the componentMenu!
     if (portId.matches(ALL_COMPONENTS)) {
       for (int i = 0; i < data.getComponents().size(); i++) {
-        componentMenu.addItem(COMPONENT_ICON + data.getComponent(i).getName(),
-            true, new ComponentSelectionCommand(data.getComponent(i).getId()));
+        addComponentMenuItem(i);
       }
       return;
     }
@@ -101,12 +100,9 @@ public class ComponentCell extends MenuBar {
     for (int i = 0; i < data.getComponents().size(); i++) {
       Integer nProvidesPorts = data.getComponent(i).getProvidesPorts().length();
       for (int j = 0; j < nProvidesPorts; j++) {
-        String providesId =
-            data.getComponent(i).getProvidesPorts().get(j).getId();
-        if (providesId.matches(portId)) {
-          componentMenu.addItem(
-              COMPONENT_ICON + data.getComponent(i).getName(), true,
-              new ComponentSelectionCommand(data.getComponent(i).getId()));
+        if (data.getComponent(i).getProvidesPorts().get(j).getId().matches(
+            portId)) {
+          addComponentMenuItem(i);
         }
       }
     }
@@ -120,6 +116,18 @@ public class ComponentCell extends MenuBar {
     updateComponents(ALL_COMPONENTS);
   }
 
+  /**
+   * A worker to add a new MenuItem to the componentMenu.
+   * 
+   * @param index
+   */
+  private void addComponentMenuItem(Integer index) {
+    MenuItem item =
+        new MenuItem(COMPONENT_ICON + data.getComponent(index).getName(), true,
+            new ComponentSelectionCommand(data.getComponent(index).getId()));
+    componentMenu.addItem(item);
+  }
+  
   /**
    * Loads the names of the actions that can be performed on a component into
    * the {@link ComponentCell} menu.
