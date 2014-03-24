@@ -18,9 +18,15 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
  */
 public class ComponentCell extends MenuBar {
 
-  private static String[] ACTIONS = {"Show parameters", "Get info", "Delete"};
+  private static String[] ACTION = {"Show parameters", "Get info", "Delete"};
+  private static String[] ACTION_ICON = {
+      "<i class='fa fa-cogs fa-fw'></i> ",
+      "<i class='fa fa-question fa-fw'></i> ",
+      "<i class='fa fa-times fa-fw'></i> "};
   private static String DRIVER_TEXT = "component";
   private static String ALL_COMPONENTS = "__all_components";
+  private static String COMPONENT_ICON =
+      "<i class='fa fa-plus-square fa-fw'></i> ";
   private static Integer TRIM = 12; // the number of characters to display
 
   private DataManager data;
@@ -37,7 +43,7 @@ public class ComponentCell extends MenuBar {
   public ComponentCell(DataManager data) {
     this(data, DRIVER_TEXT);
   }
-  
+
   /**
    * Creates a new {@link ComponentCell}.
    * 
@@ -85,8 +91,8 @@ public class ComponentCell extends MenuBar {
     // Load all available components into the componentMenu!
     if (portId.matches(ALL_COMPONENTS)) {
       for (int i = 0; i < data.getComponents().size(); i++) {
-        componentMenu.addItem(data.getComponent(i).getName(),
-            new ComponentSelectionCommand(data.getComponent(i).getId()));
+        componentMenu.addItem(COMPONENT_ICON + data.getComponent(i).getName(),
+            true, new ComponentSelectionCommand(data.getComponent(i).getId()));
       }
       return;
     }
@@ -98,13 +104,14 @@ public class ComponentCell extends MenuBar {
         String providesId =
             data.getComponent(i).getProvidesPorts().get(j).getId();
         if (providesId.matches(portId)) {
-          componentMenu.addItem(data.getComponent(i).getName(),
+          componentMenu.addItem(
+              COMPONENT_ICON + data.getComponent(i).getName(), true,
               new ComponentSelectionCommand(data.getComponent(i).getId()));
         }
       }
     }
   }
-  
+
   /**
    * Loads the names of all available components into the {@link ComponentCell}
    * menu.
@@ -112,18 +119,19 @@ public class ComponentCell extends MenuBar {
   public void updateComponents() {
     updateComponents(ALL_COMPONENTS);
   }
-  
+
   /**
    * Loads the names of the actions that can be performed on a component into
    * the {@link ComponentCell} menu.
    */
   public void updateActions() {
     actionMenu.clearItems();
-    for (int i = 0; i < ACTIONS.length; i++) {
-      actionMenu.addItem(ACTIONS[i], new ComponentActionCommand(ACTIONS[i]));
+    for (int i = 0; i < ACTION.length; i++) {
+      actionMenu.addItem(ACTION_ICON[i] + ACTION[i], true,
+          new ComponentActionCommand(ACTION[i]));
     }
   }
-  
+
   /**
    * A worker that trims the name displayed in the {@link ComponentCell} if it's
    * too long.
@@ -140,7 +148,7 @@ public class ComponentCell extends MenuBar {
     }
     return trimmedName;
   }
-  
+
   public TreeItem getEnclosingTreeItem() {
     return enclosingTreeItem;
   }
