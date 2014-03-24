@@ -48,12 +48,13 @@ public class ModelTree extends Tree {
 
     this.clear();
     
-    Grid driverGrid = new Grid(1, 2);
+    ComponentCell componentCell = new ComponentCell(data, "component");
     HTML driverCell = new HTML("<i class='fa fa-play-circle fa-2x'></i>");
     driverCell.setStyleName("mwmb-driverCell");
-    ComponentCell componentCell = new ComponentCell(data, "component");
-    driverGrid.setWidget(0, 0, driverCell);
-    driverGrid.setWidget(0, 1, componentCell);
+    
+    Grid driverGrid = new Grid(1, 2);
+    driverGrid.setWidget(0, 0, componentCell);
+    driverGrid.setWidget(0, 1, driverCell);
     
     TreeItem driverItem = new TreeItem(driverGrid);
     componentCell.setEnclosingTreeItem(driverItem);
@@ -74,6 +75,7 @@ public class ModelTree extends Tree {
    * @param target the targeted leaf TreeItem
    * @return the reference to the created TreeItem
    */
+  @Deprecated
   public TreeItem addTreeItem(Port port, TreeItem target) {
 
     ModelCell cell = new ModelCell(port, Component.makeInfoComponent());
@@ -92,12 +94,86 @@ public class ModelTree extends Tree {
   }
 
   /**
+   * Adds a new TreeItem with a {@link ComponentCell} to the ModelTree at the
+   * targeted leaf location.
+   * 
+   * @param portId the id of the exposed uses port at the leaf location
+   * @param target the targeted leaf TreeItem
+   * @return the reference to the created TreeItem
+   */
+  public TreeItem addTreeItem(String portId, TreeItem target) {
+    ComponentCell cell = new ComponentCell(data, portId);
+    Grid container = new Grid(1, 1);
+    container.setWidget(0, 0, cell);
+    TreeItem item = target.addItem(container);
+    item.setStyleName("wmt-TreeItem");
+    cell.setEnclosingTreeItem(item);
+    return item;
+  }
+  
+  /**
+   * Adds a component to the {@link ComponentCell} used by the targeted
+   * TreeItem. Uses {@link #setComponent(String, TreeItem)}.
+   * 
+   * @param componentId the id of the component to add
+   * @param target the TreeItem to which the component is to be added
+   */
+  public void addComponent(String componentId, TreeItem target) {
+    
+    String componentName = data.getComponent(componentId).getName();
+    GWT.log("Adding component: " + componentName);
+    this.setComponent(componentId, target);
+    target.setState(true);
+    
+    // Ensure that the (class) component replaces the model component.
+    data.replaceModelComponent(data.getComponent(componentId));
+
+    // Is this the driver? If so, display the component's parameters. Also
+    // suggest a model name. 
+    if (this.getItem(0).equals(target)) {
+      data.getModel().setName(
+          componentName + " " + data.saveAttempts.toString());
+      data.setSelectedComponent(componentId);
+      data.getPerspective().getParameterTable().loadTable();
+    }
+    
+    // Mark the model state as unsaved.
+    data.modelIsSaved(false);
+    data.getPerspective().setModelPanelTitle();    
+  }
+  
+  /**
+   * Sets the desired component, and its {@link ComponentCell}, in the targeted
+   * TreeItem.
+   * 
+   * @param componentId the id of the component to set
+   * @param target the TreeItem where the component is to be set
+   */
+  public void setComponent(String componentId, TreeItem target) {
+    
+    // If the component already exists at a higher level in the ModelTree, set
+    // a link to it and exit.
+
+    // Add new TreeItems with ComponentCells for the "uses" ports of the
+    // component.
+    Integer nPorts = data.getComponent(componentId).getUsesPorts().length();
+    if (nPorts == 0) {
+      return;
+    }
+    for (int i = 0; i < nPorts; i++) {
+      String portId = data.getComponent(componentId).getUsesPorts().get(i).getId();
+      addTreeItem(portId, target);
+    }
+  }
+
+  /**
    * Adds a Component to the ModelCell used by the targeted TreeItem. Uses
    * {@link #setComponent(Component, TreeItem)}.
    * 
    * @param component the Component to add
    * @param target the TreeItem to which the Component is to be added
    */
+  @Deprecated
   public void addComponent(Component component, TreeItem target) {
 
     GWT.log("Adding component: " + component.getName());
@@ -126,6 +202,7 @@ public class ModelTree extends Tree {
    * @param component the Component to add
    * @param target the TreeItem to which the Component is to be added
    */
+  @Deprecated
   public void setComponent(Component component, TreeItem target) {
 
     // Get the ModelCell used by the TreeItem target.

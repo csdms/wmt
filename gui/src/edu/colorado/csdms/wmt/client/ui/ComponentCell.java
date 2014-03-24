@@ -119,8 +119,8 @@ public class ComponentCell extends MenuBar {
       componentItem.setText(displayName);
       componentItem.addStyleDependentName("connected");
       componentItem.setSubMenu(actionMenu);
-//      data.getPerspective().getModelGrid()
-//          .addUsesPorts(componentId, iRow, iCol);
+      data.getPerspective().getModelTree().addComponent(componentId,
+          enclosingTreeItem);
     }
   }
 
