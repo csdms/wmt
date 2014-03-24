@@ -26,6 +26,7 @@ import edu.colorado.csdms.wmt.client.data.Port;
 public class ModelTree extends Tree {
 
   public DataManager data; // experimenting with a public member variable
+  private ComponentCell driverComponentCell;
 
   /**
    * Creates a ModelTree with an open "driver" port.
@@ -36,7 +37,6 @@ public class ModelTree extends Tree {
 
     this.data = data;
     initializeTree();
-    this.data.getPerspective().setModelTree(this);
   }
 
   /**
@@ -48,16 +48,16 @@ public class ModelTree extends Tree {
 
     this.clear();
     
-    ComponentCell componentCell = new ComponentCell(data, "component");
+    driverComponentCell = new ComponentCell(data);
     HTML driverCell = new HTML("<i class='fa fa-play-circle fa-2x'></i>");
     driverCell.setStyleName("mwmb-driverCell");
     
     Grid driverGrid = new Grid(1, 2);
-    driverGrid.setWidget(0, 0, componentCell);
+    driverGrid.setWidget(0, 0, driverComponentCell);
     driverGrid.setWidget(0, 1, driverCell);
     
     TreeItem driverItem = new TreeItem(driverGrid);
-    componentCell.setEnclosingTreeItem(driverItem);
+    driverComponentCell.setEnclosingTreeItem(driverItem);
     this.addItem(driverItem);
     
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
@@ -65,6 +65,14 @@ public class ModelTree extends Tree {
     ModelMetadataJSO metadata =
         (ModelMetadataJSO) ModelMetadataJSO.createObject();
     data.setMetadata(metadata);
+  }
+
+  public ComponentCell getDriverComponentCell() {
+    return driverComponentCell;
+  }
+
+  public void setDriverComponentCell(ComponentCell driverComponentCell) {
+    this.driverComponentCell = driverComponentCell;
   }
 
   /**

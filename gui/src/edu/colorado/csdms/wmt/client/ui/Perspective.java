@@ -282,7 +282,7 @@ public class Perspective extends DockLayoutPanel {
    * the open port for the driver of the model.
    */
   public void initializeModel() {
-    ModelTree modelTree = new ModelTree(data);
+    modelTree = new ModelTree(data);
     scrollModel.add(modelTree);
   }
 

@@ -12,13 +12,15 @@ import com.google.gwt.user.client.ui.TreeItem;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 
 /**
- * Displays a model component in the ModelGrid.
+ * Displays a model component in the ModelTree.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class ComponentCell extends MenuBar {
 
   private static String[] ACTIONS = {"Show parameters", "Get info", "Delete"};
+  private static String DRIVER_TEXT = "component";
+  private static String ALL_COMPONENTS = "__all_components";
   private static Integer TRIM = 12; // the number of characters to display
 
   private DataManager data;
@@ -28,38 +30,87 @@ public class ComponentCell extends MenuBar {
   private TreeItem enclosingTreeItem;
 
   /**
+   * Creates a new {@link ComponentCell} displaying the text "component".
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public ComponentCell(DataManager data) {
+    this(data, DRIVER_TEXT);
+  }
+  
+  /**
    * Creates a new {@link ComponentCell}.
    * 
-   * @param dat the DataManager object for the WMT session
-   * @param displayName the text to display in the cell
+   * @param data the DataManager object for the WMT session
+   * @param portId the id of the corresponding port for the cell
    */
-  public ComponentCell(DataManager data, String displayName) {
+  public ComponentCell(DataManager data, String portId) {
 
     this.data = data;
 
     // Show this menu when selecting a component.
     componentMenu = new MenuBar(true); // menu items stacked vertically
-    updateComponents();
+    updateComponents(portId);
 
     // Show this menu after a component has been selected.
     actionMenu = new MenuBar(true);
     updateActions();
 
-    componentItem = new MenuItem(trimName(displayName), componentMenu);
+    componentItem = new MenuItem(trimName(portId), componentMenu);
     componentItem.setStyleName("mwmb-componentItem");
     this.addItem(componentItem);
   }
 
   /**
-   * Loads the names of the available components into the {@link ComponentCell}
+   * Loads the names of the components that match the uses port of the displayed
+   * component into the {@link ComponentCell} menu.
+   * 
+   * @param portId the id of the uses port displayed in the ComponentCell
+   */
+  public void updateComponents(String portId) {
+
+    componentMenu.clearItems();
+
+    // Display a wait message in the componentMenu.
+    if (portId.matches(DRIVER_TEXT)) {
+      componentMenu.addItem("Loading...", new Command() {
+        @Override
+        public void execute() {
+          // Do nothing.
+        }
+      });
+      return;
+    }
+
+    // Load all available components into the componentMenu!
+    if (portId.matches(ALL_COMPONENTS)) {
+      for (int i = 0; i < data.getComponents().size(); i++) {
+        componentMenu.addItem(data.getComponent(i).getName(),
+            new ComponentSelectionCommand(data.getComponent(i).getId()));
+      }
+      return;
+    }
+
+    // Load only those components with provides ports matching the input portId.
+    for (int i = 0; i < data.getComponents().size(); i++) {
+      Integer nProvidesPorts = data.getComponent(i).getProvidesPorts().length();
+      for (int j = 0; j < nProvidesPorts; j++) {
+        String providesId =
+            data.getComponent(i).getProvidesPorts().get(j).getId();
+        if (providesId.matches(portId)) {
+          componentMenu.addItem(data.getComponent(i).getName(),
+              new ComponentSelectionCommand(data.getComponent(i).getId()));
+        }
+      }
+    }
+  }
+  
+  /**
+   * Loads the names of all available components into the {@link ComponentCell}
    * menu.
    */
   public void updateComponents() {
-    componentMenu.clearItems();
-    for (int i = 0; i < data.getComponents().size(); i++) {
-      componentMenu.addItem(data.getComponent(i).getName(),
-          new ComponentSelectionCommand(data.getComponent(i).getId()));
-    }
+    updateComponents(ALL_COMPONENTS);
   }
   
   /**
@@ -101,7 +152,7 @@ public class ComponentCell extends MenuBar {
   /**
    * Replaces the generic display name with the name of the selected component
    * from the menu. If the name of the component is too long, it's trimmed to
-   * fit in the Grid cell. Applies CSS rules to the driverCell.
+   * fit in the {@link ComponentCell}.
    */
   public class ComponentSelectionCommand implements Command {
 

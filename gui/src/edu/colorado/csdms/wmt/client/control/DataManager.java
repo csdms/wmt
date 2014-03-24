@@ -153,7 +153,7 @@ public class DataManager {
     this.components.add(component);
     if (this.components.size() == this.componentIdList.size()) {
       sortComponents();
-      perspective.initializeModel();
+      perspective.getModelTree().getDriverComponentCell().updateComponents();
     } 
   }
 
