@@ -24,7 +24,7 @@ public class ComponentCell extends MenuBar {
   private static String DRIVER = "driver";
   private static String ALL_COMPONENTS = "__all_components";
   private static String COMPONENT_ICON =
-      "<i class='fa fa-plus fa-fw'></i> ";
+      "<i class='fa fa-plus-square fa-fw' style='color:#55b'></i> ";
   private static Integer TRIM = 12; // the number of characters to display
 
   private DataManager data;
@@ -148,17 +148,17 @@ public class ComponentCell extends MenuBar {
     actionMenu.clearItems();
 
     MenuItem showParameters =
-        new MenuItem("<i class='fa fa-wrench fa-fw'></i> Show parameters",
+        new MenuItem("<i class='fa fa-wrench fa-fw' style='color:#333'></i> Show parameters",
             true, new ComponentShowParametersCommand(data, this));
     actionMenu.addItem(showParameters);
     
     MenuItem getInformation =
-        new MenuItem("<i class='fa fa-question fa-fw'></i> Get information",
+        new MenuItem("<i class='fa fa-question fa-fw' style='color:#55b'></i> Get information",
             true, new ComponentGetInformationCommand(data, this));
     actionMenu.addItem(getInformation);
     
     MenuItem deleteComponent =
-        new MenuItem("<i class='fa fa-times fa-fw'></i> Delete",
+        new MenuItem("<i class='fa fa-times fa-fw' style='color:#b55'></i> Delete",
             true, new ComponentDeleteCommand(data, this));
     actionMenu.addItem(deleteComponent);
   }
