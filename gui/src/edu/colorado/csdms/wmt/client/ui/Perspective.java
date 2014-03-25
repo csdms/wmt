@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 
 /**
  * Defines the initial layout of views (a perspective, in Eclipse parlance)
@@ -55,6 +56,7 @@ public class Perspective extends DockLayoutPanel {
   private ComponentList componentList;
   private ModelTree modelTree;
   private ParameterTable parameterTable;
+  private ComponentInfoDialogBox componentInfoBox;
 
   /**
    * Draws the panels and their children that compose the basic WMT GUI.
@@ -86,6 +88,9 @@ public class Perspective extends DockLayoutPanel {
     splitter.addEast(viewEast, viewEastInitialWidth);
     viewWest = new ViewWest();
     splitter.add(viewWest); // must be last
+    
+    // The ComponentInfoDialogBox floats above the Perspective.
+    this.setComponentInfoBox(new ComponentInfoDialogBox());
   }
 
   /**
@@ -197,6 +202,14 @@ public class Perspective extends DockLayoutPanel {
       data.getModel().setName("Model " + data.saveAttempts.toString());
     }
     viewWest.setTabHTML(0, tabTitle);
+  }
+
+  public ComponentInfoDialogBox getComponentInfoBox() {
+    return componentInfoBox;
+  }
+
+  public void setComponentInfoBox(ComponentInfoDialogBox componentInfoBox) {
+    this.componentInfoBox = componentInfoBox;
   }
 
   /**
