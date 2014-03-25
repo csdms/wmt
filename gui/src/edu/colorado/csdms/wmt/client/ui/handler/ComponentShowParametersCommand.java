@@ -16,20 +16,23 @@ import edu.colorado.csdms.wmt.client.ui.ComponentCell;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
+@SuppressWarnings("unused")
 public class ComponentShowParametersCommand implements Command {
 
   private DataManager data;
+  private ComponentCell cell;
   private String componentId;
 
   /**
    * Creates a new instance of {@link ComponentShowParametersCommand}.
    * 
    * @param data the DataManager object for the WMT session
-   * @param componentId the id of the component to get info on
+   * @param cell the {@link ComponentCell} this Command acts on
    */
-  public ComponentShowParametersCommand(DataManager data, String componentId) {
+  public ComponentShowParametersCommand(DataManager data, ComponentCell cell) {
     this.data = data;
-    this.componentId = componentId;
+    this.cell = cell;
+    this.componentId = cell.getComponentId();
   }
 
   @Override

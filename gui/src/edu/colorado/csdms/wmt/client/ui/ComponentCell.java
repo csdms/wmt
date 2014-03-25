@@ -149,17 +149,17 @@ public class ComponentCell extends MenuBar {
 
     MenuItem showParameters =
         new MenuItem("<i class='fa fa-wrench fa-fw'></i> Show parameters",
-            true, new ComponentShowParametersCommand(data, componentId));
+            true, new ComponentShowParametersCommand(data, this));
     actionMenu.addItem(showParameters);
     
-    MenuItem getInformation  =
+    MenuItem getInformation =
         new MenuItem("<i class='fa fa-question fa-fw'></i> Get information",
-            true, new ComponentGetInformationCommand(data, componentId));
+            true, new ComponentGetInformationCommand(data, this));
     actionMenu.addItem(getInformation);
     
-    MenuItem deleteComponent  =
+    MenuItem deleteComponent =
         new MenuItem("<i class='fa fa-times fa-fw'></i> Delete",
-            true, new ComponentDeleteCommand(data, componentId));
+            true, new ComponentDeleteCommand(data, this));
     actionMenu.addItem(deleteComponent);
   }
 

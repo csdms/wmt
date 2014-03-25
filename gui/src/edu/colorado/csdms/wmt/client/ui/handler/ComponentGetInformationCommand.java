@@ -16,20 +16,23 @@ import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
+@SuppressWarnings("unused")
 public class ComponentGetInformationCommand implements Command {
 
   private DataManager data;
+  private ComponentCell cell;
   private String componentId;
 
   /**
    * Creates a new instance of {@link ComponentGetInformationCommand}.
    * 
    * @param data the DataManager object for the WMT session
-   * @param componentId the id of the component to get info on
+   * @param cell the {@link ComponentCell} this Command acts on
    */
-  public ComponentGetInformationCommand(DataManager data, String componentId) {
+  public ComponentGetInformationCommand(DataManager data, ComponentCell cell) {
     this.data = data;
-    this.componentId = componentId;
+    this.cell = cell;
+    this.componentId = cell.getComponentId();
   }
 
   @Override
@@ -40,5 +43,4 @@ public class ComponentGetInformationCommand implements Command {
     componentInfoDialogBox.update(data.getComponent(componentId));
     componentInfoDialogBox.center();
   }
-
 }
