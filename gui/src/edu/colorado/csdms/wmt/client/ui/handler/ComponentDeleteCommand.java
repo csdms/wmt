@@ -67,7 +67,7 @@ public class ComponentDeleteCommand implements Command {
       tree.insertTreeItem(cell.getPortId(), parent, targetIndex);
     } else {
       tree.initializeTree();
-      tree.getDriverComponentCell().updateComponents();
+      tree.getDriverComponentCell().getComponentMenu().updateComponents();
       data.saveAttempts++;
     }
 

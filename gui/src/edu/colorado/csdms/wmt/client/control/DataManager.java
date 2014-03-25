@@ -141,8 +141,7 @@ public class DataManager {
   }
 
   /**
-   * A convenience method that adds a component to the ArrayList of
-   * components.
+   * A convenience method that adds a component to the ArrayList of components.
    * <p>
    * Once all the components have been pulled from the server, sort them
    * alphabetically and initialize the {@link ModelTree}.
@@ -153,8 +152,9 @@ public class DataManager {
     this.components.add(component);
     if (this.components.size() == this.componentIdList.size()) {
       sortComponents();
-      perspective.getModelTree().getDriverComponentCell().updateComponents();
-    } 
+      perspective.getModelTree().getDriverComponentCell().getComponentMenu()
+          .updateComponents();
+    }
   }
 
   /**
