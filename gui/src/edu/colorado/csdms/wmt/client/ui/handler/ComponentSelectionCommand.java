@@ -43,7 +43,7 @@ public class ComponentSelectionCommand implements Command {
     // Tell the ComponentCell what component it now holds.
     cell.setComponentId(componentId);
     String componentName = data.getComponent(componentId).getName();
-    GWT.log("Adding: " + componentName);
+    GWT.log("Selected component: " + componentName);
     
     // Display the name of the selected component.
     String displayName = cell.trimName(componentName);

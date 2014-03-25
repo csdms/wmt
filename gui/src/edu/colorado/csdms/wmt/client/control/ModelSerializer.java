@@ -1,3 +1,6 @@
+/**
+ * <License>
+ */
 package edu.colorado.csdms.wmt.client.control;
 
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import edu.colorado.csdms.wmt.client.data.ModelComponentConnectionsJSO;
 import edu.colorado.csdms.wmt.client.data.ModelComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ModelComponentParametersJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
+import edu.colorado.csdms.wmt.client.ui.ComponentCell;
 import edu.colorado.csdms.wmt.client.ui.ModelCell;
 import edu.colorado.csdms.wmt.client.ui.ModelTree;
 
@@ -178,26 +182,68 @@ public class ModelSerializer {
     }
 
     // Locate and deserialize the driver.
-    ModelComponentJSO driver = deserializeComponent("driver", null);
+    ModelComponentJSO driver = deserializeComponent1("driver", null);
 
-    // Deserialize the components connected to the driver.
-    matchConnections(driver);
-
-    // Loop to fill in open ports in ModelTree, checking the connections of all
-    // the components in the model.
-    Iterator<ModelComponentJSO> iter = modelComponents.iterator();
-    while (iter.hasNext()) {
-      ModelComponentJSO modelComponent = (ModelComponentJSO) iter.next();
-      matchConnections(modelComponent);
-    }
+//    // Deserialize the components connected to the driver.
+//    matchConnections(driver);
+//
+//    // Loop to fill in open ports in ModelTree, checking the connections of all
+//    // the components in the model.
+//    Iterator<ModelComponentJSO> iter = modelComponents.iterator();
+//    while (iter.hasNext()) {
+//      ModelComponentJSO modelComponent = (ModelComponentJSO) iter.next();
+//      matchConnections(modelComponent);
+//    }
   }
 
   /**
    * Deserializes a single model component.
    * 
    * @param componentId the id of the model component
+   * @param cell the {@link ComponentCell} in which to place the deserialized
+   *          component
+   */
+  private ModelComponentJSO deserializeComponent1(String componentId,
+      ComponentCell cell) {
+
+    // Locate the model component.
+    ModelComponentJSO modelComponent = getComponent(componentId);
+
+    // Set a new component in the open ModelTree node.
+    TreeItem node = null;
+    if (modelComponent.isDriver()) {
+      node = modelTree.getItem(0);
+      cell = modelTree.getDriverComponentCell();
+      GWT.log("Model driver = " + modelComponent.getClassName());
+    } else {
+      node = cell.getEnclosingTreeItem();
+    }
+    modelTree.setComponent(modelComponent.getId(), node);
+    node.setState(true);
+
+    String displayName = cell.trimName(modelComponent.getClassName());
+    cell.getComponentMenu().getComponentItem().setText(displayName);
+    cell.getComponentMenu().getComponentItem().addStyleDependentName(
+        "connected");
+
+    // Load the component's parameters. If this is the driver, show them in the
+    // ParameterTable.
+    deserializeParameters(modelComponent);
+    if (modelComponent.isDriver()) {
+      data.getPerspective().getParameterTable().loadTable(
+          modelComponent.getId());
+    }
+
+    return modelComponent;
+  }
+  
+  /**
+   * Deserializes a single model component.
+   * 
+   * @param componentId the id of the model component
    * @param cell the model cell in which to place the deserialized component
    */
+  @Deprecated
   private ModelComponentJSO deserializeComponent(String componentId,
       ModelCell cell) {
 
