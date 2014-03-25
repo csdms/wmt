@@ -45,7 +45,7 @@ public class Perspective extends DockLayoutPanel {
 
   // Primary UI panels.
   private ViewNorth viewNorth;
-  private ViewCenter viewCenter;
+  private ViewWest viewWest;
   private ViewEast viewEast;
 
   // Secondary UI panels/widgets.
@@ -80,12 +80,12 @@ public class Perspective extends DockLayoutPanel {
     splitter.addStyleName("wmt-SplitLayoutPanel");
     this.add(splitter);
 
-    // The SplitLayoutPanel defines panels which translate Center
-    // and South views of WMT.
+    // The SplitLayoutPanel defines panels which translate to the West
+    // and East views of WMT.
     viewEast = new ViewEast();
     splitter.addEast(viewEast, viewEastInitialWidth);
-    viewCenter = new ViewCenter();
-    splitter.add(viewCenter); // must be last
+    viewWest = new ViewWest();
+    splitter.add(viewWest); // must be last
   }
 
   /**
@@ -128,12 +128,12 @@ public class Perspective extends DockLayoutPanel {
   /**
    * An inner class to define the Center panel of the WMT GUI.
    */
-  private class ViewCenter extends TabLayoutPanel {
+  private class ViewWest extends TabLayoutPanel {
 
     /**
      * Makes the Center view of the WMT GUI. It displays the arena.
      */
-    public ViewCenter() {
+    public ViewWest() {
       super(TAB_BAR_HEIGHT, Unit.EM);
       setModelPanel(new ScrollPanel());
       String tabTitle = data.tabPrefix("model") + "Model";
@@ -196,7 +196,7 @@ public class Perspective extends DockLayoutPanel {
     } else {
       data.getModel().setName("Model " + data.saveAttempts.toString());
     }
-    viewCenter.setTabHTML(0, tabTitle);
+    viewWest.setTabHTML(0, tabTitle);
   }
 
   /**
@@ -259,8 +259,8 @@ public class Perspective extends DockLayoutPanel {
     return viewEast;
   }
 
-  public TabLayoutPanel getViewCenter() {
-    return viewCenter;
+  public TabLayoutPanel getViewWest() {
+    return viewWest;
   }
 
   /**
