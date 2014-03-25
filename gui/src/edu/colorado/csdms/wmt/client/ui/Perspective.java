@@ -311,14 +311,10 @@ public class Perspective extends DockLayoutPanel {
    * Resets WMT to an approximation of its startup state.
    */
   public void reset() {
-    data.setDraggedComponent(null);
-    data.setSelectedComponent(null);
     data.resetModelComponents();
-
     parameterTable.clearTable();
     modelTree.initializeTree();
-    componentList.setCellSensitivity();
-
+    modelTree.getDriverComponentCell().getComponentMenu().updateComponents();
     setModelPanelTitle();
   }
 }
