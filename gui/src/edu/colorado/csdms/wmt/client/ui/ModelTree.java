@@ -142,7 +142,7 @@ public class ModelTree extends Tree {
       data.getModel().setName(
           componentName + " " + data.saveAttempts.toString());
       data.setSelectedComponent(componentId);
-      data.getPerspective().getParameterTable().loadTable();
+      data.getPerspective().getParameterTable().loadTable(componentId);
     }
     
     // Mark the model state as unsaved.

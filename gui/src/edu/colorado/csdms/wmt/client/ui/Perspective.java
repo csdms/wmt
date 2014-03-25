@@ -303,7 +303,7 @@ public class Perspective extends DockLayoutPanel {
    * Creates an empty ParameterTable to display in the "Parameters" tab.
    */
   public void initializeParameterTable() {
-    ParameterTable parameterTable = new ParameterTable(data);
+    parameterTable = new ParameterTable(data);
     scrollParameters.add(parameterTable);
   }
 
