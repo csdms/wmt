@@ -1,3 +1,6 @@
+/**
+ * <License>
+ */
 package edu.colorado.csdms.wmt.client.ui;
 
 import java.util.ArrayList;
@@ -344,11 +347,10 @@ public class ModelTree extends Tree {
       Iterator<TreeItem> iter = this.treeItemIterator();
       while (iter.hasNext() && !componentIsPresent) {
         TreeItem treeItem = (TreeItem) iter.next();
-        ModelCell cell = (ModelCell) treeItem.getWidget();
-        if (cell.getComponentCell().getComponent().getId() != null) {
-          componentIsPresent =
-              cell.getComponentCell().getComponent().getId().matches(
-                  componentId);
+        Grid grid = (Grid) treeItem.getWidget();
+        ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+        if (cell.getComponentId() != null) {
+          componentIsPresent = cell.getComponentId().matches(componentId);
         }
       }
     }

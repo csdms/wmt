@@ -3,7 +3,6 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -148,17 +147,20 @@ public class ComponentCell extends MenuBar {
     actionMenu.clearItems();
 
     MenuItem showParameters =
-        new MenuItem("<i class='fa fa-wrench fa-fw' style='color:#333'></i> Show parameters",
+        new MenuItem(
+            "<i class='fa fa-wrench fa-fw' style='color:#333'></i> Show parameters",
             true, new ComponentShowParametersCommand(data, this));
     actionMenu.addItem(showParameters);
-    
+
     MenuItem getInformation =
-        new MenuItem("<i class='fa fa-question fa-fw' style='color:#55b'></i> Get information",
+        new MenuItem(
+            "<i class='fa fa-question fa-fw' style='color:#55b'></i> Get information",
             true, new ComponentGetInformationCommand(data, this));
     actionMenu.addItem(getInformation);
-    
+
     MenuItem deleteComponent =
-        new MenuItem("<i class='fa fa-times fa-fw' style='color:#b55'></i> Delete",
+        new MenuItem(
+            "<i class='fa fa-times fa-fw' style='color:#b55'></i> Delete",
             true, new ComponentDeleteCommand(data, this));
     actionMenu.addItem(deleteComponent);
   }
@@ -209,7 +211,7 @@ public class ComponentCell extends MenuBar {
 
     @Override
     public void execute() {
-      
+
       setComponentId(componentId);
       
       // Display the name of the selected component.
