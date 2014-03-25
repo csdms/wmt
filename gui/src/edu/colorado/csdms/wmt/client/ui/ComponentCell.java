@@ -21,25 +21,27 @@ import edu.colorado.csdms.wmt.client.ui.handler.ComponentShowParametersCommand;
  */
 public class ComponentCell extends MenuBar {
 
-  private static String DRIVER_TEXT = "component";
+  private static String DRIVER = "driver";
   private static String ALL_COMPONENTS = "__all_components";
   private static String COMPONENT_ICON =
       "<i class='fa fa-plus fa-fw'></i> ";
   private static Integer TRIM = 12; // the number of characters to display
 
   private DataManager data;
+  private String portId;
+  private String componentId;
   private MenuBar componentMenu;
   private MenuItem componentItem;
   private MenuBar actionMenu;
   private TreeItem enclosingTreeItem;
 
   /**
-   * Creates a new {@link ComponentCell} displaying the text "component".
+   * Creates a new {@link ComponentCell} displaying the text "driver".
    * 
    * @param data the DataManager object for the WMT session
    */
   public ComponentCell(DataManager data) {
-    this(data, DRIVER_TEXT);
+    this(data, DRIVER);
   }
 
   /**
@@ -51,6 +53,7 @@ public class ComponentCell extends MenuBar {
   public ComponentCell(DataManager data, String portId) {
 
     this.data = data;
+    this.setPortId(portId);
 
     // Show this menu when selecting a component.
     componentMenu = new MenuBar(true); // menu items stacked vertically
@@ -58,6 +61,22 @@ public class ComponentCell extends MenuBar {
     componentItem = new MenuItem(trimName(portId), componentMenu);
     componentItem.setStyleName("mwmb-componentItem");
     this.addItem(componentItem);
+  }
+
+  public String getPortId() {
+    return portId;
+  }
+
+  public void setPortId(String portId) {
+    this.portId = portId;
+  }
+
+  public String getComponentId() {
+    return componentId;
+  }
+
+  public void setComponentId(String componentId) {
+    this.componentId = componentId;
   }
 
   /**
@@ -71,7 +90,7 @@ public class ComponentCell extends MenuBar {
     componentMenu.clearItems();
 
     // Display a wait message in the componentMenu.
-    if (portId.matches(DRIVER_TEXT)) {
+    if (portId.matches(DRIVER)) {
       componentMenu.addItem("Loading...", new Command() {
         @Override
         public void execute() {
@@ -125,7 +144,7 @@ public class ComponentCell extends MenuBar {
    * Loads the actions that can be performed on a component into the
    * {@link ComponentCell} menu.
    */
-  public void updateActions(String componentId) {
+  public void updateActions() {
     actionMenu.clearItems();
 
     MenuItem showParameters =
@@ -177,6 +196,11 @@ public class ComponentCell extends MenuBar {
     private String componentId;
     private String displayName;
 
+    /**
+     * Creates a new {@link ComponentSelectionCommand}.
+     * 
+     * @param componentId the id of the selected component
+     */
     public ComponentSelectionCommand(String componentId) {
       this.componentId = componentId;
       String componentName = data.getComponent(componentId).getName();
@@ -185,6 +209,8 @@ public class ComponentCell extends MenuBar {
 
     @Override
     public void execute() {
+      
+      setComponentId(componentId);
       
       // Display the name of the selected component.
       componentItem.setText(displayName);
@@ -197,7 +223,7 @@ public class ComponentCell extends MenuBar {
       // Replace the componentMenu with the actionMenu.
       actionMenu = new MenuBar(true);
       componentItem.setSubMenu(actionMenu);
-      updateActions(componentId);
+      updateActions();
     }
   }
 }
