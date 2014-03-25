@@ -103,22 +103,36 @@ public class ModelTree extends Tree {
 
   /**
    * Adds a new TreeItem with a {@link ComponentCell} to the ModelTree at the
-   * targeted leaf location.
+   * targeted leaf location. Uses
+   * {@link #insertTreeItem(String, TreeItem, Integer)}.
    * 
    * @param portId the id of the exposed uses port at the leaf location
    * @param target the targeted leaf TreeItem
    * @return the reference to the created TreeItem
    */
   public TreeItem addTreeItem(String portId, TreeItem target) {
+    return insertTreeItem(portId, target, target.getChildCount());
+  }
+
+  /**
+   * Inserts a new TreeItem with a {@link ComponentCell} to the ModelTree at the
+   * targeted leaf location.
+   * 
+   * @param portId the id of the exposed uses port at the leaf location
+   * @param target the targeted leaf TreeItem
+   * @param index the index into the children of the targeted TreeItem
+   * @return the reference to the created TreeItem
+   */
+  public TreeItem insertTreeItem(String portId, TreeItem target, Integer index) {
     ComponentCell cell = new ComponentCell(data, portId);
     Grid container = new Grid(1, 1);
     container.setWidget(0, 0, cell);
-    TreeItem item = target.addItem(container);
+    TreeItem item = target.insertItem(index, container);
     item.setStyleName("wmt-TreeItem");
     cell.setEnclosingTreeItem(item);
     return item;
   }
-  
+
   /**
    * Adds a component to the {@link ComponentCell} used by the targeted
    * TreeItem. Uses {@link #setComponent(String, TreeItem)}.
