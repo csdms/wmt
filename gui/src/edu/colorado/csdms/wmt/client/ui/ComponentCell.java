@@ -31,7 +31,7 @@ public class ComponentCell extends MenuBar {
   private String componentId;
   private MenuBar componentMenu;
   private MenuItem componentItem;
-  private MenuBar actionMenu;
+  private ComponentActionMenu actionMenu;
   private TreeItem enclosingTreeItem;
 
   /**
@@ -138,32 +138,6 @@ public class ComponentCell extends MenuBar {
             new ComponentSelectionCommand(data.getComponent(index).getId()));
     componentMenu.addItem(item);
   }
-  
-  /**
-   * Loads the actions that can be performed on a component into the
-   * {@link ComponentCell} menu.
-   */
-  public void updateActions() {
-    actionMenu.clearItems();
-
-    MenuItem showParameters =
-        new MenuItem(
-            "<i class='fa fa-wrench fa-fw' style='color:#333'></i> Show parameters",
-            true, new ComponentShowParametersCommand(data, this));
-    actionMenu.addItem(showParameters);
-
-    MenuItem getInformation =
-        new MenuItem(
-            "<i class='fa fa-question fa-fw' style='color:#55b'></i> Get information",
-            true, new ComponentGetInformationCommand(data, this));
-    actionMenu.addItem(getInformation);
-
-    MenuItem deleteComponent =
-        new MenuItem(
-            "<i class='fa fa-times fa-fw' style='color:#b55'></i> Delete",
-            true, new ComponentDeleteCommand(data, this));
-    actionMenu.addItem(deleteComponent);
-  }
 
   /**
    * A worker that trims the name displayed in the {@link ComponentCell} if it's
@@ -223,9 +197,8 @@ public class ComponentCell extends MenuBar {
           enclosingTreeItem);
 
       // Replace the componentMenu with the actionMenu.
-      actionMenu = new MenuBar(true);
+      actionMenu = new ComponentActionMenu(data, ComponentCell.this);
       componentItem.setSubMenu(actionMenu);
-      updateActions();
     }
   }
 }
