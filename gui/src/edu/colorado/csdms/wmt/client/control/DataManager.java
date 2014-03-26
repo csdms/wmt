@@ -24,6 +24,8 @@ import edu.colorado.csdms.wmt.client.ui.Perspective;
  */
 public class DataManager {
 
+  public static String DRIVER = "driver";
+  
   private Boolean developmentMode;
 
   // Get the state of UI elements through the Perspective. 

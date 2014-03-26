@@ -18,7 +18,6 @@ import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
  */
 public class ComponentSelectionMenu extends MenuBar {
 
-  private static String DRIVER = "driver";
   private static String ALL_COMPONENTS = "__all_components";
   private static String COMPONENT_ICON =
       "<i class='fa fa-plus-square fa-fw' style='color:#55b'></i> ";
@@ -57,7 +56,7 @@ public class ComponentSelectionMenu extends MenuBar {
     this.clearItems();
 
     // Display a wait message in the componentMenu.
-    if (portId.matches(DRIVER)) {
+    if (portId.matches(DataManager.DRIVER)) {
       this.addItem("Loading...", new Command() {
         @Override
         public void execute() {

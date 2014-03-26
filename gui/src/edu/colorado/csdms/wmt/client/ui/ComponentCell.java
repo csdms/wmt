@@ -15,7 +15,6 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
  */
 public class ComponentCell extends MenuBar {
 
-  private static String DRIVER = "driver";
   private static Integer TRIM = 12; // the number of characters to display
 
   private DataManager data;
@@ -30,7 +29,7 @@ public class ComponentCell extends MenuBar {
    * @param data the DataManager object for the WMT session
    */
   public ComponentCell(DataManager data) {
-    this(data, DRIVER);
+    this(data, DataManager.DRIVER);
   }
 
   /**
