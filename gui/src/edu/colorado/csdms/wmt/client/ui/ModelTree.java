@@ -54,6 +54,7 @@ public class ModelTree extends Tree {
     driverComponentCell = new ComponentCell(data);
     HTML driverCell = new HTML("<i class='fa fa-play-circle fa-2x'></i>");
     driverCell.setStyleName("mwmb-driverCell");
+    driverCell.setTitle("Run the model");
     
     Grid driverGrid = new Grid(1, 2);
     driverGrid.setWidget(0, 0, driverComponentCell);
