@@ -108,6 +108,16 @@
   border: 2px solid #55b;
 }
 
+.mwmb-componentItem-linked {
+   color: black;
+}
+
+.mwmb-componentItem-linked:after {
+   font-family: "FontAwesome";
+   padding: 5px;
+   content: "\f112";
+   color: black;
+}
 
 /*
    The following styles are used with a ModelCell.
