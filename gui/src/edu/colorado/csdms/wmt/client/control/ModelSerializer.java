@@ -221,14 +221,18 @@ public class ModelSerializer {
     }
     ComponentSelectionCommand cmd = 
         new ComponentSelectionCommand(data, cell, modelComponent.getId());
-    cmd.execute();
+    cmd.execute(true); // use setComponent
+    node.setState(true);
     
-    // Load the component's parameters. If this is the driver, show them in the
-    // ParameterTable.
+    // Load the component's parameters.
     deserializeParameters(modelComponent);
+    
+    // If this is the driver, show its parameters in the ParameterTable. Also
+    // display the name of the model.
     if (modelComponent.isDriver()) {
       data.getPerspective().getParameterTable().loadTable(
           modelComponent.getId());
+      data.getPerspective().setModelPanelTitle();
     }
 
     return modelComponent;
