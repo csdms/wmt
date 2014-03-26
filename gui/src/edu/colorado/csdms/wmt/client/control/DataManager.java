@@ -85,16 +85,14 @@ public class DataManager {
    * before the name of the tab title in the WMT interface. Currently a Font
    * Awesome icon.
    * 
-   * @param tabName the name of the tab: "model", "parameter" or "component"
+   * @param tabName the name of the tab: "model" or "parameter"
    */
   public String tabPrefix(String tabName) {
     String prefix = "";
     if (tabName.matches("model")) {
-      prefix = "<i class='fa fa-globe'></i> ";
+      prefix = "<i class='fa fa-cogs'></i> ";
     } else if (tabName.matches("parameter")) {
       prefix = "<i class='fa fa-wrench'></i> ";
-    } else if (tabName.matches("component")) {
-      prefix = "<i class='fa fa-cogs'></i> ";
     }
     return prefix;
   }
