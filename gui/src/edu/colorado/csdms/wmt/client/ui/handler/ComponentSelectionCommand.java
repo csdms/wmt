@@ -12,8 +12,8 @@ import edu.colorado.csdms.wmt.client.ui.ComponentCell;
 
 /**
  * Defines the action for when a user selects a component in a
- * {@link ComponentCell}; adds component to the ModelTree and sets up the
- * {@link ComponentActionMenu}.
+ * {@link ComponentCell}; adds or sets a component in the ModelTree and sets up
+ * the {@link ComponentActionMenu}.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -39,7 +39,22 @@ public class ComponentSelectionCommand implements Command {
 
   @Override
   public void execute() {
-
+    updateCell(false);
+  }
+  
+  public void execute(Boolean useSetComponent) {
+    updateCell(useSetComponent);
+  }
+  
+  /**
+   * A worker which allows a choice in {@link #execute()} of <em>adding</em> a
+   * component (which adds a new TreeItem), or <em>setting</em> a component
+   * (which uses an existing TreeItem).
+   *  
+   * @param useSetComponent if true, use ModelTree#setComponent
+   */
+  private void updateCell(Boolean useSetComponent) {
+    
     // Tell the ComponentCell what component it now holds.
     cell.setComponentId(componentId);
     String componentName = data.getComponent(componentId).getName();
@@ -50,9 +65,14 @@ public class ComponentSelectionCommand implements Command {
     cell.getComponentMenu().getComponentItem().setText(displayName);
     cell.getComponentMenu().getComponentItem().addStyleDependentName("connected");
 
-    // Add the component to the ModelTree.
-    data.getPerspective().getModelTree().addComponent(componentId,
+    // Add/set the component to/on the ModelTree.
+    if (useSetComponent) {
+      data.getPerspective().getModelTree().setComponent(componentId,
         cell.getEnclosingTreeItem());
+    } else {
+      data.getPerspective().getModelTree().addComponent(componentId,
+        cell.getEnclosingTreeItem());
+    }
 
     // Replace the componentMenu with the actionMenu.
     ComponentActionMenu actionMenu = new ComponentActionMenu(data, cell);
