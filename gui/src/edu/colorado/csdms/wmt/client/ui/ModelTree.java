@@ -79,24 +79,6 @@ public class ModelTree extends Tree {
     this.driverComponentCell = driverComponentCell;
   }
 
-  @Deprecated
-  public TreeItem addTreeItem(Port port, TreeItem target) {
-
-    ModelCell cell = new ModelCell(port, Component.makeInfoComponent());
-
-    TreeItem item = null;
-    if (target == null) {
-      item = new TreeItem(cell);
-      this.addItem(item);
-    } else {
-      item = target.addItem(cell);
-      item.setStyleName("wmt-TreeItem");
-    }
-    cell.setParentTreeItem(item); // Clumsy
-
-    return item;
-  }
-
   /**
    * Adds a new TreeItem with a {@link ComponentCell} to the ModelTree at the
    * targeted leaf location. Uses
@@ -126,6 +108,24 @@ public class ModelTree extends Tree {
     TreeItem item = target.insertItem(index, container);
     item.setStyleName("wmt-TreeItem");
     cell.setEnclosingTreeItem(item);
+    return item;
+  }
+
+  @Deprecated
+  public TreeItem addTreeItem(Port port, TreeItem target) {
+
+    ModelCell cell = new ModelCell(port, Component.makeInfoComponent());
+
+    TreeItem item = null;
+    if (target == null) {
+      item = new TreeItem(cell);
+      this.addItem(item);
+    } else {
+      item = target.addItem(cell);
+      item.setStyleName("wmt-TreeItem");
+    }
+    cell.setParentTreeItem(item); // Clumsy
+
     return item;
   }
 
@@ -159,30 +159,6 @@ public class ModelTree extends Tree {
     data.modelIsSaved(false);
     data.getPerspective().setModelPanelTitle();    
   }
-  
-  /**
-   * Sets the desired component, and its {@link ComponentCell}, in the targeted
-   * TreeItem.
-   * 
-   * @param componentId the id of the component to set
-   * @param target the TreeItem where the component is to be set
-   */
-  public void setComponent(String componentId, TreeItem target) {
-    
-    // If the component already exists at a higher level in the ModelTree, set
-    // a link to it and exit.
-
-    // Add new TreeItems with ComponentCells for the "uses" ports of the
-    // component.
-    Integer nPorts = data.getComponent(componentId).getUsesPorts().length();
-    if (nPorts == 0) {
-      return;
-    }
-    for (int i = 0; i < nPorts; i++) {
-      String portId = data.getComponent(componentId).getUsesPorts().get(i).getId();
-      addTreeItem(portId, target);
-    }
-  }
 
   @Deprecated
   public void addComponent(Component component, TreeItem target) {
@@ -205,6 +181,69 @@ public class ModelTree extends Tree {
     // Mark the model state as unsaved.
     data.modelIsSaved(false);
     data.getPerspective().setModelPanelTitle();
+  }
+
+  /**
+   * Sets the desired component, and its {@link ComponentCell}, in the targeted
+   * TreeItem.
+   * 
+   * @param componentId the id of the component to set
+   * @param target the TreeItem where the component is to be set
+   */
+  public void setComponent(String componentId, TreeItem target) {
+
+    // Get the ComponentCell used by the TreeItem target.
+    Grid grid = (Grid) target.getWidget();
+    ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+
+    // If the component already exists elsewhere in the ModelTree, set a link to
+    // it and exit.
+    String connectedId1 = hasConnectedInstance1(cell.getPortId());
+    if (connectedId1 != null) {
+      GWT.log("Connection1 found!");
+      cell.getComponentMenu().getComponentItem()
+          .addStyleDependentName("linked");
+      return;
+    }
+
+    // Add new TreeItems with ComponentCells for the "uses" ports of the
+    // component.
+    Integer nPorts = data.getComponent(componentId).getUsesPorts().length();
+    if (nPorts == 0) {
+      return;
+    }
+    for (int i = 0; i < nPorts; i++) {
+      String portId =
+          data.getComponent(componentId).getUsesPorts().get(i).getId();
+      TreeItem newItem = addTreeItem(portId, target);
+
+      // If the new port has a connected component higher in the ModelTree,
+      // set a link to it.
+      Grid newGrid = (Grid) newItem.getWidget();
+      ComponentCell newCell = (ComponentCell) newGrid.getWidget(0, 0);
+      String connectedId2 = hasConnectedInstance2(newCell.getPortId());
+      if (connectedId2 != null) {
+        GWT.log("Connection2 found!");
+
+        // Tell the ComponentCell what component it now holds.
+        newCell.setComponentId(connectedId2);
+        String componentName = data.getComponent(connectedId2).getName();
+        GWT.log("Selected component: " + componentName);
+
+        // Display the name of the selected component.
+        String displayName = newCell.trimName(componentName);
+        newCell.getComponentMenu().getComponentItem().setText(displayName);
+        newCell.getComponentMenu().getComponentItem().addStyleDependentName(
+            "connected");
+
+        // Replace the componentMenu with the actionMenu.
+        ComponentActionMenu actionMenu = new ComponentActionMenu(data, newCell);
+        newCell.getComponentMenu().getComponentItem().setSubMenu(actionMenu);
+
+        newCell.getComponentMenu().getComponentItem().addStyleDependentName(
+            "linked");
+      }
+    }
   }
 
   @Deprecated
@@ -366,15 +405,85 @@ public class ModelTree extends Tree {
   }
 
   /**
-   * Checks whether the input Port has already appeared higher up in the
-   * ModelTree hierarchy, and has a connected Component. If so, the Component
-   * is returned; otherwise, a null object is returned.
+   * Checks whether the input port has appeared higher in the ModelTree
+   * hierarchy, and has a connected component. If so, the id of the component is
+   * returned; otherwise, a null object is returned.
    * <p>
-   * I'm concerned that this may be inefficient, and slow to iterate through a
-   * large ModelTree, since each TreeItem is hit.
+   * I'm concerned that this technique may be inefficient since each TreeItem is
+   * hit in iterating through the ModelTree.
    * 
-   * @param port the Port object
+   * @param portId the id the port to check
    */
+  public String hasConnectedInstance1(String portId) {
+
+    GWT.log("Checking for connection on port: " + portId);
+
+    Integer nMatches = 0;
+    
+    Iterator<TreeItem> iter = this.treeItemIterator();
+    while (iter.hasNext()) {
+
+      TreeItem treeItem = (TreeItem) iter.next();
+      Grid grid = (Grid) treeItem.getWidget();
+      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+
+      if (cell.getComponentId() != null) {
+        String cellPortId = cell.getPortId();
+        
+        // When the port is listed as "driver", it obscures the provides port
+        // of the connected component. Find the provides port and use it.
+        if (cellPortId.matches(DataManager.DRIVER)) {
+          if (data.getComponent(cell.getComponentId()).nProvidesPorts() > 0) {
+            cellPortId =
+                data.getComponent(cell.getComponentId()).getProvidesPorts()
+                    .get(0).getId();
+          }
+        }
+        
+        if (cellPortId.matches(portId)) {
+          nMatches++;
+          if (nMatches > 1) {
+            return cell.getComponentId();
+          }
+        }
+      }
+    }
+    return null;
+  }
+  
+  public String hasConnectedInstance2(String portId) {
+
+    GWT.log("Checking for connection on port: " + portId);
+
+    Iterator<TreeItem> iter = this.treeItemIterator();
+    while (iter.hasNext()) {
+
+      TreeItem treeItem = (TreeItem) iter.next();
+      Grid grid = (Grid) treeItem.getWidget();
+      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+
+      if (cell.getComponentId() != null) {
+        String cellPortId = cell.getPortId();
+
+        // When the port is listed as "driver", it obscures the provides port
+        // of the connected component. Find the provides port and use it.
+        if (cellPortId.matches(DataManager.DRIVER)) {
+          if (data.getComponent(cell.getComponentId()).nProvidesPorts() > 0) {
+            cellPortId =
+                data.getComponent(cell.getComponentId()).getProvidesPorts()
+                    .get(0).getId();
+          }
+        }
+
+        if (cellPortId.matches(portId)) {
+          return cell.getComponentId();
+        }
+      }
+    }
+    return null;
+  }
+
+  @Deprecated
   public Component hasConnectedInstance(Port port) {
 
     Component connected = null;
