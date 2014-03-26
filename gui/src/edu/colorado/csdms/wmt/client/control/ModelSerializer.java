@@ -183,11 +183,11 @@ public class ModelSerializer {
     }
 
     // Locate and deserialize the driver.
-    ModelComponentJSO driver = deserializeComponent1("driver", null);
+    ModelComponentJSO driver = deserializeComponent("driver", null);
 
-//    // Deserialize the components connected to the driver.
-//    matchConnections(driver);
-//
+    // Deserialize the components connected to the driver.
+    matchConnections(driver);
+
 //    // Loop to fill in open ports in ModelTree, checking the connections of all
 //    // the components in the model.
 //    Iterator<ModelComponentJSO> iter = modelComponents.iterator();
@@ -204,7 +204,7 @@ public class ModelSerializer {
    * @param cell the {@link ComponentCell} in which to place the deserialized
    *          component
    */
-  private ModelComponentJSO deserializeComponent1(String componentId,
+  private ModelComponentJSO deserializeComponent(String componentId,
       ComponentCell cell) {
 
     // Locate the model component.
@@ -215,7 +215,7 @@ public class ModelSerializer {
     if (modelComponent.isDriver()) {
       node = modelTree.getItem(0);
       cell = modelTree.getDriverComponentCell();
-      GWT.log("Model driver = " + modelComponent.getClassName());
+      GWT.log("Model driver: " + modelComponent.getClassName());
     } else {
       node = cell.getEnclosingTreeItem();
     }
@@ -238,14 +238,8 @@ public class ModelSerializer {
     return modelComponent;
   }
   
-  /**
-   * Deserializes a single model component.
-   * 
-   * @param componentId the id of the model component
-   * @param cell the model cell in which to place the deserialized component
-   */
   @Deprecated
-  private ModelComponentJSO deserializeComponent(String componentId,
+  private ModelComponentJSO deserializeComponent1(String componentId,
       ModelCell cell) {
 
     // Locate the model component.
@@ -309,11 +303,51 @@ public class ModelSerializer {
   }
 
   /**
-   * Attempts to deserialize the listed connections of a model component.
+   * Deserializes the listed connections of a model component.
    * 
    * @param modelComponent a {@link ModelComponentJSO} object.
    */
   private void matchConnections(ModelComponentJSO modelComponent) {
+
+    // If the model component has no connections, exit.
+    if (modelComponent.nConnections() == 0) {
+      return;
+    }
+
+    // Get a list of open ComponentCells in the ModelTree. For the driver,
+    // consider only its immediate children.
+    List<ComponentCell> openCells = new ArrayList<ComponentCell>();
+    if (modelComponent.isDriver()) {
+      openCells = modelTree.findOpenComponentCells(modelTree.getItem(0));
+    } else {
+      openCells = modelTree.findOpenComponentCells();
+    }
+
+    // Find matches for the open ComponentCells with components supplied by the
+    // model.
+    for (int i = 0; i < modelComponent.nConnections(); i++) {
+
+      // Get the "portId @ componentId" of the connection.
+      String portId = modelComponent.getConnections().getPortIds().get(i);
+      String componentId =
+          modelComponent.getConnections().getConnection(portId);
+      GWT.log(modelComponent.getId() + ": " + portId + "@" + componentId);
+      if (componentId == null) {
+        continue;
+      }
+
+      // Match the connection with an open ComponentCell through its port.
+      for (int j = 0; j < openCells.size(); j++) {
+        ComponentCell cell = openCells.get(j);
+        if (cell.getPortId().matches(portId)) {
+          deserializeComponent(componentId, cell);
+        }
+      }
+    }
+  }
+
+  @Deprecated
+  private void matchConnections1(ModelComponentJSO modelComponent) {
 
     // If the model component has no connections, that's it.
     if (modelComponent.nConnections() == 0) {
@@ -346,7 +380,7 @@ public class ModelSerializer {
       for (int j = 0; j < openCells.size(); j++) {
         ModelCell cell = openCells.get(j);
         if (cell.getPortCell().getPort().getId().matches(portId)) {
-          deserializeComponent(componentId, cell);
+          deserializeComponent1(componentId, cell);
         }
       }
     }
