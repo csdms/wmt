@@ -188,13 +188,13 @@ public class ModelSerializer {
     // Deserialize the components connected to the driver.
     matchConnections(driver);
 
-//    // Loop to fill in open ports in ModelTree, checking the connections of all
-//    // the components in the model.
-//    Iterator<ModelComponentJSO> iter = modelComponents.iterator();
-//    while (iter.hasNext()) {
-//      ModelComponentJSO modelComponent = (ModelComponentJSO) iter.next();
-//      matchConnections(modelComponent);
-//    }
+    // Loop to fill remaining open ports in ModelTree, checking the connections
+    // of all the components in the model.
+    Iterator<ModelComponentJSO> iter = modelComponents.iterator();
+    while (iter.hasNext()) {
+      ModelComponentJSO modelComponent = (ModelComponentJSO) iter.next();
+      matchConnections(modelComponent);
+    }
   }
 
   /**
@@ -234,32 +234,6 @@ public class ModelSerializer {
           modelComponent.getId());
       data.getPerspective().setModelPanelTitle();
     }
-
-    return modelComponent;
-  }
-  
-  @Deprecated
-  private ModelComponentJSO deserializeComponent1(String componentId,
-      ModelCell cell) {
-
-    // Locate the model component.
-    ModelComponentJSO modelComponent = getComponent(componentId);
-
-    // Set a new component in the open model cell (or the root node, if driver).
-    TreeItem node = null;
-    if (modelComponent.isDriver()) {
-      node = modelTree.getItem(0);
-      GWT.log("Model driver = " + modelComponent.getClassName());
-    } else {
-      node = cell.getParentTreeItem();
-    }
-    Component component =
-        new Component(data.getModelComponent(modelComponent.getId()));
-    modelTree.setComponent(component, node);
-    node.setState(true);
-
-    // Load the component's parameters.
-    deserializeParameters(modelComponent);
 
     return modelComponent;
   }
@@ -345,45 +319,4 @@ public class ModelSerializer {
       }
     }
   }
-
-  @Deprecated
-  private void matchConnections1(ModelComponentJSO modelComponent) {
-
-    // If the model component has no connections, that's it.
-    if (modelComponent.nConnections() == 0) {
-      return;
-    }
-
-    // Get a list of open model cells in the model tree. For the driver,
-    // consider only its immediate children.
-    List<ModelCell> openCells = new ArrayList<ModelCell>();
-    if (modelComponent.isDriver()) {
-      openCells = modelTree.findOpenModelCells(modelTree.getItem(0));
-    } else {
-      openCells = modelTree.findOpenModelCells();
-    }
-
-    // Find matches for the open model cells ith components supplied by the
-    // model.
-    for (int i = 0; i < modelComponent.nConnections(); i++) {
-
-      // Get the "portId @ componentId" of the connection.
-      String portId = modelComponent.getConnections().getPortIds().get(i);
-      String componentId =
-          modelComponent.getConnections().getConnection(portId);
-      GWT.log(modelComponent.getId() + ": " + portId + "@" + componentId);
-      if (componentId == null) {
-        continue;
-      }
-
-      // Match the connection with an open model cell through its port.
-      for (int j = 0; j < openCells.size(); j++) {
-        ModelCell cell = openCells.get(j);
-        if (cell.getPortCell().getPort().getId().matches(portId)) {
-          deserializeComponent1(componentId, cell);
-        }
-      }
-    }
-  }
-
 }
