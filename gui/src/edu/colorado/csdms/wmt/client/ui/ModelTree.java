@@ -379,6 +379,7 @@ public class ModelTree extends Tree {
    * @param component a Component to check
    * @return true if the component is in the ModelTree
    */
+  @Deprecated
   public Boolean isComponentPresent(Component component) {
     String componentId = component.getId();
     return isComponentPresent(componentId);
