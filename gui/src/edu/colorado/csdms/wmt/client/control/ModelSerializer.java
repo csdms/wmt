@@ -9,16 +9,15 @@ import java.util.List;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.TreeItem;
 
-import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ModelComponentConnectionsJSO;
 import edu.colorado.csdms.wmt.client.data.ModelComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ModelComponentParametersJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.ui.ComponentCell;
-import edu.colorado.csdms.wmt.client.ui.ModelCell;
 import edu.colorado.csdms.wmt.client.ui.ModelTree;
 import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
 
@@ -37,7 +36,7 @@ public class ModelSerializer {
 
   /**
    * Instatiates a ModelSerializer and stores a reference to the
-   * {@link DataManager}.
+   * {@link DataManager} and the {@link ModelTree}.
    * 
    * @param data the DataManager for the WMT session.
    */
@@ -69,21 +68,21 @@ public class ModelSerializer {
     while (iter.hasNext()) {
 
       treeItem = (TreeItem) iter.next();
-      ModelCell cell = (ModelCell) treeItem.getWidget();
+      Grid grid = (Grid) treeItem.getWidget();
+      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
 
       // Skip linked components and empty components.
-      if (cell.getComponentCell().isLinked()) {
+      if (cell.isLinked()) {
         continue;
       }
-      if (cell.getComponentCell().getComponent().getId() == null) {
+      if (cell.getComponentId() == null) {
         continue;
       }
 
       // Serialize this model component.
-      Component component = cell.getComponentCell().getComponent();
-      ComponentJSO componentJso = data.getModelComponent(component.getId());
+      ComponentJSO componentJso = data.getModelComponent(cell.getComponentId());
       ModelComponentJSO modelComponent = serializeComponent(componentJso);
-      if (cell.getPortCell().getPort().getId().matches("driver")) {
+      if (cell.getPortId().matches("driver")) {
         modelComponent.setDriver();
       }
 
@@ -146,7 +145,7 @@ public class ModelSerializer {
   }
 
   /**
-   * Serializes the ports of the model component.
+   * Serializes the ports/connections of the model component.
    * 
    * @param componentJso a {@link ComponentJSO} representing the model component
    * @return a {@link ModelComponentConnectionsJSO} representing the connections
@@ -162,9 +161,10 @@ public class ModelSerializer {
     // Add the ports for the model component.
     for (int i = 0; i < treeItem.getChildCount(); i++) {
       TreeItem child = treeItem.getChild(i);
-      ModelCell childCell = (ModelCell) child.getWidget();
-      String portId = childCell.getPortCell().getPort().getId();
-      String componentId = childCell.getComponentCell().getComponent().getId();
+      Grid grid = (Grid) child.getWidget();
+      ComponentCell childCell = (ComponentCell) grid.getWidget(0, 0);
+      String portId = childCell.getPortId();
+      String componentId = childCell.getComponentId();
       modelComponentConnections.addConnection(portId, componentId);
     }
     return modelComponentConnections;
