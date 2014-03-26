@@ -20,6 +20,7 @@ import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.ui.ComponentCell;
 import edu.colorado.csdms.wmt.client.ui.ModelCell;
 import edu.colorado.csdms.wmt.client.ui.ModelTree;
+import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
 
 /**
  * Serializes the model built in a WMT session.
@@ -218,14 +219,10 @@ public class ModelSerializer {
     } else {
       node = cell.getEnclosingTreeItem();
     }
-    modelTree.setComponent(modelComponent.getId(), node);
-    node.setState(true);
-
-    String displayName = cell.trimName(modelComponent.getClassName());
-    cell.getComponentMenu().getComponentItem().setText(displayName);
-    cell.getComponentMenu().getComponentItem().addStyleDependentName(
-        "connected");
-
+    ComponentSelectionCommand cmd = 
+        new ComponentSelectionCommand(data, cell, modelComponent.getId());
+    cmd.execute();
+    
     // Load the component's parameters. If this is the driver, show them in the
     // ParameterTable.
     deserializeParameters(modelComponent);
