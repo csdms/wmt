@@ -79,14 +79,6 @@ public class ModelTree extends Tree {
     this.driverComponentCell = driverComponentCell;
   }
 
-  /**
-   * Adds a new TreeItem with a ModelCell to the ModelTree at the targeted
-   * leaf location, or at the root if the target is missing.
-   * 
-   * @param port the Port used to create a ModelCell for the TreeItem
-   * @param target the targeted leaf TreeItem
-   * @return the reference to the created TreeItem
-   */
   @Deprecated
   public TreeItem addTreeItem(Port port, TreeItem target) {
 
@@ -192,13 +184,6 @@ public class ModelTree extends Tree {
     }
   }
 
-  /**
-   * Adds a Component to the ModelCell used by the targeted TreeItem. Uses
-   * {@link #setComponent(Component, TreeItem)}.
-   * 
-   * @param component the Component to add
-   * @param target the TreeItem to which the Component is to be added
-   */
   @Deprecated
   public void addComponent(Component component, TreeItem target) {
 
@@ -222,12 +207,6 @@ public class ModelTree extends Tree {
     data.getPerspective().setModelPanelTitle();
   }
 
-  /**
-   * Adds a Component to the ModelCell used by the targeted TreeItem.
-   * 
-   * @param component the Component to add
-   * @param target the TreeItem to which the Component is to be added
-   */
   @Deprecated
   public void setComponent(Component component, TreeItem target) {
 
@@ -274,12 +253,27 @@ public class ModelTree extends Tree {
 
   /**
    * Iterate through the {@link TreeItem}s of this ModelTree, finding what
-   * {@link ModelCell}s have open PortCells. Add the cell to the
-   * openModelCells List. The iterator descends the tree from top to bottom,
-   * ignoring the level (and sublevels, etc.) of the children. 
+   * {@link ComponentCell}s have open ports. Add the cell to a List, which is
+   * returned. The iterator descends the tree from top to bottom, ignoring the
+   * level (and sublevels, etc.) of the children.
    * 
-   * @return a List of ModelCells with open ports
+   * @return a List of open ComponentCells
    */
+  public List<ComponentCell> findOpenComponentCells() {
+    List<ComponentCell> openComponentCells = new ArrayList<ComponentCell>();
+    Iterator<TreeItem> iter = this.treeItemIterator();
+    while (iter.hasNext()) {
+      TreeItem treeItem = (TreeItem) iter.next();
+      Grid grid = (Grid) treeItem.getWidget();
+      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+      if (cell.getComponentId() == null) {
+        openComponentCells.add(cell);
+      }
+    }
+    return openComponentCells;
+  }
+
+  @Deprecated
   public List<ModelCell> findOpenModelCells() {
 
     List<ModelCell> openModelCells = new ArrayList<ModelCell>();
@@ -297,13 +291,29 @@ public class ModelTree extends Tree {
   }
 
   /**
-   * Finds the open {@link ModelCell}s among the children of a specified
+   * Finds the open {@link ComponentCell}s among the children of a specified
    * {@link TreeItem} in the ModelTree. This search doesn't descend lower than
    * the children of the input parent TreeItem.
    * 
    * @param parent a TreeItem in the ModelTree
-   * @return a List of ModelCells with open ports
+   * @return a List of ComponentCells with open ports
    */
+  public List<ComponentCell> findOpenComponentCells(TreeItem parent) {
+    List<ComponentCell> openComponentCells = new ArrayList<ComponentCell>();
+    if (parent != null) {
+      for (int i = 0; i < parent.getChildCount(); i++) {
+        TreeItem child = parent.getChild(i);
+        Grid grid = (Grid) child.getWidget();
+        ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+        if (cell.getComponentId() == null) {
+          openComponentCells.add(cell);
+        }
+      }
+    }
+    return openComponentCells;
+  }
+  
+  @Deprecated
   public List<ModelCell> findOpenModelCells(TreeItem parent) {
 
     List<ModelCell> openModelCells = new ArrayList<ModelCell>();
@@ -320,7 +330,6 @@ public class ModelTree extends Tree {
 
     return openModelCells;
   }
-  
   
   /**
    * Checks whether a given component is present in the ModelTree. This is an
@@ -341,9 +350,7 @@ public class ModelTree extends Tree {
    * @return true if the component is in the ModelTree
    */
   public Boolean isComponentPresent(String componentId) {
-
     Boolean componentIsPresent = false;
-
     if (componentId != null) {
       Iterator<TreeItem> iter = this.treeItemIterator();
       while (iter.hasNext() && !componentIsPresent) {
@@ -355,7 +362,6 @@ public class ModelTree extends Tree {
         }
       }
     }
-
     return componentIsPresent;
   }
 
