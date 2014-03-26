@@ -22,6 +22,7 @@ public class ComponentCell extends MenuBar {
   private String componentId;
   private ComponentSelectionMenu componentMenu;
   private TreeItem enclosingTreeItem;
+  private Boolean isLinked = false;
 
   /**
    * Creates a new {@link ComponentCell} displaying the text "driver".
@@ -75,6 +76,14 @@ public class ComponentCell extends MenuBar {
 
   public void setEnclosingTreeItem(TreeItem enclosingTreeItem) {
     this.enclosingTreeItem = enclosingTreeItem;
+  }
+
+  public Boolean isLinked() {
+    return isLinked;
+  }
+
+  public void isLinked(Boolean isLinked) {
+    this.isLinked = isLinked;
   }
 
   /**

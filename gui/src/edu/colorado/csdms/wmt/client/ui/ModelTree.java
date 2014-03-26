@@ -201,6 +201,7 @@ public class ModelTree extends Tree {
     String connectedId1 = hasConnectedInstance1(cell.getPortId());
     if (connectedId1 != null) {
       GWT.log("Connection1 found!");
+      cell.isLinked(true);
       cell.getComponentMenu().getComponentItem()
           .addStyleDependentName("linked");
       return;
@@ -240,6 +241,7 @@ public class ModelTree extends Tree {
         ComponentActionMenu actionMenu = new ComponentActionMenu(data, newCell);
         newCell.getComponentMenu().getComponentItem().setSubMenu(actionMenu);
 
+        newCell.isLinked(true);
         newCell.getComponentMenu().getComponentItem().addStyleDependentName(
             "linked");
       }
