@@ -28,6 +28,7 @@ public class ModelTree extends Tree {
 
   private DataManager data;
   private ComponentCell driverComponentCell;
+  private HTML driverRunCell;
 
   /**
    * Creates a ModelTree with an open "driver" port.
@@ -50,13 +51,13 @@ public class ModelTree extends Tree {
     this.clear();
 
     driverComponentCell = new ComponentCell(data);
-    HTML driverCell = new HTML("<i class='fa fa-play-circle fa-2x'></i>");
-    driverCell.setStyleName("wmt-DriverCell");
-    driverCell.setTitle("Run the model.");
+    driverRunCell = new HTML("<i class='fa fa-play-circle fa-3x'></i>");
+    driverRunCell.setStyleName("wmt-DriverRunCell");
+    driverRunCell.setTitle("Run the model.");
 
     Grid driverGrid = new Grid(1, 2);
     driverGrid.setWidget(0, 0, driverComponentCell);
-    driverGrid.setWidget(0, 1, driverCell);
+    driverGrid.setWidget(0, 1, driverRunCell);
 
     TreeItem driverItem = new TreeItem(driverGrid);
     driverComponentCell.setEnclosingTreeItem(driverItem);
@@ -75,6 +76,14 @@ public class ModelTree extends Tree {
 
   public void setDriverComponentCell(ComponentCell driverComponentCell) {
     this.driverComponentCell = driverComponentCell;
+  }
+
+  public HTML getDriverRunCell() {
+    return driverRunCell;
+  }
+
+  public void setDriverRunCell(HTML driverRunCell) {
+    this.driverRunCell = driverRunCell;
   }
 
   /**

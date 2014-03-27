@@ -2,6 +2,7 @@
    CSS rules for the WMT client.
 */
 
+/* All HTML widgets obey this rule. */
 .gwt-HTML {
    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 }
@@ -39,12 +40,14 @@
    /* background-color: white; */
 }
 
+/* The background for the ModelMenu. I don't think it works */
 .wmt-ModelMenu {
    border: 1px ridge #ddd;
    background-color: white;
    padding: 3px;
 }
 
+/* Separators used between groups of ModelMenu items. */
 .wmt-ModelMenuSeparator {
    width: 100%;
    height: 1px;
@@ -70,8 +73,14 @@
 }
 
 /* "Play" button attached to the driver. */
-.wmt-DriverCell {
-  padding: 1em 0 1em 5px;
+.wmt-DriverRunCell {
+  padding: 1em 0 1em 10px;
+  color: #ccc; 
+}
+
+/* Change the style of the "Play" button when the model can be run. */
+.wmt-DriverRunCell-active {
+  color: #333; 
 }
 
 /* Base style for a ComponentCell. */
@@ -90,7 +99,7 @@
 /* A ComponentCell that displays a component. */
 .wmt-ComponentCell-connected {
   font-style: normal;
-  background-color: #eef;
+  background-color: #ddf;
   border: 2px solid #55b;
 }
 
@@ -122,11 +131,11 @@
 /* All TextBoxen, but especially those used in the ParameterTable. */
 .gwt-TextBox {
    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif !important;
-   background-color: #ffc;
+   background-color: #ffd;
 }
 
 .gwt-TextBox-outofrange {
-   background-color: #fcc;
+   background-color: #fdd;
 }
 
 .gwt-ListBox {
@@ -151,7 +160,7 @@
 }
 
 .gwt-PasswordTextBox {
-   background-color: #ffc;
+   background-color: #ffd;
 }
 
 /* Separates parameter groups in the ParameterTable. */

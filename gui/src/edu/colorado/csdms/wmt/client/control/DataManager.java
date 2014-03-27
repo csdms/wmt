@@ -328,6 +328,7 @@ public class DataManager {
    */
   public void modelIsSaved(Boolean modelIsSaved) {
     this.modelIsSaved = modelIsSaved;
+    perspective.getModelTree().getDriverRunCell().setStyleDependentName("active", modelIsSaved);
   }
 
   /**
