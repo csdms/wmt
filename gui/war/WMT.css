@@ -80,7 +80,7 @@
 
 /* Change the style of the "Play" button when the model can be run. */
 .wmt-DriverRunCell-active {
-  color: #333; 
+  color: black; 
 }
 
 /* Base style for a ComponentCell. */

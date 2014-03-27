@@ -79,9 +79,12 @@ public class ComponentSelectionCommand implements Command {
     // Update the tooltip text.
     String ctype;
     ctype =
-        (cell.getEnclosingTreeItem().getParentItem() == null) ? "driver"
-            : "component";
+        (cell.getEnclosingTreeItem().getParentItem() == null)
+            ? DataManager.DRIVER : "component";
     String tooltip = "Model " + ctype + ": " + componentName + ". ";
+    if (!ctype.matches(DataManager.DRIVER)) {
+      tooltip += "Provides \"" + cell.getPortId() + "\" port. ";
+    }
     tooltip += "Click to get information, to view parameters, or to delete.";
     cell.setTitle(tooltip);
   }
