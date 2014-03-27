@@ -60,19 +60,29 @@ public class ComponentSelectionCommand implements Command {
    * the actionMenu of the {@link ComponentCell}.
    */
   public void updateComponentCell() {
-    
+
     // Tell the ComponentCell what component it now holds.
     cell.setComponentId(componentId);
     String componentName = data.getComponent(componentId).getName();
     GWT.log("Selected component: " + componentName);
-    
+
     // Display the name of the selected component.
     String displayName = cell.trimName(componentName);
     cell.getComponentMenu().getComponentItem().setText(displayName);
-    cell.getComponentMenu().getComponentItem().addStyleDependentName("connected");
+    cell.getComponentMenu().getComponentItem().addStyleDependentName(
+        "connected");
 
     // Replace the componentMenu with the actionMenu.
     ComponentActionMenu actionMenu = new ComponentActionMenu(data, cell);
     cell.getComponentMenu().getComponentItem().setSubMenu(actionMenu);
+
+    // Update the tooltip text.
+    String ctype;
+    ctype =
+        (cell.getEnclosingTreeItem().getParentItem() == null) ? "driver"
+            : "component";
+    String tooltip = "Model " + ctype + ": " + componentName + ". ";
+    tooltip += "Click to get information, to view parameters, or to delete.";
+    cell.setTitle(tooltip);
   }
 }

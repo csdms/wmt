@@ -56,7 +56,7 @@ public class ViewInputFilesPanel extends FlexTable {
 
     HTML viewTitle = new HTML("View input files");
     viewTitle.setTitle("View the model configuration files "
-        + "generated using these parameter values");
+        + "generated using these parameter values.");
 
     this.setWidget(0, 0, viewTitle);
     this.getFlexCellFormatter().setColSpan(0, 0, 6);

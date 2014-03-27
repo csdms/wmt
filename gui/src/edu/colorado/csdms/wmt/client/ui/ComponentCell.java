@@ -44,6 +44,13 @@ public class ComponentCell extends MenuBar {
     this.data = data;
     this.portId = portId;
     this.componentMenu = new ComponentSelectionMenu(this.data, this);
+    String tooltip = "Click to select a component";
+    if (portId.matches(DataManager.DRIVER)) {
+      tooltip += " to be the driver for the model."; 
+    } else {
+      tooltip += " to fill this \"" + portId + "\" port."; 
+    }
+    this.setTitle(tooltip);
   }
 
   public String getPortId() {
@@ -84,6 +91,11 @@ public class ComponentCell extends MenuBar {
 
   public void isLinked(Boolean isLinked) {
     this.isLinked = isLinked;
+    if (this.isLinked && (this.getTitle() != null)) {
+      String tooltip = " This component is aliased from another instance of "
+          + data.getModelComponent(this.componentId).getName() + ".";
+      this.setTitle(this.getTitle() + tooltip);
+    }
   }
 
   /**

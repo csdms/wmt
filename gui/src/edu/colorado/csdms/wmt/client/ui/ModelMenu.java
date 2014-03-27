@@ -66,17 +66,14 @@ public class ModelMenu extends DecoratedPopupPanel {
     ModelMenuItem newModel = new ModelMenuItem("New Model");
     ModelMenuItem openModel =
         new ModelMenuItem("Open Model...", "fa-folder-open-o");
-    ModelMenuItem closeModel =
-        new ModelMenuItem("Close Model", "fa-folder-o");
-    ModelMenuItem saveModel =
-        new ModelMenuItem("Save Model", "fa-floppy-o");
+    ModelMenuItem closeModel = new ModelMenuItem("Close Model", "fa-folder-o");
+    ModelMenuItem saveModel = new ModelMenuItem("Save Model", "fa-floppy-o");
     ModelMenuItem saveModelAs =
         new ModelMenuItem("Save Model As...", "fa-floppy-o");
     ModelMenuItem deleteModel =
         new ModelMenuItem("Delete Model...", "fa-trash-o");
-    ModelMenuItem runModel =
-        new ModelMenuItem("Run Model...", "fa-play");
-    ModelMenuItem runStatus = new ModelMenuItem("View Run Status...");    
+    ModelMenuItem runModel = new ModelMenuItem("Run Model...", "fa-play");
+    ModelMenuItem runStatus = new ModelMenuItem("View Run Status...");
     ModelMenuItem helpButton = new ModelMenuItem("Help");
     ModelMenuItem aboutButton = new ModelMenuItem("About");
 
@@ -111,7 +108,8 @@ public class ModelMenu extends DecoratedPopupPanel {
     // Set up, but don't display, the "hamburger" icon for the Model menu.
     menuButton = new HTML("<i class='fa fa-bars fa-2x'></i>");
     menuButton.setStyleName("wmt-ModelMenuButton");
-    menuButton.setTitle("Model menu");
+    menuButton
+        .setTitle("Use this menu to open, close, save, delete or run a model.");
 
     /*
      * Toggle the visibility of the Model menu on a click (MouseDownEvent) of

@@ -112,7 +112,7 @@ public class Perspective extends DockLayoutPanel {
       modelMenu = new ModelMenu(data);
 
       Image logo = new Image("images/CSDMS_Logo_1.jpg");
-      logo.setTitle("http://csdms.colorado.edu");
+      logo.setTitle("Go to the CSDMS website.");
 
       this.setWidget(0, 0, logo);
       this.setWidget(0, 1, modelMenu.getMenuButton());
@@ -136,7 +136,7 @@ public class Perspective extends DockLayoutPanel {
   private class ViewWest extends TabLayoutPanel {
 
     /**
-     * Makes the Center view of the WMT GUI. It displays the arena.
+     * Makes the Center view of the WMT GUI. It displays the model.
      */
     public ViewWest() {
       super(TAB_BAR_HEIGHT, Unit.EM);
