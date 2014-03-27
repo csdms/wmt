@@ -18,6 +18,7 @@ import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.data.Port;
+import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
 
 /**
  * A ModelTree is used to graphically represent the construction of a simulation
@@ -215,28 +216,15 @@ public class ModelTree extends Tree {
       TreeItem newItem = addTreeItem(portId, target);
 
       // If the new port has a connected component higher in the ModelTree,
-      // set a link to it.
-      Grid newGrid = (Grid) newItem.getWidget();
-      ComponentCell newCell = (ComponentCell) newGrid.getWidget(0, 0);
-      String connectedId = providesComponentIsADuplicate(newCell.getPortId());
+      // create the component and set a link to it.
+      String connectedId = providesComponentIsADuplicate(portId);
       if (connectedId != null) {
         GWT.log("This provides port has been used elsewhere!");
-
-        // Tell the ComponentCell what component it now holds.
-        newCell.setComponentId(connectedId);
-        String componentName = data.getComponent(connectedId).getName();
-        GWT.log("Selected component: " + componentName);
-
-        // Display the name of the selected component.
-        String displayName = newCell.trimName(componentName);
-        newCell.getComponentMenu().getComponentItem().setText(displayName);
-        newCell.getComponentMenu().getComponentItem().addStyleDependentName(
-            "connected");
-
-        // Replace the componentMenu with the actionMenu.
-        ComponentActionMenu actionMenu = new ComponentActionMenu(data, newCell);
-        newCell.getComponentMenu().getComponentItem().setSubMenu(actionMenu);
-
+        Grid newGrid = (Grid) newItem.getWidget();
+        ComponentCell newCell = (ComponentCell) newGrid.getWidget(0, 0);
+        ComponentSelectionCommand cmd =
+            new ComponentSelectionCommand(data, newCell, connectedId);
+        cmd.updateComponentCell();
         newCell.isLinked(true);
         newCell.getComponentMenu().getComponentItem().addStyleDependentName(
             "linked");

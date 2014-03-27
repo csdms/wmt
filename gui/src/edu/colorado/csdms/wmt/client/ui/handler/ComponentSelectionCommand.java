@@ -39,21 +39,27 @@ public class ComponentSelectionCommand implements Command {
 
   @Override
   public void execute() {
-    updateCell(false);
+    updateComponentCell();
+    data.getPerspective().getModelTree().addComponent(componentId,
+        cell.getEnclosingTreeItem());
   }
   
   public void execute(Boolean useSetComponent) {
-    updateCell(useSetComponent);
+    updateComponentCell();
+    if (useSetComponent) {
+      data.getPerspective().getModelTree().setComponent(componentId,
+        cell.getEnclosingTreeItem());
+    } else {
+      data.getPerspective().getModelTree().addComponent(componentId,
+        cell.getEnclosingTreeItem());
+    }
   }
   
   /**
-   * A worker which allows a choice in {@link #execute()} of <em>adding</em> a
-   * component (which adds a new TreeItem), or <em>setting</em> a component
-   * (which uses an existing TreeItem).
-   *  
-   * @param useSetComponent if true, use ModelTree#setComponent
+   * A worker that updates the componentId, sets the display name, and deploys
+   * the actionMenu of the {@link ComponentCell}.
    */
-  private void updateCell(Boolean useSetComponent) {
+  public void updateComponentCell() {
     
     // Tell the ComponentCell what component it now holds.
     cell.setComponentId(componentId);
@@ -64,15 +70,6 @@ public class ComponentSelectionCommand implements Command {
     String displayName = cell.trimName(componentName);
     cell.getComponentMenu().getComponentItem().setText(displayName);
     cell.getComponentMenu().getComponentItem().addStyleDependentName("connected");
-
-    // Add/set the component to/on the ModelTree.
-    if (useSetComponent) {
-      data.getPerspective().getModelTree().setComponent(componentId,
-        cell.getEnclosingTreeItem());
-    } else {
-      data.getPerspective().getModelTree().addComponent(componentId,
-        cell.getEnclosingTreeItem());
-    }
 
     // Replace the componentMenu with the actionMenu.
     ComponentActionMenu actionMenu = new ComponentActionMenu(data, cell);
