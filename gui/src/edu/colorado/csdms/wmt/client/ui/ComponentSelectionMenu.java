@@ -41,7 +41,7 @@ public class ComponentSelectionMenu extends MenuBar {
     
     updateComponents(cell.getPortId());
     componentItem = new MenuItem(cell.trimName(cell.getPortId()), this);
-    componentItem.setStyleName("mwmb-componentItem");
+    componentItem.setStyleName("wmt-ComponentCell");
     cell.addItem(componentItem);
   }
   

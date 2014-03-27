@@ -1,5 +1,5 @@
 /* 
-   CSS rules for WMT. 
+   CSS rules for the WMT client.
 */
 
 .gwt-HTML {
@@ -37,7 +37,6 @@
 
 .gwt-DecoratedPopupPanel .popupMiddleCenterInner {
    /* background-color: white; */
-   
 }
 
 .wmt-ModelMenu {
@@ -53,44 +52,25 @@
    background: 1px solid black;
 }
 
+/* The "hamburger" menu icon. */
 .wmt-ModelMenuButton {
    margin: 0px;
    padding: 0px;
    color: #333; /* matches font color in tab titles */
-   /* z-index: 10; */ /* make sure it's on top */
 }
 
-/* 
-   Rules imported from DragNDrop. Many should be renamed or deleted. 
-*/
-/* .gwt-Tree {
-   padding: 1px;
-} */
-/*
-.gwt-Tree .gwt-TreeItem {
-   margin-left: 2em !important;
-}
-*/
-/* Can't seem to override background color. Is it an image? */
-/*
-.gwt-Tree .gwt-TreeItem-selected {
-   font-style: italic;
-   font-size: 90%;
-   border: 1px dotted #f88;
-   padding: 1em;
-}
-*/
-
+/* The offset for TreeItems in the ModelTree. */
 .wmt-TreeItem {
    margin-left: 90px !important;
 }
 
-
-.mwmb-driverCell {
+/* "Play" button attached to the driver. */
+.wmt-DriverCell {
   padding: 1em 0 1em 5px;
 }
 
-.mwmb-componentItem {
+/* Base style for a ComponentCell. */
+.wmt-ComponentCell {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-style: italic;
   text-align: center;
@@ -102,177 +82,25 @@
   min-width: 120px;
 }
 
-.mwmb-componentItem-connected {
+/* A ComponentCell that displays a component. */
+.wmt-ComponentCell-connected {
   font-style: normal;
   background-color: #eef;
   border: 2px solid #55b;
 }
 
-.mwmb-componentItem-linked {
+/* A ComponentCell that displays a linked component. */
+.wmt-ComponentCell-linked {
    color: black;
 }
-
-.mwmb-componentItem-linked:after {
+.wmt-ComponentCell-linked:after {
    font-family: "FontAwesome";
    padding: 5px;
    content: "\f112";
    color: black;
 }
 
-/*
-   The following styles are used with a ModelCell.
-*/
-/* See TreeItem offset. Must factor combined heights of ControlCell icons. */
-.wmt-ModelCell {
-   height: 60px;
-   vertical-align: top;
-}
-
-.wmt-PortCell {
-   font-style: italic;
-   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;     
-   /* padding: 1em 3px 1em 3px; */
-   padding: 1em;
-   margin: 0px;
-   text-align: center;
-   /* width: 75px; */ /* This is a fixed, not minimum, width */
-}
-
-.wmt-PortCell-connected {
-   border: 2px solid #5b5;
-   background-color: #efe;
-}
-
-.wmt-PortCell-required {
-   border: 2px solid #b55;
-   background-color: white;
-}
-
-.wmt-PortCell-optional {
-   border: 2px solid #ee0; /* Need bright, but not too light, yellow */
-   background-color: white;
-}
-
-.wmt-PortCell-allowed {
-   border: 2px solid #5b5;
-   background-color: #dfd;
-}
-
-.wmt-PortCell-notallowed {
-   border: 2px solid #b55;
-   background-color: #fdd;
-}
-
-.wmt-ConnectorCell {
-  color: #bbb;
-}
-
-.wmt-ComponentCell {
-   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;  
-   padding: 1em;
-   margin: 0px;
-   text-align: center;
-}
-
-.wmt-ComponentCell-connected {
-   border: 2px solid #55b;
-   background-color: #eef;
-}
-
-.wmt-ComponentCell-unconnected {
-   border: 2px dashed #ccc;
-   color: #ccc;
-}
-
-.wmt-ComponentCell-linked {
-   color: black;
-}
-
-.wmt-ComponentCell-linked:after {
-   font-family: "FontAwesome";
-   padding: 5px;
-   content: "\f112";  
-   /* content: "@"; */
-   color: black;
-}
-
-/* 
-    Be mindful of hard-coded positioning with these ControlCell icons. 
-    Their combined heights may overwhelm the ModelCell height.
-*/
-.wmt-ControlCell {
-   /* height: 50px; */
-   position: relative;
-   /* top: -10px; */
-   left: -3px;
-   margin: 0px;
-   padding: 0px;
-   border: 0px;
-}
-
-.wmt-ControlCell-delete {
-   /* position: relative; */
-   /* height: 10px; */
-   /* top: -7px; */
-   color: #c55;
-}
-
-.wmt-ControlCell-help {
-   position: relative;
-   /* height: 10px; */
-   /* top: -11px; */
-   left: -1px;
-   color: #55c;
-}
-
-.wmt-ControlCell-run {
-   /* position: relative; */
-   /* height: 10px; */
-   /* top: -15px; */
-   color: #333;
-}
-
-/* Makes a grabby handle on the components grid. */
-.wmt-GrabCell {
-   color: #55c;
-}
-.wmt-GrabCell-notallowed {
-   color: #ccc;
-}
-
-/*
-.wmt-GrabCell {
-   position: relative;
-   padding-left: 0.5em;
-}
-
-.wmt-GrabCell:before {
-   content: "";
-   position: absolute;
-   left: 0px;
-   top: -0.75em;
-   width: 1px;
-   height: 1.5em;
-   border-left: 2px solid #aaa;
-   border-right: 2px solid #aaa;
-}
-*/
-
-.wmt-TextCell {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  color: black;
-}
-.wmt-TextCell-notallowed {
-  color: #ccc;
-}
-
-/* Style used for right-click context menu in a ModelTree. */
-.wmt-ContextMenu {
-   padding: 3px;
-   border: 1px #ddd;
-   background-color: white;
-}
-
+/* The informational message displayed when the ParameterTable is empty. */
 .wmt-ParameterTableMessage {
    padding: 1em;
    margin: 0px;
@@ -280,11 +108,13 @@
    color: #ccc;
 }
 
+/* Text used in a parameter description. */
 .wmt-ParameterDescription {
    padding-left: 1.5em;
    color: #039;
 }
 
+/* All TextBoxen, but especially those used in the ParameterTable. */
 .gwt-TextBox {
    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif !important;
    background-color: #ffc;
@@ -321,9 +151,7 @@
 
 /* Separates parameter groups in the ParameterTable. */
 .wmt-ParameterSeparator {
-   /* font-weight: bolder; */
    font-style: oblique;
-   /* margin: 15px 0 10px 0; */
    padding: 10px 0 5px 0;
    color: #039;
    border: solid #039;
