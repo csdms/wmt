@@ -17,6 +17,7 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
+import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;
 
 /**
  * A ModelTree is used to graphically represent the construction of a simulation
@@ -54,6 +55,7 @@ public class ModelTree extends Tree {
     driverRunCell = new HTML("<i class='fa fa-play-circle fa-3x'></i>");
     driverRunCell.setStyleName("wmt-DriverRunCell");
     driverRunCell.setTitle("Run the model.");
+    driverRunCell.addClickHandler(new SetupRunModelHandler(data));
 
     Grid driverGrid = new Grid(1, 2);
     driverGrid.setWidget(0, 0, driverComponentCell);
