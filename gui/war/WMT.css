@@ -64,6 +64,11 @@
    margin-left: 90px !important;
 }
 
+/* Pull-down menu items in a ComponentCell. */
+.wmt-ComponentCellMenuItem {
+  padding: 6px 40px 6px 1px;
+}
+
 /* "Play" button attached to the driver. */
 .wmt-DriverCell {
   padding: 1em 0 1em 5px;

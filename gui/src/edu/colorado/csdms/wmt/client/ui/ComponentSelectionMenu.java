@@ -104,6 +104,7 @@ public class ComponentSelectionMenu extends MenuBar {
         new MenuItem(COMPONENT_ICON + data.getComponent(index).getName(), true,
             new ComponentSelectionCommand(data, cell, data.getComponent(index)
                 .getId()));
+    item.setStyleName("wmt-ComponentCellMenuItem");
     this.addItem(item);
   }
 
