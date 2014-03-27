@@ -12,7 +12,6 @@ import java.util.List;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
-import edu.colorado.csdms.wmt.client.ui.ComponentList;
 import edu.colorado.csdms.wmt.client.ui.ModelTree;
 import edu.colorado.csdms.wmt.client.ui.Perspective;
 

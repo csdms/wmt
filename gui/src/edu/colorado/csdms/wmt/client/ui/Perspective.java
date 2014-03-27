@@ -53,7 +53,6 @@ public class Perspective extends DockLayoutPanel {
   private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
   private ModelMenu modelMenu;
-  private ComponentList componentList;
   private ModelTree modelTree;
   private ParameterTable parameterTable;
   private ComponentInfoDialogBox componentInfoBox;
@@ -162,24 +161,6 @@ public class Perspective extends DockLayoutPanel {
       this.add(scrollParameters, tabTitle, true);
     }
   } // end ViewEast
-
-  /**
-   * Returns a reference to the {@link ComponentList} used in the "Components"
-   * tab of a WMT session.
-   */
-  public ComponentList getComponentList() {
-    return componentList;
-  }
-
-  /**
-   * Stores a reference to the {@link ComponentList} used in the "Components"
-   * tab of a WMT session.
-   * 
-   * @param componentList the ComponentList instance
-   */
-  public void setComponentList(ComponentList componentList) {
-    this.componentList = componentList;
-  }
 
   public ScrollPanel getModelPanel() {
     return scrollModel;
