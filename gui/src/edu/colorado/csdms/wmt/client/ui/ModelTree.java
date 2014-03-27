@@ -20,9 +20,8 @@ import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.data.Port;
 
 /**
- * A ModelTree is used to graphically represent the construction of a
- * simulation through component models, each represented by a
- * {@link ModelCell}.
+ * A ModelTree is used to graphically represent the construction of a simulation
+ * through component models, each represented by a {@link ModelCell}.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -43,27 +42,27 @@ public class ModelTree extends Tree {
   }
 
   /**
-   * A worker that sets up the root TreeItem (the "driver") of the ModelTree.
-   * It also initializes the {@link ModelJSO} and {@link ModelMetadataJSO}
-   * objects used to save the model created with this ModelTree.
+   * A worker that sets up the root TreeItem (the "driver") of the ModelTree. It
+   * also initializes the {@link ModelJSO} and {@link ModelMetadataJSO} objects
+   * used to save the model created with this ModelTree.
    */
   public void initializeTree() {
 
     this.clear();
-    
+
     driverComponentCell = new ComponentCell(data);
     HTML driverCell = new HTML("<i class='fa fa-play-circle fa-2x'></i>");
     driverCell.setStyleName("mwmb-driverCell");
     driverCell.setTitle("Run the model");
-    
+
     Grid driverGrid = new Grid(1, 2);
     driverGrid.setWidget(0, 0, driverComponentCell);
     driverGrid.setWidget(0, 1, driverCell);
-    
+
     TreeItem driverItem = new TreeItem(driverGrid);
     driverComponentCell.setEnclosingTreeItem(driverItem);
     this.addItem(driverItem);
-    
+
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
     data.setModel(model);
     ModelMetadataJSO metadata =
@@ -137,27 +136,27 @@ public class ModelTree extends Tree {
    * @param target the TreeItem to which the component is to be added
    */
   public void addComponent(String componentId, TreeItem target) {
-    
+
     String componentName = data.getComponent(componentId).getName();
     GWT.log("Adding component: " + componentName);
     this.setComponent(componentId, target);
     target.setState(true);
-    
+
     // Ensure that the (class) component replaces the model component.
     data.replaceModelComponent(data.getComponent(componentId));
 
     // Is this the driver? If so, display the component's parameters. Also
-    // suggest a model name. 
+    // suggest a model name.
     if (this.getItem(0).equals(target)) {
       data.getModel().setName(
           componentName + " " + data.saveAttempts.toString());
       data.setSelectedComponent(componentId);
       data.getPerspective().getParameterTable().loadTable(componentId);
     }
-    
+
     // Mark the model state as unsaved.
     data.modelIsSaved(false);
-    data.getPerspective().setModelPanelTitle();    
+    data.getPerspective().setModelPanelTitle();
   }
 
   @Deprecated
@@ -170,14 +169,14 @@ public class ModelTree extends Tree {
     data.replaceModelComponent(data.getComponent(component.getId()));
 
     // Is this the driver? If so, display the component's parameters. Also
-    // suggest a model name. 
+    // suggest a model name.
     if (this.getItem(0).equals(target)) {
       data.getModel().setName(
           component.getName() + " " + data.saveAttempts.toString());
       data.setSelectedComponent(component.getId());
       data.getPerspective().getParameterTable().loadTable();
     }
-    
+
     // Mark the model state as unsaved.
     data.modelIsSaved(false);
     data.getPerspective().setModelPanelTitle();
@@ -192,15 +191,12 @@ public class ModelTree extends Tree {
    */
   public void setComponent(String componentId, TreeItem target) {
 
-    // Get the ComponentCell used by the TreeItem target.
-    Grid grid = (Grid) target.getWidget();
-    ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
-
-    // If the component already exists elsewhere in the ModelTree, set a link to
-    // it and exit.
-    String connectedId1 = hasConnectedInstance1(cell.getPortId());
-    if (connectedId1 != null) {
-      GWT.log("Connection1 found!");
+    // If this component already exists elsewhere in the ModelTree, set a link
+    // to it and exit.
+    if (thisComponentIsADuplicate(componentId)) {
+      GWT.log("This component is a duplicate!");
+      Grid grid = (Grid) target.getWidget();
+      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
       cell.isLinked(true);
       cell.getComponentMenu().getComponentItem()
           .addStyleDependentName("linked");
@@ -222,13 +218,13 @@ public class ModelTree extends Tree {
       // set a link to it.
       Grid newGrid = (Grid) newItem.getWidget();
       ComponentCell newCell = (ComponentCell) newGrid.getWidget(0, 0);
-      String connectedId2 = hasConnectedInstance2(newCell.getPortId());
-      if (connectedId2 != null) {
-        GWT.log("Connection2 found!");
+      String connectedId = providesComponentIsADuplicate(newCell.getPortId());
+      if (connectedId != null) {
+        GWT.log("This provides port has been used elsewhere!");
 
         // Tell the ComponentCell what component it now holds.
-        newCell.setComponentId(connectedId2);
-        String componentName = data.getComponent(connectedId2).getName();
+        newCell.setComponentId(connectedId);
+        String componentName = data.getComponent(connectedId).getName();
         GWT.log("Selected component: " + componentName);
 
         // Display the name of the selected component.
@@ -353,7 +349,7 @@ public class ModelTree extends Tree {
     }
     return openComponentCells;
   }
-  
+
   @Deprecated
   public List<ModelCell> findOpenModelCells(TreeItem parent) {
 
@@ -371,7 +367,7 @@ public class ModelTree extends Tree {
 
     return openModelCells;
   }
-  
+
   /**
    * Checks whether a given component is present in the ModelTree. This is an
    * overloaded version of {@link #isComponentPresent(String)}.
@@ -417,12 +413,12 @@ public class ModelTree extends Tree {
    * 
    * @param portId the id the port to check
    */
-  public String hasConnectedInstance1(String portId) {
+  public Boolean thisComponentIsADuplicate(String portId) {
 
     GWT.log("Checking for connection on port: " + portId);
 
     Integer nMatches = 0;
-    
+
     Iterator<TreeItem> iter = this.treeItemIterator();
     while (iter.hasNext()) {
 
@@ -432,7 +428,7 @@ public class ModelTree extends Tree {
 
       if (cell.getComponentId() != null) {
         String cellPortId = cell.getPortId();
-        
+
         // When the port is listed as "driver", it obscures the provides port
         // of the connected component. Find the provides port and use it.
         if (cellPortId.matches(DataManager.DRIVER)) {
@@ -442,19 +438,19 @@ public class ModelTree extends Tree {
                     .get(0).getId();
           }
         }
-        
+
         if (cellPortId.matches(portId)) {
           nMatches++;
           if (nMatches > 1) {
-            return cell.getComponentId();
+            return true;
           }
         }
       }
     }
-    return null;
+    return false;
   }
-  
-  public String hasConnectedInstance2(String portId) {
+
+  public String providesComponentIsADuplicate(String portId) {
 
     GWT.log("Checking for connection on port: " + portId);
 
