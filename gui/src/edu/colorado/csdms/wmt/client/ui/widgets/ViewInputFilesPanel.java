@@ -1,4 +1,4 @@
-package edu.colorado.csdms.wmt.client.ui;
+package edu.colorado.csdms.wmt.client.ui.widgets;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -56,7 +56,7 @@ public class ViewInputFilesPanel extends FlexTable {
 
     HTML viewTitle = new HTML("View input files");
     viewTitle.setTitle("View the model configuration files "
-        + "generated using these parameter values");
+        + "generated using these parameter values.");
 
     this.setWidget(0, 0, viewTitle);
     this.getFlexCellFormatter().setColSpan(0, 0, 6);

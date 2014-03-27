@@ -1,3 +1,6 @@
+/**
+ * <License>
+ */
 package edu.colorado.csdms.wmt.client.ui;
 
 import java.util.ArrayList;
@@ -5,29 +8,26 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.DragOverEvent;
-import com.google.gwt.event.dom.client.DragOverHandler;
-import com.google.gwt.event.dom.client.DropEvent;
-import com.google.gwt.event.dom.client.DropHandler;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
-import edu.colorado.csdms.wmt.client.data.Port;
+import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
 
 /**
- * A ModelTree is used to graphically represent the construction of a
- * simulation through component models, each represented by a
- * {@link ModelCell}.
+ * A ModelTree is used to graphically represent the construction of a simulation
+ * through component models, each represented by a {@link ModelCell}.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ModelTree extends Tree implements DragOverHandler, DropHandler {
+public class ModelTree extends Tree {
 
-  public DataManager data; // experimenting with a public member variable
+  private DataManager data;
+  private ComponentCell driverComponentCell;
 
   /**
    * Creates a ModelTree with an open "driver" port.
@@ -38,198 +38,200 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
 
     this.data = data;
     initializeTree();
-    this.data.getPerspective().setModelTree(this);
-
-    // Set up ModelTree event handlers.
-    addDomHandler(this, DragOverEvent.getType());
-    addDomHandler(this, DropEvent.getType());
   }
 
   /**
-   * A worker that sets up the root TreeItem (the "driver") of the ModelTree.
-   * It also initializes the {@link ModelJSO} and {@link ModelMetadataJSO}
-   * objects used to save the model created with this ModelTree.
-   * <p>
-   * The returned Port is optional.
+   * A worker that sets up the root TreeItem (the "driver") of the ModelTree. It
+   * also initializes the {@link ModelJSO} and {@link ModelMetadataJSO} objects
+   * used to save the model created with this ModelTree.
    */
-  public Port initializeTree() {
+  public void initializeTree() {
 
     this.clear();
-    Port driverPort = new Port("driver", true);
-    addTreeItem(driverPort, null);
+
+    driverComponentCell = new ComponentCell(data);
+    HTML driverCell = new HTML("<i class='fa fa-play-circle fa-2x'></i>");
+    driverCell.setStyleName("mwmb-driverCell");
+    driverCell.setTitle("Run the model.");
+
+    Grid driverGrid = new Grid(1, 2);
+    driverGrid.setWidget(0, 0, driverComponentCell);
+    driverGrid.setWidget(0, 1, driverCell);
+
+    TreeItem driverItem = new TreeItem(driverGrid);
+    driverComponentCell.setEnclosingTreeItem(driverItem);
+    this.addItem(driverItem);
 
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
     data.setModel(model);
     ModelMetadataJSO metadata =
         (ModelMetadataJSO) ModelMetadataJSO.createObject();
     data.setMetadata(metadata);
+  }
 
-    return driverPort;
+  public ComponentCell getDriverComponentCell() {
+    return driverComponentCell;
+  }
+
+  public void setDriverComponentCell(ComponentCell driverComponentCell) {
+    this.driverComponentCell = driverComponentCell;
   }
 
   /**
-   * Adds a new TreeItem with a ModelCell to the ModelTree at the targeted
-   * leaf location, or at the root if the target is missing.
+   * Adds a new TreeItem with a {@link ComponentCell} to the ModelTree at the
+   * targeted leaf location. Uses
+   * {@link #insertTreeItem(String, TreeItem, Integer)}.
    * 
-   * @param port the Port used to create a ModelCell for the TreeItem
+   * @param portId the id of the exposed uses port at the leaf location
    * @param target the targeted leaf TreeItem
    * @return the reference to the created TreeItem
    */
-  public TreeItem addTreeItem(Port port, TreeItem target) {
+  public TreeItem addTreeItem(String portId, TreeItem target) {
+    return insertTreeItem(portId, target, target.getChildCount());
+  }
 
-    ModelCell cell = new ModelCell(port, Component.makeInfoComponent());
-
-    TreeItem item = null;
-    if (target == null) {
-      item = new TreeItem(cell);
-      this.addItem(item);
-    } else {
-      item = target.addItem(cell);
-      item.setStyleName("wmt-TreeItem");
-    }
-    cell.setParentTreeItem(item); // Clumsy
-
+  /**
+   * Inserts a new TreeItem with a {@link ComponentCell} to the ModelTree at the
+   * targeted leaf location.
+   * 
+   * @param portId the id of the exposed uses port at the leaf location
+   * @param target the targeted leaf TreeItem
+   * @param index the index into the children of the targeted TreeItem
+   * @return the reference to the created TreeItem
+   */
+  public TreeItem insertTreeItem(String portId, TreeItem target, Integer index) {
+    ComponentCell cell = new ComponentCell(data, portId);
+    Grid container = new Grid(1, 1);
+    container.setWidget(0, 0, cell);
+    TreeItem item = target.insertItem(index, container);
+    item.setStyleName("wmt-TreeItem");
+    cell.setEnclosingTreeItem(item);
     return item;
   }
 
   /**
-   * Adds a Component to the ModelCell used by the targeted TreeItem. Uses
-   * {@link #setComponent(Component, TreeItem)}.
+   * Adds a component to the {@link ComponentCell} used by the targeted
+   * TreeItem. Uses {@link #setComponent(String, TreeItem)}.
    * 
-   * @param component the Component to add
-   * @param target the TreeItem to which the Component is to be added
+   * @param componentId the id of the component to add
+   * @param target the TreeItem to which the component is to be added
    */
-  public void addComponent(Component component, TreeItem target) {
+  public void addComponent(String componentId, TreeItem target) {
 
-    GWT.log("Adding component: " + component.getName());
-    this.setComponent(component, target);
+    String componentName = data.getComponent(componentId).getName();
+    GWT.log("Adding component: " + componentName);
+    this.setComponent(componentId, target);
+    target.setState(true);
 
     // Ensure that the (class) component replaces the model component.
-    data.replaceModelComponent(data.getComponent(component.getId()));
+    data.replaceModelComponent(data.getComponent(componentId));
 
     // Is this the driver? If so, display the component's parameters. Also
-    // suggest a model name. 
+    // suggest a model name.
     if (this.getItem(0).equals(target)) {
       data.getModel().setName(
-          component.getName() + " " + data.saveAttempts.toString());
-      data.setSelectedComponent(component.getId());
-      data.getPerspective().getParameterTable().loadTable();
+          componentName + " " + data.saveAttempts.toString());
+      data.setSelectedComponent(componentId);
+      data.getPerspective().getParameterTable().loadTable(componentId);
     }
-    
+
     // Mark the model state as unsaved.
     data.modelIsSaved(false);
     data.getPerspective().setModelPanelTitle();
   }
 
   /**
-   * Adds a Component to the ModelCell used by the targeted TreeItem.
+   * Sets the desired component, and its {@link ComponentCell}, in the targeted
+   * TreeItem.
    * 
-   * @param component the Component to add
-   * @param target the TreeItem to which the Component is to be added
+   * @param componentId the id of the component to set
+   * @param target the TreeItem where the component is to be set
    */
-  public void setComponent(Component component, TreeItem target) {
+  public void setComponent(String componentId, TreeItem target) {
 
-    // Get the ModelCell used by the TreeItem target.
-    ModelCell cell = (ModelCell) target.getWidget();
-
-    // If the Component already exists at a higher level in the ModelTree, set
-    // a link to it and exit.
-    Component connected1 = hasConnectedInstance(cell.getPortCell().getPort());
-    if (connected1 != null) {
-      cell.setComponentCell(cell.new ComponentCell(connected1));
-      cell.getComponentCell().addStyleDependentName("linked");
-      cell.getComponentCell().isLinked(true);
+    // If this component already exists elsewhere in the ModelTree, set a link
+    // to it and exit.
+    if (thisComponentIsADuplicate(componentId)) {
+      GWT.log("This component is a duplicate!");
+      Grid grid = (Grid) target.getWidget();
+      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+      cell.isLinked(true);
+      cell.getComponentMenu().getComponentItem()
+          .addStyleDependentName("linked");
       return;
     }
 
-    // Connect the new Component to the ModelCell.
-    cell.setComponentCell(cell.new ComponentCell(component));
-    cell.isConnected(true);
+    // Add new TreeItems with ComponentCells for the "uses" ports of the
+    // component.
+    Integer nPorts = data.getComponent(componentId).getUsesPorts().length();
+    if (nPorts == 0) {
+      return;
+    }
+    for (int i = 0; i < nPorts; i++) {
+      String portId =
+          data.getComponent(componentId).getUsesPorts().get(i).getId();
+      TreeItem newItem = addTreeItem(portId, target);
 
-    // Add new, empty, TreeItems for the "uses" ports of the Component.
-    for (int i = 0; i < component.getUsesPorts().length; i++) {
-
-      Port newPort = new Port();
-      newPort.setId(component.getUsesPorts()[i].getId());
-      newPort.isRequired(component.getUsesPorts()[i].isRequired());
-
-      TreeItem newItem = addTreeItem(newPort, target);
-
-      // If this new Port has a connected Component higher in the ModelTree,
-      // set a link to it.
-      ModelCell newCell = (ModelCell) newItem.getWidget();
-      Component connected2 = hasConnectedInstance(newPort);
-      if (connected2 != null) {
-        newCell.setComponentCell(newCell.new ComponentCell(connected2));
-        newCell.getComponentCell().addStyleDependentName("linked");
-        newCell.getComponentCell().isLinked(true);
+      // If the new port has a connected component higher in the ModelTree,
+      // create the component and set a link to it.
+      String connectedId = providesComponentIsADuplicate(portId);
+      if (connectedId != null) {
+        GWT.log("This provides port has been used elsewhere!");
+        Grid newGrid = (Grid) newItem.getWidget();
+        ComponentCell newCell = (ComponentCell) newGrid.getWidget(0, 0);
+        ComponentSelectionCommand cmd =
+            new ComponentSelectionCommand(data, newCell, connectedId);
+        cmd.updateComponentCell();
+        newCell.isLinked(true);
+        newCell.getComponentMenu().getComponentItem().addStyleDependentName(
+            "linked");
       }
     }
-
-    // Update the sensitivity of the DragCells in the ComponentList.
-    data.getPerspective().getComponentList().setCellSensitivity();
   }
 
   /**
    * Iterate through the {@link TreeItem}s of this ModelTree, finding what
-   * {@link ModelCell}s have open PortCells. Add the cell to the
-   * openModelCells List. The iterator descends the tree from top to bottom,
-   * ignoring the level (and sublevels, etc.) of the children. 
+   * {@link ComponentCell}s have open ports. Add the cell to a List, which is
+   * returned. The iterator descends the tree from top to bottom, ignoring the
+   * level (and sublevels, etc.) of the children.
    * 
-   * @return a List of ModelCells with open ports
+   * @return a List of open ComponentCells
    */
-  public List<ModelCell> findOpenModelCells() {
-
-    List<ModelCell> openModelCells = new ArrayList<ModelCell>();
-
+  public List<ComponentCell> findOpenComponentCells() {
+    List<ComponentCell> openComponentCells = new ArrayList<ComponentCell>();
     Iterator<TreeItem> iter = this.treeItemIterator();
     while (iter.hasNext()) {
       TreeItem treeItem = (TreeItem) iter.next();
-      ModelCell cell = (ModelCell) treeItem.getWidget();
-      if (cell.getComponentCell().getComponent().getId() == null) {
-        openModelCells.add(cell);
+      Grid grid = (Grid) treeItem.getWidget();
+      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+      if (cell.getComponentId() == null) {
+        openComponentCells.add(cell);
       }
     }
-
-    return openModelCells;
+    return openComponentCells;
   }
 
   /**
-   * Finds the open {@link ModelCell}s among the children of a specified
+   * Finds the open {@link ComponentCell}s among the children of a specified
    * {@link TreeItem} in the ModelTree. This search doesn't descend lower than
    * the children of the input parent TreeItem.
    * 
    * @param parent a TreeItem in the ModelTree
-   * @return a List of ModelCells with open ports
+   * @return a List of ComponentCells with open ports
    */
-  public List<ModelCell> findOpenModelCells(TreeItem parent) {
-
-    List<ModelCell> openModelCells = new ArrayList<ModelCell>();
-
+  public List<ComponentCell> findOpenComponentCells(TreeItem parent) {
+    List<ComponentCell> openComponentCells = new ArrayList<ComponentCell>();
     if (parent != null) {
       for (int i = 0; i < parent.getChildCount(); i++) {
         TreeItem child = parent.getChild(i);
-        ModelCell cell = (ModelCell) child.getWidget();
-        if (cell.getComponentCell().getComponent().getId() == null) {
-          openModelCells.add(cell);
+        Grid grid = (Grid) child.getWidget();
+        ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+        if (cell.getComponentId() == null) {
+          openComponentCells.add(cell);
         }
       }
     }
-
-    return openModelCells;
-  }
-  
-  
-  /**
-   * Checks whether a given component is present in the ModelTree. This is an
-   * overloaded version of {@link #isComponentPresent(String)}.
-   * 
-   * @param component a Component to check
-   * @return true if the component is in the ModelTree
-   */
-  public Boolean isComponentPresent(Component component) {
-    String componentId = component.getId();
-    return isComponentPresent(componentId);
+    return openComponentCells;
   }
 
   /**
@@ -239,85 +241,97 @@ public class ModelTree extends Tree implements DragOverHandler, DropHandler {
    * @return true if the component is in the ModelTree
    */
   public Boolean isComponentPresent(String componentId) {
-
     Boolean componentIsPresent = false;
-
     if (componentId != null) {
       Iterator<TreeItem> iter = this.treeItemIterator();
       while (iter.hasNext() && !componentIsPresent) {
         TreeItem treeItem = (TreeItem) iter.next();
-        ModelCell cell = (ModelCell) treeItem.getWidget();
-        if (cell.getComponentCell().getComponent().getId() != null) {
-          componentIsPresent =
-              cell.getComponentCell().getComponent().getId().matches(
-                  componentId);
+        Grid grid = (Grid) treeItem.getWidget();
+        ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+        if (cell.getComponentId() != null) {
+          componentIsPresent = cell.getComponentId().matches(componentId);
         }
       }
     }
-
     return componentIsPresent;
   }
 
   /**
-   * Checks whether the input Port has already appeared higher up in the
-   * ModelTree hierarchy, and has a connected Component. If so, the Component
-   * is returned; otherwise, a null object is returned.
+   * Checks whether the input port has appeared higher in the ModelTree
+   * hierarchy, and has a connected component. If so, the id of the component is
+   * returned; otherwise, a null object is returned.
    * <p>
-   * I'm concerned that this may be inefficient, and slow to iterate through a
-   * large ModelTree, since each TreeItem is hit.
+   * I'm concerned that this technique may be inefficient since each TreeItem is
+   * hit in iterating through the ModelTree.
    * 
-   * @param port the Port object
+   * @param portId the id the port to check
    */
-  public Component hasConnectedInstance(Port port) {
+  public Boolean thisComponentIsADuplicate(String portId) {
 
-    Component connected = null;
+    GWT.log("Checking for connection on port: " + portId);
+
+    Integer nMatches = 0;
 
     Iterator<TreeItem> iter = this.treeItemIterator();
     while (iter.hasNext()) {
+
       TreeItem treeItem = (TreeItem) iter.next();
-      ModelCell cell = (ModelCell) treeItem.getWidget();
-      if (cell.isConnected()) {
-        Component cellComponent = cell.getComponentCell().getComponent();
-        String cellPortId = cell.getPortCell().getPort().getId();
-        if (cellPortId.matches("driver")) {
-          if (cellComponent.getProvidesPorts().length > 0) {
-            cellPortId = cellComponent.getProvidesPorts()[0].getId();
+      Grid grid = (Grid) treeItem.getWidget();
+      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+
+      if (cell.getComponentId() != null) {
+        String cellPortId = cell.getPortId();
+
+        // When the port is listed as "driver", it obscures the provides port
+        // of the connected component. Find the provides port and use it.
+        if (cellPortId.matches(DataManager.DRIVER)) {
+          if (data.getComponent(cell.getComponentId()).nProvidesPorts() > 0) {
+            cellPortId =
+                data.getComponent(cell.getComponentId()).getProvidesPorts()
+                    .get(0).getId();
           }
         }
-        // GWT.log("match? " + cellPortId + " " + port.getId());
-        if (cellPortId.matches(port.getId())) {
-          connected = cellComponent;
+
+        if (cellPortId.matches(portId)) {
+          nMatches++;
+          if (nMatches > 1) {
+            return true;
+          }
         }
       }
     }
-
-    return connected;
+    return false;
   }
 
-  /**
-   * Handles events when a drag item hovers over a drop target. Note that
-   * events are continuously spawned, so there can be a lot.
-   * <p>
-   * This method is apparently needed to have drop events.
-   */
-  @Override
-  public void onDragOver(DragOverEvent event) {
-    return;
-  }
+  public String providesComponentIsADuplicate(String portId) {
 
-  /**
-   * This is needed on Firefox (but not on Chrome or Safari) to prevent a
-   * webpage linked to a keyword == the dragged component id from being loaded
-   * if a component is dropped somewhere in the ModelTree other than the
-   * component drop area. (For example, "avulsion" is currently redirected to
-   * "http://jetflow.com". I think they make hydration backpacks.)
-   * ComponentCell#onDrop is the true drop handler for the ModelTree.
-   * <p>
-   * Whew. Took some detective work.
-   */
-  @Override
-  public void onDrop(DropEvent event) {
-    event.preventDefault();
-    event.stopPropagation();
+    GWT.log("Checking for connection on port: " + portId);
+
+    Iterator<TreeItem> iter = this.treeItemIterator();
+    while (iter.hasNext()) {
+
+      TreeItem treeItem = (TreeItem) iter.next();
+      Grid grid = (Grid) treeItem.getWidget();
+      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+
+      if (cell.getComponentId() != null) {
+        String cellPortId = cell.getPortId();
+
+        // When the port is listed as "driver", it obscures the provides port
+        // of the connected component. Find the provides port and use it.
+        if (cellPortId.matches(DataManager.DRIVER)) {
+          if (data.getComponent(cell.getComponentId()).nProvidesPorts() > 0) {
+            cellPortId =
+                data.getComponent(cell.getComponentId()).getProvidesPorts()
+                    .get(0).getId();
+          }
+        }
+
+        if (cellPortId.matches(portId)) {
+          return cell.getComponentId();
+        }
+      }
+    }
+    return null;
   }
 }

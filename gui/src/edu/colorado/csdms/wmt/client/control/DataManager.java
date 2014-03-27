@@ -12,7 +12,6 @@ import java.util.List;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
-import edu.colorado.csdms.wmt.client.ui.ComponentList;
 import edu.colorado.csdms.wmt.client.ui.ModelTree;
 import edu.colorado.csdms.wmt.client.ui.Perspective;
 
@@ -24,6 +23,8 @@ import edu.colorado.csdms.wmt.client.ui.Perspective;
  */
 public class DataManager {
 
+  public static String DRIVER = "driver";
+  
   private Boolean developmentMode;
 
   // Get the state of UI elements through the Perspective. 
@@ -83,16 +84,14 @@ public class DataManager {
    * before the name of the tab title in the WMT interface. Currently a Font
    * Awesome icon.
    * 
-   * @param tabName the name of the tab: "model", "parameter" or "component"
+   * @param tabName the name of the tab: "model" or "parameter"
    */
   public String tabPrefix(String tabName) {
     String prefix = "";
     if (tabName.matches("model")) {
-      prefix = "<i class='fa fa-globe'></i> ";
+      prefix = "<i class='fa fa-cogs'></i> ";
     } else if (tabName.matches("parameter")) {
       prefix = "<i class='fa fa-wrench'></i> ";
-    } else if (tabName.matches("component")) {
-      prefix = "<i class='fa fa-cogs'></i> ";
     }
     return prefix;
   }
@@ -141,11 +140,10 @@ public class DataManager {
   }
 
   /**
-   * A convenience method that adds a component to the ArrayList of
-   * components.
+   * A convenience method that adds a component to the ArrayList of components.
    * <p>
    * Once all the components have been pulled from the server, sort them
-   * alphabetically and initialize the {@link ComponentList}.
+   * alphabetically and initialize the {@link ModelTree}.
    * 
    * @param component the component to add, a ComponentJSO object
    */
@@ -153,8 +151,9 @@ public class DataManager {
     this.components.add(component);
     if (this.components.size() == this.componentIdList.size()) {
       sortComponents();
-      perspective.initializeComponentList();
-    } // XXX This is fragile.
+      perspective.getModelTree().getDriverComponentCell().getComponentMenu()
+          .updateComponents();
+    }
   }
 
   /**
@@ -475,13 +474,5 @@ public class DataManager {
 
     ModelSerializer serializer = new ModelSerializer(this);
     serializer.deserialize();
-
-    // Locate the driver of the model and display its parameters.
-    for (int i = 0; i < model.nComponents(); i++) {
-      if (model.getComponents().get(0).isDriver()) {
-        setSelectedComponent(model.getComponents().get(0).getId());
-        perspective.getParameterTable().loadTable();
-      }
-    }
   }
 }

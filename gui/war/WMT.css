@@ -81,12 +81,42 @@
 }
 */
 
-/* TreeItem offset = ModelCell height */
 .wmt-TreeItem {
-   margin-left: 60px !important;
-   /* vertical-align: bottom; */
-   /* padding-bottom: 0px !important; */
-   /* border-left: 1px dotted #bbb; */ /* Close, but not quite. */
+   margin-left: 90px !important;
+}
+
+
+.mwmb-driverCell {
+  padding: 1em 0 1em 5px;
+}
+
+.mwmb-componentItem {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-style: italic;
+  text-align: center;
+  background-color: white;
+  border: 2px solid #55b;
+  height: 50px;
+  width: 120px;
+  max-width: 120px;
+  min-width: 120px;
+}
+
+.mwmb-componentItem-connected {
+  font-style: normal;
+  background-color: #eef;
+  border: 2px solid #55b;
+}
+
+.mwmb-componentItem-linked {
+   color: black;
+}
+
+.mwmb-componentItem-linked:after {
+   font-family: "FontAwesome";
+   padding: 5px;
+   content: "\f112";
+   color: black;
 }
 
 /*

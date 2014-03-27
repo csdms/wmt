@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.data.ParameterJSO;
+import edu.colorado.csdms.wmt.client.ui.widgets.ViewInputFilesPanel;
 
 /**
  * Builds a table of parameters for a single WMT model component. The value of
@@ -33,12 +34,7 @@ public class ParameterTable extends FlexTable {
   public ParameterTable(DataManager data) {
 
     this.data = data;
-    this.data.getPerspective().setParameterTable(this);
     this.setWidth("100%");
-
-    if (this.data.getSelectedComponent() != null) {
-      loadTable();
-    }
   }
 
   /**
@@ -51,15 +47,22 @@ public class ParameterTable extends FlexTable {
     this.setWidget(0, 0, infoMessage);
   }
 
+  @Deprecated
+  public void loadTable() {
+    // TODO Does nothing. To be deleted.
+  }
+  
   /**
    * A worker that loads the ParameterTable with parameter values for the
    * selected model component. Displays a {@link ViewInputFilesPanel} at the 
    * bottom of the table.
+   * 
+   * @param the id of the component whose parameters are to be displayed
    */
-  public void loadTable() {
+  public void loadTable(String componentId) {
 
     // The component whose parameters are to be displayed.
-    this.setComponentId(data.getSelectedComponent());
+    this.setComponentId(componentId);
 
     // Return if the selected component doesn't have parameters.
     if (data.getModelComponent(componentId).getParameters() == null) {
