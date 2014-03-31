@@ -130,6 +130,7 @@
 
 /* Pull-down menu items in the ComponentSelectionMenu. */
 .wmt-ComponentSelectionMenuItem {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   padding: 6px 40px 6px 1px;
 }
 .wmt-ComponentSelectionMenuItem:before {
@@ -142,6 +143,7 @@
 
 /* Pull-down menu items in the ComponentActionMenu. */
 .wmt-ComponentActionMenuItem {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   padding: 6px 40px 6px 1px;
 }
 
