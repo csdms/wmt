@@ -40,11 +40,12 @@
    /* background-color: white; */
 }
 
-/* The background for the ModelMenu. I don't think it works. */
+/* Rules for the ModelMenu. */
 .wmt-ModelMenu {
-   border: 1px ridge #ddd;
+   border: 1px solid #ccc; /* matches gwt-MenuBar-vertical */
    background-color: white;
-   padding: 3px;
+   padding: 5px;
+   box-shadow: 2px 2px 1px rgba(192, 192, 192, 0.75);
 }
 
 /* Separators used between groups of ModelMenu items. */

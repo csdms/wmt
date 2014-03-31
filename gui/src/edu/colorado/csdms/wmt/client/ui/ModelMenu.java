@@ -10,7 +10,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -37,7 +36,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
  * @see http://fortawesome.github.io/Font-Awesome/
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ModelMenu extends DecoratedPopupPanel {
+public class ModelMenu extends PopupPanel {
 
   private DataManager data;
   private HTML menuButton;
@@ -57,6 +56,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     this.setWidth("25ch"); // ch = character width // XXX Remove hard code?
     this.getElement().getStyle().setCursor(Cursor.POINTER); // use pointer
     this.data = data;
+    this.setStyleName("wmt-ModelMenu");
 
     // A FlexTable for the menu items. (PopupPanels can have only one child.)
     FlexTable menu = new FlexTable();
@@ -122,11 +122,13 @@ public class ModelMenu extends DecoratedPopupPanel {
       public void onMouseDown(MouseDownEvent event) {
         final Integer x = menuButton.getElement().getAbsoluteRight();
         final Integer y = menuButton.getElement().getAbsoluteBottom();
+        final Integer iconHalfWidth = 11; // by inspection
         ModelMenu.this
             .setPopupPositionAndShow(new PopupPanel.PositionCallback() {
               @Override
               public void setPosition(int offsetWidth, int offsetHeight) {
-                ModelMenu.this.setPopupPosition(x - offsetWidth, y);
+                ModelMenu.this.setPopupPosition(
+                    x - offsetWidth - iconHalfWidth, y);
               }
             });
       }
