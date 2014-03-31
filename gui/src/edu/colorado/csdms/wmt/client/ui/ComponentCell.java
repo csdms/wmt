@@ -51,23 +51,26 @@ public class ComponentCell extends VerticalPanel {
 
     this.data = data;
     this.portId = portId;
-    this.setStyleName("wmt-ComponentCell");
-    this.setVerticalAlignment(ALIGN_MIDDLE);
-
+    this.setVerticalAlignment(ALIGN_MIDDLE); // must set before adding children
+    
+    // The ComponentCell consists of a nameCell and a menuCell in a Grid.
     nameCell = new HTML(trimName(portId));
-    nameCell.setStyleName("wmt-ComponentCell-NameCell");
     menuCell = new MenuBar();
-    menuCell.setStyleName("wmt-ComponentCell-MenuCell");
-
-    Grid grid = new Grid(1, 2);
+    Grid grid = new Grid(1, 2); // one row, two cols
+    this.add(grid);
     grid.setWidget(0, 0, nameCell);
     grid.setWidget(0, 1, menuCell);
-    this.add(grid);
     
+    // The menuCell has one item that shows a list of components when selected.
     componentMenu = new ComponentSelectionMenu(this.data, this);
     menuItem =
         new MenuItem("<i class='fa fa-chevron-down'></i>", true, componentMenu);
     menuCell.addItem(menuItem);
+
+    // Styles. Note rule is set on menuItem, not menuCell.
+    this.setStyleName("wmt-ComponentCell");
+    nameCell.setStyleName("wmt-ComponentCell-NameCell");
+    menuItem.setStyleName("wmt-ComponentCell-MenuCell");
     
     String tooltip = "Click to select a component";
     if (portId.matches(DataManager.DRIVER)) {

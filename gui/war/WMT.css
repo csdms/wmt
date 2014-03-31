@@ -75,21 +75,17 @@
   background-color: white;
   border: 2px solid #55b;
   height: 60px;
-  /* width: 120px;
-  max-width: 120px;
-  min-width: 120px; */
 }
 
 /* A ComponentCell that displays a component. */
 .wmt-ComponentCell-connected {  
   font-style: normal;
-  background-color: #ddf;
+  background-color: #eef;
 }
 
 /* The name (port or component) shown inside the ComponentCell. */
 .wmt-ComponentCell-NameCell {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;  
-  /* border: 1px dotted; */
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   text-align: center;
   width: 100px;
   max-width: 100px;
@@ -111,10 +107,8 @@
 /* The menu displayed inside the ComponentCell. */
 .wmt-ComponentCell-MenuCell {
   color: #333;
-  background-color: #ddd;
-  border: 1px outset;
-  margin-right: 5px;
-  margin-left: -3px;
+  background-color: #eef;
+  padding: 1px 3px 1px 3px;
 }
 
 /* Pull-down menu items in the menuCell of a ComponentCell. */
