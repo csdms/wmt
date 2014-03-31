@@ -167,8 +167,7 @@ public class ModelTree extends Tree {
       Grid grid = (Grid) target.getWidget();
       ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
       cell.isLinked(true);
-      cell.getComponentMenu().getComponentItem()
-          .addStyleDependentName("linked");
+      cell.getNameCell().addStyleDependentName("linked");
       return;
     }
 
@@ -194,8 +193,7 @@ public class ModelTree extends Tree {
             new ComponentSelectionCommand(data, newCell, connectedId);
         cmd.updateComponentCell();
         newCell.isLinked(true);
-        newCell.getComponentMenu().getComponentItem().addStyleDependentName(
-            "linked");
+        newCell.getNameCell().addStyleDependentName("linked");
       }
     }
   }

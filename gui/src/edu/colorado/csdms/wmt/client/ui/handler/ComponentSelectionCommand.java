@@ -22,7 +22,7 @@ public class ComponentSelectionCommand implements Command {
   private DataManager data;
   private ComponentCell cell;
   private String componentId;
-  
+
   /**
    * Creates a new instance of {@link ComponentSelectionCommand}.
    * 
@@ -43,18 +43,18 @@ public class ComponentSelectionCommand implements Command {
     data.getPerspective().getModelTree().addComponent(componentId,
         cell.getEnclosingTreeItem());
   }
-  
+
   public void execute(Boolean useSetComponent) {
     updateComponentCell();
     if (useSetComponent) {
       data.getPerspective().getModelTree().setComponent(componentId,
-        cell.getEnclosingTreeItem());
+          cell.getEnclosingTreeItem());
     } else {
       data.getPerspective().getModelTree().addComponent(componentId,
-        cell.getEnclosingTreeItem());
+          cell.getEnclosingTreeItem());
     }
   }
-  
+
   /**
    * A worker that updates the componentId, sets the display name, and deploys
    * the actionMenu of the {@link ComponentCell}.
@@ -68,13 +68,12 @@ public class ComponentSelectionCommand implements Command {
 
     // Display the name of the selected component.
     String displayName = cell.trimName(componentName);
-    cell.getComponentMenu().getComponentItem().setText(displayName);
-    cell.getComponentMenu().getComponentItem().addStyleDependentName(
-        "connected");
+    cell.getNameCell().setText(displayName);
+    cell.addStyleDependentName("connected");
 
     // Replace the componentMenu with the actionMenu.
     ComponentActionMenu actionMenu = new ComponentActionMenu(data, cell);
-    cell.getComponentMenu().getComponentItem().setSubMenu(actionMenu);
+    cell.getMenuItem().setSubMenu(actionMenu);
 
     // Update the tooltip text.
     String ctype;
@@ -85,7 +84,8 @@ public class ComponentSelectionCommand implements Command {
     if (!ctype.matches(DataManager.DRIVER)) {
       tooltip += "Provides \"" + cell.getPortId() + "\" port. ";
     }
-    tooltip += "Click to get information, to view parameters, or to delete.";
     cell.setTitle(tooltip);
+    cell.getMenuCell().setTitle(
+        "Click to get information, to view parameters, or to delete.");
   }
 }

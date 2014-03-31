@@ -11,8 +11,8 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
 
 /**
- * A menu that shows a list of components to select from. This is the initial
- * menu displayed in a {@link ComponentCell}.
+ * A menu that shows a list of components. This is the initial menu displayed in
+ * a {@link ComponentCell}.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -21,7 +21,7 @@ public class ComponentSelectionMenu extends MenuBar {
   private static String ALL_COMPONENTS = "__all_components";
   private static String COMPONENT_ICON =
       "<i class='fa fa-plus-square fa-fw' style='color:#55b'></i> ";
-  
+
   private DataManager data;
   private ComponentCell cell;
   private MenuItem componentItem;
@@ -34,17 +34,26 @@ public class ComponentSelectionMenu extends MenuBar {
    * @param cell the {@link ComponentCell} this menu depends on
    */
   public ComponentSelectionMenu(DataManager data, ComponentCell cell) {
-    
     super(true); // vertical
     this.data = data;
     this.cell = cell;
-    
     updateComponents(cell.getPortId());
-    componentItem = new MenuItem(cell.trimName(cell.getPortId()), this);
-    componentItem.setStyleName("wmt-ComponentCell");
-    cell.addItem(componentItem);
   }
-  
+
+  /**
+   * A worker for adding a new MenuItem to the {@link ComponentSelectionMenu}.
+   * 
+   * @param index the index into the array of available components
+   */
+  private void addComponentMenuItem(Integer index) {
+    MenuItem item =
+        new MenuItem(COMPONENT_ICON + data.getComponent(index).getName(), true,
+            new ComponentSelectionCommand(data, cell, data.getComponent(index)
+                .getId()));
+    item.setStyleName("wmt-ComponentCell-MenuItem");
+    this.addItem(item);
+  }
+
   /**
    * Loads the names of the components that match the uses port of the displayed
    * component into the {@link ComponentCell} menu.
@@ -92,20 +101,6 @@ public class ComponentSelectionMenu extends MenuBar {
    */
   public void updateComponents() {
     updateComponents(ALL_COMPONENTS);
-  }
-
-  /**
-   * A worker to add a new MenuItem to the componentMenu.
-   * 
-   * @param index the index into the array of available components
-   */
-  private void addComponentMenuItem(Integer index) {
-    MenuItem item =
-        new MenuItem(COMPONENT_ICON + data.getComponent(index).getName(), true,
-            new ComponentSelectionCommand(data, cell, data.getComponent(index)
-                .getId()));
-    item.setStyleName("wmt-ComponentCellMenuItem");
-    this.addItem(item);
   }
 
   public MenuItem getComponentItem() {
