@@ -48,6 +48,12 @@
    box-shadow: 2px 2px 1px rgba(192, 192, 192, 0.75);
 }
 
+/* Items shown in the ModelMenu. */
+.wmt-ModelMenuItem {
+   color: #333;
+   margin: 2px 40px 2px 2px;
+}
+
 /* Separators used between groups of ModelMenu items. */
 .wmt-ModelMenuSeparator {
    width: 100%;

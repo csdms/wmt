@@ -53,7 +53,6 @@ public class ModelMenu extends PopupPanel {
   public ModelMenu(DataManager data) {
 
     super(true); // autohide
-    this.setWidth("25ch"); // ch = character width // XXX Remove hard code?
     this.getElement().getStyle().setCursor(Cursor.POINTER); // use pointer
     this.data = data;
     this.setStyleName("wmt-ModelMenu");

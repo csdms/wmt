@@ -31,6 +31,7 @@ public class ModelMenuItem extends Grid {
   public ModelMenuItem(String menuText) {
     super(1, 1);
     this.setWidget(0, 0, new HTML(menuText));
+    this.setStyleName("wmt-ModelMenuItem");
   }
 
   /**
@@ -43,5 +44,6 @@ public class ModelMenuItem extends Grid {
     super(1, 2);
     this.setWidget(0, 0, new HTML("<i class='fa " + faIcon + " fa-fw'>"));
     this.setWidget(0, 1, new HTML(menuText));
+    this.setStyleName("wmt-ModelMenuItem");
   }
 }
