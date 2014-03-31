@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Cursor;
+
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
@@ -79,6 +81,20 @@ public class DataManager {
     this.developmentMode = developmentMode;
   }
 
+  /**
+   * Shows the "wait" cursor.
+   */
+  public void showWaitCursor() {
+    perspective.getElement().getStyle().setCursor(Cursor.WAIT);
+  }
+  
+  /**
+   * Shows the default cursor.
+   */
+  public void showDefaultCursor() {
+    perspective.getElement().getStyle().setCursor(Cursor.DEFAULT);
+  }
+  
   /**
    * A convenience method that returns the prefix (a String) to be displayed
    * before the name of the tab title in the WMT interface. Currently a Font
