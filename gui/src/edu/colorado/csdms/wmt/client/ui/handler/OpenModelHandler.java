@@ -33,6 +33,7 @@ public class OpenModelHandler implements ClickHandler {
   @Override
   public void onClick(ClickEvent event) {
 
+    data.showWaitCursor();
     box.hide();
 
     data.getPerspective().reset();

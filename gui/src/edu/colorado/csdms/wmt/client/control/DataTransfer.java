@@ -587,6 +587,7 @@ public class DataTransfer {
 
     @Override
     public void onResponseReceived(Request request, Response response) {
+      data.showDefaultCursor();
       if (Response.SC_OK == response.getStatusCode()) {
 
         String rtxt = response.getText();
