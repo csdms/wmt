@@ -3,7 +3,6 @@ import urlparse
 
 from .config import site
 
-#parts = urlparse.urlsplit('https://csdms.colorado.edu/wmt-server')
 parts = (site['scheme'], site['netloc'], site['path'], '', '')
 
 globals = {
