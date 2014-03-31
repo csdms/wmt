@@ -128,8 +128,20 @@
   color: #333;
 }
 
-/* Pull-down menu items in the menuCell of a ComponentCell. */
-.wmt-ComponentCell-MenuItem {
+/* Pull-down menu items in the ComponentSelectionMenu. */
+.wmt-ComponentSelectionMenuItem {
+  padding: 6px 40px 6px 1px;
+}
+.wmt-ComponentSelectionMenuItem:before {
+  font-family: "FontAwesome";
+  font-style: normal;
+  content: "\f013";
+  color: #333;
+  margin-right: 0.5em;
+}
+
+/* Pull-down menu items in the ComponentActionMenu. */
+.wmt-ComponentActionMenuItem {
   padding: 6px 40px 6px 1px;
 }
 

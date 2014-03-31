@@ -19,8 +19,6 @@ import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
 public class ComponentSelectionMenu extends MenuBar {
 
   private static String ALL_COMPONENTS = "__all_components";
-  private static String COMPONENT_ICON =
-      "<i class='fa fa-plus-square fa-fw' style='color:#55b'></i> ";
 
   private DataManager data;
   private ComponentCell cell;
@@ -47,10 +45,10 @@ public class ComponentSelectionMenu extends MenuBar {
    */
   private void addComponentMenuItem(Integer index) {
     MenuItem item =
-        new MenuItem(COMPONENT_ICON + data.getComponent(index).getName(), true,
+        new MenuItem(data.getComponent(index).getName(), true,
             new ComponentSelectionCommand(data, cell, data.getComponent(index)
                 .getId()));
-    item.setStyleName("wmt-ComponentCell-MenuItem");
+    item.setStyleName("wmt-ComponentSelectionMenuItem");
     this.addItem(item);
   }
 
