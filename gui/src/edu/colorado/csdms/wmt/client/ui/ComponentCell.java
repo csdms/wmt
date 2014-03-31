@@ -63,14 +63,14 @@ public class ComponentCell extends VerticalPanel {
     
     // The menuCell has one item that shows a list of components when selected.
     componentMenu = new ComponentSelectionMenu(this.data, this);
-    menuItem =
-        new MenuItem("<i class='fa fa-chevron-down'></i>", true, componentMenu);
+    menuItem = new MenuItem("", true, componentMenu); // set FA icon with CSS
     menuCell.addItem(menuItem);
 
-    // Styles. Note rule is set on menuItem, not menuCell.
+    // Styles. Note settings for menuItem and menuCell.
     this.setStyleName("wmt-ComponentCell");
     nameCell.setStyleName("wmt-ComponentCell-NameCell");
-    menuItem.setStyleName("wmt-ComponentCell-MenuCell");
+    menuCell.setStyleName("wmt-ComponentCell-MenuCell");
+    menuItem.setStyleName("wmt-ComponentCell-ComponentButton");
     
     String tooltip = "Click to select a component";
     if (portId.matches(DataManager.DRIVER)) {

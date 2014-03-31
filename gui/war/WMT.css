@@ -101,14 +101,31 @@
    font-family: "FontAwesome";
    padding: 3px;
    content: "\f112";
-   color: black;
+   color: #333;
 }
 
-/* The menu displayed inside the ComponentCell. */
+/* Rules for the menuCell inside the ComponentCell. */
 .wmt-ComponentCell-MenuCell {
-  color: #333;
+  background-color: white;
+  padding: 2px;
+}
+.wmt-ComponentCell-MenuCell-connected {
   background-color: #eef;
-  padding: 1px 3px 1px 3px;
+}
+
+/* The button displayed on the menuCell inside the ComponentCell. 
+   Needs :after */
+.wmt-ComponentCell-ComponentButton:after {
+  font-family: "FontAwesome";
+  font-style: normal;
+  content: "\f067";
+  color: #333;  
+}
+.wmt-ComponentCell-ActionButton:after {
+  font-family: "FontAwesome";
+  font-style: normal;
+  content: "\f078";
+  color: #333;
 }
 
 /* Pull-down menu items in the menuCell of a ComponentCell. */
@@ -124,7 +141,7 @@
 
 /* Change the style of the "Play" button when the model can be run. */
 .wmt-DriverRunCell-active {
-  color: black; 
+  color: #333; 
 }
 
 /* The informational message displayed when the ParameterTable is empty. */

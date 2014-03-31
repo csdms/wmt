@@ -69,12 +69,16 @@ public class ComponentSelectionCommand implements Command {
     // Display the name of the selected component.
     String displayName = cell.trimName(componentName);
     cell.getNameCell().setText(displayName);
-    cell.addStyleDependentName("connected");
 
     // Replace the componentMenu with the actionMenu.
     ComponentActionMenu actionMenu = new ComponentActionMenu(data, cell);
     cell.getMenuItem().setSubMenu(actionMenu);
 
+    // Update styles.
+    cell.getMenuItem().setStyleName("wmt-ComponentCell-ActionButton");
+    cell.getMenuCell().addStyleDependentName("connected");
+    cell.addStyleDependentName("connected");
+    
     // Update the tooltip text.
     String ctype;
     ctype =
