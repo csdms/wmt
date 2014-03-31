@@ -3,8 +3,12 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.TreeItem;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 
@@ -13,13 +17,16 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ComponentCell extends MenuBar {
+public class ComponentCell extends VerticalPanel {
 
-  private static Integer TRIM = 12; // the number of characters to display
+  private static Integer TRIM = 10; // the number of characters to display
 
   private DataManager data;
   private String portId;
   private String componentId;
+  private HTML nameCell;
+  private MenuBar menuCell;
+  private MenuItem menuItem;
   private ComponentSelectionMenu componentMenu;
   private TreeItem enclosingTreeItem;
   private Boolean isLinked = false;
@@ -41,16 +48,34 @@ public class ComponentCell extends MenuBar {
    * @param portId the id of the corresponding port for the cell
    */
   public ComponentCell(DataManager data, String portId) {
+
     this.data = data;
     this.portId = portId;
-    this.componentMenu = new ComponentSelectionMenu(this.data, this);
+    this.setStyleName("wmt-ComponentCell");
+    this.setVerticalAlignment(ALIGN_MIDDLE);
+
+    nameCell = new HTML(trimName(portId));
+    nameCell.setStyleName("wmt-ComponentCell-NameCell");
+    menuCell = new MenuBar();
+    menuCell.setStyleName("wmt-ComponentCell-MenuCell");
+
+    Grid grid = new Grid(1, 2);
+    grid.setWidget(0, 0, nameCell);
+    grid.setWidget(0, 1, menuCell);
+    this.add(grid);
+    
+    componentMenu = new ComponentSelectionMenu(this.data, this);
+    menuItem =
+        new MenuItem("<i class='fa fa-chevron-down'></i>", true, componentMenu);
+    menuCell.addItem(menuItem);
+    
     String tooltip = "Click to select a component";
     if (portId.matches(DataManager.DRIVER)) {
-      tooltip += " to be the driver for the model."; 
+      tooltip += " to be the driver for the model.";
     } else {
-      tooltip += " to fill this \"" + portId + "\" port."; 
+      tooltip += " to fill this \"" + portId + "\" port.";
     }
-    this.setTitle(tooltip);
+    menuCell.setTitle(tooltip);
   }
 
   public String getPortId() {
@@ -67,6 +92,30 @@ public class ComponentCell extends MenuBar {
 
   public void setComponentId(String componentId) {
     this.componentId = componentId;
+  }
+
+  public HTML getNameCell() {
+    return nameCell;
+  }
+
+  public void setNameCell(HTML nameCell) {
+    this.nameCell = nameCell;
+  }
+
+  public MenuBar getMenuCell() {
+    return menuCell;
+  }
+
+  public void setMenuCell(MenuBar menuCell) {
+    this.menuCell = menuCell;
+  }
+
+  public MenuItem getMenuItem() {
+    return menuItem;
+  }
+
+  public void setMenuItem(MenuItem menuItem) {
+    this.menuItem = menuItem;
   }
 
   public ComponentSelectionMenu getComponentMenu() {
@@ -92,8 +141,9 @@ public class ComponentCell extends MenuBar {
   public void isLinked(Boolean isLinked) {
     this.isLinked = isLinked;
     if (this.isLinked && (this.getTitle() != null)) {
-      String tooltip = " This component is aliased from another instance of "
-          + data.getModelComponent(this.componentId).getName() + ".";
+      String tooltip =
+          " This component is aliased from another instance of "
+              + data.getModelComponent(this.componentId).getName() + ".";
       this.setTitle(this.getTitle() + tooltip);
     }
   }
