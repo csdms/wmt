@@ -15,6 +15,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DoubleBox;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -67,6 +68,8 @@ public class ValueCell extends HorizontalPanel {
       makeFileCell(value);
     } else if (type.matches("int")) {
       makeIntegerCell(value);
+    } else if (type.matches("float")) {
+      makeDoubleCell(value);
     } else {
       makeTextCell(value);
     }
@@ -162,7 +165,28 @@ public class ValueCell extends HorizontalPanel {
     }
     this.add(box);
   }
-  
+
+  /**
+   * A worker that makes the {@link ValueCell} display an {@link DoubleBox}.
+   * This is the default for the "float" parameter type. Key up events are sent
+   * to {@link DoubleBoxHandler}.
+   * 
+   * @param value the value of the parameter, a String
+   */
+  private void makeDoubleCell(String value) {
+    DoubleBox box = new DoubleBox();
+    box.addKeyUpHandler(new DoubleBoxHandler());
+    box.setStyleName("wmt-ValueBoxen");
+    try {
+      Double doubleValue = Double.valueOf(value);
+      box.setValue(doubleValue);
+    } catch (Exception e) {
+      box.setValue(null);
+      box.addStyleDependentName("outofrange");
+    }
+    this.add(box);
+  }
+
   /**
    * A worker that makes the {@link ValueCell} display a text box. This is the
    * default for the "string" parameter type.
@@ -269,13 +293,47 @@ public class ValueCell extends HorizontalPanel {
       IntegerBox box = (IntegerBox) event.getSource();
       try {
         Integer value = box.getValueOrThrow();
+        if (value == null) {
+          box.addStyleDependentName("outofrange");
+          return;
+        }
         Integer cursorPos = box.getCursorPos();
         box.setValue(value); // formats, but moves cursor
-        if (cursorPos < box.getText().length()) {
+        if (cursorPos <= box.getText().length()) {
           box.setCursorPos(cursorPos);
         }
         ValueCell.this.setValue(value.toString());
-        box.setStyleDependentName("outofrange", !isInRange(parameter, value.toString()));
+        box.setStyleDependentName("outofrange", !isInRange(parameter, value
+            .toString()));
+      } catch (ParseException e) {
+        box.addStyleDependentName("outofrange");
+      }
+    }
+  }
+
+  /**
+   * A class to handle keyboard events in a DoubleBox. Also checks for valid
+   * contents.
+   */
+  public class DoubleBoxHandler implements KeyUpHandler {
+    @Override
+    public void onKeyUp(KeyUpEvent event) {
+      GWT.log("(onKeyUp:Double)");
+      DoubleBox box = (DoubleBox) event.getSource();
+      try {
+        Double value = box.getValueOrThrow();
+        if (value == null) {
+          box.addStyleDependentName("outofrange");
+          return;
+        }
+        Integer cursorPos = box.getCursorPos();
+        box.setValue(value); // formats, but moves cursor
+        if (cursorPos <= box.getText().length()) {
+          box.setCursorPos(cursorPos);
+        }
+        ValueCell.this.setValue(value.toString());
+        box.setStyleDependentName("outofrange", !isInRange(parameter, value
+            .toString()));
       } catch (ParseException e) {
         box.addStyleDependentName("outofrange");
       }
