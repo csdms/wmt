@@ -180,12 +180,15 @@
 }
 
 /* All TextBoxen, but especially those used in the ParameterTable. */
-.gwt-TextBox {
-   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif !important;
-   background-color: #ffd;
+.wmt-ValueBoxen {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  background-color: #ffd;
+  padding: 5px 4px;
+  border: 1px solid #ccc;
+  border-top: 1px solid #999;
+  font-size: small;
 }
-
-.gwt-TextBox-outofrange {
+.wmt-ValueBoxen-outofrange {
    background-color: #fdd;
 }
 
@@ -208,10 +211,6 @@
 
 .gwt-DialogBox .Caption {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif !important;
-}
-
-.gwt-PasswordTextBox {
-   background-color: #ffd;
 }
 
 /* Separates parameter groups in the ParameterTable. */
