@@ -77,7 +77,7 @@ public class ValueCell extends HorizontalPanel {
 
     // If the parameter type is numeric, add a tooltip showing the valid range
     // of its value.
-    if (isParameterTypeNumeric(parameter)) {
+    if (isParameterTypeNumeric()) {
       range +=
           "Valid range: (" + parameter.getValue().getMin() + ", "
               + parameter.getValue().getMax() + ")";
@@ -224,7 +224,7 @@ public class ValueCell extends HorizontalPanel {
    */
   private Boolean isInRange(String value) {
     Boolean rangeOK = true;
-    if (isParameterTypeNumeric(parameter)) {
+    if (isParameterTypeNumeric()) {
       if (!isNumeric(value)) {
         rangeOK = false;
       } else {
@@ -242,12 +242,10 @@ public class ValueCell extends HorizontalPanel {
   }
 
   /**
-   * Checks whether the parameter uses a numeric type value (e.g., float or
-   * int). Returns a Boolean.
-   * 
-   * @param parameter a ParameterJSO object
+   * Checks whether the current {@link ValueCell} parameter uses a numeric type
+   * value (e.g., float or int). Returns a Boolean.
    */
-  private Boolean isParameterTypeNumeric(ParameterJSO parameter) {
+  private Boolean isParameterTypeNumeric() {
     Boolean isNumeric = true;
     String type = parameter.getValue().getType();
     if (type.matches("string") || type.matches("choice")
