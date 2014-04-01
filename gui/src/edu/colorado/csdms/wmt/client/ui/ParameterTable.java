@@ -49,7 +49,7 @@ public class ParameterTable extends FlexTable {
   
   /**
    * A worker that loads the ParameterTable with parameter values for the
-   * selected model component. Displays a {@link ViewInputFilesPanel} at the 
+   * selected model component. Displays a {@link ViewInputFilesPanel} at the
    * bottom of the table.
    * 
    * @param the id of the component whose parameters are to be displayed
@@ -85,6 +85,8 @@ public class ParameterTable extends FlexTable {
         this.setWidget(parameterIndex, 1, new ValueCell(parameter));
         this.getFlexCellFormatter().setStyleName(parameterIndex, 0,
             "wmt-ParameterDescription");
+        this.getFlexCellFormatter().setHorizontalAlignment(parameterIndex, 1,
+            HasHorizontalAlignment.ALIGN_RIGHT);
       }
       parameterIndex++;
     }
