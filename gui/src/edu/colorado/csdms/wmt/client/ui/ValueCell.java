@@ -217,13 +217,12 @@ public class ValueCell extends HorizontalPanel {
 
   /**
    * Checks whether a given value is within the established range of values for
-   * a parameter, returning a Boolean. This method operates only on numeric
-   * types.
+   * the current parameter of the {@link ValueCell}, returning a Boolean. This
+   * method operates only on numeric types.
    * 
-   * @param parameter a ParameterJSO object
-   * @param value a value
+   * @param value a value, as a String
    */
-  private Boolean isInRange(ParameterJSO parameter, String value) {
+  private Boolean isInRange(String value) {
     Boolean rangeOK = true;
     if (isParameterTypeNumeric(parameter)) {
       if (!isNumeric(value)) {
@@ -315,8 +314,7 @@ public class ValueCell extends HorizontalPanel {
           box.setCursorPos(cursorPos);
         }
         ValueCell.this.setValue(value.toString());
-        box.setStyleDependentName("outofrange", !isInRange(parameter, value
-            .toString()));
+        box.setStyleDependentName("outofrange", !isInRange(value.toString()));
       } catch (ParseException e) {
         box.addStyleDependentName("outofrange");
       }
@@ -336,7 +334,7 @@ public class ValueCell extends HorizontalPanel {
       GWT.log("(onKeyUp)");
       TextBox textBox = (TextBox) event.getSource();
       String value = textBox.getText();
-      textBox.setStyleDependentName("outofrange", !isInRange(parameter, value));
+      textBox.setStyleDependentName("outofrange", !isInRange(value));
       setValue(value);
     }
   }
