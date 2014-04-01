@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ValueBox;
 
 import edu.colorado.csdms.wmt.client.control.DataURL;
 import edu.colorado.csdms.wmt.client.data.ParameterJSO;
@@ -154,7 +155,7 @@ public class ValueCell extends HorizontalPanel {
    */
   private void makeIntegerCell(String value) {
     IntegerBox box = new IntegerBox();
-    box.addKeyUpHandler(new IntegerBoxHandler());
+    box.addKeyUpHandler(new NumberCellHandler<Integer>(box));
     box.setStyleName("wmt-ValueBoxen");
     try {
       Integer integerValue = Integer.valueOf(value);
@@ -175,7 +176,7 @@ public class ValueCell extends HorizontalPanel {
    */
   private void makeDoubleCell(String value) {
     DoubleBox box = new DoubleBox();
-    box.addKeyUpHandler(new DoubleBoxHandler());
+    box.addKeyUpHandler(new NumberCellHandler<Double>(box));
     box.setStyleName("wmt-ValueBoxen");
     try {
       Double doubleValue = Double.valueOf(value);
@@ -283,45 +284,27 @@ public class ValueCell extends HorizontalPanel {
   }
 
   /**
-   * A class to handle keyboard events in a IntegerBox. Also checks for valid
-   * contents.
+   * A class to handle keyboard events in an IntegerBox or a DoubleBox. Also
+   * checks for valid contents of the boxen.
    */
-  public class IntegerBoxHandler implements KeyUpHandler {
-    @Override
-    public void onKeyUp(KeyUpEvent event) {
-      GWT.log("(onKeyUp:Integer)");
-      IntegerBox box = (IntegerBox) event.getSource();
-      try {
-        Integer value = box.getValueOrThrow();
-        if (value == null) {
-          box.addStyleDependentName("outofrange");
-          return;
-        }
-        Integer cursorPos = box.getCursorPos();
-        box.setValue(value); // formats, but moves cursor
-        if (cursorPos <= box.getText().length()) {
-          box.setCursorPos(cursorPos);
-        }
-        ValueCell.this.setValue(value.toString());
-        box.setStyleDependentName("outofrange", !isInRange(parameter, value
-            .toString()));
-      } catch (ParseException e) {
-        box.addStyleDependentName("outofrange");
-      }
+  @SuppressWarnings("unchecked")
+  public class NumberCellHandler<T> implements KeyUpHandler {
+    
+    private ValueBox<T> box;
+    
+    public NumberCellHandler(IntegerBox box) {
+      this.box = (ValueBox<T>) box;
     }
-  }
-
-  /**
-   * A class to handle keyboard events in a DoubleBox. Also checks for valid
-   * contents.
-   */
-  public class DoubleBoxHandler implements KeyUpHandler {
+    
+    public NumberCellHandler(DoubleBox box) {
+      this.box = (ValueBox<T>) box;
+    }
+    
     @Override
     public void onKeyUp(KeyUpEvent event) {
-      GWT.log("(onKeyUp:Double)");
-      DoubleBox box = (DoubleBox) event.getSource();
+      GWT.log("(onKeyUp:ValueBox)");
       try {
-        Double value = box.getValueOrThrow();
+        T value = box.getValueOrThrow();
         if (value == null) {
           box.addStyleDependentName("outofrange");
           return;
