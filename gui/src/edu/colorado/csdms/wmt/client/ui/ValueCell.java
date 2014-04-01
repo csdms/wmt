@@ -160,6 +160,7 @@ public class ValueCell extends HorizontalPanel {
     try {
       Integer integerValue = Integer.valueOf(value);
       box.setValue(integerValue);
+      box.setStyleDependentName("outofrange", !isInRange(value));
     } catch (Exception e) {
       box.setValue(null);
       box.addStyleDependentName("outofrange");
@@ -181,6 +182,7 @@ public class ValueCell extends HorizontalPanel {
     try {
       Double doubleValue = Double.valueOf(value);
       box.setValue(doubleValue);
+      box.setStyleDependentName("outofrange", !isInRange(value));
     } catch (Exception e) {
       box.setValue(null);
       box.addStyleDependentName("outofrange");
