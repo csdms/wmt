@@ -46,11 +46,6 @@ public class ParameterTable extends FlexTable {
     infoMessage.setStyleName("wmt-ParameterTableMessage");
     this.setWidget(0, 0, infoMessage);
   }
-
-  @Deprecated
-  public void loadTable() {
-    // TODO Does nothing. To be deleted.
-  }
   
   /**
    * A worker that loads the ParameterTable with parameter values for the
