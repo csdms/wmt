@@ -3,6 +3,8 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import java.text.ParseException;
+
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -16,6 +18,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 
@@ -62,6 +65,8 @@ public class ValueCell extends HorizontalPanel {
       makeChoiceCell(value);
     } else if (type.matches("file")) {
       makeFileCell(value);
+    } else if (type.matches("int")) {
+      makeIntegerCell(value);
     } else {
       makeTextCell(value);
     }
@@ -80,7 +85,7 @@ public class ValueCell extends HorizontalPanel {
    * A worker that makes the {@link ValueCell} display a droplist for the
    * "choice" parameter type.
    * 
-   * @param value the value of the parameter.
+   * @param value the value of the parameter, a String
    */
   private void makeChoiceCell(String value) {
     ListBox choiceDroplist = new ListBox(false); // no multi select
@@ -101,7 +106,7 @@ public class ValueCell extends HorizontalPanel {
    * A worker that makes the {@link ValueCell} display a droplist and a file
    * upload button for the "file" parameter type.
    * 
-   * @param value the value of the parameter.
+   * @param value the value of the parameter, a String
    */
   private void makeFileCell(String value) {
     fileDroplist = new ListBox(false); // no multi select
@@ -138,15 +143,36 @@ public class ValueCell extends HorizontalPanel {
   }
 
   /**
+   * A worker that makes the {@link ValueCell} display an {@link IntegerBox}.
+   * This is the default for the "int" parameter type. Key up events are sent to
+   * {@link IntegerBoxHandler}.
+   * 
+   * @param value the value of the parameter, a String
+   */
+  private void makeIntegerCell(String value) {
+    IntegerBox box = new IntegerBox();
+    box.addKeyUpHandler(new IntegerBoxHandler());
+    box.setStyleName("wmt-ValueBoxen");
+    try {
+      Integer integerValue = Integer.valueOf(value);
+      box.setValue(integerValue);
+    } catch (Exception e) {
+      box.setValue(null);
+      box.addStyleDependentName("outofrange");
+    }
+    this.add(box);
+  }
+  
+  /**
    * A worker that makes the {@link ValueCell} display a text box. This is the
-   * default for "float", "int", etc., parameter types.
+   * default for the "string" parameter type.
    * 
    * @param value the value of the parameter.
    */
   private void makeTextCell(String value) {
     TextBox valueTextBox = new TextBox();
     valueTextBox.addKeyUpHandler(new TextEditHandler());
-
+    valueTextBox.setStyleName("wmt-ValueBoxen");
     valueTextBox.setText(value);
     this.add(valueTextBox);
   }
@@ -165,6 +191,61 @@ public class ValueCell extends HorizontalPanel {
   }
 
   /**
+   * Checks whether a given value is within the established range of values for
+   * a parameter, returning a Boolean. This method operates only on numeric
+   * types.
+   * 
+   * @param parameter a ParameterJSO object
+   * @param value a value
+   */
+  private Boolean isInRange(ParameterJSO parameter, String value) {
+    Boolean rangeOK = true;
+    if (isParameterTypeNumeric(parameter)) {
+      if (!isNumeric(value)) {
+        rangeOK = false;
+      } else {
+        Double newValueD = Double.valueOf(value);
+        String minValue = parameter.getValue().getMin();
+        Double minValueD = Double.valueOf(minValue);
+        String maxValue = parameter.getValue().getMax();
+        Double maxValueD = Double.valueOf(maxValue);
+        if ((newValueD > maxValueD) || (newValueD < minValueD)) {
+          rangeOK = false;
+        }
+      }
+    }
+    return rangeOK;
+  }
+
+  /**
+   * Checks whether the parameter uses a numeric type value (e.g., float or
+   * int). Returns a Boolean.
+   * 
+   * @param parameter a ParameterJSO object
+   */
+  private Boolean isParameterTypeNumeric(ParameterJSO parameter) {
+    Boolean isNumeric = true;
+    String type = parameter.getValue().getType();
+    if (type.matches("string") || type.matches("choice")
+        || type.matches("file")) {
+      isNumeric = false;
+    }
+    return isNumeric;
+  }
+
+  /**
+   * Checks whether the input String can be cast to a number.
+   * 
+   * @see <a
+   *      href="http://stackoverflow.com/questions/14206768/how-to-check-if-a-string-is-numeric">This</a>
+   *      discussion. Thanks, stackoverflow!
+   * @param s a String
+   */
+  private Boolean isNumeric(String s) {
+    return s.matches("[-+]?\\d*\\.?\\d+");
+  }
+
+  /**
    * A class to handle selection in the "choices" ListBox.
    */
   public class ListSelectionHandler implements ChangeHandler {
@@ -174,6 +255,30 @@ public class ValueCell extends HorizontalPanel {
       ListBox listBox = (ListBox) event.getSource();
       String value = listBox.getValue(listBox.getSelectedIndex());
       setValue(value);
+    }
+  }
+
+  /**
+   * A class to handle keyboard events in a IntegerBox. Also checks for valid
+   * contents.
+   */
+  public class IntegerBoxHandler implements KeyUpHandler {
+    @Override
+    public void onKeyUp(KeyUpEvent event) {
+      GWT.log("(onKeyUp:Integer)");
+      IntegerBox box = (IntegerBox) event.getSource();
+      try {
+        Integer value = box.getValueOrThrow();
+        Integer cursorPos = box.getCursorPos();
+        box.setValue(value); // formats, but moves cursor
+        if (cursorPos < box.getText().length()) {
+          box.setCursorPos(cursorPos);
+        }
+        ValueCell.this.setValue(value.toString());
+        box.setStyleDependentName("outofrange", !isInRange(parameter, value.toString()));
+      } catch (ParseException e) {
+        box.addStyleDependentName("outofrange");
+      }
     }
   }
 
@@ -270,60 +375,5 @@ public class ValueCell extends HorizontalPanel {
         pt.data.getPerspective().setModelPanelTitle();
       }
     }
-  }
-
-  /**
-   * Checks whether a given value is within the established range of values for
-   * a parameter, returning a Boolean. This method operates only on numeric
-   * types.
-   * 
-   * @param parameter a ParameterJSO object
-   * @param value a value
-   */
-  private Boolean isInRange(ParameterJSO parameter, String value) {
-    Boolean rangeOK = true;
-    if (isParameterTypeNumeric(parameter)) {
-      if (!isNumeric(value)) {
-        rangeOK = false;
-      } else {
-        Double newValueD = Double.valueOf(value);
-        String minValue = parameter.getValue().getMin();
-        Double minValueD = Double.valueOf(minValue);
-        String maxValue = parameter.getValue().getMax();
-        Double maxValueD = Double.valueOf(maxValue);
-        if ((newValueD > maxValueD) || (newValueD < minValueD)) {
-          rangeOK = false;
-        }
-      }
-    }
-    return rangeOK;
-  }
-
-  /**
-   * Checks whether the parameter uses a numeric type value (e.g., float or
-   * int). Returns a Boolean.
-   * 
-   * @param parameter a ParameterJSO object
-   */
-  private Boolean isParameterTypeNumeric(ParameterJSO parameter) {
-    Boolean isNumeric = true;
-    String type = parameter.getValue().getType();
-    if (type.matches("string") || type.matches("choice")
-        || type.matches("file")) {
-      isNumeric = false;
-    }
-    return isNumeric;
-  }
-
-  /**
-   * Checks whether the input String can be cast to a number.
-   * 
-   * @see <a
-   *      href="http://stackoverflow.com/questions/14206768/how-to-check-if-a-string-is-numeric">This</a>
-   *      discussion. Thanks, stackoverflow!
-   * @param s a String
-   */
-  private Boolean isNumeric(String s) {
-    return s.matches("[-+]?\\d*\\.?\\d+");
   }
 }
