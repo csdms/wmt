@@ -169,6 +169,7 @@ public class DataManager {
       sortComponents();
       perspective.getModelTree().getDriverComponentCell().getComponentMenu()
           .updateComponents();
+      showDefaultCursor();
     }
   }
 
