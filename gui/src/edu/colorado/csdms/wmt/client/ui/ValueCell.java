@@ -309,7 +309,7 @@ public class ValueCell extends HorizontalPanel {
 
     @Override
     public void onValueChange(ValueChangeEvent<T> event) {
-      GWT.log("(onValueChange)");
+      GWT.log("(onValueChange:number)");
       try {
         T value = box.getValueOrThrow();
         if (value == null) {
@@ -326,8 +326,7 @@ public class ValueCell extends HorizontalPanel {
   }
 
   /**
-   * A class to handle keyboard events in the TextBox. Also checks for valid
-   * TextBox contents.
+   * A class to handle keyboard events in the TextBox.
    * <p>
    * Note that every key press generates an event. It might be worth considering
    * acting on only Tab or Enter key presses.
@@ -335,10 +334,9 @@ public class ValueCell extends HorizontalPanel {
   public class TextEditHandler implements KeyUpHandler {
     @Override
     public void onKeyUp(KeyUpEvent event) {
-      GWT.log("(onKeyUp)");
+      GWT.log("(onKeyUp:text)");
       TextBox textBox = (TextBox) event.getSource();
       String value = textBox.getText();
-      textBox.setStyleDependentName("outofrange", !isInRange(value));
       setValue(value);
     }
   }
