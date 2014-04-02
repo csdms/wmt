@@ -13,6 +13,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DoubleBox;
@@ -158,7 +160,7 @@ public class ValueCell extends HorizontalPanel {
    */
   private void makeIntegerCell(String value) {
     IntegerBox box = new IntegerBox();
-    box.addKeyUpHandler(new NumberCellHandler<Integer>(box));
+    box.addValueChangeHandler(new NumberCellHandler<Integer>(box));
     box.setStyleName("wmt-ValueBoxen");
     try {
       Integer integerValue = Integer.valueOf(value);
@@ -180,7 +182,7 @@ public class ValueCell extends HorizontalPanel {
    */
   private void makeDoubleCell(String value) {
     DoubleBox box = new DoubleBox();
-    box.addKeyUpHandler(new NumberCellHandler<Double>(box));
+    box.addValueChangeHandler(new NumberCellHandler<Double>(box));
     box.setStyleName("wmt-ValueBoxen");
     try {
       Double doubleValue = Double.valueOf(value);
@@ -287,11 +289,13 @@ public class ValueCell extends HorizontalPanel {
   }
 
   /**
-   * A class to handle keyboard events in an IntegerBox or a DoubleBox. Also
-   * checks for valid contents of the boxen.
+   * A class to handle edit events in an {@link IntegerBox} or a
+   * {@link DoubleBox}. The {@link ValueChangeEvent} is fired when the
+   * <code>Enter</code> or <code>Tab</code> keys are pressed, or when focus
+   * leaves the ValueBox. Also checks for valid contents of the boxen.
    */
   @SuppressWarnings("unchecked")
-  public class NumberCellHandler<T> implements KeyUpHandler {
+  public class NumberCellHandler<T> implements ValueChangeHandler<T> {
     
     private ValueBox<T> box;
     
@@ -302,21 +306,17 @@ public class ValueCell extends HorizontalPanel {
     public NumberCellHandler(DoubleBox box) {
       this.box = (ValueBox<T>) box;
     }
-    
+
     @Override
-    public void onKeyUp(KeyUpEvent event) {
-      GWT.log("(onKeyUp:ValueBox)");
+    public void onValueChange(ValueChangeEvent<T> event) {
+      GWT.log("(onValueChange)");
       try {
         T value = box.getValueOrThrow();
         if (value == null) {
           box.addStyleDependentName("outofrange");
           return;
         }
-        Integer cursorPos = box.getCursorPos();
-        box.setValue(value); // formats, but moves cursor
-        if (cursorPos <= box.getText().length()) {
-          box.setCursorPos(cursorPos);
-        }
+        box.setValue(value); // formats contents
         ValueCell.this.setValue(value.toString());
         box.setStyleDependentName("outofrange", !isInRange(value.toString()));
       } catch (ParseException e) {
