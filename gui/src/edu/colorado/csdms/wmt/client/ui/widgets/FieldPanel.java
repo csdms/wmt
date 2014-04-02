@@ -67,7 +67,7 @@ public class FieldPanel extends Composite {
     paths.setWidget(0, 1, field);
 
     // Styles!
-    field.setStyleName("wmt-ValueBoxen");
+    field.setStyleName("wmt-TextBoxen");
     field.setWidth("15em");
     fieldLabel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
     fieldLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);

@@ -179,7 +179,17 @@
    color: #039;
 }
 
-/* All TextBoxen, but especially those used in the ParameterTable. */
+/* Used for all TextBox widgets. */
+.wmt-TextBoxen {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  background-color: #ffd;
+  padding: 5px 4px;
+  border: 1px solid #ccc;
+  border-top: 1px solid #999;
+  font-size: small;
+}
+
+/* All TextBoxen that display values. Used in the ParameterTable. */
 .wmt-ValueBoxen {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   background-color: #ffd;
