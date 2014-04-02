@@ -175,8 +175,13 @@
 
 /* Text used in a parameter description. */
 .wmt-ParameterDescription {
-   padding-left: 1.5em;
+   padding: 0 1em 0 1.5em;
    color: #039;
+}
+
+/* The ValueCell displays parameter values in the ParameterTable. */
+.wmt-ValueCell {
+  padding: 4px 2px;
 }
 
 /* Used for all TextBox widgets. */
@@ -189,7 +194,7 @@
   font-size: small;
 }
 
-/* All TextBoxen that display values. Used in the ParameterTable. */
+/* All TextBoxen that display numeric values. Used in the ParameterTable. */
 .wmt-ValueBoxen {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   background-color: #ffd;
@@ -201,12 +206,24 @@
   width: 200px;
 }
 .wmt-ValueBoxen-outofrange {
-   background-color: #fdd;
+  background-color: #fdd;
 }
 
-.gwt-ListBox {
-   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif !important;
-   font-size: medium;
+/* Droplists, used primarily in the ParameterTable. */
+.wmt-DroplistBox {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: small;
+  /* padding: 5px 4px; */ /* does nothing */
+  border: 1px solid #ccc; /* adding this changes the font?!? */
+  width: 210px; /* calculated by comparison with ValueBoxen */
+}
+
+/* For the droplist + button width for "file" parameter types. */
+.wmt-FileUploadBox {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: small;
+  border: 1px solid #ccc; /* adding this changes the font?!? */
+  width: 177px; /* calculated by comparison with DroplistBox */
 }
 
 .gwt-Button {

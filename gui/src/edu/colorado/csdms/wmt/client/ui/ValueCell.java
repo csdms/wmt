@@ -51,6 +51,7 @@ public class ValueCell extends HorizontalPanel {
   public ValueCell(ParameterJSO parameter) {
 
     this.parameter = parameter;
+    this.setStyleName("wmt-ValueCell");
 
     // If the parameter is a separator, short-circuit the method and return.
     if (this.parameter.getKey().matches("separator")) {
@@ -94,6 +95,7 @@ public class ValueCell extends HorizontalPanel {
   private void makeChoiceCell(String value) {
     ListBox choiceDroplist = new ListBox(false); // no multi select
     choiceDroplist.addChangeHandler(new ListSelectionHandler());
+    choiceDroplist.setStyleName("wmt-DroplistBox");
 
     Integer nChoices = this.parameter.getValue().getChoices().length();
     for (int i = 0; i < nChoices; i++) {
@@ -115,6 +117,7 @@ public class ValueCell extends HorizontalPanel {
   private void makeFileCell(String value) {
     fileDroplist = new ListBox(false); // no multi select
     fileDroplist.addChangeHandler(new ListSelectionHandler());
+    fileDroplist.setStyleName("wmt-FileUploadBox");
 
     // Load the droplist. If the value of the incoming parameter isn't listed
     // in the component, append it to the end of the list and select it.
@@ -199,7 +202,8 @@ public class ValueCell extends HorizontalPanel {
   private void makeTextCell(String value) {
     TextBox valueTextBox = new TextBox();
     valueTextBox.addKeyUpHandler(new TextEditHandler());
-    valueTextBox.setStyleName("wmt-ValueBoxen");
+    valueTextBox.setStyleName("wmt-TextBoxen");
+    valueTextBox.setWidth("200px");
     valueTextBox.setText(value);
     this.add(valueTextBox);
   }
