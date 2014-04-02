@@ -197,6 +197,8 @@
   border: 1px solid #ccc;
   border-top: 1px solid #999;
   font-size: small;
+  text-align: right;
+  width: 200px;
 }
 .wmt-ValueBoxen-outofrange {
    background-color: #fdd;
