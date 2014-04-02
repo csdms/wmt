@@ -15,6 +15,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DoubleBox;
@@ -182,7 +183,8 @@ public class ValueCell extends HorizontalPanel {
    */
   private void makeDoubleCell(String value) {
     DoubleBox box = new DoubleBox();
-    box.addValueChangeHandler(new NumberCellHandler<Double>(box));
+//    box.addValueChangeHandler(new NumberCellHandler<Double>(box));
+    box.addValueChangeHandler(new DoubleCellHandler(box));
     box.setStyleName("wmt-ValueBoxen");
     try {
       Double doubleValue = Double.valueOf(value);
@@ -288,6 +290,31 @@ public class ValueCell extends HorizontalPanel {
     }
   }
 
+  public class DoubleCellHandler implements ValueChangeHandler<Double> {
+
+    private DoubleBox box;
+    
+    public DoubleCellHandler(DoubleBox box) {
+      this.box = box;
+    }
+    
+    @Override
+    public void onValueChange(ValueChangeEvent<Double> event) {
+      GWT.log("(cray-cray idea)");
+      String input = box.getText();
+      if (input == null) {
+        box.addStyleDependentName("outofrange");
+        return;
+      }
+      NumberFormat fmt = NumberFormat.getDecimalFormat();
+      Double value = fmt.parse(input);
+      String formatted = NumberFormat.getFormat("#,##0.0#####").format(value);
+      box.setText(formatted);
+      ValueCell.this.setValue(formatted);
+      box.setStyleDependentName("outofrange", !isInRange(formatted));
+    }
+  }
+  
   /**
    * A class to handle edit events in an {@link IntegerBox} or a
    * {@link DoubleBox}. The {@link ValueChangeEvent} is fired when the
