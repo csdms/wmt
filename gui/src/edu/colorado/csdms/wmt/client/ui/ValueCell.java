@@ -71,7 +71,9 @@ public class ValueCell extends HorizontalPanel {
     } else if (type.matches("file")) {
       makeFileCell(value);
     } else if (type.matches("int")) {
-      makeIntegerCell(value);
+//      makeIntegerCell(value);
+      IntegerCell ibox = new IntegerCell(this);
+      this.add(ibox);
     } else if (type.matches("float")) {
       DoubleCell dbox = new DoubleCell(this);
       this.add(dbox);
