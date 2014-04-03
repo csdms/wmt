@@ -31,35 +31,29 @@
    padding-left: 1px;
 }
 
-.gwt-DecoratedPopupPanel .popupMiddleCenter {
-   height: 100%;
-   width: 100%;
-}
-
-.gwt-DecoratedPopupPanel .popupMiddleCenterInner {
-   /* background-color: white; */
-}
-
 /* Rules for the ModelMenu. */
 .wmt-ModelMenu {
    border: 1px solid #ccc; /* matches gwt-MenuBar-vertical */
    background-color: white;
-   padding: 5px;
+   padding: 5px 1px 5px 1px;
    box-shadow: 2px 2px 1px rgba(192, 192, 192, 0.75);
 }
 
 /* Items shown in the ModelMenu. */
 .wmt-ModelMenuItem {
    color: #333;
-   margin: 2px 40px 2px 2px;
+   padding: 3px 40px 3px 3px;
+   width: 100%;
+}
+.wmt-ModelMenuItem:hover {
+  background-color: #efefff;
 }
 
 /* Separators used between groups of ModelMenu items. */
 .wmt-ModelMenuSeparator {
    width: 100%;
    height: 1px;
-   margin-bottom: 3px;
-   background: 1px solid black;
+   border-top: 1px solid #ccc;
 }
 
 /* The "hamburger" menu icon for the ModelMenu. */

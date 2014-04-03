@@ -15,11 +15,11 @@ import com.google.gwt.user.client.ui.HTML;
 public class ModelMenuItem extends Grid {
 
   /**
-   * The zero-element constructor makes a separator from an HTML "hr" element.
+   * The zero-element constructor makes a separator.
    */
   public ModelMenuItem() {
     super(1, 1);
-    this.setWidget(0, 0, new HTML("<hr>"));
+    this.setWidget(0, 0, new HTML(""));
     this.setStyleName("wmt-ModelMenuSeparator");
   }
 
