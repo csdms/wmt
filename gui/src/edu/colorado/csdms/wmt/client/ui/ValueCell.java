@@ -15,7 +15,6 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DoubleBox;
@@ -184,29 +183,6 @@ public class ValueCell extends HorizontalPanel {
   }
 
   /**
-   * A worker that makes the {@link ValueCell} display an {@link DoubleBox}.
-   * This is the default for the "float" parameter type. Key up events are sent
-   * to {@link DoubleBoxHandler}.
-   * 
-   * @param value the value of the parameter, a String
-   */
-  private void makeDoubleCell(String value) {
-    DoubleBox box = new DoubleBox();
-//    box.addValueChangeHandler(new NumberCellHandler<Double>(box));
-    box.addValueChangeHandler(new DoubleCellHandler(box));
-    box.setStyleName("wmt-ValueBoxen");
-    try {
-      Double doubleValue = Double.valueOf(value);
-      box.setValue(doubleValue);
-      box.setStyleDependentName("outofrange", !isInRange(value));
-    } catch (Exception e) {
-      box.setValue(null);
-      box.addStyleDependentName("outofrange");
-    }
-    this.add(box);
-  }
-
-  /**
    * A worker that makes the {@link ValueCell} display a text box. This is the
    * default for the "string" parameter type.
    * 
@@ -296,31 +272,6 @@ public class ValueCell extends HorizontalPanel {
       ListBox listBox = (ListBox) event.getSource();
       String value = listBox.getValue(listBox.getSelectedIndex());
       setValue(value);
-    }
-  }
-
-  public class DoubleCellHandler implements ValueChangeHandler<Double> {
-
-    private DoubleBox box;
-    
-    public DoubleCellHandler(DoubleBox box) {
-      this.box = box;
-    }
-    
-    @Override
-    public void onValueChange(ValueChangeEvent<Double> event) {
-      GWT.log("(cray-cray idea)");
-      String input = box.getText();
-      if (input == null) {
-        box.addStyleDependentName("outofrange");
-        return;
-      }
-      NumberFormat fmt = NumberFormat.getDecimalFormat();
-      Double value = fmt.parse(input);
-      String formatted = NumberFormat.getFormat("#,##0.0#####").format(value);
-      box.setText(formatted);
-      ValueCell.this.setValue(formatted);
-      box.setStyleDependentName("outofrange", !isInRange(formatted));
     }
   }
   
