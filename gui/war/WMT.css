@@ -68,6 +68,9 @@
    padding: 0px;
    color: #333; /* matches font color in tab titles */
 }
+.wmt-ModelMenuButton:hover {
+  cursor: pointer;
+}
 
 /* The offset for TreeItems in the ModelTree. */
 .wmt-TreeItem {
