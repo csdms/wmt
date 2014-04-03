@@ -57,22 +57,17 @@ public class DoubleCell extends ValueBox<Double> {
    * the current parameter of the {@link ValueCell}, returning a Boolean.
    */
   public Boolean isInRange() {
-
-    String minValue = parameter.getValue().getMin();
-    Double minValueD = Double.valueOf(minValue);
-    String maxValue = parameter.getValue().getMax();
-    Double maxValueD = Double.valueOf(maxValue);
-
+    Double minValue = Double.valueOf(parameter.getValue().getMin());
+    Double maxValue = Double.valueOf(parameter.getValue().getMax());
     Boolean rangeOK = false;
-    if ((getValue() <= maxValueD) && (getValue() >= minValueD)) {
+    if ((getValue() <= maxValue) && (getValue() >= minValue)) {
       rangeOK = true;
     }
-
     return rangeOK;
   }
 
   /**
-   * A class to handle edit events in an {@link DoubleCell}. The
+   * A class to handle edit events in a {@link DoubleCell}. The
    * {@link ValueChangeEvent} is fired when the <code>Enter</code> or
    * <code>Tab</code> keys are pressed, or when focus leaves the
    * {@link DoubleCell}. Also checks for valid contents of the boxen.
