@@ -147,11 +147,17 @@
   color: #333;
   margin-right: 0.5em;
 }
+.wmt-ComponentSelectionMenuItem:hover {
+  background-color: #efefff;
+}
 
 /* Pull-down menu items in the ComponentActionMenu. */
 .wmt-ComponentActionMenuItem {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   padding: 6px 40px 6px 1px;
+}
+.wmt-ComponentActionMenuItem:hover {
+  background-color: #efefff;
 }
 
 /* "Play" button attached to the driver. */
