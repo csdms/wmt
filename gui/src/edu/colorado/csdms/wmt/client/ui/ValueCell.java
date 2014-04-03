@@ -74,7 +74,8 @@ public class ValueCell extends HorizontalPanel {
     } else if (type.matches("int")) {
       makeIntegerCell(value);
     } else if (type.matches("float")) {
-      makeDoubleCell(value);
+      DoubleCell dbox = new DoubleCell(this);
+      this.add(dbox);
     } else {
       makeTextCell(value);
     }
@@ -87,6 +88,14 @@ public class ValueCell extends HorizontalPanel {
               + parameter.getValue().getMax() + ")";
       this.setTitle(range);
     }
+  }
+
+  public ParameterJSO getParameter() {
+    return parameter;
+  }
+
+  public void setParameter(ParameterJSO parameter) {
+    this.parameter = parameter;
   }
 
   /**
