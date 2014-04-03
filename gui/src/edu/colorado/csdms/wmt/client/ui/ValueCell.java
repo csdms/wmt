@@ -188,13 +188,8 @@ public class ValueCell extends HorizontalPanel {
    * value (e.g., float or int). Returns a Boolean.
    */
   private Boolean isParameterTypeNumeric() {
-    Boolean isNumeric = true;
     String type = parameter.getValue().getType();
-    if (type.matches("string") || type.matches("choice")
-        || type.matches("file")) {
-      isNumeric = false;
-    }
-    return isNumeric;
+    return (type.matches("float") || type.matches("int"));
   }
 
   /**
