@@ -3,8 +3,6 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
-import java.text.ParseException;
-
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -13,18 +11,13 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DoubleBox;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.ValueBox;
 
 import edu.colorado.csdms.wmt.client.control.DataURL;
 import edu.colorado.csdms.wmt.client.data.ParameterJSO;
@@ -66,12 +59,12 @@ public class ValueCell extends HorizontalPanel {
     String range = "";
 
     // Make a cell to match the type -- choice, file or other.
+    // TODO Make classes for ChoiceCell, FileCell and TextCell.
     if (type.matches("choice")) {
       makeChoiceCell(value);
     } else if (type.matches("file")) {
       makeFileCell(value);
     } else if (type.matches("int")) {
-//      makeIntegerCell(value);
       IntegerCell ibox = new IntegerCell(this);
       this.add(ibox);
     } else if (type.matches("float")) {
@@ -163,28 +156,6 @@ public class ValueCell extends HorizontalPanel {
   }
 
   /**
-   * A worker that makes the {@link ValueCell} display an {@link IntegerBox}.
-   * This is the default for the "int" parameter type. Key up events are sent to
-   * {@link IntegerBoxHandler}.
-   * 
-   * @param value the value of the parameter, a String
-   */
-  private void makeIntegerCell(String value) {
-    IntegerBox box = new IntegerBox();
-    box.addValueChangeHandler(new NumberCellHandler<Integer>(box));
-    box.setStyleName("wmt-ValueBoxen");
-    try {
-      Integer integerValue = Integer.valueOf(value);
-      box.setValue(integerValue);
-      box.setStyleDependentName("outofrange", !isInRange(value));
-    } catch (Exception e) {
-      box.setValue(null);
-      box.addStyleDependentName("outofrange");
-    }
-    this.add(box);
-  }
-
-  /**
    * A worker that makes the {@link ValueCell} display a text box. This is the
    * default for the "string" parameter type.
    * 
@@ -213,32 +184,6 @@ public class ValueCell extends HorizontalPanel {
   }
 
   /**
-   * Checks whether a given value is within the established range of values for
-   * the current parameter of the {@link ValueCell}, returning a Boolean. This
-   * method operates only on numeric types.
-   * 
-   * @param value a value, as a String
-   */
-  private Boolean isInRange(String value) {
-    Boolean rangeOK = true;
-    if (isParameterTypeNumeric()) {
-      if (!isNumeric(value)) {
-        rangeOK = false;
-      } else {
-        Double newValueD = Double.valueOf(value);
-        String minValue = parameter.getValue().getMin();
-        Double minValueD = Double.valueOf(minValue);
-        String maxValue = parameter.getValue().getMax();
-        Double maxValueD = Double.valueOf(maxValue);
-        if ((newValueD > maxValueD) || (newValueD < minValueD)) {
-          rangeOK = false;
-        }
-      }
-    }
-    return rangeOK;
-  }
-
-  /**
    * Checks whether the current {@link ValueCell} parameter uses a numeric type
    * value (e.g., float or int). Returns a Boolean.
    */
@@ -250,18 +195,6 @@ public class ValueCell extends HorizontalPanel {
       isNumeric = false;
     }
     return isNumeric;
-  }
-
-  /**
-   * Checks whether the input String can be cast to a number.
-   * 
-   * @see <a
-   *      href="http://stackoverflow.com/questions/14206768/how-to-check-if-a-string-is-numeric">This</a>
-   *      discussion. Thanks, stackoverflow!
-   * @param s a String
-   */
-  private Boolean isNumeric(String s) {
-    return s.matches("[-+]?\\d*\\.?\\d+");
   }
 
   /**
@@ -277,43 +210,6 @@ public class ValueCell extends HorizontalPanel {
     }
   }
   
-  /**
-   * A class to handle edit events in an {@link IntegerBox} or a
-   * {@link DoubleBox}. The {@link ValueChangeEvent} is fired when the
-   * <code>Enter</code> or <code>Tab</code> keys are pressed, or when focus
-   * leaves the ValueBox. Also checks for valid contents of the boxen.
-   */
-  @SuppressWarnings("unchecked")
-  public class NumberCellHandler<T> implements ValueChangeHandler<T> {
-    
-    private ValueBox<T> box;
-    
-    public NumberCellHandler(IntegerBox box) {
-      this.box = (ValueBox<T>) box;
-    }
-    
-    public NumberCellHandler(DoubleBox box) {
-      this.box = (ValueBox<T>) box;
-    }
-
-    @Override
-    public void onValueChange(ValueChangeEvent<T> event) {
-      GWT.log("(onValueChange:number)");
-      try {
-        T value = box.getValueOrThrow();
-        if (value == null) {
-          box.addStyleDependentName("outofrange");
-          return;
-        }
-        box.setValue(value); // formats contents
-        ValueCell.this.setValue(value.toString());
-        box.setStyleDependentName("outofrange", !isInRange(value.toString()));
-      } catch (ParseException e) {
-        box.addStyleDependentName("outofrange");
-      }
-    }
-  }
-
   /**
    * A class to handle keyboard events in the TextBox.
    * <p>
