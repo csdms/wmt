@@ -14,17 +14,17 @@ import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
  * instance of {@link DroplistDialogBox} to prompt the user for a model to open.
  * Events are sent to {@link OpenModelHandler} and {@link GenericCancelHandler}.
  */
-public class MenuOpenModelHandler implements ClickHandler {
+public class ModelMenuPanelOpenHandler implements ClickHandler {
 
   private DataManager data;
   private DroplistDialogBox openDialog;
 
   /**
-   * Creates a new instance of {@link MenuOpenModelHandler}.
+   * Creates a new instance of {@link ModelMenuPanelOpenHandler}.
    * 
    * @param data the DataManager object for the WMT session
    */
-  public MenuOpenModelHandler(DataManager data) {
+  public ModelMenuPanelOpenHandler(DataManager data) {
     this.data = data;
   }
 

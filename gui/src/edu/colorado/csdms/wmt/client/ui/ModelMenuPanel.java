@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.ui.handler.MenuOpenModelHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelOpenHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelSaveHandler;
 
 /**
@@ -35,7 +35,7 @@ public class ModelMenuPanel extends HorizontalPanel {
     // Open
     Button openButton = new Button(DataManager.FA_OPEN);
     openButton.setTitle("Open model");
-    openButton.addClickHandler(new MenuOpenModelHandler(data));
+    openButton.addClickHandler(new ModelMenuPanelOpenHandler(data));
     this.add(openButton);
 
     Button saveButton = new Button(DataManager.FA_SAVE);
