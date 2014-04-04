@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.handler.MenuOpenModelHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelSaveHandler;
 
 /**
  * Makes a row of action buttons ("Open", "Save", "Run", etc.) for working with 
@@ -20,6 +21,7 @@ import edu.colorado.csdms.wmt.client.ui.handler.MenuOpenModelHandler;
  */
 public class ModelMenuPanel extends HorizontalPanel {
 
+  @SuppressWarnings("unused")
   private DataManager data;
   
   /**
@@ -38,11 +40,13 @@ public class ModelMenuPanel extends HorizontalPanel {
 
     Button saveButton = new Button(DataManager.FA_SAVE);
     saveButton.setTitle("Save model");
+    saveButton.addClickHandler(new ModelMenuPanelSaveHandler(data));
     this.add(saveButton);
 
     Button saveAsButton =
         new Button(DataManager.FA_SAVE + "<i class='fa fa-caret-right'></i>");
     saveAsButton.setTitle("Save model as...");
+    saveAsButton.addClickHandler(new ModelMenuPanelSaveHandler(data, true));    
     this.add(saveAsButton);
 
     Button deleteButton = new Button(DataManager.FA_DELETE);
