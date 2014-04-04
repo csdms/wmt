@@ -118,7 +118,7 @@ public class Perspective extends DockLayoutPanel {
         this.setWidget(0, 0, logo);
         this.setWidget(0, 1, modelMenu.getMenuButton());
       } else {
-        this.setWidget(0, 0, new ModelMenuPanel());
+        this.setWidget(0, 0, new ModelMenuPanel(data));
         this.setWidget(0, 1, logo);
       }
       this.getCellFormatter()
