@@ -26,6 +26,12 @@ import edu.colorado.csdms.wmt.client.ui.Perspective;
 public class DataManager {
 
   public static String DRIVER = "driver";
+  public static String FA_OPEN = "<i class='fa fa-folder-open-o'></i> ";
+  public static String FA_SAVE = "<i class='fa fa-floppy-o'></i> ";
+  public static String FA_DELETE = "<i class='fa fa-trash-o'></i> ";
+  public static String FA_RUN = "<i class='fa fa-play'></i> ";
+  public static String FA_STATUS = "<i class='fa fa-info'></i> ";
+  public static String FA_HELP = "<i class='fa fa-question'></i> ";
   
   private Boolean developmentMode;
 
