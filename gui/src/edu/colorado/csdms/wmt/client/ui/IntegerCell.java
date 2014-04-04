@@ -42,10 +42,10 @@ public class IntegerCell extends ValueBox<Integer> {
 
     addValueChangeHandler(new IntegerCellChangeHandler());
     setStyleName("wmt-ValueBoxen");
-
+    
     try {
       Integer integerValue =
-          Integer.valueOf(this.parameter.getValue().getDefault());
+          Integer.valueOf(parameter.getValue().getDefault());
       setValue(integerValue);
       setStyleDependentName("outofrange", !isInRange());
     } catch (Exception e) {
@@ -56,11 +56,21 @@ public class IntegerCell extends ValueBox<Integer> {
 
   /**
    * Checks whether a given value is within the established range of values for
-   * the current parameter of the {@link ValueCell}, returning a Boolean.
+   * the current parameter of the {@link ValueCell}, returning a Boolean. Also
+   * checks that the parameter's min/max values are within the Integer range.
    */
   public Boolean isInRange() {
-    Integer minValue = Integer.valueOf(parameter.getValue().getMin());
-    Integer maxValue = Integer.valueOf(parameter.getValue().getMax());
+    Integer minValue, maxValue;
+    try {
+      minValue = Integer.valueOf(parameter.getValue().getMin());
+    } catch (NumberFormatException e) {
+      minValue = Integer.MIN_VALUE;
+    }
+    try {
+      maxValue = Integer.valueOf(parameter.getValue().getMax());
+    } catch (NumberFormatException e) {
+      maxValue = Integer.MAX_VALUE;
+    }
     Boolean rangeOK = false;
     if ((getValue() <= maxValue) && (getValue() >= minValue)) {
       rangeOK = true;
