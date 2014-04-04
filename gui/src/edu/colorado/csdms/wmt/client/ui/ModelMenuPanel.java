@@ -31,34 +31,33 @@ public class ModelMenuPanel extends HorizontalPanel {
     this.setSpacing(5); // px
 
     // Open
-    Button openButton = new Button("<i class='fa fa-folder-open-o'></i>");
+    Button openButton = new Button(DataManager.FA_OPEN);
     openButton.setTitle("Open model");
     openButton.addClickHandler(new MenuOpenModelHandler(data));
     this.add(openButton);
 
-    Button saveButton = new Button("<i class='fa fa-floppy-o'></i>");
+    Button saveButton = new Button(DataManager.FA_SAVE);
     saveButton.setTitle("Save model");
     this.add(saveButton);
 
     Button saveAsButton =
-        new Button(
-            "<i class='fa fa-floppy-o'></i> <i class='fa fa-caret-right'></i>");
+        new Button(DataManager.FA_SAVE + "<i class='fa fa-caret-right'></i>");
     saveAsButton.setTitle("Save model as...");
     this.add(saveAsButton);
 
-    Button deleteButton = new Button("<i class='fa fa-trash-o'></i>");
+    Button deleteButton = new Button(DataManager.FA_DELETE);
     deleteButton.setTitle("Delete model");
     this.add(deleteButton);
 
-    Button runButton = new Button("<i class='fa fa-play'></i>");
+    Button runButton = new Button(DataManager.FA_RUN);
     runButton.setTitle("Run model");
     this.add(runButton);
 
-    Button statusButton = new Button("<i class='fa fa-info'></i>");
+    Button statusButton = new Button(DataManager.FA_STATUS);
     statusButton.setTitle("Status of model run");
     this.add(statusButton);
 
-    Button helpButton = new Button("<i class='fa fa-question'></i>");
+    Button helpButton = new Button(DataManager.FA_HELP);
     helpButton.setTitle("Help on using WMT");
     this.add(helpButton);
 

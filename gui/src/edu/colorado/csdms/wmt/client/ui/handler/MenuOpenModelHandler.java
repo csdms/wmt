@@ -34,7 +34,7 @@ public class MenuOpenModelHandler implements ClickHandler {
     openDialog = new DroplistDialogBox();
     openDialog.setText("Open Model...");
     openDialog.getChoicePanel().getOkButton().setHTML(
-        "<i class='fa fa-folder-open-o'></i> Open");
+        DataManager.FA_OPEN + "Open");
 
     // Populate the droplist with the available models on the server.
     for (int i = 0; i < data.modelNameList.size(); i++) {
