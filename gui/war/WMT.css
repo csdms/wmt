@@ -31,6 +31,18 @@
    padding-left: 1px;
 }
 
+/* Rules for the buttons that appear on the ModelMenuPanel. */
+.wmt-ModelMenuPanelButton {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  width: 60px;
+  color: #333;
+  background-color: #eee;
+  padding: 5px 7px;
+  border: 1px solid #bbb;
+  border-bottom: 1px solid #a0a0a0;
+  border-radius: 3px;
+}
+
 /* Rules for the ModelMenu. */
 .wmt-ModelMenu {
    border: 1px solid #ccc; /* matches gwt-MenuBar-vertical */

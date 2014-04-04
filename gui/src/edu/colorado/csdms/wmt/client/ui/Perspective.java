@@ -107,14 +107,20 @@ public class Perspective extends DockLayoutPanel {
       super(1, 2);
       this.setWidth("100%");
 
-      // Associate a ModelMenu.
-      modelMenu = new ModelMenu(data);
-
       Image logo = new Image("images/CSDMS_Logo_1.jpg");
       logo.setTitle("Go to the CSDMS website.");
 
-      this.setWidget(0, 0, logo);
-      this.setWidget(0, 1, modelMenu.getMenuButton());
+      // A temporary switch while experimenting.
+      Boolean useModelMenu = false;
+
+      if (useModelMenu) {
+        modelMenu = new ModelMenu(data);
+        this.setWidget(0, 0, logo);
+        this.setWidget(0, 1, modelMenu.getMenuButton());
+      } else {
+        this.setWidget(0, 0, new ModelMenuPanel());
+        this.setWidget(0, 1, logo);
+      }
       this.getCellFormatter()
           .setAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT,
               HasVerticalAlignment.ALIGN_MIDDLE);
