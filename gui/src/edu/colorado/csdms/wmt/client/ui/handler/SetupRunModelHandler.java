@@ -1,3 +1,6 @@
+/**
+ * <License>
+ */
 package edu.colorado.csdms.wmt.client.ui.handler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -37,9 +40,10 @@ public class SetupRunModelHandler implements ClickHandler {
       return;
     }
 
-    if (data.getPerspective().getModelMenu().isShowing()) {
-      data.getPerspective().getModelMenu().hide();
-    }
+// XXX Temporarily remove, pending decision on ModelMenu versus ModelMenuPanel.
+//    if (data.getPerspective().getModelMenu().isShowing()) {
+//      data.getPerspective().getModelMenu().hide();
+//    }
     
     runDialog = new RunDialogBox();
 

@@ -15,6 +15,7 @@ import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelHelpHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelOpenHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelSaveHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelStatusHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;
 
 /**
  * Makes a row of action buttons ("Open", "Save", "Run", etc.) for working with 
@@ -60,8 +61,10 @@ public class ModelMenuPanel extends HorizontalPanel {
     deleteButton.addClickHandler(new ModelMenuPanelDeleteHandler(data));
     this.add(deleteButton);
 
+    // Run
     Button runButton = new Button(DataManager.FA_RUN);
     runButton.setTitle("Run model");
+    runButton.addClickHandler(new SetupRunModelHandler(data));
     this.add(runButton);
 
     // Run status
