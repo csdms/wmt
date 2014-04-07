@@ -7,15 +7,16 @@
    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 }
 
+/* The DockLayoutPanel is the primary structing element of the WMT client. */
 .wmt-DockLayoutPanel {
    padding: 3px;
-   margin: 1em;
+   margin: 10px;
 }
 
+/* The base for the Model and Parameters tabs. */
 .wmt-SplitLayoutPanel {
    border: 3px solid #ccc;
 }
-
 .gwt-SplitLayoutPanel .gwt-SplitLayoutPanel-HDragger {
    background-color: #ccc;
 }
@@ -23,21 +24,19 @@
    background-color: #ccc;
 }
 
-.wmt-ParameterTableHeader {
-   font-weight: bold;
-   color: #333; /* matches font color in tab titles */
-   border-bottom: 2px solid #aaa;
-   padding-bottom: 5px;
-   padding-left: 1px;
+/* The ModelMenuPanel is the run of buttons along the top of the client. */
+.wmt-ModelMenuPanel {
+  margin-left: -3px; /* offsets 3px border in SplitLayoutPanel */
 }
 
-/* Rules for the buttons that appear on the ModelMenuPanel. */
+/* Rules for the buttons on the ModelMenuPanel. */
 .wmt-ModelMenuPanelButton {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   width: 60px;
   color: #333;
   background-color: #eee;
   padding: 5px 7px;
+  margin-right: 5px; /* provides inter-button spacing */
   border: 1px solid #bbb;
   border-bottom: 1px solid #a0a0a0;
   border-radius: 3px;

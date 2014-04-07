@@ -34,7 +34,7 @@ public class ModelMenuPanel extends HorizontalPanel {
   public ModelMenuPanel(DataManager data) {
 
     this.data = data;
-    this.setSpacing(5); // px
+    this.setStyleName("wmt-ModelMenuPanel");
 
     // Open
     Button openButton = new Button(DataManager.FA_OPEN);
