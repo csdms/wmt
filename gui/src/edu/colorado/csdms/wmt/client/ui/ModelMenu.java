@@ -36,6 +36,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
  * @see http://fortawesome.github.io/Font-Awesome/
  * @author Mark Piper (mark.piper@colorado.edu)
  */
+@Deprecated
 public class ModelMenu extends PopupPanel {
 
   private DataManager data;

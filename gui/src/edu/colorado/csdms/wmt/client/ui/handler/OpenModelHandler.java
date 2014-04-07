@@ -5,12 +5,11 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
-import edu.colorado.csdms.wmt.client.ui.ModelMenu;
 import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
 
 /**
  * Handles click on the "OK" button in the open dialog that appears when the
- * "Open Model..." button is clicked in the {@link ModelMenu}. Calls
+ * "Open Model..." button is clicked in the ModelMenuPanel. Calls
  * {@link DataTransfer#getModel(DataManager, Integer)} to pull the selected
  * model from the server.
  */

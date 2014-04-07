@@ -52,7 +52,7 @@ public class Perspective extends DockLayoutPanel {
   // Secondary UI panels/widgets.
   private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
-  private ModelMenu modelMenu;
+  private ModelMenuPanel modelMenuPanel;
   private ModelTree modelTree;
   private ParameterTable parameterTable;
   private ComponentInfoDialogBox componentInfoBox;
@@ -107,20 +107,14 @@ public class Perspective extends DockLayoutPanel {
       super(1, 2);
       this.setWidth("100%");
 
+      modelMenuPanel = new ModelMenuPanel(data);
+      
       Image logo = new Image("images/CSDMS_Logo_1.jpg");
       logo.setTitle("Go to the CSDMS website.");
 
-      // A temporary switch while experimenting.
-      Boolean useModelMenu = false;
+      this.setWidget(0, 0, modelMenuPanel);
+      this.setWidget(0, 1, logo);
 
-      if (useModelMenu) {
-        modelMenu = new ModelMenu(data);
-        this.setWidget(0, 0, logo);
-        this.setWidget(0, 1, modelMenu.getMenuButton());
-      } else {
-        this.setWidget(0, 0, new ModelMenuPanel(data));
-        this.setWidget(0, 1, logo);
-      }
       this.getCellFormatter()
           .setAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT,
               HasVerticalAlignment.ALIGN_MIDDLE);
@@ -263,18 +257,12 @@ public class Perspective extends DockLayoutPanel {
     return viewWest;
   }
 
-  /**
-   * @return the modelMenu
-   */
-  public ModelMenu getModelMenu() {
-    return modelMenu;
+  public ModelMenuPanel getModelMenuPanel() {
+    return modelMenuPanel;
   }
 
-  /**
-   * @param modelMenu the modelMenu to set
-   */
-  public void setModelMenu(ModelMenu modelMenu) {
-    this.modelMenu = modelMenu;
+  public void setModelMenuPanel(ModelMenuPanel modelMenuPanel) {
+    this.modelMenuPanel = modelMenuPanel;
   }
 
   /**
