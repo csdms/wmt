@@ -12,7 +12,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
 /**
  * Handles click on the "Open Model..." button in the ModelMenuPanel. Pops up an
  * instance of {@link DroplistDialogBox} to prompt the user for a model to open.
- * Events are sent to {@link OpenModelHandler} and {@link GenericCancelHandler}.
+ * Events are sent to {@link OpenModelHandler} and {@link DialogCancelHandler}.
  */
 public class ModelMenuPanelOpenHandler implements ClickHandler {
 

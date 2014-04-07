@@ -3,7 +3,6 @@
  */
 package edu.colorado.csdms.wmt.client.ui.handler;
 
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
@@ -29,15 +28,12 @@ public class ModelMenuPanelSaveHandler implements ClickHandler {
   public ModelMenuPanelSaveHandler(DataManager data, Boolean isSaveAs) {
     this.data = data;
     this.isSaveAs = isSaveAs;
-    GWT.log("ctr");
   }
 
   @Override
   public void onClick(ClickEvent event) {
-    GWT.log("onClick");
     if (isSaveAs) {
       showSaveDialogBox();
-      GWT.log("show box");
     } else {
       if (!data.modelIsSaved()) {
         if (data.getMetadata().getId() == -1) {
@@ -53,7 +49,7 @@ public class ModelMenuPanelSaveHandler implements ClickHandler {
   /**
    * Pops up an instance of {@link SaveDialogBox} to prompt the user to save the
    * model. Events are sent to {@link SaveModelHandler} and
-   * {@link GenericCancelHandler}.
+   * {@link DialogCancelHandler}.
    */
   private void showSaveDialogBox() {
     saveDialog = new SaveDialogBox(data.getModel().getName());

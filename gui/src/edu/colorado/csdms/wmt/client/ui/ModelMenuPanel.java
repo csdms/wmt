@@ -39,11 +39,13 @@ public class ModelMenuPanel extends HorizontalPanel {
     openButton.addClickHandler(new ModelMenuPanelOpenHandler(data));
     this.add(openButton);
 
+    // Save
     Button saveButton = new Button(DataManager.FA_SAVE);
     saveButton.setTitle("Save model");
     saveButton.addClickHandler(new ModelMenuPanelSaveHandler(data));
     this.add(saveButton);
 
+    // Save As
     Button saveAsButton =
         new Button(DataManager.FA_SAVE + "<i class='fa fa-caret-right'></i>");
     saveAsButton.setTitle("Save model as...");
