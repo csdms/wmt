@@ -11,8 +11,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelDeleteHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelHelpHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelOpenHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelSaveHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelStatusHandler;
 
 /**
  * Makes a row of action buttons ("Open", "Save", "Run", etc.) for working with 
@@ -62,12 +64,16 @@ public class ModelMenuPanel extends HorizontalPanel {
     runButton.setTitle("Run model");
     this.add(runButton);
 
+    // Run status
     Button statusButton = new Button(DataManager.FA_STATUS);
     statusButton.setTitle("Status of model run");
+    statusButton.addClickHandler(new ModelMenuPanelStatusHandler());    
     this.add(statusButton);
 
+    // Help
     Button helpButton = new Button(DataManager.FA_HELP);
     helpButton.setTitle("Help on using WMT");
+    helpButton.addClickHandler(new ModelMenuPanelHelpHandler());        
     this.add(helpButton);
 
     // Apply a style to each button.
