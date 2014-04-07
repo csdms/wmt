@@ -24,12 +24,15 @@
    background-color: #ddd;
 }
 
-/* The tabs. */
+/* Rules for the tabs. */
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
   background: #ddd !important;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelContentContainer {
   border-color: #ddd !important;
+}
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
+  font-weight: normal !important;
 }
 
 /* The ModelMenuPanel is the run of buttons along the top of the client. */
