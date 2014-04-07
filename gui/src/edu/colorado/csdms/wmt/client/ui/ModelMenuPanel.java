@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelDeleteHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelOpenHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelSaveHandler;
 
@@ -49,8 +50,10 @@ public class ModelMenuPanel extends HorizontalPanel {
     saveAsButton.addClickHandler(new ModelMenuPanelSaveHandler(data, true));    
     this.add(saveAsButton);
 
+    // Delete
     Button deleteButton = new Button(DataManager.FA_DELETE);
     deleteButton.setTitle("Delete model");
+    deleteButton.addClickHandler(new ModelMenuPanelDeleteHandler(data));
     this.add(deleteButton);
 
     Button runButton = new Button(DataManager.FA_RUN);
