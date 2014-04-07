@@ -10,12 +10,15 @@
 /* The DockLayoutPanel is the primary structing element of the WMT client. */
 .wmt-DockLayoutPanel {
    padding: 3px;
-   margin: 10px;
+   margin: 5px;
 }
 
 /* The splitter base for the Model and Parameters tabs. */
 .wmt-SplitLayoutPanel {
    border: 3px solid #ddd;
+   margin-left: 3px; /* aligns with ModelMenuPanel */
+   margin-right: 3px;
+   margin-bottom: 3px;
 }
 .gwt-SplitLayoutPanel .gwt-SplitLayoutPanel-HDragger {
    background-color: #ddd;
@@ -31,7 +34,7 @@
 
 /* The ModelMenuPanel is the run of buttons along the top of the client. */
 .wmt-ModelMenuPanel {
-  margin-left: -3px; /* offsets 3px border in SplitLayoutPanel */
+  /* margin-left: -3px; */ /* offsets 3px border in SplitLayoutPanel */
 }
 
 /* Rules for the buttons on the ModelMenuPanel. */
