@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.HTML;
  * @see http://fortawesome.github.io/Font-Awesome/
  * @author Mark Piper (mark.piper@colorado.edu)
  */
+@Deprecated
 public class ModelMenuItem extends Grid {
 
   /**
