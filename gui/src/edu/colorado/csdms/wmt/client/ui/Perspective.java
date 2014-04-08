@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.ui.handler.LoginHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 
 /**
@@ -94,8 +96,6 @@ public class Perspective extends DockLayoutPanel {
 
   /**
    * An inner class to define the header (North view) of the WMT GUI.
-   * <p>
-   * Login info could be located here, like in the GWT Mail example.
    */
   private class ViewNorth extends Grid {
 
@@ -104,20 +104,31 @@ public class Perspective extends DockLayoutPanel {
      */
     public ViewNorth() {
 
-      super(1, 2);
+      super(1, 3);
       this.setWidth("100%");
 
       modelMenuPanel = new ModelMenuPanel(data);
-      
+      this.setWidget(0, 0, modelMenuPanel);
+      this.getCellFormatter().setStyleName(0, 0, "wmt-ViewNorth0");
+
+      HTML login = new HTML("<a href=\"javascript:;\">Login</a>");
+      login.setTitle("Login to WMT.");
+      this.setWidget(0, 1, login);
+      this.getCellFormatter().setHorizontalAlignment(0, 1,
+          HasHorizontalAlignment.ALIGN_RIGHT);
+      this.getCellFormatter().setStyleName(0, 1, "wmt-ViewNorth1");
+
       Image logo = new Image("images/CSDMS_Logo_1.jpg");
       logo.setTitle("Go to the CSDMS website.");
-
-      this.setWidget(0, 0, modelMenuPanel);
-      this.setWidget(0, 1, logo);
-
+      logo.setAltText("CSDMS logo");
+      this.setWidget(0, 2, logo);
       this.getCellFormatter()
-          .setAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT,
+          .setAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT,
               HasVerticalAlignment.ALIGN_MIDDLE);
+      this.getCellFormatter().setStyleName(0, 2, "wmt-ViewNorth2");
+
+      // Clicking the login link prompts for credentials.
+      login.addClickHandler(new LoginHandler(data));
 
       // Clicking the CSDMS logo opens the CSDMS website in a new browser tab.
       logo.addClickHandler(new ClickHandler() {

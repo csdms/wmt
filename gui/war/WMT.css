@@ -13,6 +13,16 @@
    margin: 5px;
 }
 
+/* Rules for the panel running along the top of the client interface. */
+.wmt-ViewNorth0 {
+}
+.wmt-ViewNorth1 {
+  padding-right: 20px;
+}
+.wmt-ViewNorth2 {
+  width: 170px;
+}
+
 /* The splitter base for the Model and Parameters tabs. */
 .wmt-SplitLayoutPanel {
    border: 3px solid #ddd;
