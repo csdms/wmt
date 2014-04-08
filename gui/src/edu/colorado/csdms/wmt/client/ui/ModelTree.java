@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 
@@ -17,7 +15,6 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
-import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;
 
 /**
  * A ModelTree is used to graphically represent the construction of a simulation
@@ -29,7 +26,6 @@ public class ModelTree extends Tree {
 
   private DataManager data;
   private ComponentCell driverComponentCell;
-  private HTML driverRunCell;
 
   /**
    * Creates a ModelTree with an open "driver" port.
@@ -52,16 +48,7 @@ public class ModelTree extends Tree {
     this.clear();
 
     driverComponentCell = new ComponentCell(data);
-    driverRunCell = new HTML("<i class='fa fa-play-circle fa-3x'></i>");
-    driverRunCell.setStyleName("wmt-DriverRunCell");
-    driverRunCell.setTitle("Run the model.");
-    driverRunCell.addClickHandler(new SetupRunModelHandler(data));
-
-    Grid driverGrid = new Grid(1, 2);
-    driverGrid.setWidget(0, 0, driverComponentCell);
-    driverGrid.setWidget(0, 1, driverRunCell);
-
-    TreeItem driverItem = new TreeItem(driverGrid);
+    TreeItem driverItem = new TreeItem(driverComponentCell);
     driverComponentCell.setEnclosingTreeItem(driverItem);
     this.addItem(driverItem);
 
@@ -78,14 +65,6 @@ public class ModelTree extends Tree {
 
   public void setDriverComponentCell(ComponentCell driverComponentCell) {
     this.driverComponentCell = driverComponentCell;
-  }
-
-  public HTML getDriverRunCell() {
-    return driverRunCell;
-  }
-
-  public void setDriverRunCell(HTML driverRunCell) {
-    this.driverRunCell = driverRunCell;
   }
 
   /**
@@ -112,9 +91,7 @@ public class ModelTree extends Tree {
    */
   public TreeItem insertTreeItem(String portId, TreeItem target, Integer index) {
     ComponentCell cell = new ComponentCell(data, portId);
-    Grid container = new Grid(1, 1);
-    container.setWidget(0, 0, cell);
-    TreeItem item = target.insertItem(index, container);
+    TreeItem item = target.insertItem(index, cell);    
     item.setStyleName("wmt-TreeItem");
     cell.setEnclosingTreeItem(item);
     return item;
@@ -164,8 +141,7 @@ public class ModelTree extends Tree {
     // to it and exit.
     if (thisComponentIsADuplicate(componentId)) {
       GWT.log("This component is a duplicate!");
-      Grid grid = (Grid) target.getWidget();
-      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+      ComponentCell cell = (ComponentCell) target.getWidget();
       cell.isLinked(true);
       cell.getNameCell().addStyleDependentName("linked");
       return;
@@ -187,8 +163,7 @@ public class ModelTree extends Tree {
       String connectedId = providesComponentIsADuplicate(portId);
       if (connectedId != null) {
         GWT.log("This provides port has been used elsewhere!");
-        Grid newGrid = (Grid) newItem.getWidget();
-        ComponentCell newCell = (ComponentCell) newGrid.getWidget(0, 0);
+        ComponentCell newCell = (ComponentCell) newItem.getWidget();
         ComponentSelectionCommand cmd =
             new ComponentSelectionCommand(data, newCell, connectedId);
         cmd.updateComponentCell();
@@ -211,8 +186,7 @@ public class ModelTree extends Tree {
     Iterator<TreeItem> iter = this.treeItemIterator();
     while (iter.hasNext()) {
       TreeItem treeItem = (TreeItem) iter.next();
-      Grid grid = (Grid) treeItem.getWidget();
-      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+      ComponentCell cell = (ComponentCell) treeItem.getWidget();
       if (cell.getComponentId() == null) {
         openComponentCells.add(cell);
       }
@@ -233,8 +207,7 @@ public class ModelTree extends Tree {
     if (parent != null) {
       for (int i = 0; i < parent.getChildCount(); i++) {
         TreeItem child = parent.getChild(i);
-        Grid grid = (Grid) child.getWidget();
-        ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+        ComponentCell cell = (ComponentCell) child.getWidget();
         if (cell.getComponentId() == null) {
           openComponentCells.add(cell);
         }
@@ -255,8 +228,7 @@ public class ModelTree extends Tree {
       Iterator<TreeItem> iter = this.treeItemIterator();
       while (iter.hasNext() && !componentIsPresent) {
         TreeItem treeItem = (TreeItem) iter.next();
-        Grid grid = (Grid) treeItem.getWidget();
-        ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+        ComponentCell cell = (ComponentCell) treeItem.getWidget();
         if (cell.getComponentId() != null) {
           componentIsPresent = cell.getComponentId().matches(componentId);
         }
@@ -285,8 +257,7 @@ public class ModelTree extends Tree {
     while (iter.hasNext()) {
 
       TreeItem treeItem = (TreeItem) iter.next();
-      Grid grid = (Grid) treeItem.getWidget();
-      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+      ComponentCell cell = (ComponentCell) treeItem.getWidget();
 
       if (cell.getComponentId() != null) {
         String cellPortId = cell.getPortId();
@@ -312,6 +283,12 @@ public class ModelTree extends Tree {
     return false;
   }
 
+  /**
+   * Checks whether the input provides port has been filled higher in the 
+   * ModelTree. Returns the id of the component that fills it.
+   * 
+   * @param portId the id the port to check
+   */
   public String providesComponentIsADuplicate(String portId) {
 
     GWT.log("Checking for connection on port: " + portId);
@@ -320,8 +297,7 @@ public class ModelTree extends Tree {
     while (iter.hasNext()) {
 
       TreeItem treeItem = (TreeItem) iter.next();
-      Grid grid = (Grid) treeItem.getWidget();
-      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+      ComponentCell cell = (ComponentCell) treeItem.getWidget();
 
       if (cell.getComponentId() != null) {
         String cellPortId = cell.getPortId();
