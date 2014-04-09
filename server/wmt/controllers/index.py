@@ -6,7 +6,7 @@ from ..models import models, hosts
 
 class Index(object):
     def GET(self):
-        return render.index(models.get_models(), hosts.get_hosts())
+        return render.index(models.get_public_models(), hosts.get_hosts())
 
 
 class Help(object):

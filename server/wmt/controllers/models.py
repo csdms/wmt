@@ -74,7 +74,8 @@ class New(object):
         form = self.form()
         if not form.validates():
             return render.new(form)
-        id = models.new_model(form.d.name, form.d.json, owner='')
+        id = models.new_model(form.d.name, form.d.json,
+                              owner=web.ctx.session.username)
         return json.dumps(id)
 
 
@@ -187,7 +188,7 @@ class Show(object):
 class List(object):
     def GET(self):
         web.header('Content-Type', 'application/json; charset=utf-8')
-        all_models = models.get_models()
+        all_models = models.get_public_models()
         resp = []
         for model in all_models:
             resp.append(dict(id=model.id, name=model.name))

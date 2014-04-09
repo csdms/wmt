@@ -44,8 +44,12 @@ def update_model(id, name, text):
               name=name, json=text, date=web.net.httpdate(datetime.now()))
 
 
-def get_models():
-    return db.select('models', order='id DESC')
+def get_public_models():
+    return db.select('models', order='id DESC', where='owner=$owner', vars=dict(owner=''))
+
+
+def get_private_models():
+    return db.select('models', order='id DESC', where='owner=$owner', vars=dict(owner=web.ctx.session.username))
 
 
 def get_model(id):
