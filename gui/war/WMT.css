@@ -7,7 +7,7 @@
    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 }
 
-/* The DockLayoutPanel is the primary structing element of the WMT client. */
+/* The primary structuring element of the WMT client. */
 .wmt-DockLayoutPanel {
    padding: 3px;
    margin: 5px;
@@ -34,7 +34,7 @@
    background-color: #ddd;
 }
 
-/* Rules for the tabs. */
+/* Rules for the Model and Parameters tabs. */
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
   background: #ddd !important;
 }
@@ -168,6 +168,15 @@
    color: #039;
 }
 
+/* Separates parameter groups in the ParameterTable. */
+.wmt-ParameterSeparator {
+   font-style: oblique;
+   padding: 10px 0 5px 0;
+   color: #039;
+   border: solid #039;
+   border-width: 0 0 1px 0;
+}
+
 /* The ValueCell displays parameter values in the ParameterTable. */
 .wmt-ValueCell {
   padding: 4px 2px;
@@ -215,28 +224,20 @@
   width: 177px; /* calculated by comparison with DroplistBox */
 }
 
+/* All buttons. */
 .gwt-Button {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
-
 .gwt-Button-slim {
    padding: 3px 7px !important;
 }
 
+/* All labels. */
 .gwt-Label {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
+/* For the title on a DialogBox. */
 .gwt-DialogBox .Caption {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif !important;
 }
-
-/* Separates parameter groups in the ParameterTable. */
-.wmt-ParameterSeparator {
-   font-style: oblique;
-   padding: 10px 0 5px 0;
-   color: #039;
-   border: solid #039;
-   border-width: 0 0 1px 0;
-}
-
