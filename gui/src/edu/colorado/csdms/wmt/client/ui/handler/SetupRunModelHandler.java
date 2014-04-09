@@ -39,11 +39,6 @@ public class SetupRunModelHandler implements ClickHandler {
       Window.alert(msg);
       return;
     }
-
-// XXX Temporarily remove, pending decision on ModelMenu versus ModelMenuPanel.
-//    if (data.getPerspective().getModelMenu().isShowing()) {
-//      data.getPerspective().getModelMenu().hide();
-//    }
     
     runDialog = new RunDialogBox();
 
