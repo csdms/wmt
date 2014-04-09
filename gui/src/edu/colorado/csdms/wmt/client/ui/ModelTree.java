@@ -119,7 +119,6 @@ public class ModelTree extends Tree {
     if (this.getItem(0).equals(target)) {
       data.getModel().setName(
           componentName + " " + data.saveAttempts.toString());
-      data.setSelectedComponent(componentId);
       data.getPerspective().getParameterTable().loadTable(componentId);
     }
 

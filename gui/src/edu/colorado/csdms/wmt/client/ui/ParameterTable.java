@@ -126,10 +126,9 @@ public class ParameterTable extends FlexTable {
 
   /**
    * Deletes the contents of the ParameterTable and resets the tab title to
-   * "Parameters". Unsets the selectedComponent in the DataManager.
+   * "Parameters".
    */
   public void clearTable() {
-    data.setSelectedComponent(null); // should also be in ControlCell#delete?
     this.setComponentId(null);
     data.getPerspective().setParameterPanelTitle(null);
     this.removeAllRows();
