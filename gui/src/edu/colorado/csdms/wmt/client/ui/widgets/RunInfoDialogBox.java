@@ -24,8 +24,8 @@ public class RunInfoDialogBox extends DialogBox {
           + "<p>Check the status of the run by selecting "
           + "<b>View Run Status...</b> under the "
           + "<i class='fa fa-bars fa-lg'></i> menu, or by visiting:</p>"
-          + "<a href='https://csdms.colorado.edu/wmt/run/show'>"
-          + "https://csdms.colorado.edu/wmt/run/show</a>";
+          + "<a href='" + DataURL.showModelRun() + "'>"
+          + DataURL.showModelRun() + "</a>";
   private ClosePanel closePanel;
 
   /**
@@ -39,7 +39,7 @@ public class RunInfoDialogBox extends DialogBox {
 
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-    contents.setWidth("25em");
+    contents.setWidth("30em");
 
     HTML msgHtml = new HTML(MSG);
     contents.add(msgHtml);

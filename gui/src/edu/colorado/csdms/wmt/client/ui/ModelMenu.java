@@ -10,7 +10,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -37,7 +36,8 @@ import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
  * @see http://fortawesome.github.io/Font-Awesome/
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ModelMenu extends DecoratedPopupPanel {
+@Deprecated
+public class ModelMenu extends PopupPanel {
 
   private DataManager data;
   private HTML menuButton;
@@ -54,9 +54,9 @@ public class ModelMenu extends DecoratedPopupPanel {
   public ModelMenu(DataManager data) {
 
     super(true); // autohide
-    this.setWidth("25ch"); // ch = character width // XXX Remove hard code?
     this.getElement().getStyle().setCursor(Cursor.POINTER); // use pointer
     this.data = data;
+    this.setStyleName("wmt-ModelMenu");
 
     // A FlexTable for the menu items. (PopupPanels can have only one child.)
     FlexTable menu = new FlexTable();
@@ -66,17 +66,14 @@ public class ModelMenu extends DecoratedPopupPanel {
     ModelMenuItem newModel = new ModelMenuItem("New Model");
     ModelMenuItem openModel =
         new ModelMenuItem("Open Model...", "fa-folder-open-o");
-    ModelMenuItem closeModel =
-        new ModelMenuItem("Close Model", "fa-folder-o");
-    ModelMenuItem saveModel =
-        new ModelMenuItem("Save Model", "fa-floppy-o");
+    ModelMenuItem closeModel = new ModelMenuItem("Close Model", "fa-folder-o");
+    ModelMenuItem saveModel = new ModelMenuItem("Save Model", "fa-floppy-o");
     ModelMenuItem saveModelAs =
         new ModelMenuItem("Save Model As...", "fa-floppy-o");
     ModelMenuItem deleteModel =
         new ModelMenuItem("Delete Model...", "fa-trash-o");
-    ModelMenuItem runModel =
-        new ModelMenuItem("Run Model...", "fa-play");
-    ModelMenuItem runStatus = new ModelMenuItem("View Run Status...");    
+    ModelMenuItem runModel = new ModelMenuItem("Run Model...", "fa-play");
+    ModelMenuItem runStatus = new ModelMenuItem("View Run Status...");
     ModelMenuItem helpButton = new ModelMenuItem("Help");
     ModelMenuItem aboutButton = new ModelMenuItem("About");
 
@@ -111,7 +108,8 @@ public class ModelMenu extends DecoratedPopupPanel {
     // Set up, but don't display, the "hamburger" icon for the Model menu.
     menuButton = new HTML("<i class='fa fa-bars fa-2x'></i>");
     menuButton.setStyleName("wmt-ModelMenuButton");
-    menuButton.setTitle("Model menu");
+    menuButton
+        .setTitle("Use this menu to open, close, save, delete or run a model.");
 
     /*
      * Toggle the visibility of the Model menu on a click (MouseDownEvent) of
@@ -124,11 +122,13 @@ public class ModelMenu extends DecoratedPopupPanel {
       public void onMouseDown(MouseDownEvent event) {
         final Integer x = menuButton.getElement().getAbsoluteRight();
         final Integer y = menuButton.getElement().getAbsoluteBottom();
+        final Integer iconHalfWidth = 11; // by inspection
         ModelMenu.this
             .setPopupPositionAndShow(new PopupPanel.PositionCallback() {
               @Override
               public void setPosition(int offsetWidth, int offsetHeight) {
-                ModelMenu.this.setPopupPosition(x - offsetWidth, y);
+                ModelMenu.this.setPopupPosition(
+                    x - offsetWidth - iconHalfWidth, y);
               }
             });
       }

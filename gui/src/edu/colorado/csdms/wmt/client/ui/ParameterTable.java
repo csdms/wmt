@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.data.ParameterJSO;
+import edu.colorado.csdms.wmt.client.ui.widgets.ViewInputFilesPanel;
 
 /**
  * Builds a table of parameters for a single WMT model component. The value of
@@ -33,12 +34,7 @@ public class ParameterTable extends FlexTable {
   public ParameterTable(DataManager data) {
 
     this.data = data;
-    this.data.getPerspective().setParameterTable(this);
     this.setWidth("100%");
-
-    if (this.data.getSelectedComponent() != null) {
-      loadTable();
-    }
   }
 
   /**
@@ -50,16 +46,18 @@ public class ParameterTable extends FlexTable {
     infoMessage.setStyleName("wmt-ParameterTableMessage");
     this.setWidget(0, 0, infoMessage);
   }
-
+  
   /**
    * A worker that loads the ParameterTable with parameter values for the
-   * selected model component. Displays a {@link ViewInputFilesPanel} at the 
+   * selected model component. Displays a {@link ViewInputFilesPanel} at the
    * bottom of the table.
+   * 
+   * @param the id of the component whose parameters are to be displayed
    */
-  public void loadTable() {
+  public void loadTable(String componentId) {
 
     // The component whose parameters are to be displayed.
-    this.setComponentId(data.getSelectedComponent());
+    this.setComponentId(componentId);
 
     // Return if the selected component doesn't have parameters.
     if (data.getModelComponent(componentId).getParameters() == null) {
@@ -87,6 +85,8 @@ public class ParameterTable extends FlexTable {
         this.setWidget(parameterIndex, 1, new ValueCell(parameter));
         this.getFlexCellFormatter().setStyleName(parameterIndex, 0,
             "wmt-ParameterDescription");
+        this.getFlexCellFormatter().setHorizontalAlignment(parameterIndex, 1,
+            HasHorizontalAlignment.ALIGN_RIGHT);
       }
       parameterIndex++;
     }
@@ -126,10 +126,9 @@ public class ParameterTable extends FlexTable {
 
   /**
    * Deletes the contents of the ParameterTable and resets the tab title to
-   * "Parameters". Unsets the selectedComponent in the DataManager.
+   * "Parameters".
    */
   public void clearTable() {
-    data.setSelectedComponent(null); // should also be in ControlCell#delete?
     this.setComponentId(null);
     data.getPerspective().setParameterPanelTitle(null);
     this.removeAllRows();

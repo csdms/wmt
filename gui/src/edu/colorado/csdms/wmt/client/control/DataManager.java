@@ -9,10 +9,11 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Cursor;
+
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
-import edu.colorado.csdms.wmt.client.ui.ComponentList;
 import edu.colorado.csdms.wmt.client.ui.ModelTree;
 import edu.colorado.csdms.wmt.client.ui.Perspective;
 
@@ -24,6 +25,14 @@ import edu.colorado.csdms.wmt.client.ui.Perspective;
  */
 public class DataManager {
 
+  public static String DRIVER = "driver";
+  public static String FA_OPEN = "<i class='fa fa-folder-open-o'></i> ";
+  public static String FA_SAVE = "<i class='fa fa-floppy-o'></i> ";
+  public static String FA_DELETE = "<i class='fa fa-trash-o'></i> ";
+  public static String FA_RUN = "<i class='fa fa-play'></i> ";
+  public static String FA_STATUS = "<i class='fa fa-info'></i> ";
+  public static String FA_HELP = "<i class='fa fa-question'></i> ";
+  
   private Boolean developmentMode;
 
   // Get the state of UI elements through the Perspective. 
@@ -31,7 +40,6 @@ public class DataManager {
 
   private List<ComponentJSO> components; // "class" components
   private List<ComponentJSO> modelComponents; // "instance" components
-  private String draggedComponent;
   private String selectedComponent;
   
   private ModelJSO model;
@@ -40,9 +48,11 @@ public class DataManager {
   private String modelString; // stringified JSON
   
   private String simulationId; // the uuid of a submitted run
-  private String hostname;
-  private String username;
-  private String password;
+  private String hpccHostname;
+  private String hpccUsername; // for the HPCC where the model is run
+  private String hpccPassword;
+  private String wmtUsername;  // for logging into WMT
+  private String wmtPassword;
   
   // Experiment with public members, for convenience.
   public List<String> componentIdList;
@@ -79,20 +89,32 @@ public class DataManager {
   }
 
   /**
+   * Shows the "wait" cursor.
+   */
+  public void showWaitCursor() {
+    perspective.getElement().getStyle().setCursor(Cursor.WAIT);
+  }
+  
+  /**
+   * Shows the default cursor.
+   */
+  public void showDefaultCursor() {
+    perspective.getElement().getStyle().setCursor(Cursor.DEFAULT);
+  }
+  
+  /**
    * A convenience method that returns the prefix (a String) to be displayed
    * before the name of the tab title in the WMT interface. Currently a Font
    * Awesome icon.
    * 
-   * @param tabName the name of the tab: "model", "parameter" or "component"
+   * @param tabName the name of the tab: "model" or "parameter"
    */
   public String tabPrefix(String tabName) {
     String prefix = "";
     if (tabName.matches("model")) {
-      prefix = "<i class='fa fa-globe'></i> ";
+      prefix = "<i class='fa fa-cogs'></i> ";
     } else if (tabName.matches("parameter")) {
       prefix = "<i class='fa fa-wrench'></i> ";
-    } else if (tabName.matches("component")) {
-      prefix = "<i class='fa fa-cogs'></i> ";
     }
     return prefix;
   }
@@ -141,11 +163,10 @@ public class DataManager {
   }
 
   /**
-   * A convenience method that adds a component to the ArrayList of
-   * components.
+   * A convenience method that adds a component to the ArrayList of components.
    * <p>
    * Once all the components have been pulled from the server, sort them
-   * alphabetically and initialize the {@link ComponentList}.
+   * alphabetically and initialize the {@link ModelTree}.
    * 
    * @param component the component to add, a ComponentJSO object
    */
@@ -153,8 +174,10 @@ public class DataManager {
     this.components.add(component);
     if (this.components.size() == this.componentIdList.size()) {
       sortComponents();
-      perspective.initializeComponentList();
-    } // XXX This is fragile.
+      perspective.getModelTree().getDriverComponentCell().getComponentMenu()
+          .updateComponents();
+      showDefaultCursor();
+    }
   }
 
   /**
@@ -367,68 +390,82 @@ public class DataManager {
    * Returns the hostname of the machine where the user wants the model to be
    * run.
    */
-  public String getHostname() {
-    return hostname;
+  public String getHpccHostname() {
+    return hpccHostname;
   }
 
   /**
    * Stores the hostname of the machine where the user wants the model to be
    * run.
    * 
-   * @param hostname
+   * @param hpccHostname
    */
-  public void setHostname(String hostname) {
-    this.hostname = hostname;
+  public void setHpccHostname(String hostname) {
+    this.hpccHostname = hostname;
   }
 
   /**
    * Returns the user's username for the host on which the model is to be run.
    */
-  public String getUsername() {
-    return username;
+  public String getHpccUsername() {
+    return hpccUsername;
   }
 
   /**
    * Stores the user's username for the host on which the model is to be run.
    * 
-   * @param username
+   * @param hpccUsername
    */
-  public void setUsername(String username) {
-    this.username = username;
+  public void setHpccUsername(String username) {
+    this.hpccUsername = username;
   }
 
   /**
    * Returns the user's password for the host on which the model is to be run.
    */
-  public String getPassword() {
-    return password;
+  public String getHpccPassword() {
+    return hpccPassword;
   }
 
   /**
    * Stores the user's password for the host on which the model is to be run.
    * 
-   * @param password
+   * @param hpccPassword
    */
-  public void setPassword(String password) {
-    this.password = password;
+  public void setHpccPassword(String password) {
+    this.hpccPassword = password;
   }
 
   /**
-   * Returns the id of the Component (a String) being dragged from the
-   * "Components" tab of WMT.
+   * Returns the user's login name for the WMT client.
    */
-  public String getDraggedComponent() {
-    return draggedComponent;
+  public String getWmtUsername() {
+    return wmtUsername;
   }
 
   /**
-   * Stores the id of the Component (a String) being dragged from the
-   * "Components" tab of WMT.
+   * Stores the user's login name for the WMT client.
    * 
-   * @param draggedComponent the id of the dragged component, a String
+   * @param wmtUsername
    */
-  public void setDraggedComponent(String draggedComponent) {
-    this.draggedComponent = draggedComponent;
+  public void setWmtUsername(String wmtUsername) {
+    this.wmtUsername = wmtUsername;
+  }
+
+  /**
+   * Returns the user's password for the WMT client.
+   */
+  public String getWmtPassword() {
+    return wmtPassword;
+  }
+
+  /**
+   * Stores the user's password for the WMT client.
+   * 
+   * @param wmtPassword
+   */
+  public void setWmtPassword(String wmtPassword) {
+    this.wmtPassword = wmtPassword;
   }
 
   /**
@@ -475,13 +512,5 @@ public class DataManager {
 
     ModelSerializer serializer = new ModelSerializer(this);
     serializer.deserialize();
-
-    // Locate the driver of the model and display its parameters.
-    for (int i = 0; i < model.nComponents(); i++) {
-      if (model.getComponents().get(0).isDriver()) {
-        setSelectedComponent(model.getComponents().get(0).getId());
-        perspective.getParameterTable().loadTable();
-      }
-    }
   }
 }

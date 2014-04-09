@@ -1,248 +1,160 @@
 /* 
-   CSS rules for WMT. 
+   CSS rules for the WMT client.
 */
 
+/* All HTML widgets obey this rule. */
 .gwt-HTML {
    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 }
 
+/* The primary structuring element of the WMT client. */
 .wmt-DockLayoutPanel {
    padding: 3px;
-   margin: 1em;
+   margin: 5px;
 }
 
+/* Rules for the panel running along the top of the client interface. */
+.wmt-ViewNorth0 {
+}
+.wmt-ViewNorth1 {
+  padding-right: 20px;
+}
+.wmt-ViewNorth2 {
+  width: 170px;
+}
+
+/* The splitter base for the Model and Parameters tabs. */
 .wmt-SplitLayoutPanel {
-   border: 3px solid #ccc;
-}
-
-.gwt-SplitLayoutPanel .gwt-SplitLayoutPanel-HDragger {
-   background-color: #ccc;
-}
-.gwt-SplitLayoutPanel .gwt-SplitLayoutPanel-VDragger {
-   background-color: #ccc;
-}
-
-.wmt-ParameterTableHeader {
-   font-weight: bold;
-   color: #333; /* matches font color in tab titles */
-   border-bottom: 2px solid #aaa;
-   padding-bottom: 5px;
-   padding-left: 1px;
-}
-
-.gwt-DecoratedPopupPanel .popupMiddleCenter {
-   height: 100%;
-   width: 100%;
-}
-
-.gwt-DecoratedPopupPanel .popupMiddleCenterInner {
-   /* background-color: white; */
-   
-}
-
-.wmt-ModelMenu {
-   border: 1px ridge #ddd;
-   background-color: white;
-   padding: 3px;
-}
-
-.wmt-ModelMenuSeparator {
-   width: 100%;
-   height: 1px;
+   border: 3px solid #ddd;
+   margin-left: 3px; /* aligns with ModelMenuPanel */
+   margin-right: 3px;
    margin-bottom: 3px;
-   background: 1px solid black;
+}
+.gwt-SplitLayoutPanel .gwt-SplitLayoutPanel-HDragger {
+   background-color: #ddd;
 }
 
-.wmt-ModelMenuButton {
-   margin: 0px;
-   padding: 0px;
-   color: #333; /* matches font color in tab titles */
-   /* z-index: 10; */ /* make sure it's on top */
+/* Rules for the Model and Parameters tabs. */
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
+  background: #ddd !important;
+}
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelContentContainer {
+  border-color: #ddd !important;
+}
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
+  font-weight: normal !important;
 }
 
-/* 
-   Rules imported from DragNDrop. Many should be renamed or deleted. 
-*/
-/* .gwt-Tree {
-   padding: 1px;
-} */
-/*
-.gwt-Tree .gwt-TreeItem {
-   margin-left: 2em !important;
+/* The ModelMenuPanel is the run of buttons along the top of the client. */
+.wmt-ModelMenuPanel {
+  /* margin-left: -3px; */ /* offsets 3px border in SplitLayoutPanel */
 }
-*/
-/* Can't seem to override background color. Is it an image? */
-/*
-.gwt-Tree .gwt-TreeItem-selected {
-   font-style: italic;
-   font-size: 90%;
-   border: 1px dotted #f88;
-   padding: 1em;
-}
-*/
 
-/* TreeItem offset = ModelCell height */
+/* Rules for the buttons on the ModelMenuPanel. */
+.wmt-ModelMenuPanelButton {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  width: 60px;
+  color: #333;
+  background-color: rgba(192, 192, 192, 0.50);
+  padding: 5px 7px;
+  margin-right: 5px; /* provides inter-button spacing */
+  border: 1px solid #bbb;
+  border-bottom: 1px solid #a0a0a0;
+  border-radius: 2px;
+}
+
+/* The offset for TreeItems in the ModelTree. */
 .wmt-TreeItem {
-   margin-left: 60px !important;
-   /* vertical-align: bottom; */
-   /* padding-bottom: 0px !important; */
-   /* border-left: 1px dotted #bbb; */ /* Close, but not quite. */
+   margin-left: 90px !important;
 }
 
-/*
-   The following styles are used with a ModelCell.
-*/
-/* See TreeItem offset. Must factor combined heights of ControlCell icons. */
-.wmt-ModelCell {
-   height: 60px;
-   vertical-align: top;
-}
-
-.wmt-PortCell {
-   font-style: italic;
-   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;     
-   /* padding: 1em 3px 1em 3px; */
-   padding: 1em;
-   margin: 0px;
-   text-align: center;
-   /* width: 75px; */ /* This is a fixed, not minimum, width */
-}
-
-.wmt-PortCell-connected {
-   border: 2px solid #5b5;
-   background-color: #efe;
-}
-
-.wmt-PortCell-required {
-   border: 2px solid #b55;
-   background-color: white;
-}
-
-.wmt-PortCell-optional {
-   border: 2px solid #ee0; /* Need bright, but not too light, yellow */
-   background-color: white;
-}
-
-.wmt-PortCell-allowed {
-   border: 2px solid #5b5;
-   background-color: #dfd;
-}
-
-.wmt-PortCell-notallowed {
-   border: 2px solid #b55;
-   background-color: #fdd;
-}
-
-.wmt-ConnectorCell {
-  color: #bbb;
-}
-
+/* Base style for a ComponentCell. */
 .wmt-ComponentCell {
-   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;  
-   padding: 1em;
-   margin: 0px;
-   text-align: center;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-style: italic;
+  text-align: center;
+  background-color: white;
+  border: 2px solid #55b;
+  height: 60px;
 }
 
-.wmt-ComponentCell-connected {
-   border: 2px solid #55b;
-   background-color: #eef;
+/* A ComponentCell that displays a component. */
+.wmt-ComponentCell-connected {  
+  font-style: normal;
+  background-color: #eef;
 }
 
-.wmt-ComponentCell-unconnected {
-   border: 2px dashed #ccc;
-   color: #ccc;
+/* The name (port or component) shown inside the ComponentCell. */
+.wmt-ComponentCell-NameCell {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  text-align: center;
+  width: 100px;
+  max-width: 100px;
+  min-width: 100px;
+  margin-left: 5px;
 }
 
-.wmt-ComponentCell-linked {
+/* A ComponentCell that displays a linked component. */
+.wmt-ComponentCell-NameCell-linked {
    color: black;
 }
-
-.wmt-ComponentCell-linked:after {
+.wmt-ComponentCell-NameCell-linked:after {
    font-family: "FontAwesome";
-   padding: 5px;
-   content: "\f112";  
-   /* content: "@"; */
-   color: black;
-}
-
-/* 
-    Be mindful of hard-coded positioning with these ControlCell icons. 
-    Their combined heights may overwhelm the ModelCell height.
-*/
-.wmt-ControlCell {
-   /* height: 50px; */
-   position: relative;
-   /* top: -10px; */
-   left: -3px;
-   margin: 0px;
-   padding: 0px;
-   border: 0px;
-}
-
-.wmt-ControlCell-delete {
-   /* position: relative; */
-   /* height: 10px; */
-   /* top: -7px; */
-   color: #c55;
-}
-
-.wmt-ControlCell-help {
-   position: relative;
-   /* height: 10px; */
-   /* top: -11px; */
-   left: -1px;
-   color: #55c;
-}
-
-.wmt-ControlCell-run {
-   /* position: relative; */
-   /* height: 10px; */
-   /* top: -15px; */
+   padding: 3px;
+   content: "\f112";
    color: #333;
 }
 
-/* Makes a grabby handle on the components grid. */
-.wmt-GrabCell {
-   color: #55c;
+/* Rules for the menuCell inside the ComponentCell. */
+.wmt-ComponentCell-MenuCell {
+  background-color: white;
+  padding: 2px;
 }
-.wmt-GrabCell-notallowed {
-   color: #ccc;
-}
-
-/*
-.wmt-GrabCell {
-   position: relative;
-   padding-left: 0.5em;
+.wmt-ComponentCell-MenuCell-connected {
+  background-color: #eef;
 }
 
-.wmt-GrabCell:before {
-   content: "";
-   position: absolute;
-   left: 0px;
-   top: -0.75em;
-   width: 1px;
-   height: 1.5em;
-   border-left: 2px solid #aaa;
-   border-right: 2px solid #aaa;
+/* The button displayed on the menuCell inside the ComponentCell. 
+   Needs :after */
+.wmt-ComponentCell-ComponentButton:after {
+  font-family: "FontAwesome";
+  font-style: normal;
+  content: "\f067";
+  color: #333;  
 }
-*/
+.wmt-ComponentCell-ActionButton:after {
+  font-family: "FontAwesome";
+  font-style: normal;
+  content: "\f078";
+  color: #333;
+}
 
-.wmt-TextCell {
+/* Pull-down menu items in the ComponentSelectionMenu. */
+.wmt-ComponentSelectionMenuItem {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  color: black;
+  padding: 6px 40px 6px 1px;
 }
-.wmt-TextCell-notallowed {
-  color: #ccc;
+.wmt-ComponentSelectionMenuItem:before {
+  font-family: "FontAwesome";
+  font-style: normal;
+  content: "\f013";
+  color: #333;
+  margin-right: 0.5em;
+}
+.wmt-ComponentSelectionMenuItem:hover {
+  background-color: #efefff;
 }
 
-/* Style used for right-click context menu in a ModelTree. */
-.wmt-ContextMenu {
-   padding: 3px;
-   border: 1px #ddd;
-   background-color: white;
+/* Pull-down menu items in the ComponentActionMenu. */
+.wmt-ComponentActionMenuItem {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  padding: 6px 40px 6px 1px;
+}
+.wmt-ComponentActionMenuItem:hover {
+  background-color: #efefff;
 }
 
+/* The informational message displayed when the ParameterTable is empty. */
 .wmt-ParameterTableMessage {
    padding: 1em;
    margin: 0px;
@@ -250,53 +162,82 @@
    color: #ccc;
 }
 
+/* Text used in a parameter description. */
 .wmt-ParameterDescription {
-   padding-left: 1.5em;
+   padding: 0 1em 0 1.5em;
    color: #039;
-}
-
-.gwt-TextBox {
-   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif !important;
-   background-color: #ffc;
-}
-
-.gwt-TextBox-outofrange {
-   background-color: #fcc;
-}
-
-.gwt-ListBox {
-   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif !important;
-   font-size: initial;
-}
-
-.gwt-Button {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-}
-
-.gwt-Button-slim {
-   padding: 3px 7px !important;
-}
-
-.gwt-Label {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-}
-
-.gwt-DialogBox .Caption {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif !important;
-}
-
-.gwt-PasswordTextBox {
-   background-color: #ffc;
 }
 
 /* Separates parameter groups in the ParameterTable. */
 .wmt-ParameterSeparator {
-   /* font-weight: bolder; */
    font-style: oblique;
-   /* margin: 15px 0 10px 0; */
    padding: 10px 0 5px 0;
    color: #039;
    border: solid #039;
    border-width: 0 0 1px 0;
 }
 
+/* The ValueCell displays parameter values in the ParameterTable. */
+.wmt-ValueCell {
+  padding: 4px 2px;
+}
+
+/* Used for all TextBox widgets. */
+.wmt-TextBoxen {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  background-color: #ffd;
+  padding: 5px 4px;
+  border: 1px solid #ccc;
+  border-top: 1px solid #999;
+  font-size: small;
+}
+
+/* All TextBoxen that display numeric values. Used in the ParameterTable. */
+.wmt-ValueBoxen {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  background-color: #ffd;
+  padding: 5px 4px;
+  border: 1px solid #ccc;
+  border-top: 1px solid #999;
+  font-size: small;
+  text-align: right;
+  width: 200px;
+}
+.wmt-ValueBoxen-outofrange {
+  background-color: #fdd;
+}
+
+/* Droplists, used primarily in the ParameterTable. */
+.wmt-DroplistBox {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: small;
+  /* padding: 5px 4px; */ /* does nothing */
+  border: 1px solid #ccc; /* adding this changes the font?!? */
+  width: 210px; /* calculated by comparison with ValueBoxen */
+}
+
+/* For the droplist + button width for "file" parameter types. */
+.wmt-FileUploadBox {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: small;
+  border: 1px solid #ccc; /* adding this changes the font?!? */
+  width: 177px; /* calculated by comparison with DroplistBox */
+}
+
+/* All buttons. */
+.gwt-Button {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+.gwt-Button-slim {
+   padding: 3px 7px !important;
+}
+
+/* All labels. */
+.gwt-Label {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+/* For the title on a DialogBox. */
+.gwt-DialogBox .Caption {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif !important;
+}

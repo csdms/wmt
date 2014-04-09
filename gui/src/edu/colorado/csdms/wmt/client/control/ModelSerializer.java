@@ -1,3 +1,6 @@
+/**
+ * <License>
+ */
 package edu.colorado.csdms.wmt.client.control;
 
 import java.util.ArrayList;
@@ -8,14 +11,14 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.TreeItem;
 
-import edu.colorado.csdms.wmt.client.data.Component;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ModelComponentConnectionsJSO;
 import edu.colorado.csdms.wmt.client.data.ModelComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ModelComponentParametersJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
-import edu.colorado.csdms.wmt.client.ui.ModelCell;
+import edu.colorado.csdms.wmt.client.ui.ComponentCell;
 import edu.colorado.csdms.wmt.client.ui.ModelTree;
+import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
 
 /**
  * Serializes the model built in a WMT session.
@@ -32,7 +35,7 @@ public class ModelSerializer {
 
   /**
    * Instatiates a ModelSerializer and stores a reference to the
-   * {@link DataManager}.
+   * {@link DataManager} and the {@link ModelTree}.
    * 
    * @param data the DataManager for the WMT session.
    */
@@ -64,21 +67,20 @@ public class ModelSerializer {
     while (iter.hasNext()) {
 
       treeItem = (TreeItem) iter.next();
-      ModelCell cell = (ModelCell) treeItem.getWidget();
+      ComponentCell cell = (ComponentCell) treeItem.getWidget();
 
       // Skip linked components and empty components.
-      if (cell.getComponentCell().isLinked()) {
+      if (cell.isLinked()) {
         continue;
       }
-      if (cell.getComponentCell().getComponent().getId() == null) {
+      if (cell.getComponentId() == null) {
         continue;
       }
 
       // Serialize this model component.
-      Component component = cell.getComponentCell().getComponent();
-      ComponentJSO componentJso = data.getModelComponent(component.getId());
+      ComponentJSO componentJso = data.getModelComponent(cell.getComponentId());
       ModelComponentJSO modelComponent = serializeComponent(componentJso);
-      if (cell.getPortCell().getPort().getId().matches("driver")) {
+      if (cell.getPortId().matches("driver")) {
         modelComponent.setDriver();
       }
 
@@ -141,7 +143,7 @@ public class ModelSerializer {
   }
 
   /**
-   * Serializes the ports of the model component.
+   * Serializes the ports/connections of the model component.
    * 
    * @param componentJso a {@link ComponentJSO} representing the model component
    * @return a {@link ModelComponentConnectionsJSO} representing the connections
@@ -157,9 +159,9 @@ public class ModelSerializer {
     // Add the ports for the model component.
     for (int i = 0; i < treeItem.getChildCount(); i++) {
       TreeItem child = treeItem.getChild(i);
-      ModelCell childCell = (ModelCell) child.getWidget();
-      String portId = childCell.getPortCell().getPort().getId();
-      String componentId = childCell.getComponentCell().getComponent().getId();
+      ComponentCell childCell = (ComponentCell) child.getWidget();
+      String portId = childCell.getPortId();
+      String componentId = childCell.getComponentId();
       modelComponentConnections.addConnection(portId, componentId);
     }
     return modelComponentConnections;
@@ -183,8 +185,8 @@ public class ModelSerializer {
     // Deserialize the components connected to the driver.
     matchConnections(driver);
 
-    // Loop to fill in open ports in ModelTree, checking the connections of all
-    // the components in the model.
+    // Loop to fill remaining open ports in ModelTree, checking the connections
+    // of all the components in the model.
     Iterator<ModelComponentJSO> iter = modelComponents.iterator();
     while (iter.hasNext()) {
       ModelComponentJSO modelComponent = (ModelComponentJSO) iter.next();
@@ -196,29 +198,39 @@ public class ModelSerializer {
    * Deserializes a single model component.
    * 
    * @param componentId the id of the model component
-   * @param cell the model cell in which to place the deserialized component
+   * @param cell the {@link ComponentCell} in which to place the deserialized
+   *          component
    */
   private ModelComponentJSO deserializeComponent(String componentId,
-      ModelCell cell) {
+      ComponentCell cell) {
 
     // Locate the model component.
     ModelComponentJSO modelComponent = getComponent(componentId);
 
-    // Set a new component in the open model cell (or the root node, if driver).
+    // Set a new component in the open ModelTree node.
     TreeItem node = null;
     if (modelComponent.isDriver()) {
       node = modelTree.getItem(0);
-      GWT.log("Model driver = " + modelComponent.getClassName());
+      cell = modelTree.getDriverComponentCell();
+      GWT.log("Model driver: " + modelComponent.getClassName());
     } else {
-      node = cell.getParentTreeItem();
+      node = cell.getEnclosingTreeItem();
     }
-    Component component =
-        new Component(data.getModelComponent(modelComponent.getId()));
-    modelTree.setComponent(component, node);
+    ComponentSelectionCommand cmd = 
+        new ComponentSelectionCommand(data, cell, modelComponent.getId());
+    cmd.execute(true); // use setComponent
     node.setState(true);
-
+    
     // Load the component's parameters.
     deserializeParameters(modelComponent);
+    
+    // If this is the driver, show its parameters in the ParameterTable. Also
+    // display the name of the model.
+    if (modelComponent.isDriver()) {
+      data.getPerspective().getParameterTable().loadTable(
+          modelComponent.getId());
+      data.getPerspective().setModelPanelTitle();
+    }
 
     return modelComponent;
   }
@@ -262,27 +274,27 @@ public class ModelSerializer {
   }
 
   /**
-   * Attempts to deserialize the listed connections of a model component.
+   * Deserializes the listed connections of a model component.
    * 
    * @param modelComponent a {@link ModelComponentJSO} object.
    */
   private void matchConnections(ModelComponentJSO modelComponent) {
 
-    // If the model component has no connections, that's it.
+    // If the model component has no connections, exit.
     if (modelComponent.nConnections() == 0) {
       return;
     }
 
-    // Get a list of open model cells in the model tree. For the driver,
+    // Get a list of open ComponentCells in the ModelTree. For the driver,
     // consider only its immediate children.
-    List<ModelCell> openCells = new ArrayList<ModelCell>();
+    List<ComponentCell> openCells = new ArrayList<ComponentCell>();
     if (modelComponent.isDriver()) {
-      openCells = modelTree.findOpenModelCells(modelTree.getItem(0));
+      openCells = modelTree.findOpenComponentCells(modelTree.getItem(0));
     } else {
-      openCells = modelTree.findOpenModelCells();
+      openCells = modelTree.findOpenComponentCells();
     }
 
-    // Find matches for the open model cells ith components supplied by the
+    // Find matches for the open ComponentCells with components supplied by the
     // model.
     for (int i = 0; i < modelComponent.nConnections(); i++) {
 
@@ -295,14 +307,13 @@ public class ModelSerializer {
         continue;
       }
 
-      // Match the connection with an open model cell through its port.
+      // Match the connection with an open ComponentCell through its port.
       for (int j = 0; j < openCells.size(); j++) {
-        ModelCell cell = openCells.get(j);
-        if (cell.getPortCell().getPort().getId().matches(portId)) {
+        ComponentCell cell = openCells.get(j);
+        if (cell.getPortId().matches(portId)) {
           deserializeComponent(componentId, cell);
         }
       }
     }
   }
-
 }

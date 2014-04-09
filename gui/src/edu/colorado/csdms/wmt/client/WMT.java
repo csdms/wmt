@@ -46,6 +46,7 @@ public class WMT implements EntryPoint {
     // and models. Note that when DataTransfer#getComponentList completes,
     // it immediately starts pulling component data from the server with calls
     // to DataTransfer#getComponent. Asynchronous requests are cool!
+    data.showWaitCursor();
     DataTransfer.getComponentList(data);
     DataTransfer.getModelList(data);
 

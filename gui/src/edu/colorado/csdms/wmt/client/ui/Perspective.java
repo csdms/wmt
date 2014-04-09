@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
@@ -17,6 +18,8 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.ui.handler.LoginHandler;
+import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 
 /**
  * Defines the initial layout of views (a perspective, in Eclipse parlance)
@@ -32,8 +35,7 @@ public class Perspective extends DockLayoutPanel {
   private DataManager data;
 
   // Fractional sizes of views.
-  private final static Double VIEW_WEST_FRACTION = 0.20;
-  private final static Double VIEW_EAST_FRACTION = 0.40;
+  private final static Double VIEW_EAST_FRACTION = 0.50;
 
   // Browser window dimensions (in px) used for setting up UI views.
   private Integer browserWindowWidth;
@@ -47,17 +49,16 @@ public class Perspective extends DockLayoutPanel {
   // Primary UI panels.
   private ViewNorth viewNorth;
   private ViewWest viewWest;
-  private ViewCenter viewCenter;
   private ViewEast viewEast;
 
   // Secondary UI panels/widgets.
-  private ScrollPanel scrollComponents;
   private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
-  private ModelMenu modelMenu;
-  private ComponentList componentList;
+  private ModelMenuPanel modelMenuPanel;
+  private HTML loginHtml;
   private ModelTree modelTree;
   private ParameterTable parameterTable;
+  private ComponentInfoDialogBox componentInfoBox;
 
   /**
    * Draws the panels and their children that compose the basic WMT GUI.
@@ -71,8 +72,6 @@ public class Perspective extends DockLayoutPanel {
 
     // Determine initial view sizes based on browser window dimensions.
     browserWindowWidth = Window.getClientWidth();
-    Integer viewWestInitialWidth =
-        (int) Math.round(VIEW_WEST_FRACTION * browserWindowWidth);
     Integer viewEastInitialWidth =
         (int) Math.round(VIEW_EAST_FRACTION * browserWindowWidth);
     Integer headerHeight = 70; // TODO diagnose from largest header elt
@@ -85,42 +84,52 @@ public class Perspective extends DockLayoutPanel {
     splitter.addStyleName("wmt-SplitLayoutPanel");
     this.add(splitter);
 
-    // The SplitLayoutPanel defines panels which translate to the West, Center
-    // and South views of WMT.
-    viewWest = new ViewWest();
-    splitter.addWest(viewWest, viewWestInitialWidth);
+    // The SplitLayoutPanel defines panels which translate to the West
+    // and East views of WMT.
     viewEast = new ViewEast();
     splitter.addEast(viewEast, viewEastInitialWidth);
-    viewCenter = new ViewCenter();
-    splitter.add(viewCenter); // must be last
+    viewWest = new ViewWest();
+    splitter.add(viewWest); // must be last
+    
+    // The ComponentInfoDialogBox floats above the Perspective.
+    this.setComponentInfoBox(new ComponentInfoDialogBox());
   }
 
   /**
    * An inner class to define the header (North view) of the WMT GUI.
-   * <p>
-   * Login info could be located here, like in the GWT Mail example.
    */
   private class ViewNorth extends Grid {
-
+    
     /**
      * Makes the Header (North) view of the WMT GUI.
      */
     public ViewNorth() {
 
-      super(1, 2);
+      super(1, 3);
       this.setWidth("100%");
 
-      // Associate a ModelMenu.
-      modelMenu = new ModelMenu(data);
+      modelMenuPanel = new ModelMenuPanel(data);
+      this.setWidget(0, 0, modelMenuPanel);
+      this.getCellFormatter().setStyleName(0, 0, "wmt-ViewNorth0");
+
+      loginHtml = new HTML("<a href=\"javascript:;\">Login</a>");
+      loginHtml.setTitle("Login to WMT to save and run models.");
+      this.setWidget(0, 1, loginHtml);
+      this.getCellFormatter().setHorizontalAlignment(0, 1,
+          HasHorizontalAlignment.ALIGN_RIGHT);
+      this.getCellFormatter().setStyleName(0, 1, "wmt-ViewNorth1");
 
       Image logo = new Image("images/CSDMS_Logo_1.jpg");
-      logo.setTitle("http://csdms.colorado.edu");
-
-      this.setWidget(0, 0, logo);
-      this.setWidget(0, 1, modelMenu.getMenuButton());
+      logo.setTitle("Go to the CSDMS website.");
+      logo.setAltText("CSDMS logo");
+      this.setWidget(0, 2, logo);
       this.getCellFormatter()
-          .setAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT,
+          .setAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT,
               HasVerticalAlignment.ALIGN_MIDDLE);
+      this.getCellFormatter().setStyleName(0, 2, "wmt-ViewNorth2");
+
+      // Clicking the login link prompts for credentials.
+      loginHtml.addClickHandler(new LoginHandler(data));
 
       // Clicking the CSDMS logo opens the CSDMS website in a new browser tab.
       logo.addClickHandler(new ClickHandler() {
@@ -133,31 +142,14 @@ public class Perspective extends DockLayoutPanel {
   } // end ViewNorth
 
   /**
-   * An inner class to define the West panel of the WMT GUI.
+   * An inner class to define the Center panel of the WMT GUI.
    */
   private class ViewWest extends TabLayoutPanel {
 
     /**
-     * Makes the West view of the WMT GUI. It holds tabbed panels for the
-     * lists of available components.
+     * Makes the Center view of the WMT GUI. It displays the model.
      */
     public ViewWest() {
-      super(TAB_BAR_HEIGHT, Unit.EM);
-      setComponentsPanel(new ScrollPanel());
-      String tabTitle = data.tabPrefix("component") + "Components";
-      this.add(scrollComponents, tabTitle, true);
-    }
-  } // end ViewWest
-
-  /**
-   * An inner class to define the Center panel of the WMT GUI.
-   */
-  private class ViewCenter extends TabLayoutPanel {
-
-    /**
-     * Makes the Center view of the WMT GUI. It displays the arena.
-     */
-    public ViewCenter() {
       super(TAB_BAR_HEIGHT, Unit.EM);
       setModelPanel(new ScrollPanel());
       String tabTitle = data.tabPrefix("model") + "Model";
@@ -182,32 +174,6 @@ public class Perspective extends DockLayoutPanel {
     }
   } // end ViewEast
 
-  public ScrollPanel getComponentsPanel() {
-    return scrollComponents;
-  }
-
-  public void setComponentsPanel(ScrollPanel scrollComponents) {
-    this.scrollComponents = scrollComponents;
-  }
-
-  /**
-   * Returns a reference to the {@link ComponentList} used in the "Components"
-   * tab of a WMT session.
-   */
-  public ComponentList getComponentList() {
-    return componentList;
-  }
-
-  /**
-   * Stores a reference to the {@link ComponentList} used in the "Components"
-   * tab of a WMT session.
-   * 
-   * @param componentList the ComponentList instance
-   */
-  public void setComponentList(ComponentList componentList) {
-    this.componentList = componentList;
-  }
-
   public ScrollPanel getModelPanel() {
     return scrollModel;
   }
@@ -228,7 +194,23 @@ public class Perspective extends DockLayoutPanel {
     } else {
       data.getModel().setName("Model " + data.saveAttempts.toString());
     }
-    viewCenter.setTabHTML(0, tabTitle);
+    viewWest.setTabHTML(0, tabTitle);
+  }
+
+  public HTML getLoginHtml() {
+    return loginHtml;
+  }
+
+  public void setLoginHtml(HTML loginHtml) {
+    this.loginHtml = loginHtml;
+  }
+
+  public ComponentInfoDialogBox getComponentInfoBox() {
+    return componentInfoBox;
+  }
+
+  public void setComponentInfoBox(ComponentInfoDialogBox componentInfoBox) {
+    this.componentInfoBox = componentInfoBox;
   }
 
   /**
@@ -286,27 +268,21 @@ public class Perspective extends DockLayoutPanel {
   public void setParameterTable(ParameterTable parameterTable) {
     this.parameterTable = parameterTable;
   }
-
+  
   public TabLayoutPanel getViewEast() {
     return viewEast;
   }
 
-  public TabLayoutPanel getViewCenter() {
-    return viewCenter;
+  public TabLayoutPanel getViewWest() {
+    return viewWest;
   }
 
-  /**
-   * @return the modelMenu
-   */
-  public ModelMenu getModelMenu() {
-    return modelMenu;
+  public ModelMenuPanel getModelMenuPanel() {
+    return modelMenuPanel;
   }
 
-  /**
-   * @param modelMenu the modelMenu to set
-   */
-  public void setModelMenu(ModelMenu modelMenu) {
-    this.modelMenu = modelMenu;
+  public void setModelMenuPanel(ModelMenuPanel modelMenuPanel) {
+    this.modelMenuPanel = modelMenuPanel;
   }
 
   /**
@@ -314,49 +290,26 @@ public class Perspective extends DockLayoutPanel {
    * the open port for the driver of the model.
    */
   public void initializeModel() {
-    ModelTree modelTree = new ModelTree(data);
+    modelTree = new ModelTree(data);
     scrollModel.add(modelTree);
-
-    modelTree.addHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        if (data.getSelectedComponent() != null) {
-          ParameterTable table = (ParameterTable) scrollParameters.getWidget();
-          table.removeAllRows(); // FlexTable
-          table.loadTable();
-        }
-      }
-    }, ClickEvent.getType());
   }
 
   /**
    * Creates an empty ParameterTable to display in the "Parameters" tab.
    */
   public void initializeParameterTable() {
-    ParameterTable parameterTable = new ParameterTable(data);
+    parameterTable = new ParameterTable(data);
     scrollParameters.add(parameterTable);
-  }
-
-  /**
-   * Sets up a list of WMT components, displayed in the "Components" tab.
-   */
-  public void initializeComponentList() {
-    ComponentList componentList = new ComponentList(data);
-    scrollComponents.add(componentList);
   }
 
   /**
    * Resets WMT to an approximation of its startup state.
    */
   public void reset() {
-    data.setDraggedComponent(null);
-    data.setSelectedComponent(null);
     data.resetModelComponents();
-
     parameterTable.clearTable();
     modelTree.initializeTree();
-    componentList.setCellSensitivity();
-
+    modelTree.getDriverComponentCell().getComponentMenu().updateComponents();
     setModelPanelTitle();
   }
 }
