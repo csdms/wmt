@@ -18,10 +18,11 @@ public class DataURL {
   // By same-origin policy, must use HTTPS consistently across all URLs.
   private static final String BASE_URL = "https://csdms.colorado.edu/";
   private static final String API_URL = BASE_URL + "wmt-server/";
+  private static final String API_DEV_URL = BASE_URL + "wmt/api-dev/";
   private static final String LOCAL_URL = GWT.getHostPageBaseURL();
 
-  private static final String COMPONENT_LIST_URL = API_URL + "components/list";
-  private static final String COMPONENT_SHOW_URL = API_URL + "components/show/";
+//  private static final String COMPONENT_LIST_URL = API_URL + "components/list";
+//  private static final String COMPONENT_SHOW_URL = API_URL + "components/show/";
 
   private static final String MODEL_LIST_URL = API_URL + "models/list";
   private static final String MODEL_OPEN_URL = API_URL + "models/open/";
@@ -52,10 +53,13 @@ public class DataURL {
    * @param data the DataManager object for the WMT session
    */
   public static String listComponents(DataManager data) {
+    String urlPath = "components/list";
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "data/components.json";
+    } else if (data.isApiDevelopmentMode()) {
+      return API_DEV_URL + urlPath;
     } else {
-      return COMPONENT_LIST_URL;
+      return API_URL + urlPath;
     }
   }
 
@@ -66,10 +70,13 @@ public class DataURL {
    * @param componentId the id of the desired component
    */
   public static String showComponent(DataManager data, String componentId) {
+    String urlPath = "components/show/";
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "data/" + componentId + ".json";
+    } else if (data.isApiDevelopmentMode()) {
+      return API_DEV_URL + urlPath + componentId;
     } else {
-      return COMPONENT_SHOW_URL + componentId;
+      return API_URL + urlPath + componentId;
     }
   }
 
