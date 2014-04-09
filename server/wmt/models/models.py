@@ -18,6 +18,14 @@ class BadIdError(Error):
         return str(self._id)
 
 
+class AuthorizationError(Error):
+    def __init__(self, id):
+        self._id = id
+
+    def __str__(self):
+        return str(self._id)
+
+
 def new_model(name, text, owner=''):
     id = db.insert('models', name=name, json=text, owner=owner,
                     date=web.net.httpdate(datetime.now()))
@@ -54,9 +62,14 @@ def get_private_models():
 
 def get_model(id):
     try:
-        return db.select('models', where='id=$id', vars=locals())[0]
+        model = db.select('models', where='id=$id', vars=locals())[0]
     except IndexError:
         raise BadIdError(id)
+
+    if model['owner'] in ['', web.ctx.session.username]:
+        return model
+    else:
+        raise AuthorizationError(id)
 
 
 def get_model_component(id, component):
