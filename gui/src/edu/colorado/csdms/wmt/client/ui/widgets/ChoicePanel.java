@@ -3,6 +3,7 @@
  */
 package edu.colorado.csdms.wmt.client.ui.widgets;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -37,6 +38,8 @@ public class ChoicePanel extends Composite {
 
     VerticalPanel contents = new VerticalPanel();
     contents.add(choicePanel);
+    
+    okButton.getElement().getStyle().setMarginRight(3, Unit.PX);
     
     initWidget(contents);
   }
