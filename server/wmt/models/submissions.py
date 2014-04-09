@@ -34,7 +34,7 @@ def new(name, model_id):
         'message': 'Run has been submitted',
         'created': now,
         'updated': now,
-        'owner': 'anonymous',
+        'owner': web.ctx.session.username,
         'stage_dir': os.path.join(site['downloads'], uuid),
     }
     db.insert('submission', **data)
