@@ -16,6 +16,15 @@ from collections import namedtuple
 Status = namedtuple('Status', ['status', 'message'])
 
 
+def _get_model_or_raise(id):
+    try:
+        return models.get_model(int(id))
+    except models.BadIdError:
+        raise web.notfound()
+    except models.AuthorizationError:
+        raise web.Unauthorized()
+
+
 class Validate(object):
     form = web.form.Form(
         web.form.Textarea('json',
@@ -136,14 +145,14 @@ class Edit(object):
     You could also just POST some JSON to this URL.
     """
     def GET(self, id):
-        model = models.get_model(int(id))
+        model = _get_model_or_raise(id)
         form = New.form()
         form.fill(model)
         return render.edit(model, form)
 
     def POST(self, id):
         form = New.form()
-        model = models.get_model(id)
+        model = _get_model_or_raise(id)
         if not form.validates():
             return render.edit(model, form)
         models.update_model(id, form.d.name, form.d.json)
@@ -158,31 +167,23 @@ class View(object):
     * https://csdms.colorado.edu/wmt/models/view/1
     """
     def GET(self, id):
-        model = models.get_model(id)
+        model = _get_model_or_raise(id)
         return render.view(model)
 
 
 class Open(object):
     def GET(self, id):
         web.header('Content-Type', 'application/json; charset=utf-8')
-        try:
-            model = models.get_model(id)
-        except models.BadIdError:
-            raise web.notfound()
-        else:
-            return json.dumps(dict(name=model.name, id=model.id,
-                                   owner=model.owner))
+        model = _get_model_or_raise(id)
+        return json.dumps(dict(name=model.name, id=model.id,
+                               owner=model.owner))
 
 
 class Show(object):
     def GET(self, id):
         web.header('Content-Type', 'application/json; charset=utf-8')
-        try:
-            model = models.get_model(str(id))
-        except models.BadIdError:
-            raise web.notfound()
-        else:
-            return model.json
+        model = _get_model_or_raise(id)
+        return model.json
 
 
 class List(object):
@@ -203,8 +204,9 @@ class Export(object):
     * https://csdms.colorado.edu/wmt/export/1
     """
     def GET(self, id):
-        model = models.get_model(id)
+        model = _get_model_or_raise(id)
         return render.code(rc_from_json(model.json))
+
 
 _CHUNK_SIZE = 10240
 
@@ -242,12 +244,10 @@ class Format(object):
         else:
             try:
                 component = models.get_model_component(int(id), name)
-            except models.BadIdError as error:
-                raise web.internalerror("%s" % error)
-            except KeyError as error:
-                raise web.internalerror("%s" % error)
-            except Exception as error:
-                raise web.internalerror("%s" % error)
+            except models.BadIdError:
+                raise web.notfound()
+            except models.AuthorizationError:
+                raise web.Unauthorized()
 
             mapping = component['parameters']
 
