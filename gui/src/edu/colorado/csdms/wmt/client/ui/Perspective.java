@@ -55,6 +55,7 @@ public class Perspective extends DockLayoutPanel {
   private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
   private ModelMenuPanel modelMenuPanel;
+  private HTML loginHtml;
   private ModelTree modelTree;
   private ParameterTable parameterTable;
   private ComponentInfoDialogBox componentInfoBox;
@@ -98,7 +99,7 @@ public class Perspective extends DockLayoutPanel {
    * An inner class to define the header (North view) of the WMT GUI.
    */
   private class ViewNorth extends Grid {
-
+    
     /**
      * Makes the Header (North) view of the WMT GUI.
      */
@@ -111,9 +112,9 @@ public class Perspective extends DockLayoutPanel {
       this.setWidget(0, 0, modelMenuPanel);
       this.getCellFormatter().setStyleName(0, 0, "wmt-ViewNorth0");
 
-      HTML login = new HTML("<a href=\"javascript:;\">Login</a>");
-      login.setTitle("Login to WMT.");
-      this.setWidget(0, 1, login);
+      loginHtml = new HTML("<a href=\"javascript:;\">Login</a>");
+      loginHtml.setTitle("Login to WMT to save and run models.");
+      this.setWidget(0, 1, loginHtml);
       this.getCellFormatter().setHorizontalAlignment(0, 1,
           HasHorizontalAlignment.ALIGN_RIGHT);
       this.getCellFormatter().setStyleName(0, 1, "wmt-ViewNorth1");
@@ -128,7 +129,7 @@ public class Perspective extends DockLayoutPanel {
       this.getCellFormatter().setStyleName(0, 2, "wmt-ViewNorth2");
 
       // Clicking the login link prompts for credentials.
-      login.addClickHandler(new LoginHandler(data));
+      loginHtml.addClickHandler(new LoginHandler(data));
 
       // Clicking the CSDMS logo opens the CSDMS website in a new browser tab.
       logo.addClickHandler(new ClickHandler() {
@@ -196,6 +197,14 @@ public class Perspective extends DockLayoutPanel {
     viewWest.setTabHTML(0, tabTitle);
   }
 
+  public HTML getLoginHtml() {
+    return loginHtml;
+  }
+
+  public void setLoginHtml(HTML loginHtml) {
+    this.loginHtml = loginHtml;
+  }
+
   public ComponentInfoDialogBox getComponentInfoBox() {
     return componentInfoBox;
   }
@@ -259,7 +268,7 @@ public class Perspective extends DockLayoutPanel {
   public void setParameterTable(ParameterTable parameterTable) {
     this.parameterTable = parameterTable;
   }
-
+  
   public TabLayoutPanel getViewEast() {
     return viewEast;
   }

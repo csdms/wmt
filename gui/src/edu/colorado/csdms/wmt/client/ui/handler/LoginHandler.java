@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.ui.widgets.LoginDialogBox;
 
 /**
  * Handles login events.
@@ -18,6 +19,7 @@ public class LoginHandler implements ClickHandler {
 
   private DataManager data;
   private Boolean isLogout = false;
+  private LoginDialogBox loginDialog;
   
   /**
    * Creates a new {@link LoginHandler}.
@@ -34,7 +36,12 @@ public class LoginHandler implements ClickHandler {
     if (isLogout) {
       loginHtml.setHTML("<a href=\"javascript:;\">Login</a>");
     } else {
-      loginHtml.setHTML("<b>mark.piper@colorado.edu</b> | <a href=\"javascript:;\">Logout</a>");
+      loginDialog = new LoginDialogBox();
+      loginDialog.getChoicePanel().getOkButton().addClickHandler(
+          new LoginAuthenticationHandler(data, loginDialog));
+      loginDialog.getChoicePanel().getCancelButton().addClickHandler(
+          new DialogCancelHandler(loginDialog));
+      loginDialog.center();
     }
     isLogout = !isLogout;
   }
