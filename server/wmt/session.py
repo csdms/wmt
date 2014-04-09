@@ -19,6 +19,10 @@ def get_session():
     return web.ctx.session
 
 
+def get_username():
+    return web.ctx.session.username
+
+
 def login(username):
     session = get_session()
     session.loggedin = True
