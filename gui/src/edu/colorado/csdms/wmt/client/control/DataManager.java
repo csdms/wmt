@@ -49,9 +49,11 @@ public class DataManager {
   private String modelString; // stringified JSON
   
   private String simulationId; // the uuid of a submitted run
-  private String hostname;
-  private String username;
-  private String password;
+  private String hpccHostname;
+  private String hpccUsername; // for the HPCC where the model is run
+  private String hpccPassword;
+  private String wmtUsername;  // for logging into WMT
+  private String wmtPassword;
   
   // Experiment with public members, for convenience.
   public List<String> componentIdList;
@@ -389,50 +391,82 @@ public class DataManager {
    * Returns the hostname of the machine where the user wants the model to be
    * run.
    */
-  public String getHostname() {
-    return hostname;
+  public String getHpccHostname() {
+    return hpccHostname;
   }
 
   /**
    * Stores the hostname of the machine where the user wants the model to be
    * run.
    * 
-   * @param hostname
+   * @param hpccHostname
    */
-  public void setHostname(String hostname) {
-    this.hostname = hostname;
+  public void setHpccHostname(String hostname) {
+    this.hpccHostname = hostname;
   }
 
   /**
    * Returns the user's username for the host on which the model is to be run.
    */
-  public String getUsername() {
-    return username;
+  public String getHpccUsername() {
+    return hpccUsername;
   }
 
   /**
    * Stores the user's username for the host on which the model is to be run.
    * 
-   * @param username
+   * @param hpccUsername
    */
-  public void setUsername(String username) {
-    this.username = username;
+  public void setHpccUsername(String username) {
+    this.hpccUsername = username;
   }
 
   /**
    * Returns the user's password for the host on which the model is to be run.
    */
-  public String getPassword() {
-    return password;
+  public String getHpccPassword() {
+    return hpccPassword;
   }
 
   /**
    * Stores the user's password for the host on which the model is to be run.
    * 
-   * @param password
+   * @param hpccPassword
    */
-  public void setPassword(String password) {
-    this.password = password;
+  public void setHpccPassword(String password) {
+    this.hpccPassword = password;
+  }
+
+  /**
+   * Returns the user's login name for the WMT client.
+   */
+  public String getWmtUsername() {
+    return wmtUsername;
+  }
+
+  /**
+   * Stores the user's login name for the WMT client.
+   * 
+   * @param wmtUsername
+   */
+  public void setWmtUsername(String wmtUsername) {
+    this.wmtUsername = wmtUsername;
+  }
+
+  /**
+   * Returns the user's password for the WMT client.
+   */
+  public String getWmtPassword() {
+    return wmtPassword;
+  }
+
+  /**
+   * Stores the user's password for the WMT client.
+   * 
+   * @param wmtPassword
+   */
+  public void setWmtPassword(String wmtPassword) {
+    this.wmtPassword = wmtPassword;
   }
 
   /**

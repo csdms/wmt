@@ -39,18 +39,18 @@ public class RunModelHandler implements ClickHandler {
         box.getHostPanel().getDroplist().getSelectedIndex();
     String hostName =
         box.getHostPanel().getDroplist().getItemText(selIndex);
-    data.setHostname(hostName);
-    GWT.log(data.getHostname());
+    data.setHpccHostname(hostName);
+    GWT.log(data.getHpccHostname());
 
     // Get username.
     String userName = box.getUsernamePanel().getField();
-    data.setUsername(userName);
-    GWT.log(data.getUsername());
+    data.setHpccUsername(userName);
+    GWT.log(data.getHpccUsername());
 
     // Get password.
     String password = box.getPasswordPanel().getField();
-    data.setPassword(password);
-    GWT.log(data.getPassword());
+    data.setHpccPassword(password);
+    GWT.log(data.getHpccPassword());
 
     // Initialize the model run.
     DataTransfer.initModelRun(data);
