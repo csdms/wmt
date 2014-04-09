@@ -15,6 +15,7 @@ public class Security {
   private String hpccPassword;
   private String wmtUsername;  // for logging into WMT
   private String wmtPassword;
+  private Boolean isLoggedIn = false;
   
   /**
    * Initializes the Security object used in a WMT session.
@@ -102,5 +103,21 @@ public class Security {
    */
   public void setWmtPassword(String wmtPassword) {
     this.wmtPassword = wmtPassword;
+  }
+
+  /**
+   * Is the user currently logged into WMT?
+   */
+  public Boolean isLoggedIn() {
+    return isLoggedIn;
+  }
+
+  /**
+   * Sets whether the user is currently logged into WMT.
+   * 
+   * @param isLoggedIn
+   */
+  public void isLoggedIn(Boolean isLoggedIn) {
+    this.isLoggedIn = isLoggedIn;
   }
 }

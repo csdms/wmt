@@ -5,6 +5,7 @@ package edu.colorado.csdms.wmt.client.ui.handler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
@@ -18,7 +19,6 @@ import edu.colorado.csdms.wmt.client.ui.widgets.LoginDialogBox;
 public class LoginHandler implements ClickHandler {
 
   private DataManager data;
-  private Boolean isLogout = false;
   private LoginDialogBox loginDialog;
   
   /**
@@ -33,8 +33,12 @@ public class LoginHandler implements ClickHandler {
   @Override
   public void onClick(ClickEvent event) {
     HTML loginHtml = (HTML) event.getSource();
-    if (isLogout) {
-      loginHtml.setHTML("<a href=\"javascript:;\">Login</a>");
+    if (data.security.isLoggedIn()) {
+      Boolean isConfirmed = Window.confirm("Are you sure you want to log out?");
+      if (isConfirmed) {
+        loginHtml.setHTML("<a href=\"javascript:;\">Login</a>");
+      }
+      data.security.isLoggedIn(!isConfirmed);
     } else {
       loginDialog = new LoginDialogBox();
       loginDialog.getChoicePanel().getOkButton().addClickHandler(
@@ -43,7 +47,6 @@ public class LoginHandler implements ClickHandler {
           new DialogCancelHandler(loginDialog));
       loginDialog.center();
     }
-    isLogout = !isLogout;
   }
 
 }

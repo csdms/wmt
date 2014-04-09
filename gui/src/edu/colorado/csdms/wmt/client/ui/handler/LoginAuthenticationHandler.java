@@ -51,9 +51,9 @@ public class LoginAuthenticationHandler implements ClickHandler {
     HTML loginHtml = data.getPerspective().getLoginHtml();
     loginHtml
           .setHTML("<b>" + userName + "</b> | <a href=\"javascript:;\">Logout</a>");
+    data.security.isLoggedIn(true);
     
     // Authenticate the user.
     //DataTransfer.initModelRun(data);    
   }
-
 }
