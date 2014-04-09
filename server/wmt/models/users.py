@@ -1,5 +1,7 @@
 import web
-from ..config import db
+
+from ..config import user_db as db
+from ..config import site
 
 
 def new_user(username, password):
