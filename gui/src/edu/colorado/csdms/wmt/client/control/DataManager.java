@@ -35,6 +35,7 @@ public class DataManager {
   public static String FA_HELP = "<i class='fa fa-question'></i> ";
   
   private Boolean developmentMode;
+  private Boolean apiDevelopmentMode;
 
   // Get the state of UI elements through the Perspective. 
   private Perspective perspective;
@@ -84,6 +85,22 @@ public class DataManager {
    */
   public void isDevelopmentMode(Boolean developmentMode) {
     this.developmentMode = developmentMode;
+  }
+
+  /**
+   * Returns true if we're using the API development mode.
+   */
+  public Boolean isApiDevelopmentMode() {
+    return apiDevelopmentMode;
+  }
+
+  /**
+   * Stores the API development mode: true if it's being used.
+   * 
+   * @param apiDevelopmentMode
+   */
+  public void isApiDevelopmentMode(Boolean apiDevelopmentMode) {
+    this.apiDevelopmentMode = apiDevelopmentMode;
   }
 
   /**
