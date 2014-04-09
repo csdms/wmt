@@ -19,13 +19,9 @@ class Login(object):
                           description='password:'),
         web.form.Button('Login')
     )
-    def force_ssl(self):
-        if web.ctx.protocol == 'http':
-            raise web.redirect('https://' + web.ctx.path)
 
     def GET(self):
-        self.force_ssl()
-        return render.login(self.form())
+        return render.titled_form('login', self.form())
 
     def POST(self):
         form = self.form()
@@ -39,6 +35,8 @@ class Login(object):
 
         if site['pw'].verify(form.d.password, user.password):
             login(form.d.username)
+        else:
+            raise web.Unauthorized()
 
         raise web.seeother('/')
 
