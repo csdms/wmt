@@ -412,9 +412,9 @@ public class DataTransfer {
 
     HashMap<String, String> entries = new HashMap<String, String>();
     entries.put("uuid", data.getSimulationId());
-    entries.put("host", data.getHpccHostname());
-    entries.put("username", data.getHpccUsername());
-    entries.put("password", data.getHpccPassword());
+    entries.put("host", data.security.getHpccHostname());
+    entries.put("username", data.security.getHpccUsername());
+    entries.put("password", data.security.getHpccPassword());
     String queryString = buildQueryString(entries);
 
     try {

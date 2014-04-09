@@ -39,13 +39,13 @@ public class LoginAuthenticationHandler implements ClickHandler {
     
     // Get WMT username.
     String userName = box.getUsernamePanel().getField();
-    data.setWmtUsername(userName);
-    GWT.log(data.getWmtUsername());
+    data.security.setWmtUsername(userName);
+    GWT.log(data.security.getWmtUsername());
 
     // Get WMT password.
     String password = box.getPasswordPanel().getField();
-    data.setWmtPassword(password);
-    GWT.log(data.getWmtPassword());
+    data.security.setWmtPassword(password);
+    GWT.log(data.security.getWmtPassword());
 
     // XXX Temporary.
     HTML loginHtml = data.getPerspective().getLoginHtml();
