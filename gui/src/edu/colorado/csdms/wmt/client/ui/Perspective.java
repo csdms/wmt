@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.ui.handler.LoginHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.AuthenticationHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 
 /**
@@ -129,7 +129,7 @@ public class Perspective extends DockLayoutPanel {
       this.getCellFormatter().setStyleName(0, 2, "wmt-ViewNorth2");
 
       // Clicking the login link prompts for credentials.
-      loginHtml.addClickHandler(new LoginHandler(data));
+      loginHtml.addClickHandler(new AuthenticationHandler(data));
 
       // Clicking the CSDMS logo opens the CSDMS website in a new browser tab.
       logo.addClickHandler(new ClickHandler() {
