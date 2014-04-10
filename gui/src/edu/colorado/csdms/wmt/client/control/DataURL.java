@@ -22,6 +22,7 @@ public class DataURL {
   private static final String LOCAL_URL = GWT.getHostPageBaseURL();
 
   private static final String LOGIN_PATH = "account/login";
+  private static final String LOGOUT_PATH = "account/logout";
   
   private static final String COMPONENTS_LIST_PATH = "components/list";
   private static final String COMPONENTS_SHOW_PATH = "components/show/";
@@ -71,7 +72,20 @@ public class DataURL {
       return getApiUrl(data) + LOGIN_PATH;
     }
   }
-  
+
+  /**
+   * Returns the account logout URL provided by the API.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String logout(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL;
+    } else {
+      return getApiUrl(data) + LOGOUT_PATH;
+    }
+  }
+
   /**
    * Returns the URL for the list of available components on the server.
    * 

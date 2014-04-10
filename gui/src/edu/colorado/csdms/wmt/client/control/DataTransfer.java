@@ -163,20 +163,45 @@ public class DataTransfer {
 
     String url = DataURL.login(data);
     GWT.log(url);
-    
+
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
-    
+
     HashMap<String, String> entries = new HashMap<String, String>();
     entries.put("username", data.security.getWmtUsername());
     entries.put("password", data.security.getWmtPassword());
     String queryString = buildQueryString(entries);
-    
+
     try {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
       @SuppressWarnings("unused")
       Request request =
-          builder.sendRequest(queryString, new LoginRequestCallback(data, url));
+          builder.sendRequest(queryString, new AuthenticationRequestCallback(
+              data, url, "login"));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
+   * Makes an asynchronous HTTPS POST request to logout from WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void logout(DataManager data) {
+
+    String url = DataURL.logout(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(null, new AuthenticationRequestCallback(data,
+              url, "logout"));
     } catch (RequestException e) {
       Window.alert(ERR_MSG + e.getMessage());
     }
@@ -457,16 +482,19 @@ public class DataTransfer {
   }
 
   /**
-   * A RequestCallback handler class that processes WMT login requests.
+   * A RequestCallback handler class that processes WMT login and logout
+   * requests.
    */
-  public static class LoginRequestCallback implements RequestCallback {
+  public static class AuthenticationRequestCallback implements RequestCallback {
     
     private DataManager data;
     private String url;
+    private String type;
     
-    public LoginRequestCallback(DataManager data, String url) {
+    public AuthenticationRequestCallback(DataManager data, String url, String type) {
       this.data = data;
       this.url = url;
+      this.type = type;
     }
 
     @Override
@@ -475,10 +503,18 @@ public class DataTransfer {
 
         String rtxt = response.getText();
         GWT.log(rtxt);
-        data.security.isLoggedIn(true);
-        data.getPerspective().getLoginHtml().setHTML(
-            "<b>" + data.security.getWmtUsername()
-                + "</b> | <a href=\"javascript:;\">Logout</a>");
+
+        if (type.matches("login")) {
+          data.security.isLoggedIn(true);
+          data.getPerspective().getLoginHtml().setHTML(
+              "<b>" + data.security.getWmtUsername()
+                  + "</b> | <a href=\"javascript:;\">Logout</a>");
+        } 
+        if (type.matches("logout")) {
+          data.security.isLoggedIn(false);
+          data.getPerspective().getLoginHtml().setHTML(
+              "<a href=\"javascript:;\">Login</a>");
+        }
 
       } else {
         String msg =
