@@ -513,10 +513,12 @@ public class DataTransfer {
           data.getPerspective().getLoginHtml().setHTML(
               "<b>" + data.security.getWmtUsername()
                   + "</b> | <a href=\"javascript:;\">Logout</a>");
+          data.getPerspective().getLoginHtml().setTitle("Logout from WMT");
         } else if (type.matches("logout")) {
           data.security.isLoggedIn(false);
           data.getPerspective().getLoginHtml().setHTML(
               "<a href=\"javascript:;\">Login</a>");
+          data.getPerspective().getLoginHtml().setTitle("Login to WMT");
         } else {
           Window.alert(RESPONSE_ERR_MSG);
         }
