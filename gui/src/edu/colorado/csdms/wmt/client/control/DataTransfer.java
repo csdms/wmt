@@ -32,7 +32,8 @@ import edu.colorado.csdms.wmt.client.ui.widgets.RunInfoDialogBox;
  */
 public class DataTransfer {
 
-  private static final String ERR_MSG = "Failed to send the request: ";
+  private static String REQUEST_ERR_MSG = "Failed to send the request: ";
+  private static String RESPONSE_ERR_MSG = "No match found in the response.";
 
   /**
    * A JSNI method for creating a String from a JavaScriptObject.
@@ -179,7 +180,7 @@ public class DataTransfer {
           builder.sendRequest(queryString, new AuthenticationRequestCallback(
               data, url, "login"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -203,7 +204,7 @@ public class DataTransfer {
           builder.sendRequest(null, new AuthenticationRequestCallback(data,
               url, "logout"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -231,7 +232,7 @@ public class DataTransfer {
           builder
               .sendRequest(null, new ComponentListRequestCallback(data, url));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -256,7 +257,7 @@ public class DataTransfer {
       Request request =
           builder.sendRequest(null, new ComponentRequestCallback(data, url));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -279,7 +280,7 @@ public class DataTransfer {
       Request request =
           builder.sendRequest(null, new ModelListRequestCallback(data, url));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -308,7 +309,7 @@ public class DataTransfer {
           openBuilder.sendRequest(null, new ModelRequestCallback(data, openURL,
               "open"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
 
     RequestBuilder showBuilder =
@@ -319,7 +320,7 @@ public class DataTransfer {
           showBuilder.sendRequest(null, new ModelRequestCallback(data, showURL,
               "show"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -360,7 +361,7 @@ public class DataTransfer {
           builder.sendRequest(queryString, new ModelRequestCallback(data, url,
               "new/edit"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -385,7 +386,7 @@ public class DataTransfer {
           builder.sendRequest(null, new ModelRequestCallback(data, url,
               "delete"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -416,7 +417,7 @@ public class DataTransfer {
           builder.sendRequest(queryString, new RunRequestCallback(data, url,
               "init"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -445,7 +446,7 @@ public class DataTransfer {
           builder.sendRequest(queryString, new RunRequestCallback(data, url,
               "stage"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -477,7 +478,7 @@ public class DataTransfer {
           builder.sendRequest(queryString, new RunRequestCallback(data, url,
               "launch"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -512,11 +513,12 @@ public class DataTransfer {
           data.getPerspective().getLoginHtml().setHTML(
               "<b>" + data.security.getWmtUsername()
                   + "</b> | <a href=\"javascript:;\">Logout</a>");
-        } 
-        if (type.matches("logout")) {
+        } else if (type.matches("logout")) {
           data.security.isLoggedIn(false);
           data.getPerspective().getLoginHtml().setHTML(
               "<a href=\"javascript:;\">Login</a>");
+        } else {
+          Window.alert(RESPONSE_ERR_MSG);
         }
 
       } else {
@@ -529,7 +531,7 @@ public class DataTransfer {
 
     @Override
     public void onError(Request request, Throwable exception) {
-      Window.alert(ERR_MSG + exception.getMessage());
+      Window.alert(REQUEST_ERR_MSG + exception.getMessage());
     }
   }
   
@@ -577,7 +579,7 @@ public class DataTransfer {
 
     @Override
     public void onError(Request request, Throwable exception) {
-      Window.alert(ERR_MSG + exception.getMessage());
+      Window.alert(REQUEST_ERR_MSG + exception.getMessage());
     }
   }
 
@@ -617,7 +619,7 @@ public class DataTransfer {
 
     @Override
     public void onError(Request request, Throwable exception) {
-      Window.alert(ERR_MSG + exception.getMessage());
+      Window.alert(REQUEST_ERR_MSG + exception.getMessage());
     }
   }
 
@@ -665,7 +667,7 @@ public class DataTransfer {
 
     @Override
     public void onError(Request request, Throwable exception) {
-      Window.alert(ERR_MSG + exception.getMessage());
+      Window.alert(REQUEST_ERR_MSG + exception.getMessage());
     }
   }
 
@@ -703,21 +705,21 @@ public class DataTransfer {
           data.setModel(jso);
           data.modelIsSaved(true);
           data.deserialize();
-        }
-        if (type.matches("open")) {
+        } else if (type.matches("open")) {
           ModelMetadataJSO jso = parse(rtxt);
           data.setMetadata(jso);
-        }
-        if (type.matches("new/edit")) {
+        } else if (type.matches("new/edit")) {
           data.modelIsSaved(true);
           data.getPerspective().setModelPanelTitle();
           DataTransfer.getModelList(data);
           Integer modelId = Integer.valueOf(rtxt);
           data.getMetadata().setId(modelId);
-        }
-        if (type.matches("delete")) {
+        } else if (type.matches("delete")) {
           DataTransfer.getModelList(data);
+        } else {
+          Window.alert(RESPONSE_ERR_MSG);
         }
+        
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "
@@ -728,12 +730,13 @@ public class DataTransfer {
 
     @Override
     public void onError(Request request, Throwable exception) {
-      Window.alert(ERR_MSG + exception.getMessage());
+      Window.alert(REQUEST_ERR_MSG + exception.getMessage());
     }
   }
 
   /**
-   * TODO
+   * A RequestCallback handler class that handles the initialization, staging
+   * and launching of a model run.
    */
   public static class RunRequestCallback implements RequestCallback {
 
@@ -758,13 +761,13 @@ public class DataTransfer {
           String uuid = rtxt.replaceAll("^\"|\"$", "");
           data.setSimulationId(uuid); // store the run's uuid
           DataTransfer.stageModelRun(data);
-        }
-        if (type.matches("stage")) {
+        } else if (type.matches("stage")) {
           DataTransfer.launchModelRun(data);
-        }
-        if (type.matches("launch")) {
+        } else if (type.matches("launch")) {
           RunInfoDialogBox runInfo = new RunInfoDialogBox(data);
           runInfo.center();
+        } else {
+          Window.alert(RESPONSE_ERR_MSG);
         }
 
       } else {
@@ -777,7 +780,7 @@ public class DataTransfer {
 
     @Override
     public void onError(Request request, Throwable exception) {
-      Window.alert(ERR_MSG + exception.getMessage());
+      Window.alert(REQUEST_ERR_MSG + exception.getMessage());
     }
   }
 
