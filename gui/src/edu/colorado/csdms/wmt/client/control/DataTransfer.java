@@ -503,6 +503,9 @@ public class DataTransfer {
 
         String rtxt = response.getText();
         GWT.log(rtxt);
+        
+        // Need to refresh the model list on login and logout.
+        getModelList(data);
 
         if (type.matches("login")) {
           data.security.isLoggedIn(true);
