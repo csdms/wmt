@@ -36,7 +36,7 @@ public class AuthenticationHandler implements ClickHandler {
     if (data.security.isLoggedIn()) {
 
       String question = "Are you sure you want to log out from WMT?";
-      QuestionDialogBox questionDialog = new QuestionDialogBox(question);
+      final QuestionDialogBox questionDialog = new QuestionDialogBox(question);
       questionDialog.getChoicePanel().getOkButton().setHTML(
           "<i class='fa fa-sign-out'></i> Logout");
       questionDialog.getChoicePanel().getOkButton().addClickHandler(
@@ -44,6 +44,7 @@ public class AuthenticationHandler implements ClickHandler {
             @Override
             public void onClick(ClickEvent event) {
               DataTransfer.logout(data);
+              questionDialog.hide();
             }
           });
       questionDialog.getChoicePanel().getCancelButton().addClickHandler(
