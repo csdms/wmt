@@ -155,6 +155,34 @@ public class DataTransfer {
   }
 
   /**
+   * Makes an asynchronous HTTPS POST request to login to WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void login(DataManager data) {
+
+    String url = DataURL.login(data);
+    GWT.log(url);
+    
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+    
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("username", data.security.getWmtUsername());
+    entries.put("password", data.security.getWmtPassword());
+    String queryString = buildQueryString(entries);
+    
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new LoginRequestCallback(data, url));
+    } catch (RequestException e) {
+      Window.alert(ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
    * Makes an asynchronous HTTP GET request to retrieve the list of components
    * stored in the WMT database.
    * <p>
@@ -428,6 +456,44 @@ public class DataTransfer {
     }
   }
 
+  /**
+   * A RequestCallback handler class that processes WMT login requests.
+   */
+  public static class LoginRequestCallback implements RequestCallback {
+    
+    private DataManager data;
+    private String url;
+    
+    public LoginRequestCallback(DataManager data, String url) {
+      this.data = data;
+      this.url = url;
+    }
+
+    @Override
+    public void onResponseReceived(Request request, Response response) {
+      if (Response.SC_OK == response.getStatusCode()) {
+
+        String rtxt = response.getText();
+        GWT.log(rtxt);
+        data.security.isLoggedIn(true);
+        data.getPerspective().getLoginHtml().setHTML(
+            "<b>" + data.security.getWmtUsername()
+                + "</b> | <a href=\"javascript:;\">Logout</a>");
+
+      } else {
+        String msg =
+            "The URL '" + url + "' did not give an 'OK' response. "
+                + "Response code: " + response.getStatusCode();
+        Window.alert(msg);
+      }
+    }
+
+    @Override
+    public void onError(Request request, Throwable exception) {
+      Window.alert(ERR_MSG + exception.getMessage());
+    }
+  }
+  
   /**
    * A RequestCallback handler class that provides the callback for a GET
    * request of the list of available components in the WMT database. On

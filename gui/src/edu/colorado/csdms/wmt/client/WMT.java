@@ -20,7 +20,7 @@ import edu.colorado.csdms.wmt.client.ui.Perspective;
  */
 public class WMT implements EntryPoint {
 
-  private static final Boolean USE_API_DEV_MODE = false; // set this switch
+  private static final Boolean USE_API_DEV_MODE = true; // XXX set this switch
   
   private Perspective perspective;
   private DataManager data;

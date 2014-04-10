@@ -6,13 +6,14 @@ package edu.colorado.csdms.wmt.client.ui.handler;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.HTML;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.ui.widgets.LoginDialogBox;
 
 /**
+ * Saves login information in the {@link DataManager}; calls
+ * {@link DataTransfer#login()} to process a login to WMT.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -47,13 +48,7 @@ public class LoginAuthenticationHandler implements ClickHandler {
     data.security.setWmtPassword(password);
     GWT.log(data.security.getWmtPassword());
 
-    // XXX Temporary.
-    HTML loginHtml = data.getPerspective().getLoginHtml();
-    loginHtml
-          .setHTML("<b>" + userName + "</b> | <a href=\"javascript:;\">Logout</a>");
-    data.security.isLoggedIn(true);
-    
     // Authenticate the user.
-    //DataTransfer.initModelRun(data);    
+    DataTransfer.login(data);    
   }
 }
