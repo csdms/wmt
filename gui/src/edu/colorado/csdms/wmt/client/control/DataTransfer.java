@@ -512,12 +512,14 @@ public class DataTransfer {
           data.security.isLoggedIn(true);
           data.getPerspective().getLoginHtml().setHTML(
               "<b>" + data.security.getWmtUsername()
-                  + "</b> | <a href=\"javascript:;\">Logout</a>");
+                  + "</b> | <i class='fa fa-sign-out'></i> "
+                  + "<a href=\"javascript:;\">Logout</a>");
           data.getPerspective().getLoginHtml().setTitle("Logout from WMT");
         } else if (type.matches("logout")) {
           data.security.isLoggedIn(false);
           data.getPerspective().getLoginHtml().setHTML(
-              "<a href=\"javascript:;\">Login</a>");
+              "<i class='fa fa-sign-in'></i> "
+              + "<a href=\"javascript:;\">Login</a>");
           data.getPerspective().getLoginHtml().setTitle("Login to WMT");
         } else {
           Window.alert(RESPONSE_ERR_MSG);

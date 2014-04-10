@@ -112,7 +112,9 @@ public class Perspective extends DockLayoutPanel {
       this.setWidget(0, 0, modelMenuPanel);
       this.getCellFormatter().setStyleName(0, 0, "wmt-ViewNorth0");
 
-      loginHtml = new HTML("<a href=\"javascript:;\">Login</a>");
+      loginHtml =
+          new HTML(
+              "<i class='fa fa-sign-in'></i> <a href=\"javascript:;\">Login</a>");
       loginHtml.setTitle("Login to WMT to save and run models.");
       this.setWidget(0, 1, loginHtml);
       this.getCellFormatter().setHorizontalAlignment(0, 1,

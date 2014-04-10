@@ -35,16 +35,17 @@ public class AuthenticationHandler implements ClickHandler {
     // XXX Should use cookie? Or get from server?
     if (data.security.isLoggedIn()) {
 
-      String question = "Are you sure you want to log out?";
+      String question = "Are you sure you want to log out from WMT?";
       QuestionDialogBox questionDialog = new QuestionDialogBox(question);
       questionDialog.getChoicePanel().getOkButton().setHTML(
           "<i class='fa fa-sign-out'></i> Logout");
-      questionDialog.getChoicePanel().getOkButton().addClickHandler(new ClickHandler() {
-        @Override
-        public void onClick(ClickEvent event) {
-          DataTransfer.logout(data);
-        }
-      });
+      questionDialog.getChoicePanel().getOkButton().addClickHandler(
+          new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+              DataTransfer.logout(data);
+            }
+          });
       questionDialog.getChoicePanel().getCancelButton().addClickHandler(
           new DialogCancelHandler(questionDialog));
       questionDialog.center();
