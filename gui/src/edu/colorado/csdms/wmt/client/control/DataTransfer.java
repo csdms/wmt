@@ -658,7 +658,7 @@ public class DataTransfer {
           DataTransfer.launchModelRun(data);
         }
         if (type.matches("launch")) {
-          RunInfoDialogBox runInfo = new RunInfoDialogBox();
+          RunInfoDialogBox runInfo = new RunInfoDialogBox(data);
           runInfo.center();
         }
 

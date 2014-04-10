@@ -70,7 +70,7 @@ public class ModelMenuPanel extends HorizontalPanel {
     // Run status
     Button statusButton = new Button(DataManager.FA_STATUS);
     statusButton.setTitle("Status of model run");
-    statusButton.addClickHandler(new ModelMenuPanelStatusHandler());    
+    statusButton.addClickHandler(new ModelMenuPanelStatusHandler(data));    
     this.add(statusButton);
 
     // Help
