@@ -66,10 +66,13 @@ public class Perspective extends DockLayoutPanel {
   public Perspective(DataManager data) {
 
     super(Unit.PX);
-    this.addStyleName("wmt-DockLayoutPanel");
     this.data = data;
     this.data.setPerspective(this);
-
+    this.addStyleName("wmt-DockLayoutPanel");
+    if (data.isDevelopmentMode()) {
+      this.addStyleDependentName("devmode");
+    }
+    
     // Determine initial view sizes based on browser window dimensions.
     browserWindowWidth = Window.getClientWidth();
     Integer viewEastInitialWidth =

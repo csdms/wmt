@@ -9,9 +9,13 @@
 
 /* The primary structuring element of the WMT client. */
 .wmt-DockLayoutPanel {
-   padding: 3px;
-   margin: 5px;
+  padding: 3px;
+  margin: 5px;
 }
+.wmt-DockLayoutPanel-devmode {
+  border: 1px dashed burlywood;
+}
+
 
 /* Rules for the panel running along the top of the client interface. */
 .wmt-ViewNorth0 {
