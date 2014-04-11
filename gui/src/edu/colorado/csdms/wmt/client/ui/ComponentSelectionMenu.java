@@ -64,12 +64,7 @@ public class ComponentSelectionMenu extends MenuBar {
 
     // Display a wait message in the componentMenu.
     if (portId.matches(DataManager.DRIVER)) {
-      this.addItem("Loading...", new Command() {
-        @Override
-        public void execute() {
-          // Do nothing.
-        }
-      });
+      this.addItem("Loading...", new NullCommand());
       return;
     }
 
@@ -107,5 +102,12 @@ public class ComponentSelectionMenu extends MenuBar {
 
   public void setComponentItem(MenuItem componentItem) {
     this.componentItem = componentItem;
+  }
+  
+  public class NullCommand implements Command {
+    @Override
+    public void execute() {
+      // Do nothing
+    }
   }
 }
