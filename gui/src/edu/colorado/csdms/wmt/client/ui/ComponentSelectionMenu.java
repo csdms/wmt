@@ -43,13 +43,13 @@ public class ComponentSelectionMenu extends MenuBar {
   /**
    * A worker for adding a new MenuItem to the {@link ComponentSelectionMenu}.
    * 
-   * @param index the index into the array of available components
+   * @param componentId the id of the component to add to the menu
    */
-  private void addComponentMenuItem(Integer index) {
+  private void addComponentMenuItem(String componentId) {
     MenuItem item =
-        new MenuItem(data.getComponent(index).getName(), true,
-            new ComponentSelectionCommand(data, cell, data.getComponent(index)
-                .getId()));
+        new MenuItem(data.getComponent(componentId).getName(), true,
+            new ComponentSelectionCommand(data, cell, data.getComponent(
+                componentId).getId()));
     item.setStyleName("wmt-ComponentSelectionMenuItem");
     this.addItem(item);
   }
@@ -72,19 +72,22 @@ public class ComponentSelectionMenu extends MenuBar {
 
     // Load all available components into the componentMenu!
     if (portId.matches(ALL_COMPONENTS)) {
-      for (int i = 0; i < data.getComponents().size(); i++) {
-        addComponentMenuItem(i);
+      for (int i = 0; i < data.componentIdList.size(); i++) {
+        String componentId = data.componentIdList.get(i);
+        addComponentMenuItem(componentId);
       }
       return;
     }
 
     // Load only those components with provides ports matching the input portId.
-    for (int i = 0; i < data.getComponents().size(); i++) {
-      Integer nProvidesPorts = data.getComponent(i).getProvidesPorts().length();
+    for (int i = 0; i < data.componentIdList.size(); i++) {
+      String componentId = data.componentIdList.get(i);
+      Integer nProvidesPorts =
+          data.getComponent(componentId).getProvidesPorts().length();
       for (int j = 0; j < nProvidesPorts; j++) {
-        if (data.getComponent(i).getProvidesPorts().get(j).getId().matches(
-            portId)) {
-          addComponentMenuItem(i);
+        if (data.getComponent(componentId).getProvidesPorts().get(j).getId()
+            .matches(portId)) {
+          addComponentMenuItem(componentId);
         }
       }
     }
