@@ -34,6 +34,7 @@ public class DataTransfer {
 
   private static String REQUEST_ERR_MSG = "Failed to send the request: ";
   private static String RESPONSE_ERR_MSG = "No match found in the response.";
+  public static Integer RETRY_ATTEMPTS = 3; // magic number
 
   /**
    * A JSNI method for creating a String from a JavaScriptObject.
@@ -255,7 +256,7 @@ public class DataTransfer {
     try {
       @SuppressWarnings("unused")
       Request request =
-          builder.sendRequest(null, new ComponentRequestCallback(data, url));
+          builder.sendRequest(null, new ComponentRequestCallback(data, url, componentId));
     } catch (RequestException e) {
       Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
@@ -570,6 +571,7 @@ public class DataTransfer {
         for (int i = 0; i < jso.getComponents().length(); i++) {
           String componentId = jso.getComponents().get(i);
           data.componentIdList.add(componentId);
+          data.retryComponentLoad.put(componentId, 0);
           getComponent(data, componentId);
         }
         
@@ -604,31 +606,43 @@ public class DataTransfer {
 
     private DataManager data;
     private String url;
+    private String componentId;
 
-    public ComponentRequestCallback(DataManager data, String url) {
+    public ComponentRequestCallback(DataManager data, String url,
+        String componentId) {
       this.data = data;
       this.url = url;
+      this.componentId = componentId;
     }
 
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
-        
+
         String rtxt = response.getText();
         GWT.log(rtxt);
         ComponentJSO jso = parse(rtxt);
         data.addComponent(jso); // "class" component
         data.addModelComponent(copy(jso)); // "instance" component, for model
-        
+
         // Replace the associated placeholder ComponentSelectionMenu item.
         data.getPerspective().getModelTree().getDriverComponentCell()
             .getComponentMenu().replaceMenuItem(jso.getId());
-        
+
       } else {
-        String msg =
-            "The URL '" + url + "' did not give an 'OK' response. "
-                + "Response code: " + response.getStatusCode();
-        Window.alert(msg);
+
+        // If the component didn't load, try to reload it RETRY_ATTEMPTS times.
+        // If that fails, display an error message in a window.
+        Integer attempt = data.retryComponentLoad.get(componentId);
+        data.retryComponentLoad.put(componentId, attempt++);
+        if (attempt < RETRY_ATTEMPTS) {
+          getComponent(data, componentId);
+        } else {
+          String msg =
+              "The URL '" + url + "' did not give an 'OK' response. "
+                  + "Response code: " + response.getStatusCode();
+          Window.alert(msg);
+        }
       }
     }
 

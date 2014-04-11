@@ -6,6 +6,7 @@ package edu.colorado.csdms.wmt.client.control;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class DataManager {
   // Experiment with public members, for convenience.
   public Security security;
   public List<String> componentIdList;
+  public HashMap<String, Integer> retryComponentLoad;
   public List<Integer> modelIdList;
   public List<String> modelNameList;
   public Integer saveAttempts = 0;
@@ -64,6 +66,7 @@ public class DataManager {
   public DataManager() {
     security = new Security();
     componentIdList = new ArrayList<String>();
+    retryComponentLoad = new HashMap<String, Integer>();
     components = new ArrayList<ComponentJSO>();
     modelComponents = new ArrayList<ComponentJSO>();
     modelIdList = new ArrayList<Integer>();
