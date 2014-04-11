@@ -572,6 +572,11 @@ public class DataTransfer {
           data.componentIdList.add(componentId);
           getComponent(data, componentId);
         }
+        
+        // Show the list of components (id only) as placeholders in the
+        // ComponentSelectionMenu.
+        data.getPerspective().getModelTree().getDriverComponentCell()
+            .getComponentMenu().initializeComponents();
 
       } else {
         String msg =
@@ -608,11 +613,17 @@ public class DataTransfer {
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
+        
         String rtxt = response.getText();
         GWT.log(rtxt);
         ComponentJSO jso = parse(rtxt);
         data.addComponent(jso); // "class" component
         data.addModelComponent(copy(jso)); // "instance" component, for model
+        
+        // Replace the associated placeholder ComponentSelectionMenu item.
+        data.getPerspective().getModelTree().getDriverComponentCell()
+            .getComponentMenu().replaceMenuItem(jso.getId());
+        
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "

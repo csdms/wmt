@@ -3,6 +3,8 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -94,6 +96,48 @@ public class ComponentSelectionMenu extends MenuBar {
    */
   public void updateComponents() {
     updateComponents(ALL_COMPONENTS);
+  }
+
+  /**
+   * This method builds the initial list of MenuItems in the driver
+   * {@link ComponentCell}. This list functions as a placeholder. Only the ids
+   * of the components are displayed, and there is no command associated with
+   * the MenuItems. These MenuItems are replaced with fully functional MenuItems
+   * when their associated component is successfully loaded from the server.
+   */
+  public void initializeComponents() {
+    this.clearItems();
+    for (int i = 0; i < data.componentIdList.size(); i++) {
+      MenuItem item =
+          new MenuItem(data.componentIdList.get(i), true, new NullCommand());
+      item.setStyleName("wmt-ComponentSelectionMenuItem");
+      this.addItem(item);
+    };
+  }
+  
+  /**
+   * Replaces a placeholder MenuItem, created by
+   * {@link ComponentSelectionMenu#initializeComponents()}, with a fully
+   * functional MenuItem showing the component name and having an associated
+   * action.
+   * 
+   * @param componentId the id of the component associated with the MenuItem to
+   *          replace
+   */
+  public void replaceMenuItem(String componentId) {
+    List<MenuItem> allItems = this.getItems();
+    for (int i = 0; i < allItems.size(); i++) {
+      MenuItem currentItem = allItems.get(i);
+      if (currentItem.getText().matches(componentId)) {
+        MenuItem newItem =
+            new MenuItem(data.getComponent(componentId).getName(), true,
+                new ComponentSelectionCommand(data, cell, componentId));
+        newItem.setStyleName("wmt-ComponentSelectionMenuItem");
+        this.insertItem(newItem, i);
+        this.removeItem(currentItem);
+        return;
+      }
+    }
   }
 
   public MenuItem getComponentItem() {

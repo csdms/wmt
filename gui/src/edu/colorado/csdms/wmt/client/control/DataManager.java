@@ -187,12 +187,12 @@ public class DataManager {
    */
   public void addComponent(ComponentJSO component) {
     this.components.add(component);
-    if (this.components.size() == this.componentIdList.size()) {
-      sortComponents();
-      perspective.getModelTree().getDriverComponentCell().getComponentMenu()
-          .updateComponents();
-      showDefaultCursor();
-    }
+//    if (this.components.size() == this.componentIdList.size()) {
+//      sortComponents();
+//      perspective.getModelTree().getDriverComponentCell().getComponentMenu()
+//          .updateComponents();
+//      showDefaultCursor();
+//    }
   }
 
   /**
