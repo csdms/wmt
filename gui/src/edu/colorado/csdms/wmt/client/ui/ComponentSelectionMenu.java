@@ -111,6 +111,7 @@ public class ComponentSelectionMenu extends MenuBar {
       MenuItem item =
           new MenuItem(data.componentIdList.get(i), true, new NullCommand());
       item.setStyleName("wmt-ComponentSelectionMenuItem");
+      item.addStyleDependentName("missing");
       this.addItem(item);
     };
   }

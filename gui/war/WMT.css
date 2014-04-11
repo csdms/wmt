@@ -148,6 +148,9 @@
 .wmt-ComponentSelectionMenuItem:hover {
   background-color: #efefff;
 }
+.wmt-ComponentSelectionMenuItem-missing {
+  background-color: #fdd;
+}
 
 /* Pull-down menu items in the ComponentActionMenu. */
 .wmt-ComponentActionMenuItem {
