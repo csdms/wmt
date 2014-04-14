@@ -49,13 +49,13 @@
   font-weight: normal !important;
 }
 
-/* The ModelMenuPanel is the run of buttons along the top of the client. */
-.wmt-ModelMenuPanel {
+/* The ActionButtonPanel is the run of buttons along the top of the client. */
+.wmt-ActionButtonPanel {
   /* margin-left: -3px; */ /* offsets 3px border in SplitLayoutPanel */
 }
 
-/* Rules for the buttons on the ModelMenuPanel. */
-.wmt-ModelMenuPanelButton {
+/* Rules for the buttons on the ActionButtonPanel. */
+.wmt-ActionButtonPanelButton {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   width: 60px;
   color: #333;
@@ -64,7 +64,7 @@
   margin-right: 5px; /* provides inter-button spacing */
   border: 1px solid #bbb;
   border-bottom: 1px solid #a0a0a0;
-  border-radius: 2px;
+  /* border-radius: 2px; */
 }
 
 /* Rules for the MoreActionsMenu. */
