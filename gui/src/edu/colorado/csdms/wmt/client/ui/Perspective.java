@@ -282,11 +282,11 @@ public class Perspective extends DockLayoutPanel {
     return viewWest;
   }
 
-  public ActionButtonPanel getModelMenuPanel() {
+  public ActionButtonPanel getActionButtonPanel() {
     return actionButtonPanel;
   }
 
-  public void setModelMenuPanel(ActionButtonPanel actionButtonPanel) {
+  public void setActionButtonPanel(ActionButtonPanel actionButtonPanel) {
     this.actionButtonPanel = actionButtonPanel;
   }
 
