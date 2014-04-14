@@ -27,6 +27,7 @@ public class ActionButtonPanel extends HorizontalPanel {
 
   @SuppressWarnings("unused")
   private DataManager data;
+  private MoreActionsMenu moreMenu;
   
   /**
    * Makes a new {@link ActionButtonPanel}.
@@ -57,7 +58,7 @@ public class ActionButtonPanel extends HorizontalPanel {
     // More
     Button moreButton = new Button("More <i class='fa fa-caret-down'></i>");
     this.add(moreButton);
-    final MoreActionsMenu moreMenu = new MoreActionsMenu(data, moreButton);
+    moreMenu = new MoreActionsMenu(data, moreButton);
     moreButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
@@ -80,5 +81,13 @@ public class ActionButtonPanel extends HorizontalPanel {
       Button button = (Button) iter.next();
       button.setStyleName("wmt-ActionButtonPanelButton");
     }
+  }
+
+  public MoreActionsMenu getMoreMenu() {
+    return moreMenu;
+  }
+
+  public void setMoreMenu(MoreActionsMenu moreMenu) {
+    this.moreMenu = moreMenu;
   }
 }

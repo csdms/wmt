@@ -31,6 +31,7 @@ public class ActionButtonPanelStatusHandler implements ClickHandler {
   
   @Override
   public void onClick(ClickEvent event) {
+    data.getPerspective().getActionButtonPanel().getMoreMenu().hide();
     Window.open(DataURL.showModelRun(data), "runInfoDialog", null);
   }
 }

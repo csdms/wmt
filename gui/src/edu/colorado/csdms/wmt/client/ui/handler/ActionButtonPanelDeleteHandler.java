@@ -33,6 +33,9 @@ public class ActionButtonPanelDeleteHandler implements ClickHandler {
   @Override
   public void onClick(ClickEvent event) {
     
+    // Hide the MoreActionsMenu.
+    data.getPerspective().getActionButtonPanel().getMoreMenu().hide();
+    
     deleteDialog = new DroplistDialogBox();
     deleteDialog.setText("Delete Model...");
     deleteDialog.getChoicePanel().getOkButton().setHTML(

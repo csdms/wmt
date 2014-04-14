@@ -70,7 +70,7 @@ public class MoreActionsMenu extends PopupPanel {
     // Help
     HTML helpButton = new HTML(DataManager.FA_HELP + "Help");
     helpButton.setTitle("Help on using WMT");
-    helpButton.addClickHandler(new ActionButtonPanelHelpHandler());        
+    helpButton.addClickHandler(new ActionButtonPanelHelpHandler(data));        
     menu.add(helpButton);
     
     // Apply a style to each button.
