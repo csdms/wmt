@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Widget;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelDeleteHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelHelpHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelMoreHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelOpenHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelSaveHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelStatusHandler;
@@ -81,9 +82,9 @@ public class ActionButtonPanel extends HorizontalPanel {
     
     // More
     Button moreButton = new Button("More <i class='fa fa-caret-down'></i>");
-    moreButton.setTitle("Other actions...");
-    moreButton.addClickHandler(new ActionButtonPanelHelpHandler());        
-    this.add(moreButton);    
+    MoreActionsMenu moreMenu = new MoreActionsMenu(data, moreButton);
+    moreButton.addClickHandler(new ActionButtonPanelMoreHandler(data, moreMenu));        
+    this.add(moreButton);
 
     // Apply a style to each button.
     Iterator<Widget> iter = this.iterator();
