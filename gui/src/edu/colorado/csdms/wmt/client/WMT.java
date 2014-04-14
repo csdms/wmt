@@ -47,6 +47,9 @@ public class WMT implements EntryPoint {
     RootLayoutPanel.get().add(perspective);
     perspective.initializeModel();
     perspective.initializeParameterTable();
+    
+    // Check whether the user is already logged in.
+    DataTransfer.getLoginState(data);
 
     // Retrieve (asynchronously) and store the list of available components
     // and models. Note that when DataTransfer#getComponentList completes,

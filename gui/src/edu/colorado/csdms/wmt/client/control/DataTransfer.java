@@ -210,6 +210,31 @@ public class DataTransfer {
   }
 
   /**
+   * Makes an asynchronous HTTPS GET request to get the WMT login state from
+   * the server.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void getLoginState(DataManager data) {
+
+    String url = DataURL.loginState(data);
+    GWT.log(url);
+    
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.GET, URL.encode(url));
+
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(null, new AuthenticationRequestCallback(data,
+              url, "state"));
+    } catch (RequestException e) {
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
+    }
+  }
+  
+  /**
    * Makes an asynchronous HTTP GET request to retrieve the list of components
    * stored in the WMT database.
    * <p>
@@ -522,6 +547,10 @@ public class DataTransfer {
               "<i class='fa fa-sign-in'></i> "
               + "<a href=\"javascript:;\">Login</a>");
           data.getPerspective().getLoginHtml().setTitle("Login to WMT");
+        } if (type.matches("state")) {
+          if ((rtxt != null) && !rtxt.trim().equals("") && (rtxt.length() >= 1)) { // XXX fragile?
+            Window.alert("Username: " + rtxt);
+          }
         } else {
           Window.alert(RESPONSE_ERR_MSG);
         }

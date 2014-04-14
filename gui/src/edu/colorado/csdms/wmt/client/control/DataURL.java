@@ -23,6 +23,7 @@ public class DataURL {
 
   private static final String LOGIN_PATH = "account/login";
   private static final String LOGOUT_PATH = "account/logout";
+  private static final String USERNAME_PATH = "account/username";
   
   private static final String COMPONENTS_LIST_PATH = "components/list";
   private static final String COMPONENTS_SHOW_PATH = "components/show/";
@@ -83,6 +84,20 @@ public class DataURL {
       return LOCAL_URL;
     } else {
       return getApiUrl(data) + LOGOUT_PATH;
+    }
+  }
+
+  /**
+   * Returns the URL that gives the username of the user, if the user is
+   * currently logged in.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String loginState(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL;
+    } else {
+      return getApiUrl(data) + USERNAME_PATH;
     }
   }
 
