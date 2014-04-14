@@ -158,7 +158,7 @@ class Database(SiteSubFolder):
     def populate(self):
         src_dir = os.path.join(_PACKAGE_PREFIX, 'data', 'db')
 
-        for db in ['wmt', 'users', 'submission']:
+        for db in ['wmt', 'users', 'submission', 'session', ]:
             create_empty_database(
                 os.path.join(self.prefix, db + '.db'),
                 schema=os.path.join(src_dir, db + '.sql'),
