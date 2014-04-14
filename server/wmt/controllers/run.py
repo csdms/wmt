@@ -14,7 +14,13 @@ import threading
 
 
 def launch_simulation(uuid, username, host, password):
-    resp = submissions.launch(uuid, username, host, password=password)
+    try:
+        resp = submissions.launch(uuid, username, host, password=password)
+    except Exception as error:
+        submissions.update(
+            uuid,
+            status='error',
+            message='unexpected error launching simulation on %s (%s)' % (host, error))
 
     if resp['status_code'] == 200:
         return
