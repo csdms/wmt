@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataURL;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 
@@ -19,29 +20,29 @@ import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
  */
 public class RunInfoDialogBox extends DialogBox {
 
-  private static String MSG =
-      "<h2>Success!</h2><p>You have submitted your model run.</p>"
-          + "<p>Check the status of the run by selecting "
-          + "<b>View Run Status...</b> under the "
-          + "<i class='fa fa-bars fa-lg'></i> menu, or by visiting:</p>"
-          + "<a href='" + DataURL.showModelRun() + "'>"
-          + DataURL.showModelRun() + "</a>";
+  private DataManager data;
   private ClosePanel closePanel;
 
   /**
    * Displays a {@link RunInfoDialogBox}.
    */
-  public RunInfoDialogBox() {
+  public RunInfoDialogBox(DataManager data) {
 
     super(true); // autohide
     this.setModal(true);
     this.setText("Model Run Information");
+    this.data = data;
 
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
     contents.setWidth("30em");
 
-    HTML msgHtml = new HTML(MSG);
+    String msg = "<h2>Success!</h2><p>You have submitted your model run.</p>"
+          + "<p>Check the status of the run by selecting the Run status "
+          + "button, or by visiting:</p>"
+          + "<a href='" + DataURL.showModelRun(data) + "'>"
+          + DataURL.showModelRun(data) + "</a>";
+    HTML msgHtml = new HTML(msg);
     contents.add(msgHtml);
 
     closePanel = new ClosePanel();
@@ -62,7 +63,8 @@ public class RunInfoDialogBox extends DialogBox {
       @Override
       public void onClick(ClickEvent event) {
         event.preventDefault();
-        Window.open(DataURL.showModelRun(), "runInfoDialog", null);
+        Window.open(DataURL.showModelRun(RunInfoDialogBox.this.data),
+            "runInfoDialog", null);
       }
     });
   }

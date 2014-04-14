@@ -33,7 +33,7 @@ public class LoginDialogBox extends DialogBox {
     passwordPanel = new FieldPanel(true); // uses PasswordTextBox
     choicePanel = new ChoicePanel();
 
-    usernamePanel.getLabel().setText("Username:");
+    usernamePanel.getLabel().setText("Email address:");
     passwordPanel.getLabel().setText("Password:");
     choicePanel.getOkButton().setHTML("<i class='fa fa-sign-in'></i> Login");
 

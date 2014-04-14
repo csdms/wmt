@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.ui.handler.LoginHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.AuthenticationHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 
 /**
@@ -66,10 +66,13 @@ public class Perspective extends DockLayoutPanel {
   public Perspective(DataManager data) {
 
     super(Unit.PX);
-    this.addStyleName("wmt-DockLayoutPanel");
     this.data = data;
     this.data.setPerspective(this);
-
+    this.addStyleName("wmt-DockLayoutPanel");
+    if (data.isDevelopmentMode()) {
+      this.addStyleDependentName("devmode");
+    }
+    
     // Determine initial view sizes based on browser window dimensions.
     browserWindowWidth = Window.getClientWidth();
     Integer viewEastInitialWidth =
@@ -112,7 +115,9 @@ public class Perspective extends DockLayoutPanel {
       this.setWidget(0, 0, modelMenuPanel);
       this.getCellFormatter().setStyleName(0, 0, "wmt-ViewNorth0");
 
-      loginHtml = new HTML("<a href=\"javascript:;\">Login</a>");
+      loginHtml =
+          new HTML(
+              "<i class='fa fa-sign-in'></i> <a href=\"javascript:;\">Login</a>");
       loginHtml.setTitle("Login to WMT to save and run models.");
       this.setWidget(0, 1, loginHtml);
       this.getCellFormatter().setHorizontalAlignment(0, 1,
@@ -129,7 +134,7 @@ public class Perspective extends DockLayoutPanel {
       this.getCellFormatter().setStyleName(0, 2, "wmt-ViewNorth2");
 
       // Clicking the login link prompts for credentials.
-      loginHtml.addClickHandler(new LoginHandler(data));
+      loginHtml.addClickHandler(new AuthenticationHandler(data));
 
       // Clicking the CSDMS logo opens the CSDMS website in a new browser tab.
       logo.addClickHandler(new ClickHandler() {

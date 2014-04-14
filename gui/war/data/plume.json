@@ -1,9 +1,308 @@
 {
+  "files":[
+    "plume_params.cfg.tmpl",
+    "plume_flood.cfg.tmpl"
+  ],
+  "doi":"10.1594/IEDA/100152",
   "name":"Plume",
   "parameters":[
-    
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"River",
+      "key":"separator",
+      "description":"River"
+    },
+    {
+      "value":{
+        "default":4.0,
+        "units":"kg/m^3",
+        "range":{
+          "max":10.0,
+          "min":0.01
+        },
+        "type":"float"
+      },
+      "name":"Sediment concentration",
+      "key":"sediment_mass_concentration",
+      "description":"Average mass-concentration of suspended sediment"
+    },
+    {
+      "value":{
+        "default":1.0,
+        "units":"m/s",
+        "range":{
+          "max":10.0,
+          "min":0.1
+        },
+        "type":"float"
+      },
+      "name":"River mouth velocity",
+      "key":"river_mouth_velocity",
+      "description":"Flow velocity at river mouth"
+    },
+    {
+      "value":{
+        "default":100.0,
+        "units":"m",
+        "range":{
+          "max":5000.0,
+          "min":10.0
+        },
+        "type":"float"
+      },
+      "name":"River mouth width",
+      "key":"river_mouth_width",
+      "description":"Width of river at river mouth"
+    },
+    {
+      "value":{
+        "default":10.0,
+        "units":"m",
+        "range":{
+          "max":100.0,
+          "min":1.0
+        },
+        "type":"float"
+      },
+      "name":"River mouth depth",
+      "key":"river_mouth_depth",
+      "description":"Depth of river at river mouth"
+    },
+    {
+      "value":{
+        "default":0.0,
+        "units":"degrees",
+        "range":{
+          "max":180.0,
+          "min":-180.0
+        },
+        "type":"float"
+      },
+      "name":"River mouth angle",
+      "key":"river_mouth_angle",
+      "description":"Angle of the river mouth measured with respect to the coast normal"
+    },
+    {
+      "value":{
+        "default":45.0,
+        "units":"degrees",
+        "range":{
+          "max":90.0,
+          "min":-90.0
+        },
+        "type":"float"
+      },
+      "name":"Latitude",
+      "key":"river_mouth_latitude",
+      "description":"Latitude of the river mouth"
+    },
+    {
+      "value":{
+        "default":90.0,
+        "units":"degrees",
+        "range":{
+          "max":360.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Angle of coast normal",
+      "key":"coast_normal",
+      "description":"Angle of the coast normal as measured clockwise from north"
+    },
+    {
+      "value":{
+        "default":2000.0,
+        "units":"m",
+        "range":{
+          "max":200000.0,
+          "min":100.0
+        },
+        "type":"float"
+      },
+      "name":"Basin width",
+      "key":"basin_width",
+      "description":"Width of the ocean/fjord"
+    },
+    {
+      "value":{
+        "default":30000.0,
+        "units":"m",
+        "range":{
+          "max":200000.0,
+          "min":1000.0
+        },
+        "type":"float"
+      },
+      "name":"Basin length",
+      "key":"basin_length",
+      "description":"Length of the ocean/fjord"
+    },
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"Sediment",
+      "key":"separator",
+      "description":"Sediment"
+    },
+    {
+      "value":{
+        "default":1800.0,
+        "units":"kg/m^3",
+        "range":{
+          "max":2650.0,
+          "min":1000.0
+        },
+        "type":"float"
+      },
+      "name":"Bulk density",
+      "key":"bulk_density",
+      "description":"Saturated bulk density of bottom sediments"
+    },
+    {
+      "value":{
+        "default":16.8,
+        "units":"day^-1",
+        "range":{
+          "max":100.0,
+          "min":1.0
+        },
+        "type":"float"
+      },
+      "name":"Removal rate",
+      "key":"removal_rate",
+      "description":"Removal rate of susmpended sediment"
+    },
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"Ocean",
+      "key":"separator",
+      "description":"Ocean"
+    },
+    {
+      "value":{
+        "default":0.0,
+        "units":"-",
+        "range":{
+          "max":1.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Ocean sediment concentration",
+      "key":"background_ocean_concentration",
+      "description":"Background sediment volume concentration of the ocean"
+    },
+    {
+      "value":{
+        "default":1.0,
+        "units":"-",
+        "range":{
+          "max":1.0,
+          "min":0.1
+        },
+        "type":"float"
+      },
+      "name":"Normalized current width",
+      "key":"normalized_current_width",
+      "description":"Normalized width of the along-shore current"
+    },
+    {
+      "value":{
+        "default":0.0,
+        "units":"m/s",
+        "range":{
+          "max":5.0,
+          "min":-5.0
+        },
+        "type":"float"
+      },
+      "name":"Current velocity",
+      "key":"coastal_current_velocity",
+      "description":"Along-shore velocity of the coastal current"
+    },
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"Advanced",
+      "key":"separator",
+      "description":"Advanced"
+    },
+    {
+      "value":{
+        "default":3,
+        "units":"-",
+        "range":{
+          "max":21,
+          "min":3
+        },
+        "type":"int"
+      },
+      "name":"Number of grid nodes in river mouth",
+      "key":"grid_nodes_in_river_mouth",
+      "description":"Number of computational grid nodes contained within the river mouth"
+    },
+    {
+      "value":{
+        "default":2,
+        "units":"-",
+        "range":{
+          "max":20,
+          "min":1
+        },
+        "type":"int"
+      },
+      "name":"Grid spacing ratio",
+      "key":"ratio_of_cross_shore_to_along_shore_spacing",
+      "description":"Ratio of spacing in the along-shore to cross-shore spacing"
+    },
+    {
+      "value":{
+        "default":100.0,
+        "units":"m",
+        "range":{
+          "max":1000.0,
+          "min":100.0
+        },
+        "type":"float"
+      },
+      "name":"Along-shore resolution",
+      "key":"along_shore_resolution",
+      "description":"Resolution of the deposit in the along-shore direction"
+    },
+    {
+      "value":{
+        "default":100.0,
+        "units":"m",
+        "range":{
+          "max":1000.0,
+          "min":100.0
+        },
+        "type":"float"
+      },
+      "name":"Cross-shore resolution",
+      "key":"cross_shore_resolution",
+      "description":"Resolution of the deposit in the cross-shore direction"
+    }
   ],
+  "author":"Eric Hutton",
   "url":"http://csdms.colorado.edu/wiki/Model:Plume",
+  "argv":[
+    "plume",
+    "plume_params.cfg",
+    "plume_flood.cfg"
+  ],
+  "summary":"Plume simulates the sediment transport and deposition of several grainsize classes from a river mouth entering into a marine basin by creating a turbulent jet. The model forms a hypopycnal plume. The model allows for plume deflection due to systematic currents or Coriolis force",
   "uses":[
     {
       "required":false,

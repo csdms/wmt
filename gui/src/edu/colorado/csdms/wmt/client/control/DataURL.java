@@ -18,23 +18,37 @@ public class DataURL {
   // By same-origin policy, must use HTTPS consistently across all URLs.
   private static final String BASE_URL = "https://csdms.colorado.edu/";
   private static final String API_URL = BASE_URL + "wmt-server/";
+  private static final String API_DEV_URL = BASE_URL + "wmt/api-dev/";
   private static final String LOCAL_URL = GWT.getHostPageBaseURL();
 
-  private static final String COMPONENT_LIST_URL = API_URL + "components/list";
-  private static final String COMPONENT_SHOW_URL = API_URL + "components/show/";
+  private static final String LOGIN_PATH = "account/login";
+  private static final String LOGOUT_PATH = "account/logout";
+  
+  private static final String COMPONENTS_LIST_PATH = "components/list";
+  private static final String COMPONENTS_SHOW_PATH = "components/show/";
 
-  private static final String MODEL_LIST_URL = API_URL + "models/list";
-  private static final String MODEL_OPEN_URL = API_URL + "models/open/";
-  private static final String MODEL_SHOW_URL = API_URL + "models/show/";
-  private static final String MODEL_NEW_URL = API_URL + "models/new";
-  private static final String MODEL_EDIT_URL = API_URL + "models/edit/";
-  private static final String MODEL_DELETE_URL = API_URL + "models/delete/";
-  private static final String MODEL_UPLOAD_URL = API_URL + "models/upload";
+  private static final String MODELS_LIST_PATH = "models/list";
+  private static final String MODELS_OPEN_PATH = "models/open/";
+  private static final String MODELS_SHOW_PATH = "models/show/";
+  private static final String MODELS_NEW_PATH = "models/new";
+  private static final String MODELS_EDIT_PATH = "models/edit/";
+  private static final String MODELS_DELETE_PATH = "models/delete/";
+  private static final String MODELS_UPLOAD_PATH = "models/upload";
 
-  private static final String RUN_NEW_URL = API_URL + "run/new";
-  private static final String RUN_SHOW_URL = API_URL + "run/show";
-  private static final String RUN_STAGE_URL = API_URL + "run/stage";
-  private static final String RUN_LAUNCH_URL = API_URL + "run/launch";
+  private static final String RUN_NEW_PATH = "run/new";
+  private static final String RUN_SHOW_PATH = "run/show";
+  private static final String RUN_STAGE_PATH = "run/stage";
+  private static final String RUN_LAUNCH_PATH = "run/launch";
+
+  /**
+   * A helper that returns the base URL for the selected API (development or
+   * production).
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  private static String getApiUrl(DataManager data) {
+    return data.isApiDevelopmentMode() ? API_DEV_URL : API_URL;
+  }
 
   /**
    * A wrapper around Window.Location that returns the application URL in
@@ -47,6 +61,32 @@ public class DataURL {
   }
 
   /**
+   * Returns the account login URL provided by the API.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String login(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL;
+    } else {
+      return getApiUrl(data) + LOGIN_PATH;
+    }
+  }
+
+  /**
+   * Returns the account logout URL provided by the API.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String logout(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return LOCAL_URL;
+    } else {
+      return getApiUrl(data) + LOGOUT_PATH;
+    }
+  }
+
+  /**
    * Returns the URL for the list of available components on the server.
    * 
    * @param data the DataManager object for the WMT session
@@ -55,7 +95,7 @@ public class DataURL {
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "data/components.json";
     } else {
-      return COMPONENT_LIST_URL;
+      return getApiUrl(data) + COMPONENTS_LIST_PATH;
     }
   }
 
@@ -69,7 +109,7 @@ public class DataURL {
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "data/" + componentId + ".json";
     } else {
-      return COMPONENT_SHOW_URL + componentId;
+      return getApiUrl(data) + COMPONENTS_SHOW_PATH + componentId;
     }
   }
 
@@ -90,7 +130,7 @@ public class DataURL {
       if (useDefaults) {
         modelId = "0";
       }
-      String url = API_URL + "models/" + modelId + "/" + componentId 
+      String url = getApiUrl(data) + "models/" + modelId + "/" + componentId 
           + "/format?format=" + format;
       return url;
     }
@@ -105,7 +145,7 @@ public class DataURL {
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "save/model_list.json";
     } else {
-      return MODEL_LIST_URL;
+      return getApiUrl(data) + MODELS_LIST_PATH;
     }
   }
 
@@ -119,7 +159,7 @@ public class DataURL {
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "save/open" + modelId.toString() + ".json";
     } else {
-      return MODEL_OPEN_URL + modelId.toString();
+      return getApiUrl(data) + MODELS_OPEN_PATH + modelId.toString();
     }
   }
 
@@ -134,7 +174,7 @@ public class DataURL {
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "save/show" + modelId.toString() + ".json";
     } else {
-      return MODEL_SHOW_URL + modelId.toString();
+      return getApiUrl(data) + MODELS_SHOW_PATH + modelId.toString();
     }
   }
 
@@ -149,7 +189,7 @@ public class DataURL {
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "save/saved.json";
     } else {
-      return MODEL_NEW_URL;
+      return getApiUrl(data) + MODELS_NEW_PATH;
     }
   }
 
@@ -164,7 +204,7 @@ public class DataURL {
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "save/saved.json";
     } else {
-      return MODEL_EDIT_URL + modelId.toString();
+      return getApiUrl(data) + MODELS_EDIT_PATH + modelId.toString();
     }
   }
 
@@ -179,7 +219,7 @@ public class DataURL {
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "save/saved.json";
     } else {
-      return MODEL_DELETE_URL + modelId.toString();
+      return getApiUrl(data) + MODELS_DELETE_PATH + modelId.toString();
     }
   }
 
@@ -192,7 +232,7 @@ public class DataURL {
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "save/saved.json";
     } else {
-      return MODEL_UPLOAD_URL;
+      return getApiUrl(data) + MODELS_UPLOAD_PATH;
     }
   }
 
@@ -205,16 +245,18 @@ public class DataURL {
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "save/saved.json";
     } else {
-      return RUN_NEW_URL;
+      return getApiUrl(data) + RUN_NEW_PATH;
     }
   }
 
   /**
    * Returns the URL for API page displaying the status of all current model
    * runs on the server.
+   * 
+   * @param data the DataManager object for the WMT session
    */
-  public static String showModelRun() {
-    return RUN_SHOW_URL;
+  public static String showModelRun(DataManager data) {
+    return getApiUrl(data) + RUN_SHOW_PATH;
   }
 
   /**
@@ -226,7 +268,7 @@ public class DataURL {
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "save/saved.json";
     } else {
-      return RUN_STAGE_URL;
+      return getApiUrl(data) + RUN_STAGE_PATH;
     }
   }
 
@@ -240,7 +282,7 @@ public class DataURL {
     if (data.isDevelopmentMode()) {
       return LOCAL_URL + "save/saved.json";
     } else {
-      return RUN_LAUNCH_URL;
+      return getApiUrl(data) + RUN_LAUNCH_PATH;
     }
   }
 }

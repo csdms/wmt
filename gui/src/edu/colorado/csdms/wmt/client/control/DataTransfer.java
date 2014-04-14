@@ -32,7 +32,9 @@ import edu.colorado.csdms.wmt.client.ui.widgets.RunInfoDialogBox;
  */
 public class DataTransfer {
 
-  private static final String ERR_MSG = "Failed to send the request: ";
+  private static String REQUEST_ERR_MSG = "Failed to send the request: ";
+  private static String RESPONSE_ERR_MSG = "No match found in the response.";
+  public static Integer RETRY_ATTEMPTS = 3; // magic number
 
   /**
    * A JSNI method for creating a String from a JavaScriptObject.
@@ -155,6 +157,59 @@ public class DataTransfer {
   }
 
   /**
+   * Makes an asynchronous HTTPS POST request to login to WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void login(DataManager data) {
+
+    String url = DataURL.login(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("username", data.security.getWmtUsername());
+    entries.put("password", data.security.getWmtPassword());
+    String queryString = buildQueryString(entries);
+
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new AuthenticationRequestCallback(
+              data, url, "login"));
+    } catch (RequestException e) {
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
+   * Makes an asynchronous HTTPS POST request to logout from WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void logout(DataManager data) {
+
+    String url = DataURL.logout(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(null, new AuthenticationRequestCallback(data,
+              url, "logout"));
+    } catch (RequestException e) {
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
    * Makes an asynchronous HTTP GET request to retrieve the list of components
    * stored in the WMT database.
    * <p>
@@ -178,7 +233,7 @@ public class DataTransfer {
           builder
               .sendRequest(null, new ComponentListRequestCallback(data, url));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -201,9 +256,9 @@ public class DataTransfer {
     try {
       @SuppressWarnings("unused")
       Request request =
-          builder.sendRequest(null, new ComponentRequestCallback(data, url));
+          builder.sendRequest(null, new ComponentRequestCallback(data, url, componentId));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -226,7 +281,7 @@ public class DataTransfer {
       Request request =
           builder.sendRequest(null, new ModelListRequestCallback(data, url));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -255,7 +310,7 @@ public class DataTransfer {
           openBuilder.sendRequest(null, new ModelRequestCallback(data, openURL,
               "open"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
 
     RequestBuilder showBuilder =
@@ -266,7 +321,7 @@ public class DataTransfer {
           showBuilder.sendRequest(null, new ModelRequestCallback(data, showURL,
               "show"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -307,7 +362,7 @@ public class DataTransfer {
           builder.sendRequest(queryString, new ModelRequestCallback(data, url,
               "new/edit"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -332,7 +387,7 @@ public class DataTransfer {
           builder.sendRequest(null, new ModelRequestCallback(data, url,
               "delete"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -363,7 +418,7 @@ public class DataTransfer {
           builder.sendRequest(queryString, new RunRequestCallback(data, url,
               "init"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -392,7 +447,7 @@ public class DataTransfer {
           builder.sendRequest(queryString, new RunRequestCallback(data, url,
               "stage"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
@@ -412,9 +467,9 @@ public class DataTransfer {
 
     HashMap<String, String> entries = new HashMap<String, String>();
     entries.put("uuid", data.getSimulationId());
-    entries.put("host", data.getHpccHostname());
-    entries.put("username", data.getHpccUsername());
-    entries.put("password", data.getHpccPassword());
+    entries.put("host", data.security.getHpccHostname());
+    entries.put("username", data.security.getHpccUsername());
+    entries.put("password", data.security.getHpccPassword());
     String queryString = buildQueryString(entries);
 
     try {
@@ -424,10 +479,67 @@ public class DataTransfer {
           builder.sendRequest(queryString, new RunRequestCallback(data, url,
               "launch"));
     } catch (RequestException e) {
-      Window.alert(ERR_MSG + e.getMessage());
+      Window.alert(REQUEST_ERR_MSG + e.getMessage());
     }
   }
 
+  /**
+   * A RequestCallback handler class that processes WMT login and logout
+   * requests.
+   */
+  public static class AuthenticationRequestCallback implements RequestCallback {
+    
+    private DataManager data;
+    private String url;
+    private String type;
+    
+    public AuthenticationRequestCallback(DataManager data, String url, String type) {
+      this.data = data;
+      this.url = url;
+      this.type = type;
+    }
+
+    @Override
+    public void onResponseReceived(Request request, Response response) {
+      if (Response.SC_OK == response.getStatusCode()) {
+
+        String rtxt = response.getText();
+        GWT.log(rtxt);
+        
+        // Need to refresh the model list on login and logout.
+        getModelList(data);
+
+        if (type.matches("login")) {
+          data.security.isLoggedIn(true);
+          data.getPerspective().getLoginHtml().setHTML(
+              "<b>" + data.security.getWmtUsername()
+                  + "</b> | <i class='fa fa-sign-out'></i> "
+                  + "<a href=\"javascript:;\">Logout</a>");
+          data.getPerspective().getLoginHtml().setTitle("Logout from WMT");
+        } else if (type.matches("logout")) {
+          data.security.isLoggedIn(false);
+          data.getPerspective().getLoginHtml().setHTML(
+              "<i class='fa fa-sign-in'></i> "
+              + "<a href=\"javascript:;\">Login</a>");
+          data.getPerspective().getLoginHtml().setTitle("Login to WMT");
+        } else {
+          Window.alert(RESPONSE_ERR_MSG);
+        }
+
+      } else {
+        String msg =
+            "The URL '" + url + "' did not give an 'OK' response. "
+                + "Response code: " + response.getStatusCode();
+        Window.alert(msg);
+      }
+    }
+
+    @Override
+    public void onError(Request request, Throwable exception) {
+      Window.alert(REQUEST_ERR_MSG + exception.getMessage());
+    }
+  }
+  
   /**
    * A RequestCallback handler class that provides the callback for a GET
    * request of the list of available components in the WMT database. On
@@ -459,8 +571,14 @@ public class DataTransfer {
         for (int i = 0; i < jso.getComponents().length(); i++) {
           String componentId = jso.getComponents().get(i);
           data.componentIdList.add(componentId);
+          data.retryComponentLoad.put(componentId, 0);
           getComponent(data, componentId);
         }
+        
+        // Show the list of components (id only) as placeholders in the
+        // ComponentSelectionMenu.
+        data.getPerspective().getModelTree().getDriverComponentCell()
+            .getComponentMenu().initializeComponents();
 
       } else {
         String msg =
@@ -472,7 +590,7 @@ public class DataTransfer {
 
     @Override
     public void onError(Request request, Throwable exception) {
-      Window.alert(ERR_MSG + exception.getMessage());
+      Window.alert(REQUEST_ERR_MSG + exception.getMessage());
     }
   }
 
@@ -488,31 +606,49 @@ public class DataTransfer {
 
     private DataManager data;
     private String url;
+    private String componentId;
 
-    public ComponentRequestCallback(DataManager data, String url) {
+    public ComponentRequestCallback(DataManager data, String url,
+        String componentId) {
       this.data = data;
       this.url = url;
+      this.componentId = componentId;
     }
 
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
+
         String rtxt = response.getText();
         GWT.log(rtxt);
         ComponentJSO jso = parse(rtxt);
         data.addComponent(jso); // "class" component
         data.addModelComponent(copy(jso)); // "instance" component, for model
+
+        // Replace the associated placeholder ComponentSelectionMenu item.
+        data.getPerspective().getModelTree().getDriverComponentCell()
+            .getComponentMenu().replaceMenuItem(jso.getId());
+
       } else {
-        String msg =
-            "The URL '" + url + "' did not give an 'OK' response. "
-                + "Response code: " + response.getStatusCode();
-        Window.alert(msg);
+
+        // If the component didn't load, try to reload it RETRY_ATTEMPTS times.
+        // If that fails, display an error message in a window.
+        Integer attempt = data.retryComponentLoad.get(componentId);
+        data.retryComponentLoad.put(componentId, attempt++);
+        if (attempt < RETRY_ATTEMPTS) {
+          getComponent(data, componentId);
+        } else {
+          String msg =
+              "The URL '" + url + "' did not give an 'OK' response. "
+                  + "Response code: " + response.getStatusCode();
+          Window.alert(msg);
+        }
       }
     }
 
     @Override
     public void onError(Request request, Throwable exception) {
-      Window.alert(ERR_MSG + exception.getMessage());
+      Window.alert(REQUEST_ERR_MSG + exception.getMessage());
     }
   }
 
@@ -560,7 +696,7 @@ public class DataTransfer {
 
     @Override
     public void onError(Request request, Throwable exception) {
-      Window.alert(ERR_MSG + exception.getMessage());
+      Window.alert(REQUEST_ERR_MSG + exception.getMessage());
     }
   }
 
@@ -598,21 +734,21 @@ public class DataTransfer {
           data.setModel(jso);
           data.modelIsSaved(true);
           data.deserialize();
-        }
-        if (type.matches("open")) {
+        } else if (type.matches("open")) {
           ModelMetadataJSO jso = parse(rtxt);
           data.setMetadata(jso);
-        }
-        if (type.matches("new/edit")) {
+        } else if (type.matches("new/edit")) {
           data.modelIsSaved(true);
           data.getPerspective().setModelPanelTitle();
           DataTransfer.getModelList(data);
           Integer modelId = Integer.valueOf(rtxt);
           data.getMetadata().setId(modelId);
-        }
-        if (type.matches("delete")) {
+        } else if (type.matches("delete")) {
           DataTransfer.getModelList(data);
+        } else {
+          Window.alert(RESPONSE_ERR_MSG);
         }
+        
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "
@@ -623,12 +759,13 @@ public class DataTransfer {
 
     @Override
     public void onError(Request request, Throwable exception) {
-      Window.alert(ERR_MSG + exception.getMessage());
+      Window.alert(REQUEST_ERR_MSG + exception.getMessage());
     }
   }
 
   /**
-   * TODO
+   * A RequestCallback handler class that handles the initialization, staging
+   * and launching of a model run.
    */
   public static class RunRequestCallback implements RequestCallback {
 
@@ -653,13 +790,13 @@ public class DataTransfer {
           String uuid = rtxt.replaceAll("^\"|\"$", "");
           data.setSimulationId(uuid); // store the run's uuid
           DataTransfer.stageModelRun(data);
-        }
-        if (type.matches("stage")) {
+        } else if (type.matches("stage")) {
           DataTransfer.launchModelRun(data);
-        }
-        if (type.matches("launch")) {
-          RunInfoDialogBox runInfo = new RunInfoDialogBox();
+        } else if (type.matches("launch")) {
+          RunInfoDialogBox runInfo = new RunInfoDialogBox(data);
           runInfo.center();
+        } else {
+          Window.alert(RESPONSE_ERR_MSG);
         }
 
       } else {
@@ -672,7 +809,7 @@ public class DataTransfer {
 
     @Override
     public void onError(Request request, Throwable exception) {
-      Window.alert(ERR_MSG + exception.getMessage());
+      Window.alert(REQUEST_ERR_MSG + exception.getMessage());
     }
   }
 

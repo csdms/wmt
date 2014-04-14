@@ -270,8 +270,8 @@ public class ModelTree extends Tree {
                     .get(0).getId();
           }
         }
-
-        if (cellPortId.matches(portId)) {
+        
+        if ((cellPortId != null) && cellPortId.matches(portId)) {
           nMatches++;
           if (nMatches > 1) {
             return true;
@@ -311,7 +311,7 @@ public class ModelTree extends Tree {
           }
         }
 
-        if (cellPortId.matches(portId)) {
+        if ((cellPortId != null) && cellPortId.matches(portId)) {
           return cell.getComponentId();
         }
       }

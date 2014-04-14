@@ -301,7 +301,7 @@ public class ModelMenu extends PopupPanel {
     @Override
     public void onClick(ClickEvent event) {
       ModelMenu.this.hide();
-      Window.open(DataURL.showModelRun(), "runInfoDialog", null);
+      Window.open(DataURL.showModelRun(data), "runInfoDialog", null);
     }
   }
 
