@@ -1,9 +1,10 @@
 import web
+import json
 
 from ..validators import not_too_long, valid_email_address
 from ..render import render
 from ..models import users
-from ..session import (login, logout, get_session)
+from ..session import (login, logout, get_username)
 from ..config import site
 
 
@@ -51,3 +52,7 @@ class Logout(object):
         raise web.seeother('/')
 
 
+class Username(object):
+    def GET(self):
+        web.header('Content-Type', 'application/json; charset=utf-8')
+        return json.dumps(get_username())
