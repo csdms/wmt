@@ -13,11 +13,8 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelDeleteHandler;
-import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelHelpHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelOpenHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelSaveHandler;
-import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelStatusHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;
 
 /**
@@ -51,37 +48,12 @@ public class ActionButtonPanel extends HorizontalPanel {
     saveButton.addClickHandler(new ActionButtonPanelSaveHandler(data));
     this.add(saveButton);
 
-    // Save As
-    Button saveAsButton =
-        new Button(DataManager.FA_SAVE + "<i class='fa fa-caret-right'></i>");
-    saveAsButton.setTitle("Save model as...");
-    saveAsButton.addClickHandler(new ActionButtonPanelSaveHandler(data, true));    
-    this.add(saveAsButton);
-
-    // Delete
-    Button deleteButton = new Button(DataManager.FA_DELETE);
-    deleteButton.setTitle("Delete model");
-    deleteButton.addClickHandler(new ActionButtonPanelDeleteHandler(data));
-    this.add(deleteButton);
-
     // Run
     Button runButton = new Button(DataManager.FA_RUN);
     runButton.setTitle("Run model");
     runButton.addClickHandler(new SetupRunModelHandler(data));
     this.add(runButton);
 
-    // Run status
-    Button statusButton = new Button(DataManager.FA_STATUS);
-    statusButton.setTitle("Status of model run");
-    statusButton.addClickHandler(new ActionButtonPanelStatusHandler(data));    
-    this.add(statusButton);
-
-    // Help
-    Button helpButton = new Button(DataManager.FA_HELP);
-    helpButton.setTitle("Help on using WMT");
-    helpButton.addClickHandler(new ActionButtonPanelHelpHandler());        
-    this.add(helpButton);
-    
     // More
     Button moreButton = new Button("More <i class='fa fa-caret-down'></i>");
     this.add(moreButton);
@@ -106,7 +78,7 @@ public class ActionButtonPanel extends HorizontalPanel {
     Iterator<Widget> iter = this.iterator();
     while (iter.hasNext()) {
       Button button = (Button) iter.next();
-      button.setStyleName("wmt-ModelMenuPanelButton");
+      button.setStyleName("wmt-ActionButtonPanelButton");
     }
   }
 }
