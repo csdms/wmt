@@ -65,7 +65,7 @@ class Show(object):
             return json.dumps(get_component_names())
         elif user_data.element == 'models':
             return json.dumps(
-                [dict(id=p.id, name=p.name) for p in models.get_public_models()])
+                [dict(id=p.id, name=p.name) for p in models.get_models()])
         elif user_data.element == 'users':
             return json.dumps([u.username for u in users.get_users()])
         else:

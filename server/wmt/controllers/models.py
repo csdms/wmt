@@ -8,7 +8,7 @@ from ..validators import (not_too_short, not_bad_json)
 from ..cca import rc_from_json
 from ..config import site
 from ..utils.io import chunk_copy
-
+from ..session import get_username
 
 from collections import namedtuple
 
@@ -84,7 +84,7 @@ class New(object):
         if not form.validates():
             return render.new(form)
         id = models.new_model(form.d.name, form.d.json,
-                              owner=web.ctx.session.username)
+                              owner=get_username())
         return json.dumps(id)
 
 
@@ -92,10 +92,8 @@ class Save(object):
     form = web.form.Form(
         web.form.Textbox('name',
                          not_too_short(3),
-                         #not_too_long(20),
                          size=30, description='Model name:'),
         web.form.Textarea('json',
-                          #not_too_long(2048),
                           not_bad_json,
                           rows=40, cols=80, description=None),
         web.form.Button('Save')
@@ -189,7 +187,7 @@ class Show(object):
 class List(object):
     def GET(self):
         web.header('Content-Type', 'application/json; charset=utf-8')
-        all_models = models.get_public_models()
+        all_models = models.get_models()
         resp = []
         for model in all_models:
             resp.append(dict(id=model.id, name=model.name))
@@ -251,13 +249,10 @@ class Format(object):
 
             mapping = component['parameters']
 
-        #return render.files(components.get_component_formatted_input(name, **mapping))
-
         if x['format'].lower() == 'html':
             return render.files(components.get_component_formatted_input(name, **mapping))
         elif x['format'].lower() == 'json':
             web.header('Content-Type', 'application/json; charset=utf-8')
-            #mapping.pop('separator')
             return json.dumps(mapping, sort_keys=True, indent=4, separators=(',', ': '))
         else:
             files = components.get_component_formatted_input(name, **mapping)

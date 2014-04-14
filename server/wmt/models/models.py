@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 
 from ..config import (site, db)
+from ..session import get_username
 
 
 class Error(Exception):
@@ -53,11 +54,19 @@ def update_model(id, name, text):
 
 
 def get_public_models():
-    return db.select('models', order='id DESC', where='owner=$owner', vars=dict(owner=''))
+    return db.select('models', order='id DESC', where='owner=$owner',
+                     vars=dict(owner=''))
 
 
 def get_private_models():
-    return db.select('models', order='id DESC', where='owner=$owner', vars=dict(owner=web.ctx.session.username))
+    return db.select('models', order='id DESC', where='owner=$owner',
+                     vars=dict(owner=get_username()))
+
+
+def get_models():
+    where = ' OR '.join(['owner=$user', 'owner=\'\''])
+    return db.select('models', order='id DESC', where=where,
+                     vars=dict(user=get_username()))
 
 
 def get_model(id):
@@ -66,7 +75,7 @@ def get_model(id):
     except IndexError:
         raise BadIdError(id)
 
-    if model['owner'] in ['', web.ctx.session.username]:
+    if model['owner'] in ['', get_username()]:
         return model
     else:
         raise AuthorizationError(id)
