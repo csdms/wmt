@@ -50,19 +50,19 @@ public class MoreActionsMenu extends PopupPanel {
 
     // Save As
     HTML saveAsButton =
-        new HTML(DataManager.FA_SAVE + "Save as...");
+        new HTML(DataManager.FA_SAVE + "Save model as...");
     saveAsButton.setTitle("Save model as...");
     saveAsButton.addClickHandler(new ActionButtonPanelSaveHandler(data, true));    
     menu.add(saveAsButton);
 
     // Delete
-    HTML deleteButton = new HTML(DataManager.FA_DELETE + "Delete");
+    HTML deleteButton = new HTML(DataManager.FA_DELETE + "Delete model...");
     deleteButton.setTitle("Delete model");
     deleteButton.addClickHandler(new ActionButtonPanelDeleteHandler(data));
     menu.add(deleteButton);
 
     // Run status
-    HTML statusButton = new HTML(DataManager.FA_STATUS + "Run status");
+    HTML statusButton = new HTML(DataManager.FA_STATUS + "View run status...");
     statusButton.setTitle("Status of model run");
     statusButton.addClickHandler(new ActionButtonPanelStatusHandler(data));    
     menu.add(statusButton);
