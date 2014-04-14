@@ -10,7 +10,7 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
 
 /**
- * Handles click on the "Delete" button in the ModelMenuPanel. It presents an
+ * Handles click on the "Delete" button in the ActionButtonPanel. It presents an
  * instance of {@link DroplistDialogBox} with a "Delete" button. Events are sent
  * to {@link DeleteModelHandler} and {@link DialogCancelHandler}.
  * 

@@ -10,7 +10,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
 
 /**
  * Handles click on the "Delete" button in the dialog that appears when the
- * "Delete Model..." button is clicked in the ModelMenuPanel. Deletes the
+ * "Delete Model..." button is clicked in the ActionButtonPanel. Deletes the
  * selected model from the server with a call to
  * {@link DataTransfer#deleteModel(DataManager, Integer)}.
  */

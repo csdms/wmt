@@ -11,7 +11,7 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataURL;
 
 /**
- * Handles click on the "Run status" button in the ModelMenuPanel. Displays the
+ * Handles click on the "Run status" button in the ActionButtonPanel. Displays the
  * API "run/show" page showing the status of all currently running models.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)

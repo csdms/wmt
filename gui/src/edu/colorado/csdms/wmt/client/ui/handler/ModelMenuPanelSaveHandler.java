@@ -11,7 +11,7 @@ import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
 
 /**
- * Handles click on the "Save" or "Save As..." buttons in the ModelMenuPanel.
+ * Handles click on the "Save" or "Save As..." buttons in the ActionButtonPanel.
  * Saves a not-previously-saved model or a new model displayed in WMT to the
  * server with a call to {@link DataTransfer#postModel(DataManager)}.
  */

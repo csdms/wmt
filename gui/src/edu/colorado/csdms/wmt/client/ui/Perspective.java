@@ -54,7 +54,7 @@ public class Perspective extends DockLayoutPanel {
   // Secondary UI panels/widgets.
   private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
-  private ModelMenuPanel modelMenuPanel;
+  private ActionButtonPanel actionButtonPanel;
   private HTML loginHtml;
   private ModelTree modelTree;
   private ParameterTable parameterTable;
@@ -111,8 +111,8 @@ public class Perspective extends DockLayoutPanel {
       super(1, 3);
       this.setWidth("100%");
 
-      modelMenuPanel = new ModelMenuPanel(data);
-      this.setWidget(0, 0, modelMenuPanel);
+      actionButtonPanel = new ActionButtonPanel(data);
+      this.setWidget(0, 0, actionButtonPanel);
       this.getCellFormatter().setStyleName(0, 0, "wmt-ViewNorth0");
 
       loginHtml =
@@ -282,12 +282,12 @@ public class Perspective extends DockLayoutPanel {
     return viewWest;
   }
 
-  public ModelMenuPanel getModelMenuPanel() {
-    return modelMenuPanel;
+  public ActionButtonPanel getModelMenuPanel() {
+    return actionButtonPanel;
   }
 
-  public void setModelMenuPanel(ModelMenuPanel modelMenuPanel) {
-    this.modelMenuPanel = modelMenuPanel;
+  public void setModelMenuPanel(ActionButtonPanel actionButtonPanel) {
+    this.actionButtonPanel = actionButtonPanel;
   }
 
   /**

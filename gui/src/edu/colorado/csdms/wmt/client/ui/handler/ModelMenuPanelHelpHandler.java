@@ -8,7 +8,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 
 /**
- * Handles click on "Help" button in the ModelMenuPanel.
+ * Handles click on "Help" button in the ActionButtonPanel.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
