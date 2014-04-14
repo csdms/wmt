@@ -78,6 +78,12 @@ public class ModelMenuPanel extends HorizontalPanel {
     helpButton.setTitle("Help on using WMT");
     helpButton.addClickHandler(new ModelMenuPanelHelpHandler());        
     this.add(helpButton);
+    
+    // More
+    Button moreButton = new Button("More <i class='fa fa-caret-down'></i>");
+    moreButton.setTitle("Other actions...");
+    moreButton.addClickHandler(new ModelMenuPanelHelpHandler());        
+    this.add(moreButton);    
 
     // Apply a style to each button.
     Iterator<Widget> iter = this.iterator();
