@@ -10,11 +10,11 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelDeleteHandler;
-import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelHelpHandler;
-import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelOpenHandler;
-import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelSaveHandler;
-import edu.colorado.csdms.wmt.client.ui.handler.ModelMenuPanelStatusHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelDeleteHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelHelpHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelOpenHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelSaveHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelStatusHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;
 
 /**
@@ -39,26 +39,26 @@ public class ActionButtonPanel extends HorizontalPanel {
     // Open
     Button openButton = new Button(DataManager.FA_OPEN);
     openButton.setTitle("Open model");
-    openButton.addClickHandler(new ModelMenuPanelOpenHandler(data));
+    openButton.addClickHandler(new ActionButtonPanelOpenHandler(data));
     this.add(openButton);
 
     // Save
     Button saveButton = new Button(DataManager.FA_SAVE);
     saveButton.setTitle("Save model");
-    saveButton.addClickHandler(new ModelMenuPanelSaveHandler(data));
+    saveButton.addClickHandler(new ActionButtonPanelSaveHandler(data));
     this.add(saveButton);
 
     // Save As
     Button saveAsButton =
         new Button(DataManager.FA_SAVE + "<i class='fa fa-caret-right'></i>");
     saveAsButton.setTitle("Save model as...");
-    saveAsButton.addClickHandler(new ModelMenuPanelSaveHandler(data, true));    
+    saveAsButton.addClickHandler(new ActionButtonPanelSaveHandler(data, true));    
     this.add(saveAsButton);
 
     // Delete
     Button deleteButton = new Button(DataManager.FA_DELETE);
     deleteButton.setTitle("Delete model");
-    deleteButton.addClickHandler(new ModelMenuPanelDeleteHandler(data));
+    deleteButton.addClickHandler(new ActionButtonPanelDeleteHandler(data));
     this.add(deleteButton);
 
     // Run
@@ -70,19 +70,19 @@ public class ActionButtonPanel extends HorizontalPanel {
     // Run status
     Button statusButton = new Button(DataManager.FA_STATUS);
     statusButton.setTitle("Status of model run");
-    statusButton.addClickHandler(new ModelMenuPanelStatusHandler(data));    
+    statusButton.addClickHandler(new ActionButtonPanelStatusHandler(data));    
     this.add(statusButton);
 
     // Help
     Button helpButton = new Button(DataManager.FA_HELP);
     helpButton.setTitle("Help on using WMT");
-    helpButton.addClickHandler(new ModelMenuPanelHelpHandler());        
+    helpButton.addClickHandler(new ActionButtonPanelHelpHandler());        
     this.add(helpButton);
     
     // More
     Button moreButton = new Button("More <i class='fa fa-caret-down'></i>");
     moreButton.setTitle("Other actions...");
-    moreButton.addClickHandler(new ModelMenuPanelHelpHandler());        
+    moreButton.addClickHandler(new ActionButtonPanelHelpHandler());        
     this.add(moreButton);    
 
     // Apply a style to each button.
