@@ -5,14 +5,16 @@ package edu.colorado.csdms.wmt.client.ui;
 
 import java.util.Iterator;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelDeleteHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelHelpHandler;
-import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelMoreHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelOpenHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelSaveHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelStatusHandler;
@@ -82,9 +84,23 @@ public class ActionButtonPanel extends HorizontalPanel {
     
     // More
     Button moreButton = new Button("More <i class='fa fa-caret-down'></i>");
-    MoreActionsMenu moreMenu = new MoreActionsMenu(data, moreButton);
-    moreButton.addClickHandler(new ActionButtonPanelMoreHandler(data, moreMenu));        
     this.add(moreButton);
+    final MoreActionsMenu moreMenu = new MoreActionsMenu(data, moreButton);
+    moreButton.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        moreMenu.setPopupPositionAndShow(new PositionCallback() {
+          final Integer x = moreMenu.getMoreButton().getElement()
+              .getAbsoluteLeft();
+          final Integer y = moreMenu.getMoreButton().getElement()
+              .getAbsoluteBottom();
+          @Override
+          public void setPosition(int offsetWidth, int offsetHeight) {
+            moreMenu.setPopupPosition(x, y);
+          }
+        });
+      }
+    });
 
     // Apply a style to each button.
     Iterator<Widget> iter = this.iterator();
