@@ -47,7 +47,7 @@ public class DroplistPanel extends Composite {
     dropLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
     HorizontalPanel contents = new HorizontalPanel();
-    contents.setSpacing(10); // px
+    contents.setSpacing(5); // px
     contents.add(dropLabel);
     contents.add(droplist);
 

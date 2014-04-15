@@ -31,7 +31,7 @@ public class RadioButtonPanel extends Composite {
     rightButton.setValue(true);
     
     HorizontalPanel contents = new HorizontalPanel();
-    contents.setSpacing(10); // px
+    contents.setSpacing(5); // px
     contents.add(panelLabel);
     contents.add(leftButton);
     contents.add(rightButton);
