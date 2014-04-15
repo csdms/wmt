@@ -5,6 +5,7 @@ package edu.colorado.csdms.wmt.client.ui.widgets;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -47,6 +48,7 @@ public class DroplistPanel extends Composite {
     dropLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
     HorizontalPanel contents = new HorizontalPanel();
+    contents.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     contents.setSpacing(5); // px
     contents.add(dropLabel);
     contents.add(droplist);
