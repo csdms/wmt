@@ -54,8 +54,19 @@ public class SaveDialogBox extends DialogBox {
     accessPanel.getLeftButton().setText("Public");
     accessPanel.getRightButton().setText("Private");
 
+    // Displays the driver for the model in a droplist. If no driver has been
+    // set, the first component in the list is displayed.
     driverPanel = new DroplistPanel();
     driverPanel.getLabel().removeFromParent();
+    for (int i = 0; i < data.getComponents().size(); i++) {
+      driverPanel.getDroplist().addItem(data.getComponent(i).getName());
+      String driverId =
+          data.getPerspective().getModelTree().getDriverComponentCell()
+              .getComponentId();
+      if (data.getComponent(i).getId().equals(driverId)) {
+        driverPanel.getDroplist().setItemSelected(i, true);
+      }
+    }
 
     casePanel = new DroplistPanel(new String[] {"default"});
     casePanel.getLabel().removeFromParent();
