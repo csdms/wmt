@@ -95,14 +95,14 @@ public class FieldPanel extends Composite {
   /**
    * Returns the text displayed in the FieldPanel.
    */
-  public String getField() {
-    return field.getText();
+  public TextBox getField() {
+    return this.field;
   }
 
   /**
    * Sets the text displayed in the FieldPanel.
    */
-  public void setField(String text) {
-    field.setText(text);
+  public void setField(TextBox box) {
+    this.field = box;
   }
 }

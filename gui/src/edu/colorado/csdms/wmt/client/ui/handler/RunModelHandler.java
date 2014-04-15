@@ -43,12 +43,12 @@ public class RunModelHandler implements ClickHandler {
     GWT.log(data.security.getHpccHostname());
 
     // Get username.
-    String userName = box.getUsernamePanel().getField();
+    String userName = box.getUsernamePanel().getField().getText();
     data.security.setHpccUsername(userName);
     GWT.log(data.security.getHpccUsername());
 
     // Get password.
-    String password = box.getPasswordPanel().getField();
+    String password = box.getPasswordPanel().getField().getText();
     data.security.setHpccPassword(password);
     GWT.log(data.security.getHpccPassword());
 

@@ -35,7 +35,7 @@ public class SaveModelHandler implements ClickHandler {
     box.hide();
 
     // Set the model name in the DataManager.
-    String modelName = box.getNamePanel().getField();
+    String modelName = box.getNamePanel().getField().getText();
     if (modelName.isEmpty()) {
       return;
     }
