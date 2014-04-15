@@ -57,7 +57,7 @@ public class ActionButtonPanelSaveHandler implements ClickHandler {
    */
   private void showSaveDialogBox() {
     saveDialog = new SaveDialogBox(data.getModel().getName());
-    saveDialog.getFilePanel().setTitle(
+    saveDialog.getNamePanel().setTitle(
         "Enter a name for the model. No file extension is needed.");
     saveDialog.getChoicePanel().getOkButton().addClickHandler(
         new SaveModelHandler(data, saveDialog));
