@@ -53,6 +53,7 @@ public class ModelTree extends Tree {
     this.addItem(driverItem);
 
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
+    model.setName("Model 0");
     data.setModel(model);
     ModelMetadataJSO metadata =
         (ModelMetadataJSO) ModelMetadataJSO.createObject();
