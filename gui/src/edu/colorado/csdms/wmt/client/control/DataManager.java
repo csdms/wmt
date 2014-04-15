@@ -28,6 +28,7 @@ import edu.colorado.csdms.wmt.client.ui.Perspective;
 public class DataManager {
 
   public static String DRIVER = "driver";
+  public static String DEFAULT_MODEL = "Model 0";
   public static String FA_OPEN = "<i class='fa fa-folder-open-o fa-fw'></i> ";
   public static String FA_SAVE = "<i class='fa fa-floppy-o fa-fw'></i> ";
   public static String FA_DELETE = "<i class='fa fa-trash-o fa-fw'></i> ";

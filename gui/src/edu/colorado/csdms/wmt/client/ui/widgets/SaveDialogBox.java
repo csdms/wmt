@@ -33,7 +33,7 @@ public class SaveDialogBox extends DialogBox {
    * @param data the DataManager object for the WMT session
    */
   public SaveDialogBox(DataManager data) {
-    this(data, "Model 0");
+    this(data, DataManager.DEFAULT_MODEL);
   }
   
   /**
