@@ -9,6 +9,8 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.colorado.csdms.wmt.client.control.DataManager;
+
 /**
  * A customized DialogBox with elements for setting a public or private model,
  * the driver and case of the model, and a name/description of the model. "OK"
@@ -18,6 +20,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class SaveDialogBox extends DialogBox {
 
+  private DataManager data;
   private RadioButtonPanel accessPanel;
   private DroplistPanel driverPanel;
   private DroplistPanel casePanel;
@@ -26,19 +29,25 @@ public class SaveDialogBox extends DialogBox {
   
   /**
    * Makes a SaveDialogBox with a default name.
+   * 
+   * @param data the DataManager object for the WMT session
    */
-  public SaveDialogBox() {
-    this("Model 0");
+  public SaveDialogBox(DataManager data) {
+    this(data, "Model 0");
   }
   
   /**
    * Makes a SaveDialogBox with a user-supplied name.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param modelName a descriptive name for the model
    */
-  public SaveDialogBox(String fileName) {
+  public SaveDialogBox(DataManager data, String modelName) {
 
     super(false); // autohide
     this.setModal(true);
     this.setText("Save Model As...");
+    this.data = data;
 
     accessPanel = new RadioButtonPanel();
     accessPanel.getPanelLabel().removeFromParent();
@@ -53,7 +62,7 @@ public class SaveDialogBox extends DialogBox {
 
     namePanel = new FieldPanel();
     namePanel.getLabel().removeFromParent();
-    namePanel.getField().setText(fileName);
+    namePanel.getField().setText(modelName);
 
     Integer nRows = 4, nCols = 2;
     Grid grid = new Grid(nRows, nCols);

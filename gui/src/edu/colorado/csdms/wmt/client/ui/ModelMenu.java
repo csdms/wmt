@@ -253,7 +253,7 @@ public class ModelMenu extends PopupPanel {
    * {@link GenericCancelHandler}.
    */
   private void showSaveDialogBox() {
-    saveDialog = new SaveDialogBox(data.getModel().getName());
+    saveDialog = new SaveDialogBox(data, data.getModel().getName());
     saveDialog.getNamePanel().setTitle(
         "Enter a name for the model. No file extension is needed.");
     saveDialog.getChoicePanel().getOkButton().addClickHandler(
