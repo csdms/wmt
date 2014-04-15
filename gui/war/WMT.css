@@ -221,6 +221,7 @@
   border: 1px solid #ccc;
   border-top: 1px solid #999;
   font-size: small;
+  width: 200px;
 }
 
 /* All TextBoxen that display numeric values. Used in the ParameterTable. */
