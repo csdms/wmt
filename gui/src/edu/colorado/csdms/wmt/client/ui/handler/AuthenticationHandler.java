@@ -32,7 +32,6 @@ public class AuthenticationHandler implements ClickHandler {
   @Override
   public void onClick(ClickEvent event) {
 
-    // XXX Should use cookie? Or get from server?
     if (data.security.isLoggedIn()) {
 
       String question = "Are you sure you want to log out from WMT?";

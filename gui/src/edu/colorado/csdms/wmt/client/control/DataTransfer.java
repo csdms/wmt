@@ -518,38 +518,57 @@ public class DataTransfer {
     private String url;
     private String type;
     
-    public AuthenticationRequestCallback(DataManager data, String url, String type) {
+    public AuthenticationRequestCallback(DataManager data, String url,
+        String type) {
       this.data = data;
       this.url = url;
       this.type = type;
     }
 
+    /*
+     * A helper that performs actions on login.
+     */
+    private void loginActions() {
+      data.security.isLoggedIn(true);
+      data.getPerspective().getLoginHtml().setHTML(
+          "<b>" + data.security.getWmtUsername()
+              + "</b> | <i class='fa fa-sign-out'></i> "
+              + "<a href=\"javascript:;\">Logout</a>");
+      data.getPerspective().getLoginHtml().setTitle("Logout from WMT");
+    }
+
+    /*
+     * A helper that performs actions on logout.
+     */
+    private void logoutActions() {
+      data.security.isLoggedIn(false);
+      data.getPerspective().getLoginHtml().setHTML(
+          "<i class='fa fa-sign-in'></i> "
+              + "<a href=\"javascript:;\">Login</a>");
+      data.getPerspective().getLoginHtml().setTitle("Login to WMT");
+    }
+    
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
 
         String rtxt = response.getText();
         GWT.log(rtxt);
-        
+
         // Need to refresh the model list on login and logout.
         getModelList(data);
 
         if (type.matches("login")) {
-          data.security.isLoggedIn(true);
-          data.getPerspective().getLoginHtml().setHTML(
-              "<b>" + data.security.getWmtUsername()
-                  + "</b> | <i class='fa fa-sign-out'></i> "
-                  + "<a href=\"javascript:;\">Logout</a>");
-          data.getPerspective().getLoginHtml().setTitle("Logout from WMT");
+          loginActions();
         } else if (type.matches("logout")) {
-          data.security.isLoggedIn(false);
-          data.getPerspective().getLoginHtml().setHTML(
-              "<i class='fa fa-sign-in'></i> "
-              + "<a href=\"javascript:;\">Login</a>");
-          data.getPerspective().getLoginHtml().setTitle("Login to WMT");
-        } if (type.matches("state")) {
-          if ((rtxt != null) && !rtxt.trim().equals("") && (rtxt.length() >= 1)) { // XXX fragile?
-            Window.alert("Username: " + rtxt);
+          logoutActions();
+        } else if (type.matches("state")) {
+          String username = rtxt.replace("\"", ""); // strip quote marks
+          if (username.isEmpty()) {
+            logoutActions();
+          } else {
+            data.security.setWmtUsername(username);
+            loginActions();
           }
         } else {
           Window.alert(RESPONSE_ERR_MSG);

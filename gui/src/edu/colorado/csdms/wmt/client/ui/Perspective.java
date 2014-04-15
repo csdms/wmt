@@ -111,19 +111,20 @@ public class Perspective extends DockLayoutPanel {
       super(1, 3);
       this.setWidth("100%");
 
+      // The ActionButtonPanel shows "Open", "Save", etc., buttons.
       actionButtonPanel = new ActionButtonPanel(data);
       this.setWidget(0, 0, actionButtonPanel);
       this.getCellFormatter().setStyleName(0, 0, "wmt-ViewNorth0");
 
-      loginHtml =
-          new HTML(
-              "<i class='fa fa-sign-in'></i> <a href=\"javascript:;\">Login</a>");
-      loginHtml.setTitle("Login to WMT to save and run models.");
+      // Login/logout link. Clicking it prompts for credentials.
+      loginHtml = new HTML();
       this.setWidget(0, 1, loginHtml);
       this.getCellFormatter().setHorizontalAlignment(0, 1,
           HasHorizontalAlignment.ALIGN_RIGHT);
       this.getCellFormatter().setStyleName(0, 1, "wmt-ViewNorth1");
+      loginHtml.addClickHandler(new AuthenticationHandler(data));
 
+      // CSDMS logo. Clicking it opens the CSDMS website in a new browser tab.
       Image logo = new Image("images/CSDMS_Logo_1.jpg");
       logo.setTitle("Go to the CSDMS website.");
       logo.setAltText("CSDMS logo");
@@ -132,11 +133,6 @@ public class Perspective extends DockLayoutPanel {
           .setAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT,
               HasVerticalAlignment.ALIGN_MIDDLE);
       this.getCellFormatter().setStyleName(0, 2, "wmt-ViewNorth2");
-
-      // Clicking the login link prompts for credentials.
-      loginHtml.addClickHandler(new AuthenticationHandler(data));
-
-      // Clicking the CSDMS logo opens the CSDMS website in a new browser tab.
       logo.addClickHandler(new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
