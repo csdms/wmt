@@ -32,10 +32,15 @@ public class LabelsMenu extends PopupPanel {
     super(true); // autohide
     this.getElement().getStyle().setCursor(Cursor.POINTER); // use pointer
     this.data = data;
+
+    // A VerticalPanel for the menu items. (PopupPanels have only one child.)
+    VerticalPanel menu = new VerticalPanel();
+    this.add(menu);
     
-    // All the labels are listed on the labelPanel, which sits on a ScrollPanel.
+    // All labels are listed on the labelPanel, which sits on a ScrollPanel.
     VerticalPanel labelPanel = new VerticalPanel();
     ScrollPanel scroller = new ScrollPanel(labelPanel);
+    menu.add(scroller);
     
     // XXX Temporary labels.
     HTML label0 = new HTML("low avulsion");
@@ -49,13 +54,10 @@ public class LabelsMenu extends PopupPanel {
     HTML label4 = new HTML("2013");
     labelPanel.add(label4);
     
-    // These two menu items are always visible on the bottom of the menu.
+    // These items are always visible on the bottom of the menu.
     HTML addNewHtml = new HTML("Add new label");
     HTML manageHtml = new HTML("Manage labels");
-
-    VerticalPanel contents = new VerticalPanel();
-    contents.add(scroller);
-    contents.add(addNewHtml);
-    contents.add(manageHtml);
+    menu.add(addNewHtml);
+    menu.add(manageHtml);
   }
 }
