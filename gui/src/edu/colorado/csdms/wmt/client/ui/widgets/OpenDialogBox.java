@@ -16,42 +16,32 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 
 /**
- * A customized DialogBox with a field for setting the name/description of the
- * model, and a "Labels" button for applying labels to the model (used for
- * filtering). "OK" and "Cancel" buttons are shown on the bottom of the dialog.
+ * A customized DialogBox with a droplist for selecting a model and a "Labels"
+ * button for selecting labels, used to filter the list of models. "OK" and
+ * "Cancel" buttons are shown on the bottom of the dialog.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class SaveDialogBox extends DialogBox {
-  
+public class OpenDialogBox extends DialogBox {
+
   @SuppressWarnings("unused")
   private DataManager data;
-  private FieldPanel namePanel;
+  private DroplistPanel droplistPanel;
   private ChoicePanel choicePanel;
   
   /**
-   * Makes a {@link SaveDialogBox} with a default name.
+   * Makes an {@link OpenDialogBox}.
    * 
    * @param data the DataManager object for the WMT session
    */
-  public SaveDialogBox(DataManager data) {
-    this(data, DataManager.DEFAULT_MODEL);
-  }
-  
-  /**
-   * Makes a SaveDialogBox with a user-supplied name.
-   * 
-   * @param data the DataManager object for the WMT session
-   * @param modelName a descriptive name for the model
-   */
-  public SaveDialogBox(DataManager data, String modelName) {
-
+  public OpenDialogBox(DataManager data) {
+    
     super(false); // autohide
     this.setModal(true);
-    this.setText("Save Model As...");
-    this.data = data;
-
-    namePanel = new FieldPanel(modelName);
+    this.setText("Open Model...");
+    this.data = data;    
+    
+    droplistPanel = new DroplistPanel();
 
     Button labelsButton =
         new Button(DataManager.FA_TAGS + "Labels", new ClickHandler() {
@@ -60,16 +50,16 @@ public class SaveDialogBox extends DialogBox {
             Window.alert("show labels!");
           }
         });
-
+    
     HorizontalPanel row = new HorizontalPanel();
     row.setSpacing(5); // px
-    row.add(namePanel);
+    row.add(droplistPanel);
     row.add(labelsButton);
     row.setCellVerticalAlignment(labelsButton,
         HasVerticalAlignment.ALIGN_MIDDLE);
 
     choicePanel = new ChoicePanel();
-    choicePanel.getOkButton().setHTML(DataManager.FA_SAVE + "Save");
+    choicePanel.getOkButton().setHTML(DataManager.FA_OPEN + "Open");
 
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
@@ -79,12 +69,12 @@ public class SaveDialogBox extends DialogBox {
     this.setWidget(contents);
   }
 
-  public FieldPanel getNamePanel() {
-    return namePanel;
+  public DroplistPanel getDroplistPanel() {
+    return droplistPanel;
   }
 
-  public void setNamePanel(FieldPanel namePanel) {
-    this.namePanel = namePanel;
+  public void setDroplistPanel(DroplistPanel droplistPanel) {
+    this.droplistPanel = droplistPanel;
   }
 
   public ChoicePanel getChoicePanel() {

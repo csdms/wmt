@@ -7,17 +7,17 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
+import edu.colorado.csdms.wmt.client.ui.widgets.OpenDialogBox;
 
 /**
  * Handles click on the "Open Model..." button in the ActionButtonPanel. Pops up an
- * instance of {@link DroplistDialogBox} to prompt the user for a model to open.
+ * instance of {@link OpenDialogBox} to prompt the user for a model to open.
  * Events are sent to {@link OpenModelHandler} and {@link DialogCancelHandler}.
  */
 public class ActionButtonPanelOpenHandler implements ClickHandler {
 
   private DataManager data;
-  private DroplistDialogBox openDialog;
+  private OpenDialogBox openDialog;
 
   /**
    * Creates a new instance of {@link ActionButtonPanelOpenHandler}.
@@ -31,10 +31,7 @@ public class ActionButtonPanelOpenHandler implements ClickHandler {
   @Override
   public void onClick(ClickEvent event) {
 
-    openDialog = new DroplistDialogBox();
-    openDialog.setText("Open Model...");
-    openDialog.getChoicePanel().getOkButton().setHTML(
-        DataManager.FA_OPEN + "Open");
+    openDialog = new OpenDialogBox(data);
 
     // Populate the droplist with the available models on the server.
     for (int i = 0; i < data.modelNameList.size(); i++) {

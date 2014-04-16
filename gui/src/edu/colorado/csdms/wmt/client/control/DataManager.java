@@ -35,6 +35,7 @@ public class DataManager {
   public static String FA_RUN = "<i class='fa fa-play fa-fw'></i> ";
   public static String FA_STATUS = "<i class='fa fa-info fa-fw'></i> ";
   public static String FA_HELP = "<i class='fa fa-question fa-fw'></i> ";
+  public static String FA_TAGS = "<i class='fa fa-tags fa-fw'></i> ";
   
   private Boolean developmentMode;
   private Boolean apiDevelopmentMode;
