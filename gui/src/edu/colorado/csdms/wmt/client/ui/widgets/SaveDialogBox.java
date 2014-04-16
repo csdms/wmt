@@ -5,7 +5,6 @@ package edu.colorado.csdms.wmt.client.ui.widgets;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -14,6 +13,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.ui.LabelsMenu;
 
 /**
  * A customized DialogBox with a field for setting the name/description of the
@@ -28,6 +28,7 @@ public class SaveDialogBox extends DialogBox {
   private DataManager data;
   private FieldPanel namePanel;
   private ChoicePanel choicePanel;
+  private LabelsMenu labelsMenu;
   
   /**
    * Makes a {@link SaveDialogBox} with a default name.
@@ -53,13 +54,21 @@ public class SaveDialogBox extends DialogBox {
 
     namePanel = new FieldPanel(modelName);
 
-    Button labelsButton =
-        new Button(DataManager.FA_TAGS + "Labels", new ClickHandler() {
+    final Button labelsButton = new Button(DataManager.FA_TAGS + "Labels");
+    labelsMenu = new LabelsMenu(data);
+    labelsButton.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        labelsMenu.setPopupPositionAndShow(new PositionCallback() {
+          final Integer x = labelsButton.getElement().getAbsoluteRight();
+          final Integer y = labelsButton.getAbsoluteTop();
           @Override
-          public void onClick(ClickEvent event) {
-            Window.alert("show labels!");
+          public void setPosition(int offsetWidth, int offsetHeight) {
+            labelsMenu.setPopupPosition(x, y);
           }
         });
+      }
+    });
 
     HorizontalPanel row = new HorizontalPanel();
     row.setSpacing(5); // px
