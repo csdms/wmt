@@ -3,6 +3,9 @@
  */
 package edu.colorado.csdms.wmt.client.ui.widgets;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -20,6 +23,9 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
  */
 public class SaveDialogBox extends DialogBox {
 
+  private static final String DEFAULT_CASE = "default";
+  private static final String ADD_NEW_CASE = "<add a new case>";
+  
   private DataManager data;
   private RadioButtonPanel accessPanel;
   private DroplistPanel driverPanel;
@@ -68,8 +74,10 @@ public class SaveDialogBox extends DialogBox {
       }
     }
 
-    casePanel = new DroplistPanel(new String[] {"default"});
+    String[] cases = {DEFAULT_CASE, ADD_NEW_CASE};
+    casePanel = new DroplistPanel(cases);
     casePanel.getLabel().removeFromParent();
+    casePanel.getDroplist().addChangeHandler(new AddNewCaseHandler());
 
     namePanel = new FieldPanel();
     namePanel.getLabel().removeFromParent();
@@ -141,5 +149,24 @@ public class SaveDialogBox extends DialogBox {
 
   public void setChoicePanel(ChoicePanel choicePanel) {
     this.choicePanel = choicePanel;
+  }
+
+  /**
+   * 
+   */
+  public class AddNewCaseHandler implements ChangeHandler {
+
+    @Override
+    public void onChange(ChangeEvent event) {
+
+      Integer selectedIndex = casePanel.getDroplist().getSelectedIndex();
+      String selectedItem = casePanel.getDroplist().getItemText(selectedIndex);
+
+      // Woo-hoo!
+      if (selectedItem.equals(ADD_NEW_CASE)) {
+        Window.alert(selectedItem);
+      }
+
+    }
   }
 }
