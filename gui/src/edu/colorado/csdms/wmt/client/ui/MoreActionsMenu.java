@@ -13,10 +13,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelDeleteHandler;
-import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelHelpHandler;
-import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelSaveHandler;
-import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelStatusHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelDeleteHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelHelpHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelSaveHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelStatusHandler;
 
 /**
  * Encapsulates a menu of secondary actions on models -- "Save as", "Delete",
@@ -52,25 +52,25 @@ public class MoreActionsMenu extends PopupPanel {
     HTML saveAsButton =
         new HTML(DataManager.FA_SAVE + "Save model as...");
     saveAsButton.setTitle("Save model as...");
-    saveAsButton.addClickHandler(new ActionButtonPanelSaveHandler(data, true));    
+    saveAsButton.addClickHandler(new ModelActionPanelSaveHandler(data, true));    
     menu.add(saveAsButton);
 
     // Delete
     HTML deleteButton = new HTML(DataManager.FA_DELETE + "Delete model...");
     deleteButton.setTitle("Delete model");
-    deleteButton.addClickHandler(new ActionButtonPanelDeleteHandler(data));
+    deleteButton.addClickHandler(new ModelActionPanelDeleteHandler(data));
     menu.add(deleteButton);
 
     // Run status
     HTML statusButton = new HTML(DataManager.FA_STATUS + "View run status...");
     statusButton.setTitle("Status of model run");
-    statusButton.addClickHandler(new ActionButtonPanelStatusHandler(data));    
+    statusButton.addClickHandler(new ModelActionPanelStatusHandler(data));    
     menu.add(statusButton);
     
     // Help
     HTML helpButton = new HTML(DataManager.FA_HELP + "Help");
     helpButton.setTitle("Help on using WMT");
-    helpButton.addClickHandler(new ActionButtonPanelHelpHandler(data));        
+    helpButton.addClickHandler(new ModelActionPanelHelpHandler(data));        
     menu.add(helpButton);
     
     // Apply a style to each button.

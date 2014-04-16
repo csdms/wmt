@@ -10,23 +10,23 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
 
 /**
- * Handles click on the "Delete" button in the ActionButtonPanel. It presents an
+ * Handles click on the "Delete" button in the ModelActionPanel. It presents an
  * instance of {@link DroplistDialogBox} with a "Delete" button. Events are sent
  * to {@link DeleteModelHandler} and {@link DialogCancelHandler}.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ActionButtonPanelDeleteHandler implements ClickHandler {
+public class ModelActionPanelDeleteHandler implements ClickHandler {
 
   private DataManager data;
   private DroplistDialogBox deleteDialog;
 
   /**
-   * Creates a new instance of {@link ActionButtonPanelDeleteHandler}.
+   * Creates a new instance of {@link ModelActionPanelDeleteHandler}.
    * 
    * @param data the DataManager object for the WMT session
    */
-  public ActionButtonPanelDeleteHandler(DataManager data) {
+  public ModelActionPanelDeleteHandler(DataManager data) {
     this.data = data;
   }
   

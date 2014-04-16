@@ -11,21 +11,21 @@ import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
 
 /**
- * Handles click on the "Save" or "Save As..." buttons in the ActionButtonPanel.
+ * Handles click on the "Save" or "Save As..." buttons in the ModelActionPanel.
  * Saves a not-previously-saved model or a new model displayed in WMT to the
  * server with a call to {@link DataTransfer#postModel(DataManager)}.
  */
-public class ActionButtonPanelSaveHandler implements ClickHandler {
+public class ModelActionPanelSaveHandler implements ClickHandler {
 
   private DataManager data;
   private Boolean isSaveAs;
   private SaveDialogBox saveDialog;
 
-  public ActionButtonPanelSaveHandler(DataManager data) {
+  public ModelActionPanelSaveHandler(DataManager data) {
     this(data, false);
   }
 
-  public ActionButtonPanelSaveHandler(DataManager data, Boolean isSaveAs) {
+  public ModelActionPanelSaveHandler(DataManager data, Boolean isSaveAs) {
     this.data = data;
     this.isSaveAs = isSaveAs;
   }

@@ -9,7 +9,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.OpenDialogBox;
 
 /**
  * Handles click on the "OK" button in the open dialog that appears when the
- * "Open Model..." button is clicked in the ActionButtonPanel. Calls
+ * "Open Model..." button is clicked in the ModelActionPanel. Calls
  * {@link DataTransfer#getModel(DataManager, Integer)} to pull the selected
  * model from the server.
  */

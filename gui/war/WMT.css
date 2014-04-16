@@ -49,13 +49,13 @@
   font-weight: normal !important;
 }
 
-/* The ActionButtonPanel is the run of buttons along the top of the client. */
-.wmt-ActionButtonPanel {
+/* The ModelActionPanel is the run of buttons along the top of the client. */
+.wmt-ModelActionPanel {
   /* margin-left: -3px; */ /* offsets 3px border in SplitLayoutPanel */
 }
 
-/* Rules for the buttons on the ActionButtonPanel. */
-.wmt-ActionButtonPanelButton {
+/* Rules for the buttons on the ModelActionPanel. */
+.wmt-ModelActionPanelButton {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   width: 75px;
   color: #333;
@@ -65,7 +65,7 @@
   border: 1px solid #bbb;
   border-bottom: 1px solid #a0a0a0;
 }
-.wmt-ActionButtonPanelButton:hover {
+.wmt-ModelActionPanelButton:hover {
   background-color: #eee;
 }
 

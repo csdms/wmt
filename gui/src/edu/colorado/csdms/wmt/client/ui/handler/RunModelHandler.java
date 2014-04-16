@@ -10,7 +10,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.RunDialogBox;
 
 /**
  * Handles click on the "Run" button in the dialog that appears when the
- * "Run Model..." button is clicked in the ActionButtonPanel. Initializes a
+ * "Run Model..." button is clicked in the ModelActionPanel. Initializes a
  * model run with a call to {@link DataTransfer#initModelRun(DataManager)}.
  */
 public class RunModelHandler implements ClickHandler {

@@ -10,20 +10,20 @@ import com.google.gwt.user.client.Window;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 
 /**
- * Handles click on "Help" button in the ActionButtonPanel.
+ * Handles click on "Help" button in the ModelActionPanel.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ActionButtonPanelHelpHandler implements ClickHandler {
+public class ModelActionPanelHelpHandler implements ClickHandler {
   
   private DataManager data;
 
   /**
-   * Creates a new instance of {@link ActionButtonPanelHelpHandler}.
+   * Creates a new instance of {@link ModelActionPanelHelpHandler}.
    * 
    * @param data the DataManager object for the WMT session
    */
-  public ActionButtonPanelHelpHandler(DataManager data) {
+  public ModelActionPanelHelpHandler(DataManager data) {
     this.data = data;
   }
   

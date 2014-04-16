@@ -10,21 +10,21 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.widgets.OpenDialogBox;
 
 /**
- * Handles click on the "Open Model..." button in the ActionButtonPanel. Pops up an
+ * Handles click on the "Open Model..." button in the ModelActionPanel. Pops up an
  * instance of {@link OpenDialogBox} to prompt the user for a model to open.
  * Events are sent to {@link OpenModelHandler} and {@link DialogCancelHandler}.
  */
-public class ActionButtonPanelOpenHandler implements ClickHandler {
+public class ModelActionPanelOpenHandler implements ClickHandler {
 
   private DataManager data;
   private OpenDialogBox openDialog;
 
   /**
-   * Creates a new instance of {@link ActionButtonPanelOpenHandler}.
+   * Creates a new instance of {@link ModelActionPanelOpenHandler}.
    * 
    * @param data the DataManager object for the WMT session
    */
-  public ActionButtonPanelOpenHandler(DataManager data) {
+  public ModelActionPanelOpenHandler(DataManager data) {
     this.data = data;
   }
 

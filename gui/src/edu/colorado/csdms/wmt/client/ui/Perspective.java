@@ -54,7 +54,7 @@ public class Perspective extends DockLayoutPanel {
   // Secondary UI panels/widgets.
   private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
-  private ActionButtonPanel actionButtonPanel;
+  private ModelActionPanel modelActionPanel;
   private HTML loginHtml;
   private ModelTree modelTree;
   private ParameterTable parameterTable;
@@ -111,9 +111,9 @@ public class Perspective extends DockLayoutPanel {
       super(1, 3);
       this.setWidth("100%");
 
-      // The ActionButtonPanel shows "Open", "Save", etc., buttons.
-      actionButtonPanel = new ActionButtonPanel(data);
-      this.setWidget(0, 0, actionButtonPanel);
+      // The ModelActionPanel shows "Open", "Save", etc., buttons.
+      modelActionPanel = new ModelActionPanel(data);
+      this.setWidget(0, 0, modelActionPanel);
       this.getCellFormatter().setStyleName(0, 0, "wmt-ViewNorth0");
 
       // Login/logout link. Clicking it prompts for credentials.
@@ -278,12 +278,12 @@ public class Perspective extends DockLayoutPanel {
     return viewWest;
   }
 
-  public ActionButtonPanel getActionButtonPanel() {
-    return actionButtonPanel;
+  public ModelActionPanel getActionButtonPanel() {
+    return modelActionPanel;
   }
 
-  public void setActionButtonPanel(ActionButtonPanel actionButtonPanel) {
-    this.actionButtonPanel = actionButtonPanel;
+  public void setActionButtonPanel(ModelActionPanel modelActionPanel) {
+    this.modelActionPanel = modelActionPanel;
   }
 
   /**

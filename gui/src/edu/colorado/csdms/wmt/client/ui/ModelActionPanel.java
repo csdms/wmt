@@ -13,8 +13,8 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelOpenHandler;
-import edu.colorado.csdms.wmt.client.ui.handler.ActionButtonPanelSaveHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelOpenHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelSaveHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;
 
 /**
@@ -23,30 +23,30 @@ import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ActionButtonPanel extends HorizontalPanel {
+public class ModelActionPanel extends HorizontalPanel {
 
   @SuppressWarnings("unused")
   private DataManager data;
   private MoreActionsMenu moreMenu;
   
   /**
-   * Makes a new {@link ActionButtonPanel}.
+   * Makes a new {@link ModelActionPanel}.
    */
-  public ActionButtonPanel(DataManager data) {
+  public ModelActionPanel(DataManager data) {
 
     this.data = data;
-    this.setStyleName("wmt-ActionButtonPanel");
+    this.setStyleName("wmt-ModelActionPanel");
 
     // Open
     Button openButton = new Button(DataManager.FA_OPEN);
     openButton.setTitle("Open model");
-    openButton.addClickHandler(new ActionButtonPanelOpenHandler(data));
+    openButton.addClickHandler(new ModelActionPanelOpenHandler(data));
     this.add(openButton);
 
     // Save
     Button saveButton = new Button(DataManager.FA_SAVE);
     saveButton.setTitle("Save model");
-    saveButton.addClickHandler(new ActionButtonPanelSaveHandler(data));
+    saveButton.addClickHandler(new ModelActionPanelSaveHandler(data));
     this.add(saveButton);
 
     // Run
@@ -79,7 +79,7 @@ public class ActionButtonPanel extends HorizontalPanel {
     Iterator<Widget> iter = this.iterator();
     while (iter.hasNext()) {
       Button button = (Button) iter.next();
-      button.setStyleName("wmt-ActionButtonPanelButton");
+      button.setStyleName("wmt-ModelActionPanelButton");
     }
   }
 

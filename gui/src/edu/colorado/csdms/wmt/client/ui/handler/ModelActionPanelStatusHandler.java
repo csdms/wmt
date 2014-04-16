@@ -11,21 +11,21 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataURL;
 
 /**
- * Handles click on the "Run status" button in the ActionButtonPanel. Displays the
+ * Handles click on the "Run status" button in the ModelActionPanel. Displays the
  * API "run/show" page showing the status of all currently running models.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ActionButtonPanelStatusHandler implements ClickHandler {
+public class ModelActionPanelStatusHandler implements ClickHandler {
 
   private DataManager data;
   
   /**
-   * Creates a new instance of {@link ActionButtonPanelStatusHandler}.
+   * Creates a new instance of {@link ModelActionPanelStatusHandler}.
    * 
    * @param data the DataManager object for the WMT session
    */
-  public ActionButtonPanelStatusHandler(DataManager data) {
+  public ModelActionPanelStatusHandler(DataManager data) {
     this.data = data;
   }
   
