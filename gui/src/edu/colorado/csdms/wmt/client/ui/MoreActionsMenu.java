@@ -6,7 +6,6 @@ package edu.colorado.csdms.wmt.client.ui;
 import java.util.Iterator;
 
 import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -28,20 +27,17 @@ public class MoreActionsMenu extends PopupPanel {
 
   @SuppressWarnings("unused")
   private DataManager data;
-  private Button moreButton;
   
   /**
    * Makes a new {@link MoreActionsMenu}.
    * 
    * @param data the DataManager object for the WMT session
-   * @param moreButton the "More" button to which this menu is attached
    */
-  public MoreActionsMenu(DataManager data, Button moreButton) {
+  public MoreActionsMenu(DataManager data) {
 
     super(true); // autohide
     this.getElement().getStyle().setCursor(Cursor.POINTER); // use pointer
     this.data = data;
-    this.setMoreButton(moreButton);
     this.setStyleName("wmt-MoreActionsMenu");
     
     // A VerticalPanel for the menu items. (PopupPanels have only one child.)
@@ -79,13 +75,5 @@ public class MoreActionsMenu extends PopupPanel {
       HTML button = (HTML) iter.next();
       button.setStyleName("wmt-MoreActionsMenuItem");
     }    
-  }
-
-  public Button getMoreButton() {
-    return moreButton;
-  }
-
-  public void setMoreButton(Button moreButton) {
-    this.moreButton = moreButton;
   }
 }

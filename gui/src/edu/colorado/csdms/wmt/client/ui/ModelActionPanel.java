@@ -56,17 +56,15 @@ public class ModelActionPanel extends HorizontalPanel {
     this.add(runButton);
 
     // More
-    Button moreButton = new Button("More <i class='fa fa-caret-down'></i>");
+    final Button moreButton = new Button("More <i class='fa fa-caret-down'></i>");
     this.add(moreButton);
-    moreMenu = new MoreActionsMenu(data, moreButton);
+    moreMenu = new MoreActionsMenu(data);
     moreButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
         moreMenu.setPopupPositionAndShow(new PositionCallback() {
-          final Integer x = moreMenu.getMoreButton().getElement()
-              .getAbsoluteLeft();
-          final Integer y = moreMenu.getMoreButton().getElement()
-              .getAbsoluteBottom();
+          final Integer x = moreButton.getElement().getAbsoluteLeft();
+          final Integer y = moreButton.getElement().getAbsoluteBottom();
           @Override
           public void setPosition(int offsetWidth, int offsetHeight) {
             moreMenu.setPopupPosition(x, y);
