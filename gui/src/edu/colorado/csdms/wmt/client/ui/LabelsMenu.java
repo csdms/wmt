@@ -3,11 +3,14 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import java.util.Iterator;
+
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 
@@ -32,6 +35,7 @@ public class LabelsMenu extends PopupPanel {
     super(true); // autohide
     this.getElement().getStyle().setCursor(Cursor.POINTER); // use pointer
     this.data = data;
+    this.setStyleName("wmt-MoreActionsMenu"); // TODO update name
 
     // A VerticalPanel for the menu items. (PopupPanels have only one child.)
     VerticalPanel menu = new VerticalPanel();
@@ -54,10 +58,23 @@ public class LabelsMenu extends PopupPanel {
     HTML label4 = new HTML("2013");
     labelPanel.add(label4);
     
+    // Apply a style to each label.
+    Iterator<Widget> iter = labelPanel.iterator();
+    while (iter.hasNext()) {
+      HTML button = (HTML) iter.next();
+      button.setStyleName("wmt-MoreActionsMenuItem"); // TODO update name
+    }
+    
     // These items are always visible on the bottom of the menu.
+    HTML separator1 = new HTML("");
+    separator1.setStyleName("wmt-MoreActionsMenuSeparator");
     HTML addNewHtml = new HTML("Add new label");
+    HTML separator2 = new HTML("");
+    separator2.setStyleName("wmt-MoreActionsMenuSeparator");
     HTML manageHtml = new HTML("Manage labels");
+    menu.add(separator1);
     menu.add(addNewHtml);
+    menu.add(separator2);
     menu.add(manageHtml);
   }
 }
