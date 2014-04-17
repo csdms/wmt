@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -32,7 +33,7 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
   // private MenuBar menuCell;
   private HTML menuCell;
   // private MenuItem menuItem;
-  private ComponentSelectionMenu componentMenu;
+  private PopupPanel componentMenu;
   private TreeItem enclosingTreeItem;
   private Boolean isLinked = false;
 
@@ -147,11 +148,11 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
   // this.menuItem = menuItem;
   // }
 
-  public ComponentSelectionMenu getComponentMenu() {
+  public PopupPanel getComponentMenu() {
     return componentMenu;
   }
 
-  public void setComponentMenu(ComponentSelectionMenu componentMenu) {
+  public void setComponentMenu(PopupPanel componentMenu) {
     this.componentMenu = componentMenu;
   }
 

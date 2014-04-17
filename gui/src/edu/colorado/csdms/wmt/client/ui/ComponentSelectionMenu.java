@@ -51,8 +51,6 @@ public class ComponentSelectionMenu extends PopupPanel {
     menu = new VerticalPanel();
     this.add(menu);
     
-    GWT.log("ho " + cell.getPortId());
-    
     updateComponents(cell.getPortId());
   }
 

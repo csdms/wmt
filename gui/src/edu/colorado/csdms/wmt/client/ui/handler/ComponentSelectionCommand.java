@@ -74,6 +74,10 @@ public class ComponentSelectionCommand implements Command {
 //    ComponentActionMenu actionMenu = new ComponentActionMenu(data, cell);
 //    cell.getMenuItem().setSubMenu(actionMenu);
 
+    cell.getMenuCell().setHTML(DataManager.FA_ACTION);
+//    cell.setComponentMenu(null); // check!
+    cell.setComponentMenu(new ComponentActionMenu(data, cell)); 
+    
     // Update styles.
 //    cell.getMenuItem().setStyleName("wmt-ComponentCell-ActionButton");
 //    cell.getMenuCell().addStyleDependentName("connected");
