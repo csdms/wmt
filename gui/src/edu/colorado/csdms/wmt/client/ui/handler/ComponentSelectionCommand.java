@@ -71,7 +71,7 @@ public class ComponentSelectionCommand implements Command {
     cell.getNameCell().setText(displayName);
 
     // Replace the componentMenu with the actionMenu.
-    ComponentActionMenu actionMenu = new ComponentActionMenu(data, cell);
+//    ComponentActionMenu actionMenu = new ComponentActionMenu(data, cell);
 //    cell.getMenuItem().setSubMenu(actionMenu);
 
     // Update styles.

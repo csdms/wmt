@@ -5,7 +5,11 @@ package edu.colorado.csdms.wmt.client.ui;
 
 import java.util.List;
 
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -47,6 +51,8 @@ public class ComponentSelectionMenu extends PopupPanel {
     menu = new VerticalPanel();
     this.add(menu);
     
+    GWT.log("ho " + cell.getPortId());
+    
     updateComponents(cell.getPortId());
   }
 
@@ -61,6 +67,10 @@ public class ComponentSelectionMenu extends PopupPanel {
 //            new ComponentSelectionCommand(data, cell, data.getComponent(
 //                componentId).getId()));
     HTML item = new HTML(data.getComponent(componentId).getName());
+    
+    // A temporary solution until I refactor & remove ComponentSelectionCommand.
+    item.addClickHandler(new ComponentClickHandler(componentId));
+    
     item.setStyleName("wmt-ComponentSelectionMenuItem");
     menu.add(item);
   }
@@ -155,6 +165,7 @@ public class ComponentSelectionMenu extends PopupPanel {
 //            new MenuItem(data.getComponent(componentId).getName(), true,
 //                new ComponentSelectionCommand(data, cell, componentId));
         HTML newItem = new HTML(data.getComponent(componentId).getName());
+        newItem.addClickHandler(new ComponentClickHandler(componentId));
         newItem.setStyleName("wmt-ComponentSelectionMenuItem");
 //        this.insertItem(newItem, i);
         menu.insert(newItem, i);
@@ -178,5 +189,24 @@ public class ComponentSelectionMenu extends PopupPanel {
     public void execute() {
       // Do nothing
     }
+  }
+  
+  public class ComponentClickHandler implements ClickHandler {
+
+    private String componentId;
+    
+    public ComponentClickHandler(String componentId) {
+      this.componentId = componentId;
+    }
+    
+    @Override
+    public void onClick(ClickEvent event) {
+      ComponentSelectionMenu.this.hide();
+      ComponentSelectionCommand cmd =
+          new ComponentSelectionCommand(data, cell, data.getComponent(
+              componentId).getId());
+      cmd.execute();
+    }
+    
   }
 }
