@@ -35,7 +35,7 @@ public class LabelsMenu extends PopupPanel {
     super(true); // autohide
     this.getElement().getStyle().setCursor(Cursor.POINTER); // use pointer
     this.data = data;
-    this.setStyleName("wmt-MoreActionsMenu"); // TODO update name
+    this.setStyleName("wmt-PopupPanel");
 
     // A VerticalPanel for the menu items. (PopupPanels have only one child.)
     VerticalPanel menu = new VerticalPanel();
@@ -62,15 +62,15 @@ public class LabelsMenu extends PopupPanel {
     Iterator<Widget> iter = labelPanel.iterator();
     while (iter.hasNext()) {
       HTML button = (HTML) iter.next();
-      button.setStyleName("wmt-MoreActionsMenuItem"); // TODO update name
+      button.setStyleName("wmt-PopupPanelItem");
     }
     
     // These items are always visible on the bottom of the menu.
     HTML separator1 = new HTML("");
-    separator1.setStyleName("wmt-MoreActionsMenuSeparator");
+    separator1.setStyleName("wmt-PopupPanelSeparator");
     HTML addNewHtml = new HTML("Add new label");
     HTML separator2 = new HTML("");
-    separator2.setStyleName("wmt-MoreActionsMenuSeparator");
+    separator2.setStyleName("wmt-PopupPanelSeparator");
     HTML manageHtml = new HTML("Manage labels");
     menu.add(separator1);
     menu.add(addNewHtml);

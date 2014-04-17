@@ -38,7 +38,7 @@ public class MoreActionsMenu extends PopupPanel {
     super(true); // autohide
     this.getElement().getStyle().setCursor(Cursor.POINTER); // use pointer
     this.data = data;
-    this.setStyleName("wmt-MoreActionsMenu");
+    this.setStyleName("wmt-PopupPanel");
     
     // A VerticalPanel for the menu items. (PopupPanels have only one child.)
     VerticalPanel menu = new VerticalPanel();
@@ -73,7 +73,7 @@ public class MoreActionsMenu extends PopupPanel {
     Iterator<Widget> iter = menu.iterator();
     while (iter.hasNext()) {
       HTML button = (HTML) iter.next();
-      button.setStyleName("wmt-MoreActionsMenuItem");
+      button.setStyleName("wmt-PopupPanelItem");
     }    
   }
 }
