@@ -89,7 +89,7 @@ public class ComponentSelectionCommand implements Command {
       tooltip += "Provides \"" + cell.getPortId() + "\" port. ";
     }
     cell.setTitle(tooltip);
-//    cell.getMenuCell().setTitle(
-//        "Click to get information, to view parameters, or to delete.");
+    cell.getMenuCell().setTitle(
+        "Click to get information, to view parameters, or to delete.");
   }
 }

@@ -57,11 +57,12 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
     this.data = data;
     this.portId = portId;
     this.setVerticalAlignment(ALIGN_MIDDLE); // must set before adding children
-
+    this.addDomHandler(this, ClickEvent.getType());
+    
     // The ComponentCell consists of a nameCell and a menuCell in a Grid.
     nameCell = new HTML(trimName(portId));
     // menuCell = new MenuBar();
-    menuCell = new HTML();
+    menuCell = new HTML(DataManager.FA_SELECT);
     Grid grid = new Grid(1, 2); // one row, two cols
     this.add(grid);
     grid.setWidget(0, 0, nameCell);
@@ -75,7 +76,6 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
 
     componentMenu = new ComponentSelectionMenu(this.data, this);
 
-    this.addDomHandler(this, ClickEvent.getType());
 
     // Styles. Note settings for menuItem and menuCell.
     this.setStyleName("wmt-ComponentCell");
@@ -131,13 +131,13 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
     this.nameCell = nameCell;
   }
 
-  // public MenuBar getMenuCell() {
-  // return menuCell;
-  // }
+  public HTML getMenuCell() {
+    return menuCell;
+  }
 
-  // public void setMenuCell(MenuBar menuCell) {
-  // this.menuCell = menuCell;
-  // }
+  public void setMenuCell(HTML menuCell) {
+    this.menuCell = menuCell;
+  }
 
   // public MenuItem getMenuItem() {
   // return menuItem;

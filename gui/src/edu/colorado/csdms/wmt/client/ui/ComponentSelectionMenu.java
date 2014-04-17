@@ -38,9 +38,10 @@ public class ComponentSelectionMenu extends PopupPanel {
    * @param cell the {@link ComponentCell} this menu depends on
    */
   public ComponentSelectionMenu(DataManager data, ComponentCell cell) {
-    super(true); // vertical
+    super(true); // autohide
     this.data = data;
     this.cell = cell;
+    this.setStyleName("wmt-PopupPanel");
     
     // A VerticalPanel for the menu items. (PopupPanels have only one child.)
     menu = new VerticalPanel();

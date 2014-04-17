@@ -81,7 +81,7 @@
 .wmt-PopupPanelItem {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   color: #333;
-  padding: 5px 40px 5px 3px;
+  padding: 5px 40px 5px 5px;
 }
 .wmt-PopupPanelItem:hover {
   background-color: #efefff;
@@ -146,16 +146,17 @@
 
 /* Rules for the menuCell inside the ComponentCell. */
 .wmt-ComponentCell-MenuCell {
-  background-color: white;
+  /* background-color: white; */
   padding: 2px;
+  margin-right: 3px;
 }
-.wmt-ComponentCell-MenuCell-connected {
+/* .wmt-ComponentCell-MenuCell-connected {
   background-color: #eef;
-}
+} */
 
 /* The button displayed on the menuCell inside the ComponentCell. 
    Needs :after */
-.wmt-ComponentCell-ComponentButton:after {
+/* .wmt-ComponentCell-ComponentButton:after {
   font-family: "FontAwesome";
   font-style: normal;
   content: "\f067";
@@ -166,12 +167,13 @@
   font-style: normal;
   content: "\f078";
   color: #333;
-}
+} */
 
 /* Pull-down menu items in the ComponentSelectionMenu. */
 .wmt-ComponentSelectionMenuItem {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  padding: 6px 40px 6px 1px;
+  padding: 5px 40px 5px 5px;
+  cursor: pointer;
 }
 .wmt-ComponentSelectionMenuItem:before {
   font-family: "FontAwesome";
