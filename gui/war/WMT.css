@@ -87,6 +87,14 @@
   background-color: #efefff;
 }
 
+/* For CheckBox items -- Don't use :hover, set line-height. */
+.wmt-PopupPanelCheckBoxItem {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  color: #333;
+  padding: 5px 40px 5px 3px;
+  line-height: 2.0;
+}
+
 /* Separators used between groups of WMT PopupPanel items. */
 .wmt-PopupPanelSeparator {
   width: 100%;

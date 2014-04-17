@@ -6,6 +6,7 @@ package edu.colorado.csdms.wmt.client.ui;
 import java.util.Iterator;
 
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -22,6 +23,8 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
  */
 public class LabelsMenu extends PopupPanel {
 
+  private static final String MENU_WIDTH = "200px"; // arbitrary, aesthetic
+  
   @SuppressWarnings("unused")
   private DataManager data;
   
@@ -44,37 +47,51 @@ public class LabelsMenu extends PopupPanel {
     // All labels are listed on the labelPanel, which sits on a ScrollPanel.
     VerticalPanel labelPanel = new VerticalPanel();
     ScrollPanel scroller = new ScrollPanel(labelPanel);
+    scroller.setWidth(MENU_WIDTH);
     menu.add(scroller);
     
-    // XXX Temporary labels.
-    HTML label0 = new HTML("low avulsion");
+    // XXX Ten temporary labels.
+    CheckBox label0 = new CheckBox("low avulsion");
+    label0.setValue(true);
     labelPanel.add(label0);
-    HTML label1 = new HTML("Ganges");
+    CheckBox label9 = new CheckBox("high waves");
+    labelPanel.add(label9);
+    CheckBox label1 = new CheckBox("Ganges");
     labelPanel.add(label1);
-    HTML label2 = new HTML("thesis");
+    CheckBox label2 = new CheckBox("thesis");
     labelPanel.add(label2);
-    HTML label3 = new HTML("AGU talk");
+    CheckBox label3 = new CheckBox("AGU talk");
     labelPanel.add(label3);
-    HTML label4 = new HTML("2013");
+    CheckBox label4 = new CheckBox("2013");
     labelPanel.add(label4);
+    CheckBox label5 = new CheckBox("Nature paper");
+    label5.setValue(true);
+    labelPanel.add(label5);
+    CheckBox label6 = new CheckBox("CEM");
+    label6.setValue(true);
+    labelPanel.add(label6);
+    CheckBox label7 = new CheckBox("What happens if someone makes a really long label?");
+    labelPanel.add(label7);
+    CheckBox label8 = new CheckBox("HydroTrend");
+    labelPanel.add(label8);
     
     // Apply a style to each label.
     Iterator<Widget> iter = labelPanel.iterator();
     while (iter.hasNext()) {
-      HTML button = (HTML) iter.next();
-      button.setStyleName("wmt-PopupPanelItem");
+      CheckBox button = (CheckBox) iter.next();
+      button.setWordWrap(false);
+      button.setStyleName("wmt-PopupPanelCheckBoxItem");
     }
     
     // These items are always visible on the bottom of the menu.
-    HTML separator1 = new HTML("");
-    separator1.setStyleName("wmt-PopupPanelSeparator");
+    HTML separator = new HTML("");
+    separator.setStyleName("wmt-PopupPanelSeparator");
     HTML addNewHtml = new HTML("Add new label");
-    HTML separator2 = new HTML("");
-    separator2.setStyleName("wmt-PopupPanelSeparator");
+    addNewHtml.setStyleName("wmt-PopupPanelItem");
     HTML manageHtml = new HTML("Manage labels");
-    menu.add(separator1);
+    manageHtml.setStyleName("wmt-PopupPanelItem");
+    menu.add(separator);
     menu.add(addNewHtml);
-    menu.add(separator2);
     menu.add(manageHtml);
   }
 }
