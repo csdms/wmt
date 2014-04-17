@@ -145,6 +145,7 @@ public class ValueCell extends HorizontalPanel {
     this.add(fileDroplist);
 
     Button uploadButton = new Button("<i class='fa fa-cloud-upload'></i>");
+    uploadButton.setStyleName("wmt-Button");
     uploadButton.setStyleDependentName("slim", true);
     uploadButton.addClickHandler(new UploadHandler());
 

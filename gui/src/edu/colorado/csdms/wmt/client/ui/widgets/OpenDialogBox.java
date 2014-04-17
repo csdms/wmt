@@ -45,6 +45,7 @@ public class OpenDialogBox extends DialogBox {
     droplistPanel = new DroplistPanel();
 
     final Button labelsButton = new Button(DataManager.FA_TAGS + "Labels");
+    labelsButton.setStyleName("wmt-Button");
     labelsMenu = new LabelsMenu(data);
     labelsButton.addClickHandler(new ClickHandler() {
       @Override

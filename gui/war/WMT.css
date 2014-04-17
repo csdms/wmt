@@ -267,13 +267,22 @@
   width: 177px; /* calculated by comparison with DroplistBox */
 }
 
-/* All buttons. */
-.gwt-Button {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+/* A consistent style for all buttons. */
+.wmt-Button {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  color: #333;
+  background-color: #eee;
+  padding: 5px 7px;
+  border: 1px solid #bbb;
+  border-bottom: 1px solid #a0a0a0;
 }
-.gwt-Button-slim {
-   padding: 3px 7px !important;
+.wmt-Button:hover {
+  background-color: #f9f9f9;
 }
+.wmt-Button-slim {
+  padding: 2px 7px !important;
+}
+
 
 /* All labels. */
 .gwt-Label {
