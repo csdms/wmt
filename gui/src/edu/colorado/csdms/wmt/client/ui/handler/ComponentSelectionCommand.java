@@ -72,11 +72,11 @@ public class ComponentSelectionCommand implements Command {
 
     // Replace the componentMenu with the actionMenu.
     ComponentActionMenu actionMenu = new ComponentActionMenu(data, cell);
-    cell.getMenuItem().setSubMenu(actionMenu);
+//    cell.getMenuItem().setSubMenu(actionMenu);
 
     // Update styles.
-    cell.getMenuItem().setStyleName("wmt-ComponentCell-ActionButton");
-    cell.getMenuCell().addStyleDependentName("connected");
+//    cell.getMenuItem().setStyleName("wmt-ComponentCell-ActionButton");
+//    cell.getMenuCell().addStyleDependentName("connected");
     cell.addStyleDependentName("connected");
     
     // Update the tooltip text.
@@ -89,7 +89,7 @@ public class ComponentSelectionCommand implements Command {
       tooltip += "Provides \"" + cell.getPortId() + "\" port. ";
     }
     cell.setTitle(tooltip);
-    cell.getMenuCell().setTitle(
-        "Click to get information, to view parameters, or to delete.");
+//    cell.getMenuCell().setTitle(
+//        "Click to get information, to view parameters, or to delete.");
   }
 }
