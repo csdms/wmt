@@ -4,7 +4,9 @@ from .config import site
 
 def add_sessions_to_app(app):
     import os
-    store = web.session.DiskStore(os.path.join(site['db'], 'sessions'))
+
+    db = web.database(dbn='sqlite', db=os.path.join(site['db'], 'session.db'))
+    store = web.session.DBStore(db, 'session')
     session = web.session.Session(app, store, initializer={
         'loggedin': False,
         'username': ''})
@@ -17,6 +19,10 @@ def add_sessions_to_app(app):
 
 def get_session():
     return web.ctx.session
+
+
+def get_username():
+    return get_session().username
 
 
 def login(username):

@@ -34,18 +34,23 @@ public class ComponentActionMenu extends MenuBar {
         new MenuItem(
             "<i class='fa fa-wrench fa-fw' style='color:#333'></i> Show parameters",
             true, new ComponentShowParametersCommand(data, cell));
+    showParameters.setStyleName("wmt-ComponentActionMenuItem");
     this.addItem(showParameters);
 
     MenuItem getInformation =
         new MenuItem(
             "<i class='fa fa-question fa-fw' style='color:#55b'></i> Get information",
             true, new ComponentGetInformationCommand(data, cell));
+    getInformation.setStyleName("wmt-ComponentActionMenuItem");
     this.addItem(getInformation);
 
+    this.addSeparator();
+    
     MenuItem deleteComponent =
         new MenuItem(
             "<i class='fa fa-times fa-fw' style='color:#b55'></i> Delete",
             true, new ComponentDeleteCommand(data, cell));
+    deleteComponent.setStyleName("wmt-ComponentActionMenuItem");
     this.addItem(deleteComponent);
   }
 }

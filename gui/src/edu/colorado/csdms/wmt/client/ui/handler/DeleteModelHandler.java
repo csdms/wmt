@@ -6,12 +6,11 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
-import edu.colorado.csdms.wmt.client.ui.ModelMenu;
 import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
 
 /**
  * Handles click on the "Delete" button in the dialog that appears when the
- * "Delete Model..." button is clicked in the {@link ModelMenu}. Deletes the
+ * "Delete Model..." button is clicked in the ModelActionPanel. Deletes the
  * selected model from the server with a call to
  * {@link DataTransfer#deleteModel(DataManager, Integer)}.
  */

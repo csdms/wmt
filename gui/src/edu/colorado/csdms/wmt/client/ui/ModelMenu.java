@@ -10,7 +10,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -24,6 +23,7 @@ import edu.colorado.csdms.wmt.client.ui.handler.OpenModelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SaveModelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
+import edu.colorado.csdms.wmt.client.ui.widgets.OpenDialogBox;
 import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
 
 /**
@@ -37,12 +37,13 @@ import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
  * @see http://fortawesome.github.io/Font-Awesome/
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ModelMenu extends DecoratedPopupPanel {
+@Deprecated
+public class ModelMenu extends PopupPanel {
 
   private DataManager data;
   private HTML menuButton;
   private SaveDialogBox saveDialog;
-  private DroplistDialogBox openDialog;
+  private OpenDialogBox openDialog;
   private DroplistDialogBox deleteDialog;
 
   /**
@@ -54,9 +55,9 @@ public class ModelMenu extends DecoratedPopupPanel {
   public ModelMenu(DataManager data) {
 
     super(true); // autohide
-    this.setWidth("25ch"); // ch = character width // XXX Remove hard code?
     this.getElement().getStyle().setCursor(Cursor.POINTER); // use pointer
     this.data = data;
+    this.setStyleName("wmt-ModelMenu");
 
     // A FlexTable for the menu items. (PopupPanels can have only one child.)
     FlexTable menu = new FlexTable();
@@ -122,11 +123,13 @@ public class ModelMenu extends DecoratedPopupPanel {
       public void onMouseDown(MouseDownEvent event) {
         final Integer x = menuButton.getElement().getAbsoluteRight();
         final Integer y = menuButton.getElement().getAbsoluteBottom();
+        final Integer iconHalfWidth = 11; // by inspection
         ModelMenu.this
             .setPopupPositionAndShow(new PopupPanel.PositionCallback() {
               @Override
               public void setPosition(int offsetWidth, int offsetHeight) {
-                ModelMenu.this.setPopupPosition(x - offsetWidth, y);
+                ModelMenu.this.setPopupPosition(
+                    x - offsetWidth - iconHalfWidth, y);
               }
             });
       }
@@ -173,10 +176,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     @Override
     public void onClick(ClickEvent event) {
 
-      openDialog = new DroplistDialogBox();
-      openDialog.setText("Open Model...");
-      openDialog.getChoicePanel().getOkButton().setHTML(
-          "<i class='fa fa-folder-open-o'></i> Open");      
+      openDialog = new OpenDialogBox(data);
 
       // Populate the ModelDroplist with the available models on the server.
       for (int i = 0; i < data.modelNameList.size(); i++) {
@@ -251,8 +251,8 @@ public class ModelMenu extends DecoratedPopupPanel {
    * {@link GenericCancelHandler}.
    */
   private void showSaveDialogBox() {
-    saveDialog = new SaveDialogBox(data.getModel().getName());
-    saveDialog.getFilePanel().setTitle(
+    saveDialog = new SaveDialogBox(data, data.getModel().getName());
+    saveDialog.getNamePanel().setTitle(
         "Enter a name for the model. No file extension is needed.");
     saveDialog.getChoicePanel().getOkButton().addClickHandler(
         new SaveModelHandler(data, saveDialog));
@@ -299,7 +299,7 @@ public class ModelMenu extends DecoratedPopupPanel {
     @Override
     public void onClick(ClickEvent event) {
       ModelMenu.this.hide();
-      Window.open(DataURL.showModelRun(), "runInfoDialog", null);
+      Window.open(DataURL.showModelRun(data), "runInfoDialog", null);
     }
   }
 

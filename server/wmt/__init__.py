@@ -15,8 +15,9 @@ URLS = (
     '/help/(.*)', 'wmt.controllers.index.Help',
     '/show', 'wmt.controllers.actions.Show',
 
-    '/login', 'wmt.controllers.account.Login',
-    '/logout', 'wmt.controllers.account.Logout',
+    '/account/login', 'wmt.controllers.account.Login',
+    '/account/logout', 'wmt.controllers.account.Logout',
+    '/account/username', 'wmt.controllers.account.Username',
 
     '/components/list', 'wmt.controllers.components.List',
     '/components/dump', 'wmt.controllers.components.Dump',

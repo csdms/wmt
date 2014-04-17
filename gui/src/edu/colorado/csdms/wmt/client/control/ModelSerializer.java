@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
@@ -68,8 +67,7 @@ public class ModelSerializer {
     while (iter.hasNext()) {
 
       treeItem = (TreeItem) iter.next();
-      Grid grid = (Grid) treeItem.getWidget();
-      ComponentCell cell = (ComponentCell) grid.getWidget(0, 0);
+      ComponentCell cell = (ComponentCell) treeItem.getWidget();
 
       // Skip linked components and empty components.
       if (cell.isLinked()) {
@@ -161,8 +159,7 @@ public class ModelSerializer {
     // Add the ports for the model component.
     for (int i = 0; i < treeItem.getChildCount(); i++) {
       TreeItem child = treeItem.getChild(i);
-      Grid grid = (Grid) child.getWidget();
-      ComponentCell childCell = (ComponentCell) grid.getWidget(0, 0);
+      ComponentCell childCell = (ComponentCell) child.getWidget();
       String portId = childCell.getPortId();
       String componentId = childCell.getComponentId();
       modelComponentConnections.addConnection(portId, componentId);

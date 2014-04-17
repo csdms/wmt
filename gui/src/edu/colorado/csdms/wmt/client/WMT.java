@@ -20,32 +20,42 @@ import edu.colorado.csdms.wmt.client.ui.Perspective;
  */
 public class WMT implements EntryPoint {
 
+  // This switch toggles API development and public mode.
+  private static final Boolean USE_API_DEV_MODE = true;
+  
   private Perspective perspective;
   private DataManager data;
 
   /**
    * This is the entry point method. It draws the views that make up the WMT
    * GUI. It loads information about component models from a set of JSON
-   * files, then populates the GUI with this information.
+   * files on the server, then populates the GUI with this information.
    */
   public void onModuleLoad() {
 
     // Initialize the DataManager object.
     data = new DataManager();
     
-    // Are we running in GWT development mode or in production mode?
+    // Is GWT running in development mode or in production mode?
     data.isDevelopmentMode(!GWT.isProdMode() && GWT.isClient());
+    
+    // Are we using the development mode of the API?
+    data.isApiDevelopmentMode(USE_API_DEV_MODE);
 
     // Set up the basic framework of views for the GUI.
     perspective = new Perspective(data);
     RootLayoutPanel.get().add(perspective);
     perspective.initializeModel();
     perspective.initializeParameterTable();
+    
+    // Check whether the user is already logged in.
+    DataTransfer.getLoginState(data);
 
     // Retrieve (asynchronously) and store the list of available components
     // and models. Note that when DataTransfer#getComponentList completes,
     // it immediately starts pulling component data from the server with calls
     // to DataTransfer#getComponent. Asynchronous requests are cool!
+//    data.showWaitCursor();
     DataTransfer.getComponentList(data);
     DataTransfer.getModelList(data);
 

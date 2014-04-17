@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 
 from ..config import (site, db)
+from ..session import get_username
 
 
 class Error(Exception):
@@ -11,6 +12,14 @@ class Error(Exception):
 
 
 class BadIdError(Error):
+    def __init__(self, id):
+        self._id = id
+
+    def __str__(self):
+        return str(self._id)
+
+
+class AuthorizationError(Error):
     def __init__(self, id):
         self._id = id
 
@@ -44,15 +53,32 @@ def update_model(id, name, text):
               name=name, json=text, date=web.net.httpdate(datetime.now()))
 
 
+def get_public_models():
+    return db.select('models', order='id DESC', where='owner=$owner',
+                     vars=dict(owner=''))
+
+
+def get_private_models():
+    return db.select('models', order='id DESC', where='owner=$owner',
+                     vars=dict(owner=get_username()))
+
+
 def get_models():
-    return db.select('models', order='id DESC')
+    where = ' OR '.join(['owner=$user', 'owner=\'\''])
+    return db.select('models', order='id DESC', where=where,
+                     vars=dict(user=get_username()))
 
 
 def get_model(id):
     try:
-        return db.select('models', where='id=$id', vars=locals())[0]
+        model = db.select('models', where='id=$id', vars=locals())[0]
     except IndexError:
         raise BadIdError(id)
+
+    if model['owner'] in ['', get_username()]:
+        return model
+    else:
+        raise AuthorizationError(id)
 
 
 def get_model_component(id, component):

@@ -12,14 +12,15 @@ import com.google.gwt.user.client.ui.HTML;
  * @see http://fortawesome.github.io/Font-Awesome/
  * @author Mark Piper (mark.piper@colorado.edu)
  */
+@Deprecated
 public class ModelMenuItem extends Grid {
 
   /**
-   * The zero-element constructor makes a separator from an HTML "hr" element.
+   * The zero-element constructor makes a separator.
    */
   public ModelMenuItem() {
     super(1, 1);
-    this.setWidget(0, 0, new HTML("<hr>"));
+    this.setWidget(0, 0, new HTML(""));
     this.setStyleName("wmt-ModelMenuSeparator");
   }
 
@@ -31,6 +32,7 @@ public class ModelMenuItem extends Grid {
   public ModelMenuItem(String menuText) {
     super(1, 1);
     this.setWidget(0, 0, new HTML(menuText));
+    this.setStyleName("wmt-ModelMenuItem");
   }
 
   /**
@@ -43,5 +45,6 @@ public class ModelMenuItem extends Grid {
     super(1, 2);
     this.setWidget(0, 0, new HTML("<i class='fa " + faIcon + " fa-fw'>"));
     this.setWidget(0, 1, new HTML(menuText));
+    this.setStyleName("wmt-ModelMenuItem");
   }
 }

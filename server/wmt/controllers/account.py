@@ -1,9 +1,10 @@
 import web
+import json
 
 from ..validators import not_too_long, valid_email_address
 from ..render import render
 from ..models import users
-from ..session import (login, logout, get_session)
+from ..session import (login, logout, get_username)
 from ..config import site
 
 
@@ -19,13 +20,9 @@ class Login(object):
                           description='password:'),
         web.form.Button('Login')
     )
-    def force_ssl(self):
-        if web.ctx.protocol == 'http':
-            raise web.redirect('https://' + web.ctx.path)
 
     def GET(self):
-        self.force_ssl()
-        return render.login(self.form())
+        return render.titled_form('login', self.form())
 
     def POST(self):
         form = self.form()
@@ -39,6 +36,8 @@ class Login(object):
 
         if site['pw'].verify(form.d.password, user.password):
             login(form.d.username)
+        else:
+            raise web.Unauthorized()
 
         raise web.seeother('/')
 
@@ -53,3 +52,7 @@ class Logout(object):
         raise web.seeother('/')
 
 
+class Username(object):
+    def GET(self):
+        web.header('Content-Type', 'application/json; charset=utf-8')
+        return json.dumps(get_username())

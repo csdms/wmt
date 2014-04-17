@@ -1,3 +1,6 @@
+/**
+ * <License>
+ */
 package edu.colorado.csdms.wmt.client.ui.handler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -35,10 +38,6 @@ public class SetupRunModelHandler implements ClickHandler {
           "The model must be saved before it can be run.";
       Window.alert(msg);
       return;
-    }
-
-    if (data.getPerspective().getModelMenu().isShowing()) {
-      data.getPerspective().getModelMenu().hide();
     }
     
     runDialog = new RunDialogBox();

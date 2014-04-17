@@ -8,12 +8,21 @@ from ..validators import (not_too_short, not_bad_json)
 from ..cca import rc_from_json
 from ..config import site
 from ..utils.io import chunk_copy
-
+from ..session import get_username
 
 from collections import namedtuple
 
 
 Status = namedtuple('Status', ['status', 'message'])
+
+
+def _get_model_or_raise(id):
+    try:
+        return models.get_model(int(id))
+    except models.BadIdError:
+        raise web.notfound()
+    except models.AuthorizationError:
+        raise web.Unauthorized()
 
 
 class Validate(object):
@@ -74,7 +83,8 @@ class New(object):
         form = self.form()
         if not form.validates():
             return render.new(form)
-        id = models.new_model(form.d.name, form.d.json, owner='')
+        id = models.new_model(form.d.name, form.d.json,
+                              owner=get_username())
         return json.dumps(id)
 
 
@@ -82,10 +92,8 @@ class Save(object):
     form = web.form.Form(
         web.form.Textbox('name',
                          not_too_short(3),
-                         #not_too_long(20),
                          size=30, description='Model name:'),
         web.form.Textarea('json',
-                          #not_too_long(2048),
                           not_bad_json,
                           rows=40, cols=80, description=None),
         web.form.Button('Save')
@@ -135,14 +143,14 @@ class Edit(object):
     You could also just POST some JSON to this URL.
     """
     def GET(self, id):
-        model = models.get_model(int(id))
+        model = _get_model_or_raise(id)
         form = New.form()
         form.fill(model)
         return render.edit(model, form)
 
     def POST(self, id):
         form = New.form()
-        model = models.get_model(id)
+        model = _get_model_or_raise(id)
         if not form.validates():
             return render.edit(model, form)
         models.update_model(id, form.d.name, form.d.json)
@@ -157,31 +165,23 @@ class View(object):
     * https://csdms.colorado.edu/wmt/models/view/1
     """
     def GET(self, id):
-        model = models.get_model(id)
+        model = _get_model_or_raise(id)
         return render.view(model)
 
 
 class Open(object):
     def GET(self, id):
         web.header('Content-Type', 'application/json; charset=utf-8')
-        try:
-            model = models.get_model(id)
-        except models.BadIdError:
-            raise web.notfound()
-        else:
-            return json.dumps(dict(name=model.name, id=model.id,
-                                   owner=model.owner))
+        model = _get_model_or_raise(id)
+        return json.dumps(dict(name=model.name, id=model.id,
+                               owner=model.owner))
 
 
 class Show(object):
     def GET(self, id):
         web.header('Content-Type', 'application/json; charset=utf-8')
-        try:
-            model = models.get_model(str(id))
-        except models.BadIdError:
-            raise web.notfound()
-        else:
-            return model.json
+        model = _get_model_or_raise(id)
+        return model.json
 
 
 class List(object):
@@ -202,8 +202,9 @@ class Export(object):
     * https://csdms.colorado.edu/wmt/export/1
     """
     def GET(self, id):
-        model = models.get_model(id)
+        model = _get_model_or_raise(id)
         return render.code(rc_from_json(model.json))
+
 
 _CHUNK_SIZE = 10240
 
@@ -241,22 +242,17 @@ class Format(object):
         else:
             try:
                 component = models.get_model_component(int(id), name)
-            except models.BadIdError as error:
-                raise web.internalerror("%s" % error)
-            except KeyError as error:
-                raise web.internalerror("%s" % error)
-            except Exception as error:
-                raise web.internalerror("%s" % error)
+            except models.BadIdError:
+                raise web.notfound()
+            except models.AuthorizationError:
+                raise web.Unauthorized()
 
             mapping = component['parameters']
-
-        #return render.files(components.get_component_formatted_input(name, **mapping))
 
         if x['format'].lower() == 'html':
             return render.files(components.get_component_formatted_input(name, **mapping))
         elif x['format'].lower() == 'json':
             web.header('Content-Type', 'application/json; charset=utf-8')
-            #mapping.pop('separator')
             return json.dumps(mapping, sort_keys=True, indent=4, separators=(',', ': '))
         else:
             files = components.get_component_formatted_input(name, **mapping)

@@ -9,6 +9,7 @@ from ..config import site
 from ..utils.io import write_readme, execute_in_dir
 from ..utils.time import current_time_as_string
 from ..utils.ssh import launch_cmt_on_host
+from ..session import get_username
 
 
 class Error(Exception):
@@ -34,7 +35,7 @@ def new(name, model_id):
         'message': 'Run has been submitted',
         'created': now,
         'updated': now,
-        'owner': 'anonymous',
+        'owner': get_username(),
         'stage_dir': os.path.join(site['downloads'], uuid),
     }
     db.insert('submission', **data)

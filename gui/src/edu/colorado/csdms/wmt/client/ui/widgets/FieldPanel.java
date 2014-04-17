@@ -3,14 +3,13 @@
  */
 package edu.colorado.csdms.wmt.client.ui.widgets;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * A GWT composite widget that defines a label and a field (which can
@@ -22,7 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class FieldPanel extends Composite {
 
   private Label fieldLabel;
-  private TextBox field;
+  private TextBox fieldBox;
 
   /**
    * Defines an empty FieldPanel.
@@ -58,21 +57,19 @@ public class FieldPanel extends Composite {
    */
   public FieldPanel(String text, Boolean secure) {
 
-    Grid paths = new Grid(1, 2);
-
     fieldLabel = new Label("Name:");
-    field = secure ? new PasswordTextBox() : new TextBox();
-    field.setText(text);
-    paths.setWidget(0, 0, fieldLabel);
-    paths.setWidget(0, 1, field);
+    fieldBox = secure ? new PasswordTextBox() : new TextBox();
+    fieldBox.setText(text);
 
     // Styles!
-    field.setWidth("15em");
-    fieldLabel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+    fieldBox.setStyleName("wmt-TextBoxen");
     fieldLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
-    VerticalPanel contents = new VerticalPanel();
-    contents.add(paths);
+    HorizontalPanel contents = new HorizontalPanel();
+    contents.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+    contents.setSpacing(5); // px
+    contents.add(fieldLabel);
+    contents.add(fieldBox);
 
     initWidget(contents);
   }
@@ -94,14 +91,14 @@ public class FieldPanel extends Composite {
   /**
    * Returns the text displayed in the FieldPanel.
    */
-  public String getField() {
-    return field.getText();
+  public TextBox getField() {
+    return this.fieldBox;
   }
 
   /**
    * Sets the text displayed in the FieldPanel.
    */
-  public void setField(String text) {
-    field.setText(text);
+  public void setField(TextBox box) {
+    this.fieldBox = box;
   }
 }

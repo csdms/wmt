@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.ui.handler.AuthenticationHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 
 /**
@@ -52,7 +54,8 @@ public class Perspective extends DockLayoutPanel {
   // Secondary UI panels/widgets.
   private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
-  private ModelMenu modelMenu;
+  private ModelActionPanel modelActionPanel;
+  private HTML loginHtml;
   private ModelTree modelTree;
   private ParameterTable parameterTable;
   private ComponentInfoDialogBox componentInfoBox;
@@ -63,10 +66,13 @@ public class Perspective extends DockLayoutPanel {
   public Perspective(DataManager data) {
 
     super(Unit.PX);
-    this.addStyleName("wmt-DockLayoutPanel");
     this.data = data;
     this.data.setPerspective(this);
-
+    this.addStyleName("wmt-DockLayoutPanel");
+    if (data.isDevelopmentMode()) {
+      this.addStyleDependentName("devmode");
+    }
+    
     // Determine initial view sizes based on browser window dimensions.
     browserWindowWidth = Window.getClientWidth();
     Integer viewEastInitialWidth =
@@ -94,32 +100,39 @@ public class Perspective extends DockLayoutPanel {
 
   /**
    * An inner class to define the header (North view) of the WMT GUI.
-   * <p>
-   * Login info could be located here, like in the GWT Mail example.
    */
   private class ViewNorth extends Grid {
-
+    
     /**
      * Makes the Header (North) view of the WMT GUI.
      */
     public ViewNorth() {
 
-      super(1, 2);
+      super(1, 3);
       this.setWidth("100%");
 
-      // Associate a ModelMenu.
-      modelMenu = new ModelMenu(data);
+      // The ModelActionPanel shows "Open", "Save", etc., buttons.
+      modelActionPanel = new ModelActionPanel(data);
+      this.setWidget(0, 0, modelActionPanel);
+      this.getCellFormatter().setStyleName(0, 0, "wmt-ViewNorth0");
 
+      // Login/logout link. Clicking it prompts for credentials.
+      loginHtml = new HTML();
+      this.setWidget(0, 1, loginHtml);
+      this.getCellFormatter().setHorizontalAlignment(0, 1,
+          HasHorizontalAlignment.ALIGN_RIGHT);
+      this.getCellFormatter().setStyleName(0, 1, "wmt-ViewNorth1");
+      loginHtml.addClickHandler(new AuthenticationHandler(data));
+
+      // CSDMS logo. Clicking it opens the CSDMS website in a new browser tab.
       Image logo = new Image("images/CSDMS_Logo_1.jpg");
       logo.setTitle("Go to the CSDMS website.");
-
-      this.setWidget(0, 0, logo);
-      this.setWidget(0, 1, modelMenu.getMenuButton());
+      logo.setAltText("CSDMS logo");
+      this.setWidget(0, 2, logo);
       this.getCellFormatter()
-          .setAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT,
+          .setAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT,
               HasVerticalAlignment.ALIGN_MIDDLE);
-
-      // Clicking the CSDMS logo opens the CSDMS website in a new browser tab.
+      this.getCellFormatter().setStyleName(0, 2, "wmt-ViewNorth2");
       logo.addClickHandler(new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
@@ -185,6 +198,14 @@ public class Perspective extends DockLayoutPanel {
     viewWest.setTabHTML(0, tabTitle);
   }
 
+  public HTML getLoginHtml() {
+    return loginHtml;
+  }
+
+  public void setLoginHtml(HTML loginHtml) {
+    this.loginHtml = loginHtml;
+  }
+
   public ComponentInfoDialogBox getComponentInfoBox() {
     return componentInfoBox;
   }
@@ -248,7 +269,7 @@ public class Perspective extends DockLayoutPanel {
   public void setParameterTable(ParameterTable parameterTable) {
     this.parameterTable = parameterTable;
   }
-
+  
   public TabLayoutPanel getViewEast() {
     return viewEast;
   }
@@ -257,18 +278,12 @@ public class Perspective extends DockLayoutPanel {
     return viewWest;
   }
 
-  /**
-   * @return the modelMenu
-   */
-  public ModelMenu getModelMenu() {
-    return modelMenu;
+  public ModelActionPanel getActionButtonPanel() {
+    return modelActionPanel;
   }
 
-  /**
-   * @param modelMenu the modelMenu to set
-   */
-  public void setModelMenu(ModelMenu modelMenu) {
-    this.modelMenu = modelMenu;
+  public void setActionButtonPanel(ModelActionPanel modelActionPanel) {
+    this.modelActionPanel = modelActionPanel;
   }
 
   /**

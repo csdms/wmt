@@ -8,4 +8,11 @@ $def with (page)
 <body>
 $:page
 </body>
+
+<p>
+$if CONTEXT.username == '':
+  <a href="$BASE_URL/account/login">Sign In</a>
+$else:
+  Signed in as: $CONTEXT.username | <a href="$BASE_URL/account/logout">Sign Out</a>
+</p>
 </html>
