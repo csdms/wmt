@@ -84,8 +84,7 @@ public class ComponentSelectionCommand implements Command {
     if (!ctype.matches(DataManager.DRIVER)) {
       tooltip += "Provides \"" + cell.getPortId() + "\" port. ";
     }
+    tooltip += "Click to get information, to view parameters, or to delete.";
     cell.setTitle(tooltip);
-    cell.getMenuCell().setTitle(
-        "Click to get information, to view parameters, or to delete.");
   }
 }
