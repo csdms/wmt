@@ -3,10 +3,12 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -17,7 +19,7 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ComponentCell extends VerticalPanel {
+public class ComponentCell extends VerticalPanel implements ClickHandler {
 
   private static Integer TRIM = 10; // the number of characters to display
 
@@ -25,9 +27,8 @@ public class ComponentCell extends VerticalPanel {
   private String portId;
   private String componentId;
   private HTML nameCell;
-  private MenuBar menuCell;
-  private MenuItem menuItem;
-  private ComponentSelectionMenu componentMenu;
+  private HTML menuCell;
+  private PopupPanel componentMenu;
   private TreeItem enclosingTreeItem;
   private Boolean isLinked = false;
 
@@ -52,26 +53,22 @@ public class ComponentCell extends VerticalPanel {
     this.data = data;
     this.portId = portId;
     this.setVerticalAlignment(ALIGN_MIDDLE); // must set before adding children
+    this.setStyleName("wmt-ComponentCell");
+    this.addDomHandler(this, ClickEvent.getType());
     
     // The ComponentCell consists of a nameCell and a menuCell in a Grid.
     nameCell = new HTML(trimName(portId));
-    menuCell = new MenuBar();
+    nameCell.setStyleName("wmt-ComponentCell-NameCell");
+    menuCell = new HTML(DataManager.FA_SELECT);
+    menuCell.setStyleName("wmt-ComponentCell-MenuCell");
     Grid grid = new Grid(1, 2); // one row, two cols
     this.add(grid);
     grid.setWidget(0, 0, nameCell);
     grid.setWidget(0, 1, menuCell);
-    
-    // The menuCell has one item that shows a list of components when selected.
-    componentMenu = new ComponentSelectionMenu(this.data, this);
-    menuItem = new MenuItem("", true, componentMenu); // set FA icon with CSS
-    menuCell.addItem(menuItem);
 
-    // Styles. Note settings for menuItem and menuCell.
-    this.setStyleName("wmt-ComponentCell");
-    nameCell.setStyleName("wmt-ComponentCell-NameCell");
-    menuCell.setStyleName("wmt-ComponentCell-MenuCell");
-    menuItem.setStyleName("wmt-ComponentCell-ComponentButton");
-    
+    // The componentMenu is displayed on a click of the ComponentCell.
+    componentMenu = new ComponentSelectionMenu(this.data, this);
+
     String tooltip = "Click to select a component";
     if (portId.matches(DataManager.DRIVER)) {
       tooltip += " to be the driver for the model.";
@@ -79,6 +76,21 @@ public class ComponentCell extends VerticalPanel {
       tooltip += " to fill this \"" + portId + "\" port.";
     }
     menuCell.setTitle(tooltip);
+  }
+
+  /**
+   * Displays the componentMenu directly beneath the ComponentCell.
+   */
+  @Override
+  public void onClick(ClickEvent event) {
+    componentMenu.setPopupPositionAndShow(new PositionCallback() {
+      final Integer x = ComponentCell.this.getElement().getAbsoluteLeft();
+      final Integer y = ComponentCell.this.getElement().getAbsoluteBottom();
+      @Override
+      public void setPosition(int offsetWidth, int offsetHeight) {
+        componentMenu.setPopupPosition(x, y);
+      }
+    });
   }
 
   public String getPortId() {
@@ -105,27 +117,19 @@ public class ComponentCell extends VerticalPanel {
     this.nameCell = nameCell;
   }
 
-  public MenuBar getMenuCell() {
+  public HTML getMenuCell() {
     return menuCell;
   }
 
-  public void setMenuCell(MenuBar menuCell) {
+  public void setMenuCell(HTML menuCell) {
     this.menuCell = menuCell;
   }
 
-  public MenuItem getMenuItem() {
-    return menuItem;
-  }
-
-  public void setMenuItem(MenuItem menuItem) {
-    this.menuItem = menuItem;
-  }
-
-  public ComponentSelectionMenu getComponentMenu() {
+  public PopupPanel getComponentMenu() {
     return componentMenu;
   }
 
-  public void setComponentMenu(ComponentSelectionMenu componentMenu) {
+  public void setComponentMenu(PopupPanel componentMenu) {
     this.componentMenu = componentMenu;
   }
 

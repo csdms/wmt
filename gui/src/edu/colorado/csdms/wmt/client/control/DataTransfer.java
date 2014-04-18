@@ -21,6 +21,7 @@ import edu.colorado.csdms.wmt.client.data.ComponentListJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelListJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
+import edu.colorado.csdms.wmt.client.ui.ComponentSelectionMenu;
 import edu.colorado.csdms.wmt.client.ui.widgets.RunInfoDialogBox;
 
 /**
@@ -622,11 +623,12 @@ public class DataTransfer {
           data.retryComponentLoad.put(componentId, 0);
           getComponent(data, componentId);
         }
-        
+
         // Show the list of components (id only) as placeholders in the
         // ComponentSelectionMenu.
-        data.getPerspective().getModelTree().getDriverComponentCell()
-            .getComponentMenu().initializeComponents();
+        ((ComponentSelectionMenu) data.getPerspective().getModelTree()
+            .getDriverComponentCell().getComponentMenu())
+            .initializeComponents();
 
       } else {
         String msg =
@@ -674,8 +676,9 @@ public class DataTransfer {
         data.addModelComponent(copy(jso)); // "instance" component, for model
 
         // Replace the associated placeholder ComponentSelectionMenu item.
-        data.getPerspective().getModelTree().getDriverComponentCell()
-            .getComponentMenu().replaceMenuItem(jso.getId());
+        ((ComponentSelectionMenu) data.getPerspective().getModelTree()
+            .getDriverComponentCell().getComponentMenu()).replaceMenuItem(jso
+            .getId());
 
       } else {
 

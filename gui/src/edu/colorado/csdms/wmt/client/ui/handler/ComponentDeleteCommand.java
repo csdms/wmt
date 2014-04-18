@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.ComponentCell;
+import edu.colorado.csdms.wmt.client.ui.ComponentSelectionMenu;
 import edu.colorado.csdms.wmt.client.ui.ModelTree;
 
 /**
@@ -45,18 +46,18 @@ public class ComponentDeleteCommand implements Command {
     // targeted TreeItem.
     ModelTree tree = data.getPerspective().getModelTree();
     TreeItem target = cell.getEnclosingTreeItem();
-    
+
     // Delete all children of the target TreeItem.
     target.removeItems();
-    
+
     // If the parameters of the about-to-be-deleted component, or any of its
     // children, are displayed, clear the ParameterTable.
     String showing = data.getPerspective().getParameterTable().getComponentId();
-    if ((showing != null) && 
-        (componentId.contains(showing) || !tree.isComponentPresent(showing))) {
+    if ((showing != null)
+        && (componentId.contains(showing) || !tree.isComponentPresent(showing))) {
       data.getPerspective().getParameterTable().clearTable();
     }
-    
+
     // If this isn't the driver, delete the target TreeItem and replace it with
     // a new one sporting the appropriate open uses port. If it is the driver,
     // reinitialize the ModelTree and update the available components.
@@ -67,7 +68,8 @@ public class ComponentDeleteCommand implements Command {
       tree.insertTreeItem(cell.getPortId(), parent, targetIndex);
     } else {
       tree.initializeTree();
-      tree.getDriverComponentCell().getComponentMenu().updateComponents();
+      ((ComponentSelectionMenu) tree.getDriverComponentCell()
+          .getComponentMenu()).updateComponents();
       data.saveAttempts++;
     }
 

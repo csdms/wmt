@@ -66,18 +66,14 @@ public class ComponentSelectionCommand implements Command {
     String componentName = data.getComponent(componentId).getName();
     GWT.log("Selected component: " + componentName);
 
-    // Display the name of the selected component.
+    // Display the name of the selected component and set the "connected" style.
     String displayName = cell.trimName(componentName);
     cell.getNameCell().setText(displayName);
-
-    // Replace the componentMenu with the actionMenu.
-    ComponentActionMenu actionMenu = new ComponentActionMenu(data, cell);
-    cell.getMenuItem().setSubMenu(actionMenu);
-
-    // Update styles.
-    cell.getMenuItem().setStyleName("wmt-ComponentCell-ActionButton");
-    cell.getMenuCell().addStyleDependentName("connected");
     cell.addStyleDependentName("connected");
+    
+    // Replace the componentMenu with the actionMenu.
+    cell.setComponentMenu(new ComponentActionMenu(data, cell)); 
+    cell.getMenuCell().setHTML(DataManager.FA_ACTION);
     
     // Update the tooltip text.
     String ctype;

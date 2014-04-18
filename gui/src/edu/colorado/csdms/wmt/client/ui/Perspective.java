@@ -310,7 +310,9 @@ public class Perspective extends DockLayoutPanel {
     data.resetModelComponents();
     parameterTable.clearTable();
     modelTree.initializeTree();
-    modelTree.getDriverComponentCell().getComponentMenu().updateComponents();
+    // modelTree.getDriverComponentCell().getComponentMenu().updateComponents();
+    ((ComponentSelectionMenu) modelTree.getDriverComponentCell()
+        .getComponentMenu()).updateComponents();;
     setModelPanelTitle();
   }
 }
