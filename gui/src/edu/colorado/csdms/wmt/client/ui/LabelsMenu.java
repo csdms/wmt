@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
-import edu.colorado.csdms.wmt.client.ui.widgets.AddLabelDialogBox;
+import edu.colorado.csdms.wmt.client.ui.widgets.LabelDialogBox;
 
 /**
  * Encapsulates a scrollable list of labels used to tag and classify models.
@@ -27,6 +27,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.AddLabelDialogBox;
 public class LabelsMenu extends PopupPanel {
 
   private static final String MENU_WIDTH = "200px"; // arbitrary, aesthetic
+  private static final String MENU_HEIGHT = "20em";
   
   private DataManager data;
   private VerticalPanel labelPanel;
@@ -50,7 +51,7 @@ public class LabelsMenu extends PopupPanel {
     // All labels are listed on the labelPanel, which sits on a ScrollPanel.
     labelPanel = new VerticalPanel();
     ScrollPanel scroller = new ScrollPanel(labelPanel);
-    scroller.setWidth(MENU_WIDTH);
+    scroller.setSize(MENU_WIDTH, MENU_HEIGHT);
     menu.add(scroller);
 
     // Populate the menu with the stored model labels and their values.
@@ -59,34 +60,55 @@ public class LabelsMenu extends PopupPanel {
     // These items are always visible on the bottom of the menu.
     HTML separator = new HTML("");
     separator.setStyleName("wmt-PopupPanelSeparator");
-    HTML addNewHtml = new HTML("Add new label");
+    final HTML addNewHtml = new HTML("Add new label");
     addNewHtml.setStyleName("wmt-PopupPanelItem");
-    HTML deleteHtml = new HTML("Delete label");
+    final HTML deleteHtml = new HTML("Delete label");
     deleteHtml.setStyleName("wmt-PopupPanelItem");
     menu.add(separator);
     menu.add(addNewHtml);
     menu.add(deleteHtml);
     
-    // Show a SuggestBox when the user adds a new label.
+    // Show a SuggestBox when the user adds or deletes a label.
     addNewHtml.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        final AddLabelDialogBox box = new AddLabelDialogBox(LabelsMenu.this.data);
+        final LabelDialogBox box = new LabelDialogBox(LabelsMenu.this.data);
+        box.getChoicePanel().getOkButton().setHTML(DataManager.FA_TAGS + "Add");
         box.getChoicePanel().getOkButton().addClickHandler(new ClickHandler() {
           @Override
           public void onClick(ClickEvent event) {
-            String newLabel = box.getSuggestBox().getText();
-            LabelsMenu.this.data.modelLabels.put(newLabel, false);
+            String label = box.getSuggestBox().getText();
+            LabelsMenu.this.data.modelLabels.put(label, false);
             populateMenu();
             box.hide();
           }
         });
         box.getChoicePanel().getCancelButton().addClickHandler(
             new DialogCancelHandler(box));
-        box.showRelativeTo(labelPanel);
+        box.showRelativeTo(addNewHtml);
         box.getSuggestBox().setFocus(true);
       }
     });
+    deleteHtml.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        final LabelDialogBox box = new LabelDialogBox(LabelsMenu.this.data);
+        box.getChoicePanel().getOkButton().setHTML(DataManager.FA_TAGS + "Delete");
+        box.getChoicePanel().getOkButton().addClickHandler(new ClickHandler() {
+          @Override
+          public void onClick(ClickEvent event) {
+            String label = box.getSuggestBox().getText();
+            LabelsMenu.this.data.modelLabels.remove(label);
+            populateMenu();
+            box.hide();
+          }
+        });
+        box.getChoicePanel().getCancelButton().addClickHandler(
+            new DialogCancelHandler(box));
+        box.showRelativeTo(deleteHtml);
+        box.getSuggestBox().setFocus(true);
+      }
+    });    
   }
   
   /**

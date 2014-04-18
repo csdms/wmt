@@ -19,7 +19,7 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class AddLabelDialogBox extends DialogBox {
+public class LabelDialogBox extends DialogBox {
 
   @SuppressWarnings("unused")
   private DataManager data;
@@ -27,15 +27,14 @@ public class AddLabelDialogBox extends DialogBox {
   private ChoicePanel choicePanel;
   
   /**
-   * Makes a new {@link AddLabelDialogBox}.
+   * Makes a new {@link LabelDialogBox}.
    * 
    * @param data the DataManager object for the WMT session
    */
-  public AddLabelDialogBox(DataManager data) {
+  public LabelDialogBox(DataManager data) {
 
     super(false); // autohide
     this.setModal(true);
-    this.setText("Add New Label...");
     this.data = data;
 
     // OMG is this fun!
@@ -47,8 +46,6 @@ public class AddLabelDialogBox extends DialogBox {
     suggestBox = new SuggestBox(oracle);
     choicePanel = new ChoicePanel();
 
-    choicePanel.getOkButton().setHTML(DataManager.FA_TAGS + "Add");
-    
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
     contents.add(suggestBox);
