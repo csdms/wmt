@@ -14,8 +14,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 
 /**
- * A customized DialogBox with a {@link FieldPanel} for entering a new label and
- * a {@link ChoicePanel} displaying "OK" and "Cancel" buttons.
+ * A customized DialogBox with a {@link FieldPanel} for entering a label and a
+ * {@link ChoicePanel} displaying "OK" and "Cancel" buttons.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */

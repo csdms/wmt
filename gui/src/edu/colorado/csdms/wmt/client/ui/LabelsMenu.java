@@ -31,6 +31,8 @@ public class LabelsMenu extends PopupPanel {
   
   private DataManager data;
   private VerticalPanel labelPanel;
+  private HTML addNewHtml;
+  private HTML deleteHtml;
   
   /**
    * Makes a new {@link LabelsMenu}.
@@ -60,55 +62,17 @@ public class LabelsMenu extends PopupPanel {
     // These items are always visible on the bottom of the menu.
     HTML separator = new HTML("");
     separator.setStyleName("wmt-PopupPanelSeparator");
-    final HTML addNewHtml = new HTML("Add new label");
+    addNewHtml = new HTML("Add new label");
     addNewHtml.setStyleName("wmt-PopupPanelItem");
-    final HTML deleteHtml = new HTML("Delete label");
+    deleteHtml = new HTML("Delete label");
     deleteHtml.setStyleName("wmt-PopupPanelItem");
     menu.add(separator);
     menu.add(addNewHtml);
     menu.add(deleteHtml);
     
-    // Show a SuggestBox when the user adds or deletes a label.
-    addNewHtml.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        final LabelDialogBox box = new LabelDialogBox(LabelsMenu.this.data);
-        box.getChoicePanel().getOkButton().setHTML(DataManager.FA_TAGS + "Add");
-        box.getChoicePanel().getOkButton().addClickHandler(new ClickHandler() {
-          @Override
-          public void onClick(ClickEvent event) {
-            String label = box.getSuggestBox().getText();
-            LabelsMenu.this.data.modelLabels.put(label, false);
-            populateMenu();
-            box.hide();
-          }
-        });
-        box.getChoicePanel().getCancelButton().addClickHandler(
-            new DialogCancelHandler(box));
-        box.showRelativeTo(addNewHtml);
-        box.getSuggestBox().setFocus(true);
-      }
-    });
-    deleteHtml.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        final LabelDialogBox box = new LabelDialogBox(LabelsMenu.this.data);
-        box.getChoicePanel().getOkButton().setHTML(DataManager.FA_TAGS + "Delete");
-        box.getChoicePanel().getOkButton().addClickHandler(new ClickHandler() {
-          @Override
-          public void onClick(ClickEvent event) {
-            String label = box.getSuggestBox().getText();
-            LabelsMenu.this.data.modelLabels.remove(label);
-            populateMenu();
-            box.hide();
-          }
-        });
-        box.getChoicePanel().getCancelButton().addClickHandler(
-            new DialogCancelHandler(box));
-        box.showRelativeTo(deleteHtml);
-        box.getSuggestBox().setFocus(true);
-      }
-    });    
+    // Show a SuggestBox to add or delete a label.
+    addNewHtml.addClickHandler(new LabelHandler(data, "Add"));
+    deleteHtml.addClickHandler(new LabelHandler(data, "Delete"));
   }
   
   /**
@@ -122,6 +86,56 @@ public class LabelsMenu extends PopupPanel {
       labelBox.setWordWrap(false);
       labelBox.setStyleName("wmt-PopupPanelCheckBoxItem");
       labelPanel.add(labelBox);
+    }
+  }
+  
+  /**
+   * Handles adding and deleting model labels using {@link LabelDialogBox}.
+   */
+  public class LabelHandler implements ClickHandler {
+
+    private DataManager data;
+    private String type;
+
+    /**
+     * Creates a new {@link LabelHandler}.
+     * 
+     * @param data the DataManager object for the WMT session
+     * @param type the event type, currently "Add" or "Delete"
+     */
+    public LabelHandler(DataManager data, String type) {
+      this.data = data;
+      this.type = type; // use sentence case
+    }
+    
+    @Override
+    public void onClick(ClickEvent event) {
+      
+      final LabelDialogBox box = new LabelDialogBox(data);
+      
+      box.getChoicePanel().getCancelButton().addClickHandler(
+          new DialogCancelHandler(box));
+      box.getChoicePanel().getOkButton().setHTML(DataManager.FA_TAGS + type);
+      box.getChoicePanel().getOkButton().addClickHandler(new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+          String label = box.getSuggestBox().getText();
+          if (type.equalsIgnoreCase("add")) {
+            data.modelLabels.put(label, false);
+          } else if (type.equalsIgnoreCase("delete")) {
+            data.modelLabels.remove(label);
+          }
+          populateMenu();
+          box.hide();
+        }
+      });
+
+      if (type.equalsIgnoreCase("add")) {
+        box.showRelativeTo(addNewHtml);
+      } else if (type.equalsIgnoreCase("delete")) {
+        box.showRelativeTo(deleteHtml);
+      }
+      box.getSuggestBox().setFocus(true);
     }
   }
 }
