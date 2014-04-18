@@ -6,6 +6,8 @@ package edu.colorado.csdms.wmt.client.ui;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -13,6 +15,8 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
+import edu.colorado.csdms.wmt.client.ui.widgets.AddLabelDialogBox;
 
 /**
  * Encapsulates a scrollable list of labels used to tag and classify models.
@@ -62,12 +66,34 @@ public class LabelsMenu extends PopupPanel {
     menu.add(separator);
     menu.add(addNewHtml);
     menu.add(deleteHtml);
+    
+    // Show a SuggestBox when the user adds a new label.
+    addNewHtml.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        final AddLabelDialogBox box = new AddLabelDialogBox(LabelsMenu.this.data);
+        box.getChoicePanel().getOkButton().addClickHandler(new ClickHandler() {
+          @Override
+          public void onClick(ClickEvent event) {
+            String newLabel = box.getSuggestBox().getText();
+            LabelsMenu.this.data.modelLabels.put(newLabel, false);
+            populateMenu();
+            box.hide();
+          }
+        });
+        box.getChoicePanel().getCancelButton().addClickHandler(
+            new DialogCancelHandler(box));
+        box.showRelativeTo(labelPanel);
+        box.getSuggestBox().setFocus(true);
+      }
+    });
   }
   
   /**
    * A helper that loads the menu with labels.
    */
   public void populateMenu() {
+    labelPanel.clear();
     for (Map.Entry<String, Boolean> entry : data.modelLabels.entrySet()) {
       CheckBox labelBox = new CheckBox(entry.getKey());
       labelBox.setValue(entry.getValue());
