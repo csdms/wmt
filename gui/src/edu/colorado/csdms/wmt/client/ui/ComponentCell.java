@@ -5,11 +5,8 @@ package edu.colorado.csdms.wmt.client.ui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -30,9 +27,7 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
   private String portId;
   private String componentId;
   private HTML nameCell;
-  // private MenuBar menuCell;
   private HTML menuCell;
-  // private MenuItem menuItem;
   private PopupPanel componentMenu;
   private TreeItem enclosingTreeItem;
   private Boolean isLinked = false;
@@ -58,31 +53,21 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
     this.data = data;
     this.portId = portId;
     this.setVerticalAlignment(ALIGN_MIDDLE); // must set before adding children
+    this.setStyleName("wmt-ComponentCell");
     this.addDomHandler(this, ClickEvent.getType());
     
     // The ComponentCell consists of a nameCell and a menuCell in a Grid.
     nameCell = new HTML(trimName(portId));
-    // menuCell = new MenuBar();
+    nameCell.setStyleName("wmt-ComponentCell-NameCell");
     menuCell = new HTML(DataManager.FA_SELECT);
+    menuCell.setStyleName("wmt-ComponentCell-MenuCell");
     Grid grid = new Grid(1, 2); // one row, two cols
     this.add(grid);
     grid.setWidget(0, 0, nameCell);
     grid.setWidget(0, 1, menuCell);
 
-    // The menuCell has one item that shows a list of components when selected.
-    // componentMenu = new ComponentSelectionMenu(this.data, this);
-    // menuItem = new MenuItem("", true, componentMenu); // set FA icon with CSS
-
-    // menuCell.addItem(menuItem);
-
+    // The componentMenu is displayed on a click of the ComponentCell.
     componentMenu = new ComponentSelectionMenu(this.data, this);
-
-
-    // Styles. Note settings for menuItem and menuCell.
-    this.setStyleName("wmt-ComponentCell");
-    nameCell.setStyleName("wmt-ComponentCell-NameCell");
-    menuCell.setStyleName("wmt-ComponentCell-MenuCell");
-    // menuItem.setStyleName("wmt-ComponentCell-ComponentButton");
 
     String tooltip = "Click to select a component";
     if (portId.matches(DataManager.DRIVER)) {
@@ -94,7 +79,7 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
   }
 
   /**
-   * 
+   * Displays the componentMenu directly beneath the ComponentCell.
    */
   @Override
   public void onClick(ClickEvent event) {
@@ -139,14 +124,6 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
   public void setMenuCell(HTML menuCell) {
     this.menuCell = menuCell;
   }
-
-  // public MenuItem getMenuItem() {
-  // return menuItem;
-  // }
-
-  // public void setMenuItem(MenuItem menuItem) {
-  // this.menuItem = menuItem;
-  // }
 
   public PopupPanel getComponentMenu() {
     return componentMenu;

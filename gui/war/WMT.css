@@ -16,7 +16,6 @@
   border: 1px dashed burlywood;
 }
 
-
 /* Rules for the panel running along the top of the client interface. */
 .wmt-ViewNorth0 {
 }
@@ -144,30 +143,12 @@
    color: #333;
 }
 
-/* Rules for the menuCell inside the ComponentCell. */
+/* For the menuCell inside the ComponentCell. */
 .wmt-ComponentCell-MenuCell {
   /* background-color: white; */
   padding: 2px;
   margin-right: 3px;
 }
-/* .wmt-ComponentCell-MenuCell-connected {
-  background-color: #eef;
-} */
-
-/* The button displayed on the menuCell inside the ComponentCell. 
-   Needs :after */
-/* .wmt-ComponentCell-ComponentButton:after {
-  font-family: "FontAwesome";
-  font-style: normal;
-  content: "\f067";
-  color: #333;  
-}
-.wmt-ComponentCell-ActionButton:after {
-  font-family: "FontAwesome";
-  font-style: normal;
-  content: "\f078";
-  color: #333;
-} */
 
 /* Pull-down menu items in the ComponentSelectionMenu. */
 .wmt-ComponentSelectionMenuItem {
@@ -286,7 +267,6 @@
 .wmt-Button-slim {
   padding: 2px 7px !important;
 }
-
 
 /* All labels. */
 .gwt-Label {
