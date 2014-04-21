@@ -60,7 +60,8 @@ public class ComponentDeleteCommand implements Command {
 
     // If this isn't the driver, delete the target TreeItem and replace it with
     // a new one sporting the appropriate open uses port. If it is the driver,
-    // reinitialize the ModelTree and update the available components.
+    // reinitialize the ModelTree, update the available components and deselect
+    // the component label.
     if (target.getParentItem() != null) {
       TreeItem parent = target.getParentItem();
       Integer targetIndex = parent.getChildIndex(target);
@@ -70,6 +71,7 @@ public class ComponentDeleteCommand implements Command {
       tree.initializeTree();
       ((ComponentSelectionMenu) tree.getDriverComponentCell()
           .getComponentMenu()).updateComponents();
+      data.modelLabels.put(data.getComponent(componentId).getName(), false);
       data.saveAttempts++;
     }
 
