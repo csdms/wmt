@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeMap;
 
 import com.google.gwt.dom.client.Style.Cursor;
 
@@ -62,6 +63,7 @@ public class DataManager {
   public HashMap<String, Integer> retryComponentLoad;
   public List<Integer> modelIdList;
   public List<String> modelNameList;
+  public TreeMap<String, Boolean> modelLabels; // maintains sort
   public Integer saveAttempts = 0;
 
   /**
@@ -74,7 +76,15 @@ public class DataManager {
     components = new ArrayList<ComponentJSO>();
     modelComponents = new ArrayList<ComponentJSO>();
     modelIdList = new ArrayList<Integer>();
+    modelLabels = new TreeMap<String, Boolean>();
     modelNameList = new ArrayList<String>();
+
+    // Labels that are always present.
+    String[] labels = {"public"};
+    Boolean[] values = {false};
+    for (int i = 0; i < values.length; i++) {
+      modelLabels.put(labels[i], values[i]);
+    }
   }
 
   /**

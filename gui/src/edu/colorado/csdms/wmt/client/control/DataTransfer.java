@@ -536,6 +536,7 @@ public class DataTransfer {
               + "</b> | <i class='fa fa-sign-out'></i> "
               + "<a href=\"javascript:;\">Logout</a>");
       data.getPerspective().getLoginHtml().setTitle("Logout from WMT");
+      data.modelLabels.put(data.security.getWmtUsername(), true);
     }
 
     /*
@@ -547,6 +548,7 @@ public class DataTransfer {
           "<i class='fa fa-sign-in'></i> "
               + "<a href=\"javascript:;\">Login</a>");
       data.getPerspective().getLoginHtml().setTitle("Login to WMT");
+      data.modelLabels.remove(data.security.getWmtUsername());
     }
     
     @Override
@@ -679,6 +681,9 @@ public class DataTransfer {
         ((ComponentSelectionMenu) data.getPerspective().getModelTree()
             .getDriverComponentCell().getComponentMenu()).replaceMenuItem(jso
             .getId());
+        
+        // Add the component name to the list of model labels.
+        data.modelLabels.put(jso.getName(), false);
 
       } else {
 

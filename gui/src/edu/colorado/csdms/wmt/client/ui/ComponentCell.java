@@ -75,7 +75,7 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
     } else {
       tooltip += " to fill this \"" + portId + "\" port.";
     }
-    menuCell.setTitle(tooltip);
+    this.setTitle(tooltip);
   }
 
   /**

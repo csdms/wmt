@@ -74,18 +74,22 @@ public class ComponentSelectionCommand implements Command {
     // Replace the componentMenu with the actionMenu.
     cell.setComponentMenu(new ComponentActionMenu(data, cell)); 
     cell.getMenuCell().setHTML(DataManager.FA_ACTION);
+
+    // Is this the driver?
+    Boolean isDriver = (cell.getEnclosingTreeItem().getParentItem() == null);
+    
+    // If this is the driver, select its label in the list of model labels.
+    if (isDriver) {
+      data.modelLabels.put(componentName, true);
+    }
     
     // Update the tooltip text.
-    String ctype;
-    ctype =
-        (cell.getEnclosingTreeItem().getParentItem() == null)
-            ? DataManager.DRIVER : "component";
+    String ctype = isDriver ? DataManager.DRIVER : "component";
     String tooltip = "Model " + ctype + ": " + componentName + ". ";
     if (!ctype.matches(DataManager.DRIVER)) {
       tooltip += "Provides \"" + cell.getPortId() + "\" port. ";
     }
+    tooltip += "Click to get information, to view parameters, or to delete.";
     cell.setTitle(tooltip);
-    cell.getMenuCell().setTitle(
-        "Click to get information, to view parameters, or to delete.");
   }
 }

@@ -6,6 +6,8 @@ package edu.colorado.csdms.wmt.client.ui;
 import java.util.Iterator;
 
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -27,6 +29,7 @@ public class MoreActionsMenu extends PopupPanel {
 
   @SuppressWarnings("unused")
   private DataManager data;
+  private LabelsMenu labelsMenu;
   
   /**
    * Makes a new {@link MoreActionsMenu}.
@@ -44,28 +47,49 @@ public class MoreActionsMenu extends PopupPanel {
     VerticalPanel menu = new VerticalPanel();
     this.add(menu);
 
-    // Save As
+    // Save as
     HTML saveAsButton =
         new HTML(DataManager.FA_SAVE + "Save model as...");
-    saveAsButton.setTitle("Save model as...");
+    saveAsButton.setTitle("Save a model with a new name.");
     saveAsButton.addClickHandler(new ModelActionPanelSaveHandler(data, true));    
     menu.add(saveAsButton);
 
+    // Manage labels
+    final HTML labelsButton =
+        new HTML(DataManager.FA_TAGS + "Manage labels...");
+    labelsButton.setTitle("Manage the labels set on a model.");
+    menu.add(labelsButton);
+    labelsMenu = new LabelsMenu(data);
+    labelsButton.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        labelsMenu.populateMenu();
+        labelsMenu.setPopupPositionAndShow(new PositionCallback() {
+          final Integer x = labelsButton.getElement().getAbsoluteRight();
+          final Integer y = labelsButton.getAbsoluteTop();
+          @Override
+          public void setPosition(int offsetWidth, int offsetHeight) {
+            labelsMenu.setPopupPosition(x, y);
+          }
+        });
+      }
+    });
+    
     // Delete
     HTML deleteButton = new HTML(DataManager.FA_DELETE + "Delete model...");
-    deleteButton.setTitle("Delete model");
+    deleteButton.setTitle("Delete a model from server.");
     deleteButton.addClickHandler(new ModelActionPanelDeleteHandler(data));
     menu.add(deleteButton);
 
     // Run status
     HTML statusButton = new HTML(DataManager.FA_STATUS + "View run status...");
-    statusButton.setTitle("Status of model run");
+    statusButton.setTitle("Get the status of model run.");
     statusButton.addClickHandler(new ModelActionPanelStatusHandler(data));    
     menu.add(statusButton);
     
     // Help
     HTML helpButton = new HTML(DataManager.FA_HELP + "Help");
-    helpButton.setTitle("Help on using WMT");
+    helpButton.setTitle("View the help documents on using WMT.");
     helpButton.addClickHandler(new ModelActionPanelHelpHandler(data));        
     menu.add(helpButton);
     
