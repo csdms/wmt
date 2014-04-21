@@ -63,6 +63,7 @@ public class MoreActionsMenu extends PopupPanel {
     labelsButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
+        labelsMenu.populateMenu();
         labelsMenu.setPopupPositionAndShow(new PositionCallback() {
           final Integer x = labelsButton.getElement().getAbsoluteRight();
           final Integer y = labelsButton.getAbsoluteTop();
