@@ -50,6 +50,8 @@ public class OpenDialogBox extends DialogBox {
     labelsButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
+        labelsMenu.areButtonsUnchecked(true);; // show all labels, unselected
+        labelsMenu.populateMenu();
         labelsMenu.setPopupPositionAndShow(new PositionCallback() {
           final Integer x = labelsButton.getElement().getAbsoluteRight();
           final Integer y = labelsButton.getAbsoluteTop();

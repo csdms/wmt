@@ -33,6 +33,7 @@ public class LabelsMenu extends PopupPanel {
   private VerticalPanel labelPanel;
   private HTML addNewHtml;
   private HTML deleteHtml;
+  private Boolean buttonsUnchecked = false; // show selected labels
   
   /**
    * Makes a new {@link LabelsMenu}.
@@ -76,19 +77,38 @@ public class LabelsMenu extends PopupPanel {
   }
   
   /**
-   * A helper that loads the menu with labels.
+   * A helper that loads the menu with {@link CheckBox} labels.
    */
   public void populateMenu() {
     labelPanel.clear();
     for (Map.Entry<String, Boolean> entry : data.modelLabels.entrySet()) {
       CheckBox labelBox = new CheckBox(entry.getKey());
-      labelBox.setValue(entry.getValue());
+      if (!buttonsUnchecked) {
+        labelBox.setValue(entry.getValue());
+      }
       labelBox.setWordWrap(false);
       labelBox.setStyleName("wmt-PopupPanelCheckBoxItem");
       labelPanel.add(labelBox);
     }
   }
-  
+
+  /**
+   * Gets the state of the buttonsUnchecked member.
+   */
+  public Boolean areButtonsUnchecked() {
+    return buttonsUnchecked;
+  }
+
+  /**
+   * Sets the state of the buttonsUnchecked member, used to toggle whether the 
+   * states of the {@link LabelsMenu} buttons are shown or are turned off.
+   * 
+   * @param buttonsUnchecked true if all buttons are to be shown unselected
+   */
+  public void areButtonsUnchecked(Boolean buttonsUnchecked) {
+    this.buttonsUnchecked = buttonsUnchecked;
+  }
+
   /**
    * Handles adding and deleting model labels using a {@link LabelDialogBox}.
    */
