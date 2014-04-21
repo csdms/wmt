@@ -19,8 +19,8 @@ import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.LabelDialogBox;
 
 /**
- * Encapsulates a scrollable list of labels used to tag and classify models.
- * This menu is modeled on the "Labels" menu in Gmail.
+ * Encapsulates an alphabetized, scrollable list of labels used to tag and
+ * classify models. This menu is modeled on the "Labels" menu in Gmail.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -90,7 +90,7 @@ public class LabelsMenu extends PopupPanel {
   }
   
   /**
-   * Handles adding and deleting model labels using {@link LabelDialogBox}.
+   * Handles adding and deleting model labels using a {@link LabelDialogBox}.
    */
   public class LabelHandler implements ClickHandler {
 
