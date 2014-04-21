@@ -79,14 +79,9 @@ public class DataManager {
     modelLabels = new TreeMap<String, Boolean>();
     modelNameList = new ArrayList<String>();
 
-    // XXX Ten temporary model labels and their values.
-    String[] labels =
-        {
-            "low avulsion", "high waves", "Ganges", "thesis", "AGU talk",
-            "2013", "Nature paper", "CEM",
-            "What happens if someone makes a really long label?", "HydroTrend"};
-    Boolean[] values =
-        {true, false, false, false, false, false, true, true, false, false};
+    // Labels that are always present.
+    String[] labels = {"public"};
+    Boolean[] values = {false};
     for (int i = 0; i < values.length; i++) {
       modelLabels.put(labels[i], values[i]);
     }
