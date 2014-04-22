@@ -46,7 +46,7 @@ public class Perspective extends DockLayoutPanel {
   private final static Integer SPLITTER_SIZE = 3;
 
   // Height (in px) of tab bars.
-  private final static Double TAB_BAR_HEIGHT = 2.0;
+  private final static Double TAB_BAR_HEIGHT = 32.0;
 
   // Primary UI panels.
   private ViewNorth viewNorth;
@@ -179,7 +179,7 @@ public class Perspective extends DockLayoutPanel {
      * Makes the Center view of the WMT GUI. It displays the model.
      */
     public ViewWest() {
-      super(TAB_BAR_HEIGHT, Unit.EM);
+      super(TAB_BAR_HEIGHT, Unit.PX);
       setModelPanel(new ScrollPanel());
       String tabTitle = data.tabPrefix("model") + "Model";
       this.add(scrollModel, tabTitle, true);
@@ -196,7 +196,7 @@ public class Perspective extends DockLayoutPanel {
      * currently selected model.
      */
     public ViewEast() {
-      super(TAB_BAR_HEIGHT, Unit.EM);
+      super(TAB_BAR_HEIGHT, Unit.PX);
       setParametersPanel(new ScrollPanel());
       String tabTitle = data.tabPrefix("parameter") + "Parameters";
       this.add(scrollParameters, tabTitle, true);
