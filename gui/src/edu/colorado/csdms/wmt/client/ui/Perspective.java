@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
@@ -23,11 +24,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.handler.AuthenticationHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
+import edu.colorado.csdms.wmt.client.ui.widgets.LoginPanel;
 
 /**
  * Defines the initial layout of views (a perspective, in Eclipse parlance)
- * for a WMT instance in a browser window. The Perspective holds four views,
- * named North, West, Center and South. The top-level organizing panel for the
+ * for a WMT instance in a browser window. The Perspective holds three views,
+ * named North, West, and East. The top-level organizing panel for the
  * GUI is a DockLayoutPanel. Includes getters and setters for the UI elements
  * that are arrayed on the Perspective.
  * 
@@ -116,25 +118,9 @@ public class Perspective extends DockLayoutPanel {
       HTML title = new HTML("The CSDMS Web Modeling Tool");
       title.setStyleName("wmt-NavBarTitle");
       this.add(title);
-
-      HorizontalPanel loginPanel = new HorizontalPanel();
-      loginPanel.setVerticalAlignment(ALIGN_MIDDLE);
-      loginPanel.setStyleName("wmt-LoginPanel");
+      
+      LoginPanel loginPanel = new LoginPanel();
       this.add(loginPanel);
-
-      TextBox emailBox = new TextBox();
-      emailBox.setStyleName("wmt-LoginBox");
-      loginPanel.add(emailBox);
-      emailBox.getElement().setAttribute("placeholder", "Email");
-
-      TextBox passwordBox = new TextBox();
-      passwordBox.setStyleName("wmt-LoginBox");
-      loginPanel.add(passwordBox);
-      passwordBox.getElement().setAttribute("placeholder", "Password");
-
-      HTML signInButton = new HTML("Sign In");
-      signInButton.setStyleName("wmt-SignInButton");
-      loginPanel.add(signInButton);
 
       // super(1, 3);
       // this.setWidth("100%");
@@ -172,12 +158,12 @@ public class Perspective extends DockLayoutPanel {
   } // end ViewNorth
 
   /**
-   * An inner class to define the Center panel of the WMT GUI.
+   * An inner class to define the West panel of the WMT client.
    */
   private class ViewWest extends TabLayoutPanel {
 
     /**
-     * Makes the Center view of the WMT GUI. It displays the model.
+     * Makes the West view of the WMT client. It displays the model.
      */
     public ViewWest() {
       super(TAB_BAR_HEIGHT, Unit.PX);
@@ -185,15 +171,15 @@ public class Perspective extends DockLayoutPanel {
       String tabTitle = data.tabPrefix("model") + "Model";
       this.add(scrollModel, tabTitle, true);
     }
-  } // end ViewCenter
+  } // end ViewWest
 
   /**
-   * An inner class to define the East panel of the WMT GUI.
+   * An inner class to define the East panel of the WMT client.
    */
   private class ViewEast extends TabLayoutPanel {
 
     /**
-     * Makes the East view of the WMT GUI. It displays the parameters of the
+     * Makes the East view of the WMT client. It displays the parameters of the
      * currently selected model.
      */
     public ViewEast() {
