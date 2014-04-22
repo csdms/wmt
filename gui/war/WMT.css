@@ -10,28 +10,75 @@
 /* The primary structuring element of the WMT client. */
 .wmt-DockLayoutPanel {
   padding: 3px;
-  margin: 5px;
+  /* margin: 5px; */
 }
 .wmt-DockLayoutPanel-devmode {
-  border: 1px dashed burlywood;
+  /* border: 1px dashed burlywood; */
+}
+
+
+.wmt-NavBar {
+  /* position: fixed; */
+  /* top: 0px; */
+  /* right: 0px; */
+  /* left: 0px; */
+  width: 100%;
+  background-color: #222;
+  /* min-height: 50px; */
+  /* margin-bottom: 20px; */
+}
+
+.wmt-NavBarTitle {
+  color: #ccc;
+  float: left;
+  padding: 15px;
+  font-size: 18px;
+  line-height: 20px;
+  margin-left: 15px;
+  /* height: 50px; */
+}
+
+.wmt-LoginPanel {
+  float: right;
+  margin: 8px 15px 8px 0px;
+}
+
+.wmt-LoginBox {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.25;
+  padding: 6px 12px;
+  margin-right: 5px;
+}
+
+.wmt-SignInButton {
+  display: inline-block;
+  color: #fff;
+  background-color: #5cb85c;
+  font-size: 14px;
+  line-height: 1.25;
+  padding: 6px 12px;
+  cursor: pointer;
+  margin: 2px;
+  border: 2px solid #5cb85c;
 }
 
 /* Rules for the panel running along the top of the client interface. */
-.wmt-ViewNorth0 {
+/* .wmt-ViewNorth0 {
 }
 .wmt-ViewNorth1 {
   padding-right: 20px;
 }
 .wmt-ViewNorth2 {
   width: 170px;
-}
+} */
 
 /* The splitter base for the Model and Parameters tabs. */
 .wmt-SplitLayoutPanel {
    border: 3px solid #ddd;
-   margin-left: 3px; /* aligns with ModelMenuPanel */
-   margin-right: 3px;
-   margin-bottom: 3px;
+   /* margin-left: 3px; */ /* aligns with ModelMenuPanel */
+   /* margin-right: 3px; */
+   /* margin-bottom: 3px; */
 }
 .gwt-SplitLayoutPanel .gwt-SplitLayoutPanel-HDragger {
    background-color: #ddd;

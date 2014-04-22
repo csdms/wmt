@@ -12,10 +12,12 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TextBox;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.handler.AuthenticationHandler;
@@ -77,7 +79,7 @@ public class Perspective extends DockLayoutPanel {
     browserWindowWidth = Window.getClientWidth();
     Integer viewEastInitialWidth =
         (int) Math.round(VIEW_EAST_FRACTION * browserWindowWidth);
-    Integer headerHeight = 70; // TODO diagnose from largest header elt
+    Integer headerHeight = 50; // TODO diagnose from largest header elt
 
     // The Perspective has two children, a header in the north panel
     // and a SplitLayoutPanel below.
@@ -101,44 +103,70 @@ public class Perspective extends DockLayoutPanel {
   /**
    * An inner class to define the header (North view) of the WMT GUI.
    */
-  private class ViewNorth extends Grid {
+  private class ViewNorth extends HorizontalPanel {
     
     /**
      * Makes the Header (North) view of the WMT GUI.
      */
     public ViewNorth() {
 
-      super(1, 3);
-      this.setWidth("100%");
+      this.setStyleName("wmt-NavBar");
 
-      // The ModelActionPanel shows "Open", "Save", etc., buttons.
-      modelActionPanel = new ModelActionPanel(data);
-      this.setWidget(0, 0, modelActionPanel);
-      this.getCellFormatter().setStyleName(0, 0, "wmt-ViewNorth0");
+      HTML title = new HTML("The CSDMS Web Modeling Tool");
+      title.setStyleName("wmt-NavBarTitle");
+      this.add(title);
 
-      // Login/logout link. Clicking it prompts for credentials.
-      loginHtml = new HTML();
-      this.setWidget(0, 1, loginHtml);
-      this.getCellFormatter().setHorizontalAlignment(0, 1,
-          HasHorizontalAlignment.ALIGN_RIGHT);
-      this.getCellFormatter().setStyleName(0, 1, "wmt-ViewNorth1");
-      loginHtml.addClickHandler(new AuthenticationHandler(data));
+      HorizontalPanel loginPanel = new HorizontalPanel();
+      loginPanel.setVerticalAlignment(ALIGN_MIDDLE);
+      loginPanel.setStyleName("wmt-LoginPanel");
+      this.add(loginPanel);
 
-      // CSDMS logo. Clicking it opens the CSDMS website in a new browser tab.
-      Image logo = new Image("images/CSDMS_Logo_1.jpg");
-      logo.setTitle("Go to the CSDMS website.");
-      logo.setAltText("CSDMS logo");
-      this.setWidget(0, 2, logo);
-      this.getCellFormatter()
-          .setAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT,
-              HasVerticalAlignment.ALIGN_MIDDLE);
-      this.getCellFormatter().setStyleName(0, 2, "wmt-ViewNorth2");
-      logo.addClickHandler(new ClickHandler() {
-        @Override
-        public void onClick(ClickEvent event) {
-          Window.open("http://csdms.colorado.edu", "_blank", null);
-        }
-      });
+      TextBox emailBox = new TextBox();
+      emailBox.setStyleName("wmt-LoginBox");
+      loginPanel.add(emailBox);
+      emailBox.getElement().setAttribute("placeholder", "Email");
+
+      TextBox passwordBox = new TextBox();
+      passwordBox.setStyleName("wmt-LoginBox");
+      loginPanel.add(passwordBox);
+      passwordBox.getElement().setAttribute("placeholder", "Password");
+
+      HTML signInButton = new HTML("Sign In");
+      signInButton.setStyleName("wmt-SignInButton");
+      loginPanel.add(signInButton);
+
+      // super(1, 3);
+      // this.setWidth("100%");
+      //
+      // // The ModelActionPanel shows "Open", "Save", etc., buttons.
+      // modelActionPanel = new ModelActionPanel(data);
+      // this.setWidget(0, 0, modelActionPanel);
+      // this.getCellFormatter().setStyleName(0, 0, "wmt-ViewNorth0");
+      //
+      // // Login/logout link. Clicking it prompts for credentials.
+      // loginHtml = new HTML();
+      // this.setWidget(0, 1, loginHtml);
+      // this.getCellFormatter().setHorizontalAlignment(0, 1,
+      // HasHorizontalAlignment.ALIGN_RIGHT);
+      // this.getCellFormatter().setStyleName(0, 1, "wmt-ViewNorth1");
+      // loginHtml.addClickHandler(new AuthenticationHandler(data));
+      //
+      // // CSDMS logo. Clicking it opens the CSDMS website in a new browser
+      // tab.
+      // Image logo = new Image("images/CSDMS_Logo_1.jpg");
+      // logo.setTitle("Go to the CSDMS website.");
+      // logo.setAltText("CSDMS logo");
+      // this.setWidget(0, 2, logo);
+      // this.getCellFormatter()
+      // .setAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT,
+      // HasVerticalAlignment.ALIGN_MIDDLE);
+      // this.getCellFormatter().setStyleName(0, 2, "wmt-ViewNorth2");
+      // logo.addClickHandler(new ClickHandler() {
+      // @Override
+      // public void onClick(ClickEvent event) {
+      // Window.open("http://csdms.colorado.edu", "_blank", null);
+      // }
+      // });
     }
   } // end ViewNorth
 
