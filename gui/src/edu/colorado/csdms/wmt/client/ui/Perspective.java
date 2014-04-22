@@ -4,21 +4,13 @@
 package edu.colorado.csdms.wmt.client.ui;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
@@ -118,42 +110,11 @@ public class Perspective extends DockLayoutPanel {
       HTML title = new HTML("The CSDMS Web Modeling Tool");
       title.setStyleName("wmt-NavBarTitle");
       this.add(title);
-      
-      LoginPanel loginPanel = new LoginPanel();
-      this.add(loginPanel);
 
-      // super(1, 3);
-      // this.setWidth("100%");
-      //
-      // // The ModelActionPanel shows "Open", "Save", etc., buttons.
-      // modelActionPanel = new ModelActionPanel(data);
-      // this.setWidget(0, 0, modelActionPanel);
-      // this.getCellFormatter().setStyleName(0, 0, "wmt-ViewNorth0");
-      //
-      // // Login/logout link. Clicking it prompts for credentials.
-      // loginHtml = new HTML();
-      // this.setWidget(0, 1, loginHtml);
-      // this.getCellFormatter().setHorizontalAlignment(0, 1,
-      // HasHorizontalAlignment.ALIGN_RIGHT);
-      // this.getCellFormatter().setStyleName(0, 1, "wmt-ViewNorth1");
-      // loginHtml.addClickHandler(new AuthenticationHandler(data));
-      //
-      // // CSDMS logo. Clicking it opens the CSDMS website in a new browser
-      // tab.
-      // Image logo = new Image("images/CSDMS_Logo_1.jpg");
-      // logo.setTitle("Go to the CSDMS website.");
-      // logo.setAltText("CSDMS logo");
-      // this.setWidget(0, 2, logo);
-      // this.getCellFormatter()
-      // .setAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT,
-      // HasVerticalAlignment.ALIGN_MIDDLE);
-      // this.getCellFormatter().setStyleName(0, 2, "wmt-ViewNorth2");
-      // logo.addClickHandler(new ClickHandler() {
-      // @Override
-      // public void onClick(ClickEvent event) {
-      // Window.open("http://csdms.colorado.edu", "_blank", null);
-      // }
-      // });
+      LoginPanel loginPanel = new LoginPanel();
+      loginPanel.getSignInButton().addClickHandler(
+          new AuthenticationHandler(data, loginPanel));
+      this.add(loginPanel);
     }
   } // end ViewNorth
 
@@ -302,12 +263,12 @@ public class Perspective extends DockLayoutPanel {
   }
 
   /**
-   * Sets up the default starting ModelTree in the "Model" tab, showing only
-   * the open port for the driver of the model.
+   * Sets up the {@link ModelActionPanel} and the default starting
+   * {@link ModelTree} in the "Model" tab, showing only the open port for the
+   * driver of the model.
    */
   public void initializeModel() {
     modelTree = new ModelTree(data);
-//    scrollModel.add(modelTree);
     modelActionPanel = new ModelActionPanel(data);
     modelActionPanel.setStyleName("wmt-ModelActionPanel");
     VerticalPanel panel = new VerticalPanel();
@@ -331,7 +292,6 @@ public class Perspective extends DockLayoutPanel {
     data.resetModelComponents();
     parameterTable.clearTable();
     modelTree.initializeTree();
-    // modelTree.getDriverComponentCell().getComponentMenu().updateComponents();
     ((ComponentSelectionMenu) modelTree.getDriverComponentCell()
         .getComponentMenu()).updateComponents();;
     setModelPanelTitle();

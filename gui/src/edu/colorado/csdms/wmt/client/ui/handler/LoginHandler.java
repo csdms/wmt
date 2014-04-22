@@ -17,6 +17,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.LoginDialogBox;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
+@Deprecated
 public class LoginHandler implements ClickHandler {
 
   private DataManager data;
