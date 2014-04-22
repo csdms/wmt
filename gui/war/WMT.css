@@ -118,7 +118,7 @@
 .wmt-ModelActionPanelButton {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   width: 75px;
-  color: #333;
+  color: rgb(3,22,52);
   background-color: rgb(232,221,203);
   padding: 5px 7px;
   margin-right: 5px; /* provides inter-button spacing */
@@ -250,18 +250,18 @@
 }
 
 /* The informational message displayed when the ParameterTable is empty. */
-.wmt-ParameterTableMessage {
+/* .wmt-ParameterTableMessage {
    padding: 1em;
    margin: 0px;
    text-align: center;
    color: #ccc;
-}
+} */
 
 /* Text used in a parameter description. */
 .wmt-ParameterDescription {
    padding: 0 1em 0 1.5em;
    /* color: #039; */
-   color: rgb(3,22,52);
+   color: rgb(3,54,73);
 }
 
 /* Separates parameter groups in the ParameterTable. */
@@ -269,7 +269,7 @@
    font-style: oblique;
    padding: 10px 0 5px 0;
    /* color: #039; */
-   color: rgb(3,22,52);
+   color: rgb(3,54,73);
    border: solid rgb(3,54,73);
    border-width: 0 0 1px 0;
 }
@@ -283,6 +283,7 @@
 .wmt-TextBoxen {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   /* background-color: #ffd; */
+  color: rgb(3,22,52);
   background-color: rgb(232,221,203);
   padding: 5px 4px;
   /* border: 1px solid #ccc;
@@ -297,6 +298,7 @@
 .wmt-ValueBoxen {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   /* background-color: #ffd; */
+  color: rgb(3,22,52);
   background-color: rgb(232,221,203);
   padding: 5px 4px;
   /* border: 1px solid #ccc;
@@ -333,7 +335,7 @@
 /* A consistent style for all buttons. */
 .wmt-Button {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  color: #333;
+  color: rgb(3,22,52);
   background-color: rgb(232,221,203);
   padding: 5px 7px;
   border: 1px solid rgb(3,54,73);
@@ -359,6 +361,7 @@
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif !important;
 } */
 
+/* Styles for use by all DialogBoxes. */
 .wmt-DialogBox {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   color: rgb(3,22,52);
