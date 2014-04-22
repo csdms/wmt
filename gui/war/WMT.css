@@ -88,12 +88,15 @@
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
   background: #ddd !important;
   font-size: 14px;
+  padding-left: 1px !important;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelContentContainer {
   border-color: #ddd !important;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
   border-radius: 0px !important;
+  margin-left: 0px !important;
+  padding: 4px 12px !important;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
   font-weight: normal !important;
@@ -101,7 +104,7 @@
 
 /* The ModelActionPanel is the run of buttons along the top of the client. */
 .wmt-ModelActionPanel {
-  /* margin-left: -3px; */ /* offsets 3px border in SplitLayoutPanel */
+  margin: 5px 0px 10px 2px;
 }
 
 /* Rules for the buttons on the ModelActionPanel. */

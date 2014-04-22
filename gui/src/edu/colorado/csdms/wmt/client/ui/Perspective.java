@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.handler.AuthenticationHandler;
@@ -320,7 +321,13 @@ public class Perspective extends DockLayoutPanel {
    */
   public void initializeModel() {
     modelTree = new ModelTree(data);
-    scrollModel.add(modelTree);
+//    scrollModel.add(modelTree);
+    modelActionPanel = new ModelActionPanel(data);
+    modelActionPanel.setStyleName("wmt-ModelActionPanel");
+    VerticalPanel panel = new VerticalPanel();
+    panel.add(modelActionPanel);
+    panel.add(modelTree);
+    scrollModel.add(panel);
   }
 
   /**
