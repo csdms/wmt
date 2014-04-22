@@ -44,10 +44,10 @@ public class Perspective extends DockLayoutPanel {
   private Integer browserWindowWidth;
 
   // Width (in px) of splitter grabby bar.
-  private final static Integer SPLITTER_SIZE = 3;
+  private final static Integer SPLITTER_SIZE = 5;
 
   // Height (in px) of tab bars.
-  private final static Double TAB_BAR_HEIGHT = 32.0;
+  private final static Double TAB_BAR_HEIGHT = 40.0;
 
   // Primary UI panels.
   private ViewNorth viewNorth;

@@ -1,5 +1,7 @@
 /* 
    CSS rules for the WMT client.
+   
+   Color palette adapted from http://www.colourlovers.com/palette/292482/Terra.
 */
 
 /* All HTML widgets obey this rule. */
@@ -23,13 +25,15 @@
   /* right: 0px; */
   /* left: 0px; */
   width: 100%;
-  background-color: #333;
+  /* background-color: #333; */
+  background-color: rgb(3,22,52);
   /* min-height: 50px; */ /* Height is set in code by DockLayoutPanel */
   /* margin-bottom: 20px; */
 }
 
 .wmt-NavBarTitle {
-  color: #ddd;
+  /* color: #ddd; */
+  color: rgb(232,221,203);
   float: left;
   padding: 15px;
   font-size: 18px;
@@ -43,7 +47,8 @@
 }
 
 .wmt-LoginBox {
-  color: #333;
+  /* color: #333; */
+  color: rgb(3,54,73);
   font-size: 14px;
   line-height: 1.25;
   padding: 6px 12px;
@@ -53,14 +58,13 @@
 .wmt-SignInButton {
   display: inline-block;
   color: white;
-  background-color: #5cb85c;
-  background-color: #ccc;
+  background-color: rgb(3,101,100);
   font-size: 14px;
   line-height: 1.25;
   padding: 6px 12px;
   cursor: pointer;
   margin: 2px;
-  border: 2px solid #5cb85c;
+  border: 2px solid rgb(3,101,100);
 }
 
 /* Rules for the panel running along the top of the client interface. */
@@ -81,25 +85,28 @@
    /* margin-bottom: 3px; */
 }
 .gwt-SplitLayoutPanel .gwt-SplitLayoutPanel-HDragger {
-   background-color: #ddd;
+   /* background-color: #ddd; */
+  background-color: rgb(232,221,203);
+  border-left: 1px solid rgb(3,54,73);
 }
 
 /* Rules for the Model and Parameters tabs. */
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
-  background: #ddd !important;
-  font-size: 14px;
+  background: white !important;
+  font-size: 16px;
   padding-left: 1px !important;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelContentContainer {
-  border-color: #ddd !important;
+  border-color: white !important;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
   border-radius: 0px !important;
   margin-left: 0px !important;
-  padding: 4px 12px !important;
+  padding: 4px 10px !important;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
   font-weight: normal !important;
+  color: rgb(3,22,52) !important;
 }
 
 /* The ModelActionPanel is the run of buttons along the top of the client. */
@@ -112,14 +119,14 @@
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   width: 75px;
   color: #333;
-  background-color: rgba(192, 192, 192, 0.50);
+  background-color: rgb(232,221,203);
   padding: 5px 7px;
   margin-right: 5px; /* provides inter-button spacing */
-  border: 1px solid #bbb;
-  border-bottom: 1px solid #a0a0a0;
+  border: 1px solid rgb(3,54,73);
+  border-bottom: 1px solid rgb(3,22,52);
 }
 .wmt-ModelActionPanelButton:hover {
-  background-color: #eee;
+  background-color: rgb(205,179,128);
 }
 
 /* Rules for WMT widgets derived from a GWT PopupPanel. */
@@ -137,7 +144,7 @@
   padding: 5px 40px 5px 5px;
 }
 .wmt-PopupPanelItem:hover {
-  background-color: #efefff;
+  background-color: rgb(232,221,203);
 }
 
 /* For CheckBox items -- Don't use :hover, set line-height. */
@@ -165,15 +172,22 @@
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-style: italic;
   text-align: center;
-  background-color: white;
-  border: 2px solid #55b;
+  color: rgb(3,22,52);
+  background-color: rgb(232,221,203);
+  /* border: 2px solid #55b; */
+  border: 2px solid rgb(3,54,73);
   height: 60px;
 }
 
 /* A ComponentCell that displays a component. */
 .wmt-ComponentCell-connected {  
   font-style: normal;
-  background-color: #eef;
+  /* background-color: #eef; */
+  /* background-color: rgba(92, 184, 92, 0.20); */
+  background-color: rgb(3,101,100);
+  /* background-color: #5cb85c; */
+  /* border: 2px solid #ccc; */
+  color: white;
 }
 
 /* The name (port or component) shown inside the ComponentCell. */
@@ -188,13 +202,13 @@
 
 /* A ComponentCell that displays a linked component. */
 .wmt-ComponentCell-NameCell-linked {
-   color: black;
+   color: white;
 }
 .wmt-ComponentCell-NameCell-linked:after {
    font-family: "FontAwesome";
    padding: 3px;
    content: "\f112";
-   color: #333;
+   color: rgb(232,221,203);
 }
 
 /* For the menuCell inside the ComponentCell. */
@@ -219,7 +233,7 @@
   margin-right: 0.5em;
 }
 .wmt-ComponentSelectionMenuItem:hover {
-  background-color: #efefff;
+  background-color: rgb(232,221,203);
 }
 .wmt-ComponentSelectionMenuItem-missing {
   background-color: #fdd;
@@ -232,7 +246,7 @@
   cursor: pointer;
 }
 .wmt-ComponentActionMenuItem:hover {
-  background-color: #efefff;
+  background-color: rgb(232,221,203);
 }
 
 /* The informational message displayed when the ParameterTable is empty. */
@@ -246,15 +260,17 @@
 /* Text used in a parameter description. */
 .wmt-ParameterDescription {
    padding: 0 1em 0 1.5em;
-   color: #039;
+   /* color: #039; */
+   color: rgb(3,22,52);
 }
 
 /* Separates parameter groups in the ParameterTable. */
 .wmt-ParameterSeparator {
    font-style: oblique;
    padding: 10px 0 5px 0;
-   color: #039;
-   border: solid #039;
+   /* color: #039; */
+   color: rgb(3,22,52);
+   border: solid rgb(3,54,73);
    border-width: 0 0 1px 0;
 }
 
@@ -266,10 +282,13 @@
 /* Used for all TextBox widgets. */
 .wmt-TextBoxen {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  background-color: #ffd;
+  /* background-color: #ffd; */
+  background-color: rgb(232,221,203);
   padding: 5px 4px;
-  border: 1px solid #ccc;
-  border-top: 1px solid #999;
+  /* border: 1px solid #ccc;
+  border-top: 1px solid #999; */
+  border: 1px solid rgb(3,54,73);
+  border-top: 1px solid rgb(3,22,52);
   font-size: small;
   width: 200px;
 }
@@ -277,10 +296,13 @@
 /* All TextBoxen that display numeric values. Used in the ParameterTable. */
 .wmt-ValueBoxen {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  background-color: #ffd;
+  /* background-color: #ffd; */
+  background-color: rgb(232,221,203);
   padding: 5px 4px;
-  border: 1px solid #ccc;
-  border-top: 1px solid #999;
+  /* border: 1px solid #ccc;
+  border-top: 1px solid #999; */
+  border: 1px solid rgb(3,54,73);
+  border-top: 1px solid rgb(3,22,52);
   font-size: small;
   text-align: right;
   width: 200px;
@@ -294,29 +316,31 @@
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: small;
   /* padding: 5px 4px; */ /* does nothing */
-  border: 1px solid #ccc; /* adding this changes the font?!? */
+  border: 1px solid rgb(3,54,73); /* adding this changes the font?!? */
   width: 210px; /* calculated by comparison with ValueBoxen */
+  background-color: rgb(232,221,203);
 }
 
 /* For the droplist + button width for "file" parameter types. */
 .wmt-FileUploadBox {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: small;
-  border: 1px solid #ccc; /* adding this changes the font?!? */
-  width: 177px; /* calculated by comparison with DroplistBox */
+  background-color: rgb(232,221,203);
+  border: 1px solid rgb(3,54,73); /* adding this changes the font?!? */
+  width: 175px; /* calculated by comparison with DroplistBox */
 }
 
 /* A consistent style for all buttons. */
 .wmt-Button {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   color: #333;
-  background-color: #eee;
+  background-color: rgb(232,221,203);
   padding: 5px 7px;
-  border: 1px solid #bbb;
-  border-bottom: 1px solid #a0a0a0;
+  border: 1px solid rgb(3,54,73);
+  border-bottom: 1px solid rgb(3,22,52);
 }
 .wmt-Button:hover {
-  background-color: #f9f9f9;
+  background-color: rgb(205,179,128);
 }
 .wmt-Button-slim {
   padding: 2px 7px !important;
@@ -328,6 +352,9 @@
 }
 
 /* For the title on a DialogBox. */
+.gwt-DialogBox {
+  color: rgb(3,22,52);
+}
 .gwt-DialogBox .Caption {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif !important;
 }
