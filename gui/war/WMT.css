@@ -12,27 +12,18 @@
 /* The primary structuring element of the WMT client. */
 .wmt-DockLayoutPanel {
   padding: 3px;
-  /* margin: 5px; */
 }
 .wmt-DockLayoutPanel-devmode {
   /* border: 1px dashed burlywood; */
 }
 
-
+/* The navbar runs along the top of the client interface. */
 .wmt-NavBar {
-  /* position: fixed; */
-  /* top: 0px; */
-  /* right: 0px; */
-  /* left: 0px; */
   width: 100%;
-  /* background-color: #333; */
   background-color: rgb(3,22,52);
   /* min-height: 50px; */ /* Height is set in code by DockLayoutPanel */
-  /* margin-bottom: 20px; */
 }
-
 .wmt-NavBarTitle {
-  /* color: #ddd; */
   color: white;
   float: left;
   padding: 15px;
@@ -41,20 +32,18 @@
   cursor: pointer;
 }
 
+/* The navbar includes login widgets. */
 .wmt-LoginPanel {
   float: right;
   margin: 8px 10px 8px 0px;
 }
-
 .wmt-LoginBox {
-  /* color: #333; */
   color: rgb(3,54,73);
   font-size: 14px;
   line-height: 1.25;
   padding: 6px 12px;
   margin-right: 5px;
 }
-
 .wmt-SignInButton {
   display: inline-block;
   color: white;
@@ -67,27 +56,12 @@
   border: 2px solid rgb(3,101,100);
 }
 
-/* Rules for the panel running along the top of the client interface. */
-/* .wmt-ViewNorth0 {
-}
-.wmt-ViewNorth1 {
-  padding-right: 20px;
-}
-.wmt-ViewNorth2 {
-  width: 170px;
-} */
-
-/* The splitter base for the Model and Parameters tabs. */
+/* The splitter base divides the Model and Parameters tabs. */
 .wmt-SplitLayoutPanel {
-   /* border: 3px solid #ddd; */
-   /* margin-left: 3px; */ /* aligns with ModelMenuPanel */
-   /* margin-right: 3px; */
-   /* margin-bottom: 3px; */
 }
 .gwt-SplitLayoutPanel .gwt-SplitLayoutPanel-HDragger {
-   /* background-color: #ddd; */
-  background-color: rgb(232,221,203);
-  /* border-left: 1px solid rgb(3,54,73); */
+  background-color: white;
+  border-left: 1px solid rgb(3,22,52);
 }
 
 /* Rules for the Model and Parameters tabs. */
@@ -109,12 +83,10 @@
   color: rgb(3,22,52) !important;
 }
 
-/* The ModelActionPanel is the run of buttons along the top of the client. */
+/* The ModelActionPanel is a button group at the top of the Model tab. */
 .wmt-ModelActionPanel {
   margin: 5px 0px 10px 2px;
 }
-
-/* Rules for the buttons on the ModelActionPanel. */
 .wmt-ModelActionPanelButton {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   width: 75px;
@@ -174,7 +146,6 @@
   text-align: center;
   color: rgb(3,22,52);
   background-color: rgb(232,221,203);
-  /* border: 2px solid #55b; */
   border: 2px solid rgb(3,54,73);
   height: 60px;
 }
@@ -182,12 +153,8 @@
 /* A ComponentCell that displays a component. */
 .wmt-ComponentCell-connected {  
   font-style: normal;
-  /* background-color: #eef; */
-  /* background-color: rgba(92, 184, 92, 0.20); */
-  background-color: rgb(3,101,100);
-  /* background-color: #5cb85c; */
-  /* border: 2px solid #ccc; */
   color: white;
+  background-color: rgb(3,101,100);
 }
 
 /* The name (port or component) shown inside the ComponentCell. */
@@ -213,7 +180,6 @@
 
 /* For the menuCell inside the ComponentCell. */
 .wmt-ComponentCell-MenuCell {
-  /* background-color: white; */
   padding: 2px;
   margin-right: 3px;
 }
@@ -249,18 +215,9 @@
   background-color: rgb(232,221,203);
 }
 
-/* The informational message displayed when the ParameterTable is empty. */
-/* .wmt-ParameterTableMessage {
-   padding: 1em;
-   margin: 0px;
-   text-align: center;
-   color: #ccc;
-} */
-
 /* Text used in a parameter description. */
 .wmt-ParameterDescription {
    padding: 0 1em 0 1.5em;
-   /* color: #039; */
    color: rgb(3,54,73);
 }
 
@@ -268,7 +225,6 @@
 .wmt-ParameterSeparator {
    font-style: oblique;
    padding: 10px 0 5px 0;
-   /* color: #039; */
    color: rgb(3,54,73);
    border: solid rgb(3,54,73);
    border-width: 0 0 1px 0;
@@ -282,12 +238,9 @@
 /* Used for all TextBox widgets. */
 .wmt-TextBoxen {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  /* background-color: #ffd; */
   color: rgb(3,22,52);
   background-color: rgb(232,221,203);
   padding: 5px 4px;
-  /* border: 1px solid #ccc;
-  border-top: 1px solid #999; */
   border: 1px solid rgb(3,54,73);
   border-top: 1px solid rgb(3,22,52);
   font-size: small;
@@ -297,12 +250,9 @@
 /* All TextBoxen that display numeric values. Used in the ParameterTable. */
 .wmt-ValueBoxen {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  /* background-color: #ffd; */
   color: rgb(3,22,52);
   background-color: rgb(232,221,203);
   padding: 5px 4px;
-  /* border: 1px solid #ccc;
-  border-top: 1px solid #999; */
   border: 1px solid rgb(3,54,73);
   border-top: 1px solid rgb(3,22,52);
   font-size: small;
@@ -352,14 +302,6 @@
 .gwt-Label {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
-
-/* For the title on a DialogBox. */
-/* .gwt-DialogBox {
-  color: rgb(3,22,52);
-}
-.gwt-DialogBox .Caption {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif !important;
-} */
 
 /* Styles for use by all DialogBoxes. */
 .wmt-DialogBox {
