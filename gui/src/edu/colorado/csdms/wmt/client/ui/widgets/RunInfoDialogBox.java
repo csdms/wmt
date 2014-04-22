@@ -30,6 +30,7 @@ public class RunInfoDialogBox extends DialogBox {
 
     super(true); // autohide
     this.setModal(true);
+    this.setStyleName("wmt-DialogBox");
     this.setText("Model Run Information");
     this.data = data;
 

@@ -27,6 +27,7 @@ public class LoginDialogBox extends DialogBox {
 
     super(false); // autohide
     this.setModal(true);
+    this.setStyleName("wmt-DialogBox");
     this.setText("Login to WMT");
 
     usernamePanel = new FieldPanel();

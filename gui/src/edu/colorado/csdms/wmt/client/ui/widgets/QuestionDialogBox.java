@@ -28,6 +28,7 @@ public class QuestionDialogBox extends DialogBox {
 
     super(false); // autohide
     this.setModal(true);
+    this.setStyleName("wmt-DialogBox");
     this.setText("Question");
     
     setQuestionHtml(new HTML(question));

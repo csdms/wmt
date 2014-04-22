@@ -39,6 +39,7 @@ public class OpenDialogBox extends DialogBox {
     
     super(false); // autohide
     this.setModal(true);
+    this.setStyleName("wmt-DialogBox");
     this.setText("Open Model...");
     this.data = data;    
     
