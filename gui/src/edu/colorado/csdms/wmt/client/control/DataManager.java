@@ -39,6 +39,8 @@ public class DataManager {
   public static String FA_TAGS = "<i class='fa fa-tags fa-fw'></i> ";
   public static String FA_SELECT = "<i class='fa fa-plus'></i> ";
   public static String FA_ACTION = "<i class='fa fa-chevron-down'></i> ";
+  public static String FA_WRENCH = "<i class='fa fa-wrench fa-fw'></i> ";
+  public static String FA_CLOBBER = "<i class='fa fa-times fa-fw'></i> ";
   
   private Boolean developmentMode;
   private Boolean apiDevelopmentMode;

@@ -114,8 +114,9 @@
 /* Items shown in a WMT PopupPanel. */
 .wmt-PopupPanelItem {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  color: rgb(3,22,52);
+  color: rgb(3, 54, 73);
   padding: 5px 40px 5px 5px;
+  cursor: pointer;
 }
 .wmt-PopupPanelItem:hover {
   background-color: rgb(232,221,203);
@@ -197,7 +198,7 @@
   font-family: "FontAwesome";
   font-style: normal;
   content: "\f013";
-  color: rgb(3,22,52);
+  color: rgb(3, 54, 73);
   margin-right: 0.5em;
 }
 .wmt-ComponentSelectionMenuItem:hover {
@@ -205,16 +206,6 @@
 }
 .wmt-ComponentSelectionMenuItem-missing {
   background-color: #fdd;
-}
-
-/* Pull-down menu items in the ComponentActionMenu. */
-.wmt-ComponentActionMenuItem {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  padding: 5px 40px 5px 5px;
-  cursor: pointer;
-}
-.wmt-ComponentActionMenuItem:hover {
-  background-color: rgb(232,221,203);
 }
 
 /* Text used in a parameter description. */
