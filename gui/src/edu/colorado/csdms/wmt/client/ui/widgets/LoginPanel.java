@@ -3,6 +3,7 @@
  */
 package edu.colorado.csdms.wmt.client.ui.widgets;
 
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -18,10 +19,13 @@ import com.google.gwt.user.client.ui.TextBox;
  */
 public class LoginPanel extends Composite {
 
+  private static final String SIGN_IN = "Sign In";
+  private static final String SIGN_OUT = "Sign Out";
+  
   private TextBox emailBox;
   private PasswordTextBox passwordBox;
   private HTML loginName;
-  private HTML signInButton;
+  private Button signInButton;
   private HorizontalPanel inputPanel;
   private HorizontalPanel statusPanel;
   
@@ -50,8 +54,8 @@ public class LoginPanel extends Composite {
     // The status panel, initially hidden, shows the user's loginName.
     statusPanel = new HorizontalPanel();
     statusPanel.add(loginName);
-    
-    signInButton = new HTML("Sign In");
+
+    signInButton = new Button(SIGN_IN);
     signInButton.setStyleName("wmt-SignInButton");
     
     HorizontalPanel contents = new HorizontalPanel();
@@ -75,7 +79,7 @@ public class LoginPanel extends Composite {
     passwordBox.setText(null);
     inputPanel.setVisible(true);
     statusPanel.setVisible(false);
-    signInButton.setText("Sign In");
+    signInButton.setText(SIGN_IN);
   }
   
   /**
@@ -85,7 +89,7 @@ public class LoginPanel extends Composite {
   public void showStatusPanel() {
     inputPanel.setVisible(false);
     statusPanel.setVisible(true);
-    signInButton.setText("Sign Out");
+    signInButton.setText(SIGN_OUT);
   }
   
   public TextBox getEmailBox() {
@@ -112,11 +116,11 @@ public class LoginPanel extends Composite {
     this.loginName = loginName;
   }
 
-  public HTML getSignInButton() {
+  public Button getSignInButton() {
     return signInButton;
   }
 
-  public void setSignInButton(HTML signInButton) {
+  public void setSignInButton(Button signInButton) {
     this.signInButton = signInButton;
   }
 }
