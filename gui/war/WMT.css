@@ -24,6 +24,7 @@
   /* min-height: 50px; */ /* Height is set in code by DockLayoutPanel */
 }
 .wmt-NavBarTitle {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   color: white;
   float: left;
   padding: 15px;
@@ -45,6 +46,7 @@
   margin-right: 5px;
 }
 .wmt-SignInButton {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   display: inline-block;
   color: white;
   background-color: rgb(3,101,100);
@@ -67,7 +69,7 @@
 /* Rules for the Model and Parameters tabs. */
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
   background: white !important;
-  font-size: 16px;
+  font-size: 18px;
   padding-left: 1px !important;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelContentContainer {
