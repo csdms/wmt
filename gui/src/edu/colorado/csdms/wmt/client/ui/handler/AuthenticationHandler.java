@@ -46,8 +46,10 @@ public class AuthenticationHandler implements ClickHandler {
           new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-              DataTransfer.logout(data);
+//              DataTransfer.logout(data);
               questionDialog.hide();
+              panel.showInputPanel();
+              data.security.isLoggedIn(false); // XXX for testing only
             }
           });
       questionDialog.getChoicePanel().getCancelButton().addClickHandler(
@@ -68,8 +70,10 @@ public class AuthenticationHandler implements ClickHandler {
 
       // Authenticate the user.
 //      DataTransfer.login(data);
+      data.security.isLoggedIn(true); // XXX for testing only
 
-      panel.getSignInButton().setText("Sign Out");
+      panel.showStatusPanel();
+      panel.getLoginName().setText(userName);
     }
   }
 
