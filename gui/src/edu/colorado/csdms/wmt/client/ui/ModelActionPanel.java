@@ -31,6 +31,8 @@ public class ModelActionPanel extends HorizontalPanel {
   
   /**
    * Makes a new {@link ModelActionPanel}.
+   * 
+   * @param data the DataManager instance for the WMT session
    */
   public ModelActionPanel(DataManager data) {
 
