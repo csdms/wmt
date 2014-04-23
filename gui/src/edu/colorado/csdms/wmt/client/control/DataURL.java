@@ -68,7 +68,7 @@ public class DataURL {
    */
   public static String login(DataManager data) {
     if (data.isDevelopmentMode()) {
-      return LOCAL_URL;
+      return LOCAL_URL + "save/authenticate.json";
     } else {
       return getApiUrl(data) + LOGIN_PATH;
     }
@@ -81,7 +81,7 @@ public class DataURL {
    */
   public static String logout(DataManager data) {
     if (data.isDevelopmentMode()) {
-      return LOCAL_URL;
+      return LOCAL_URL + "save/authenticate.json";
     } else {
       return getApiUrl(data) + LOGOUT_PATH;
     }
@@ -95,7 +95,7 @@ public class DataURL {
    */
   public static String loginState(DataManager data) {
     if (data.isDevelopmentMode()) {
-      return LOCAL_URL;
+      return LOCAL_URL + "save/authenticate.json";
     } else {
       return getApiUrl(data) + USERNAME_PATH;
     }
