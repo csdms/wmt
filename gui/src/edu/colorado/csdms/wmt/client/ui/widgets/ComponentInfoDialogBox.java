@@ -35,6 +35,7 @@ public class ComponentInfoDialogBox extends DialogBox {
 
     this.setAutoHideEnabled(false);
     this.setModal(false);
+    this.setStyleName("wmt-DialogBox");
         
     grid = new Grid(LABELS.length, 1);
     grid.setCellPadding(5); // px

@@ -4,27 +4,24 @@
 package edu.colorado.csdms.wmt.client.ui;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.ui.handler.AuthenticationHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
+import edu.colorado.csdms.wmt.client.ui.widgets.LoginPanel;
 
 /**
  * Defines the initial layout of views (a perspective, in Eclipse parlance)
- * for a WMT instance in a browser window. The Perspective holds four views,
- * named North, West, Center and South. The top-level organizing panel for the
+ * for a WMT instance in a browser window. The Perspective holds three views,
+ * named North, West, and East. The top-level organizing panel for the
  * GUI is a DockLayoutPanel. Includes getters and setters for the UI elements
  * that are arrayed on the Perspective.
  * 
@@ -41,10 +38,10 @@ public class Perspective extends DockLayoutPanel {
   private Integer browserWindowWidth;
 
   // Width (in px) of splitter grabby bar.
-  private final static Integer SPLITTER_SIZE = 3;
+  private final static Integer SPLITTER_SIZE = 5;
 
   // Height (in px) of tab bars.
-  private final static Double TAB_BAR_HEIGHT = 2.0;
+  private final static Double TAB_BAR_HEIGHT = 40.0;
 
   // Primary UI panels.
   private ViewNorth viewNorth;
@@ -54,8 +51,8 @@ public class Perspective extends DockLayoutPanel {
   // Secondary UI panels/widgets.
   private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
+  private LoginPanel loginPanel;
   private ModelActionPanel modelActionPanel;
-  private HTML loginHtml;
   private ModelTree modelTree;
   private ParameterTable parameterTable;
   private ComponentInfoDialogBox componentInfoBox;
@@ -77,7 +74,7 @@ public class Perspective extends DockLayoutPanel {
     browserWindowWidth = Window.getClientWidth();
     Integer viewEastInitialWidth =
         (int) Math.round(VIEW_EAST_FRACTION * browserWindowWidth);
-    Integer headerHeight = 70; // TODO diagnose from largest header elt
+    Integer headerHeight = 50; // TODO diagnose from largest header elt
 
     // The Perspective has two children, a header in the north panel
     // and a SplitLayoutPanel below.
@@ -101,74 +98,53 @@ public class Perspective extends DockLayoutPanel {
   /**
    * An inner class to define the header (North view) of the WMT GUI.
    */
-  private class ViewNorth extends Grid {
+  private class ViewNorth extends HorizontalPanel {
     
     /**
      * Makes the Header (North) view of the WMT GUI.
      */
     public ViewNorth() {
 
-      super(1, 3);
-      this.setWidth("100%");
+      this.setStyleName("wmt-NavBar");
 
-      // The ModelActionPanel shows "Open", "Save", etc., buttons.
-      modelActionPanel = new ModelActionPanel(data);
-      this.setWidget(0, 0, modelActionPanel);
-      this.getCellFormatter().setStyleName(0, 0, "wmt-ViewNorth0");
+      HTML title = new HTML("The CSDMS Web Modeling Tool");
+      title.setStyleName("wmt-NavBarTitle");
+      this.add(title);
 
-      // Login/logout link. Clicking it prompts for credentials.
-      loginHtml = new HTML();
-      this.setWidget(0, 1, loginHtml);
-      this.getCellFormatter().setHorizontalAlignment(0, 1,
-          HasHorizontalAlignment.ALIGN_RIGHT);
-      this.getCellFormatter().setStyleName(0, 1, "wmt-ViewNorth1");
-      loginHtml.addClickHandler(new AuthenticationHandler(data));
-
-      // CSDMS logo. Clicking it opens the CSDMS website in a new browser tab.
-      Image logo = new Image("images/CSDMS_Logo_1.jpg");
-      logo.setTitle("Go to the CSDMS website.");
-      logo.setAltText("CSDMS logo");
-      this.setWidget(0, 2, logo);
-      this.getCellFormatter()
-          .setAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT,
-              HasVerticalAlignment.ALIGN_MIDDLE);
-      this.getCellFormatter().setStyleName(0, 2, "wmt-ViewNorth2");
-      logo.addClickHandler(new ClickHandler() {
-        @Override
-        public void onClick(ClickEvent event) {
-          Window.open("http://csdms.colorado.edu", "_blank", null);
-        }
-      });
+      loginPanel = new LoginPanel();
+      loginPanel.getSignInButton().addClickHandler(
+          new AuthenticationHandler(data, loginPanel));
+      this.add(loginPanel);
     }
   } // end ViewNorth
 
   /**
-   * An inner class to define the Center panel of the WMT GUI.
+   * An inner class to define the West panel of the WMT client.
    */
   private class ViewWest extends TabLayoutPanel {
 
     /**
-     * Makes the Center view of the WMT GUI. It displays the model.
+     * Makes the West view of the WMT client. It displays the model.
      */
     public ViewWest() {
-      super(TAB_BAR_HEIGHT, Unit.EM);
+      super(TAB_BAR_HEIGHT, Unit.PX);
       setModelPanel(new ScrollPanel());
       String tabTitle = data.tabPrefix("model") + "Model";
       this.add(scrollModel, tabTitle, true);
     }
-  } // end ViewCenter
+  } // end ViewWest
 
   /**
-   * An inner class to define the East panel of the WMT GUI.
+   * An inner class to define the East panel of the WMT client.
    */
   private class ViewEast extends TabLayoutPanel {
 
     /**
-     * Makes the East view of the WMT GUI. It displays the parameters of the
+     * Makes the East view of the WMT client. It displays the parameters of the
      * currently selected model.
      */
     public ViewEast() {
-      super(TAB_BAR_HEIGHT, Unit.EM);
+      super(TAB_BAR_HEIGHT, Unit.PX);
       setParametersPanel(new ScrollPanel());
       String tabTitle = data.tabPrefix("parameter") + "Parameters";
       this.add(scrollParameters, tabTitle, true);
@@ -196,14 +172,6 @@ public class Perspective extends DockLayoutPanel {
       data.getModel().setName("Model " + data.saveAttempts.toString());
     }
     viewWest.setTabHTML(0, tabTitle);
-  }
-
-  public HTML getLoginHtml() {
-    return loginHtml;
-  }
-
-  public void setLoginHtml(HTML loginHtml) {
-    this.loginHtml = loginHtml;
   }
 
   public ComponentInfoDialogBox getComponentInfoBox() {
@@ -286,13 +254,27 @@ public class Perspective extends DockLayoutPanel {
     this.modelActionPanel = modelActionPanel;
   }
 
+  public LoginPanel getLoginPanel() {
+    return loginPanel;
+  }
+
+  public void setLoginPanel(LoginPanel loginPanel) {
+    this.loginPanel = loginPanel;
+  }
+
   /**
-   * Sets up the default starting ModelTree in the "Model" tab, showing only
-   * the open port for the driver of the model.
+   * Sets up the {@link ModelActionPanel} and the default starting
+   * {@link ModelTree} in the "Model" tab, showing only the open port for the
+   * driver of the model.
    */
   public void initializeModel() {
     modelTree = new ModelTree(data);
-    scrollModel.add(modelTree);
+    modelActionPanel = new ModelActionPanel(data);
+    modelActionPanel.setStyleName("wmt-ModelActionPanel");
+    VerticalPanel panel = new VerticalPanel();
+    panel.add(modelActionPanel);
+    panel.add(modelTree);
+    scrollModel.add(panel);
   }
 
   /**
@@ -310,7 +292,6 @@ public class Perspective extends DockLayoutPanel {
     data.resetModelComponents();
     parameterTable.clearTable();
     modelTree.initializeTree();
-    // modelTree.getDriverComponentCell().getComponentMenu().updateComponents();
     ((ComponentSelectionMenu) modelTree.getDriverComponentCell()
         .getComponentMenu()).updateComponents();;
     setModelPanelTitle();

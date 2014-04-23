@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
+@Deprecated
 public class LoginDialogBox extends DialogBox {
 
   private FieldPanel usernamePanel;
@@ -27,6 +28,7 @@ public class LoginDialogBox extends DialogBox {
 
     super(false); // autohide
     this.setModal(true);
+    this.setStyleName("wmt-DialogBox");
     this.setText("Login to WMT");
 
     usernamePanel = new FieldPanel();
