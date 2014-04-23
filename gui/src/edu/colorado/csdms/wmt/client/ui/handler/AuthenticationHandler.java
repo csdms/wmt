@@ -9,7 +9,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
-import edu.colorado.csdms.wmt.client.ui.widgets.LoginDialogBox;
 import edu.colorado.csdms.wmt.client.ui.widgets.LoginPanel;
 import edu.colorado.csdms.wmt.client.ui.widgets.QuestionDialogBox;
 
@@ -27,6 +26,7 @@ public class AuthenticationHandler implements ClickHandler {
    * Creates a new {@link AuthenticationHandler}.
    * 
    * @param data the DataManager object for the WMT session
+   * @param panel the {@link LoginPanel} object for the WMT session
    */
   public AuthenticationHandler(DataManager data, LoginPanel panel) {
     this.data = data;
@@ -38,18 +38,16 @@ public class AuthenticationHandler implements ClickHandler {
 
     if (data.security.isLoggedIn()) {
 
-      String question = "Are you sure you want to log out from WMT?";
+      String question = "Are you sure you want to sign out from WMT?";
       final QuestionDialogBox questionDialog = new QuestionDialogBox(question);
-      questionDialog.getChoicePanel().getOkButton().setHTML(
-          "<i class='fa fa-sign-out'></i> Logout");
+      questionDialog.getChoicePanel().getOkButton()
+          .setHTML(LoginPanel.SIGN_OUT);
       questionDialog.getChoicePanel().getOkButton().addClickHandler(
           new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-//              DataTransfer.logout(data);
+              DataTransfer.logout(data);
               questionDialog.hide();
-              panel.showInputPanel();
-              data.security.isLoggedIn(false); // XXX for testing only
             }
           });
       questionDialog.getChoicePanel().getCancelButton().addClickHandler(
@@ -69,12 +67,7 @@ public class AuthenticationHandler implements ClickHandler {
       GWT.log(data.security.getWmtPassword());
 
       // Authenticate the user.
-//      DataTransfer.login(data);
-      data.security.isLoggedIn(true); // XXX for testing only
-
-      panel.showStatusPanel();
-      panel.getLoginName().setText(userName);
+      DataTransfer.login(data);
     }
   }
-
 }

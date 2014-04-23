@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.TextBox;
  */
 public class LoginPanel extends Composite {
 
-  private static final String SIGN_IN = "Sign In";
-  private static final String SIGN_OUT = "Sign Out";
+  public static String SIGN_IN = "<i class='fa fa-sign-in'></i> Sign In";
+  public static String SIGN_OUT = "<i class='fa fa-sign-out'></i> Sign Out";
   
   private TextBox emailBox;
   private PasswordTextBox passwordBox;
@@ -30,7 +30,7 @@ public class LoginPanel extends Composite {
   private HorizontalPanel statusPanel;
   
   /**
-   * Makes a new, empty, {@link LoginPanel}.
+   * Makes a new {@link LoginPanel} displaying empty email and password boxes.
    */
   public LoginPanel() {
 
@@ -79,7 +79,7 @@ public class LoginPanel extends Composite {
     passwordBox.setText(null);
     inputPanel.setVisible(true);
     statusPanel.setVisible(false);
-    signInButton.setText(SIGN_IN);
+    signInButton.setHTML(SIGN_IN);
   }
   
   /**
@@ -89,7 +89,7 @@ public class LoginPanel extends Composite {
   public void showStatusPanel() {
     inputPanel.setVisible(false);
     statusPanel.setVisible(true);
-    signInButton.setText(SIGN_OUT);
+    signInButton.setHTML(SIGN_OUT);
   }
   
   public TextBox getEmailBox() {

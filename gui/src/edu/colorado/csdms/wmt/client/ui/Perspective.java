@@ -51,8 +51,8 @@ public class Perspective extends DockLayoutPanel {
   // Secondary UI panels/widgets.
   private ScrollPanel scrollModel;
   private ScrollPanel scrollParameters;
+  private LoginPanel loginPanel;
   private ModelActionPanel modelActionPanel;
-  private HTML loginHtml;
   private ModelTree modelTree;
   private ParameterTable parameterTable;
   private ComponentInfoDialogBox componentInfoBox;
@@ -111,7 +111,7 @@ public class Perspective extends DockLayoutPanel {
       title.setStyleName("wmt-NavBarTitle");
       this.add(title);
 
-      LoginPanel loginPanel = new LoginPanel();
+      loginPanel = new LoginPanel();
       loginPanel.getSignInButton().addClickHandler(
           new AuthenticationHandler(data, loginPanel));
       this.add(loginPanel);
@@ -172,14 +172,6 @@ public class Perspective extends DockLayoutPanel {
       data.getModel().setName("Model " + data.saveAttempts.toString());
     }
     viewWest.setTabHTML(0, tabTitle);
-  }
-
-  public HTML getLoginHtml() {
-    return loginHtml;
-  }
-
-  public void setLoginHtml(HTML loginHtml) {
-    this.loginHtml = loginHtml;
   }
 
   public ComponentInfoDialogBox getComponentInfoBox() {
@@ -260,6 +252,14 @@ public class Perspective extends DockLayoutPanel {
 
   public void setActionButtonPanel(ModelActionPanel modelActionPanel) {
     this.modelActionPanel = modelActionPanel;
+  }
+
+  public LoginPanel getLoginPanel() {
+    return loginPanel;
+  }
+
+  public void setLoginPanel(LoginPanel loginPanel) {
+    this.loginPanel = loginPanel;
   }
 
   /**
