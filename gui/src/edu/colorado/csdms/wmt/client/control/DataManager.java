@@ -14,6 +14,7 @@ import java.util.TreeMap;
 import com.google.gwt.dom.client.Style.Cursor;
 
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.security.Security;
@@ -28,8 +29,8 @@ import edu.colorado.csdms.wmt.client.ui.Perspective;
  */
 public class DataManager {
 
-  public static String DRIVER = "driver";
-  public static String DEFAULT_MODEL = "Model 0";
+//  public static String DRIVER = "driver";
+//  public static String DEFAULT_MODEL = "Model 0";
   public static String FA_OPEN = "<i class='fa fa-folder-open-o fa-fw'></i> ";
   public static String FA_SAVE = "<i class='fa fa-floppy-o fa-fw'></i> ";
   public static String FA_DELETE = "<i class='fa fa-trash-o fa-fw'></i> ";
@@ -44,6 +45,8 @@ public class DataManager {
   
   private Boolean developmentMode;
   private Boolean apiDevelopmentMode;
+  
+  public Constants constants;
 
   // Get the state of UI elements through the Perspective. 
   private Perspective perspective;
