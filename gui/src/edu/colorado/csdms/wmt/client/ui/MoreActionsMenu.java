@@ -51,14 +51,14 @@ public class MoreActionsMenu extends PopupPanel {
     // Save as
     HTML saveAsButton =
         new HTML(Constants.FA_SAVE + "Save model as...");
-    saveAsButton.setTitle("Save a model with a new name.");
+    saveAsButton.setTitle(Constants.MODEL_SAVE_AS);
     saveAsButton.addClickHandler(new ModelActionPanelSaveHandler(data, true));    
     menu.add(saveAsButton);
 
     // Manage labels
     final HTML labelsButton =
         new HTML(Constants.FA_TAGS + "Manage labels...");
-    labelsButton.setTitle("Manage the labels set on a model.");
+    labelsButton.setTitle(Constants.MODEL_LABELS);
     menu.add(labelsButton);
     labelsMenu = new LabelsMenu(data);
     labelsButton.addClickHandler(new ClickHandler() {
@@ -78,19 +78,19 @@ public class MoreActionsMenu extends PopupPanel {
     
     // Delete
     HTML deleteButton = new HTML(Constants.FA_DELETE + "Delete model...");
-    deleteButton.setTitle("Delete a model from server.");
+    deleteButton.setTitle(Constants.MODEL_DELETE);
     deleteButton.addClickHandler(new ModelActionPanelDeleteHandler(data));
     menu.add(deleteButton);
 
     // Run status
     HTML statusButton = new HTML(Constants.FA_STATUS + "View run status...");
-    statusButton.setTitle("Get the status of model run.");
+    statusButton.setTitle(Constants.MODEL_RUN_STATUS);
     statusButton.addClickHandler(new ModelActionPanelStatusHandler(data));    
     menu.add(statusButton);
     
     // Help
     HTML helpButton = new HTML(Constants.FA_HELP + "Help");
-    helpButton.setTitle("View the help documents on using WMT.");
+    helpButton.setTitle(Constants.MODEL_HELP);
     helpButton.addClickHandler(new ModelActionPanelHelpHandler(data));        
     menu.add(helpButton);
     

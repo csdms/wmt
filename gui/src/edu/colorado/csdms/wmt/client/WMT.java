@@ -63,9 +63,7 @@ public class WMT implements EntryPoint {
       @Override
       public void onWindowClosing(ClosingEvent event) {
         if (!data.isDevelopmentMode() && !data.modelIsSaved()) {
-          String msg = "Any unsaved model data will be lost if this page"
-              + " is reloaded or closed.";
-          event.setMessage(msg);
+          event.setMessage(Constants.CLOSE_MSG);
         }
       }
     });

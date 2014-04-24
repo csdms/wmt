@@ -42,24 +42,25 @@ public class ModelActionPanel extends HorizontalPanel {
 
     // Open
     Button openButton = new Button(Constants.FA_OPEN);
-    openButton.setTitle("Open model");
+    openButton.setTitle(Constants.MODEL_OPEN);
     openButton.addClickHandler(new ModelActionPanelOpenHandler(data));
     this.add(openButton);
 
     // Save
     Button saveButton = new Button(Constants.FA_SAVE);
-    saveButton.setTitle("Save model");
+    saveButton.setTitle(Constants.MODEL_SAVE);
     saveButton.addClickHandler(new ModelActionPanelSaveHandler(data));
     this.add(saveButton);
 
     // Run
     Button runButton = new Button(Constants.FA_RUN);
-    runButton.setTitle("Run model");
+    runButton.setTitle(Constants.MODEL_RUN);
     runButton.addClickHandler(new SetupRunModelHandler(data));
     this.add(runButton);
 
     // More
-    final Button moreButton = new Button("More <i class='fa fa-caret-down'></i>");
+    final Button moreButton = new Button("More" + Constants.FA_MORE);
+    moreButton.setTitle(Constants.MODEL_MORE);
     this.add(moreButton);
     moreMenu = new MoreActionsMenu(data);
     moreButton.addClickHandler(new ClickHandler() {
