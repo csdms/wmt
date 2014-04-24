@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.LabelsMenu;
 
 /**
@@ -36,7 +37,7 @@ public class SaveDialogBox extends DialogBox {
    * @param data the DataManager object for the WMT session
    */
   public SaveDialogBox(DataManager data) {
-    this(data, DataManager.DEFAULT_MODEL);
+    this(data, Constants.DEFAULT_MODEL);
   }
   
   /**
@@ -55,7 +56,7 @@ public class SaveDialogBox extends DialogBox {
 
     namePanel = new FieldPanel(modelName);
 
-    final Button labelsButton = new Button(DataManager.FA_TAGS + "Labels");
+    final Button labelsButton = new Button(Constants.FA_TAGS + "Labels");
     labelsButton.setStyleName("wmt-Button");
     labelsMenu = new LabelsMenu(data);
     labelsButton.addClickHandler(new ClickHandler() {
@@ -80,7 +81,7 @@ public class SaveDialogBox extends DialogBox {
         HasVerticalAlignment.ALIGN_MIDDLE);
 
     choicePanel = new ChoicePanel();
-    choicePanel.getOkButton().setHTML(DataManager.FA_SAVE + "Save");
+    choicePanel.getOkButton().setHTML(Constants.FA_SAVE + "Save");
 
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);

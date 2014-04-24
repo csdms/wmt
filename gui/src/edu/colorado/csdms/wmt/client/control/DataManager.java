@@ -28,20 +28,6 @@ import edu.colorado.csdms.wmt.client.ui.Perspective;
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class DataManager {
-
-//  public static String DRIVER = "driver";
-//  public static String DEFAULT_MODEL = "Model 0";
-  public static String FA_OPEN = "<i class='fa fa-folder-open-o fa-fw'></i> ";
-  public static String FA_SAVE = "<i class='fa fa-floppy-o fa-fw'></i> ";
-  public static String FA_DELETE = "<i class='fa fa-trash-o fa-fw'></i> ";
-  public static String FA_RUN = "<i class='fa fa-play fa-fw'></i> ";
-  public static String FA_STATUS = "<i class='fa fa-info fa-fw'></i> ";
-  public static String FA_HELP = "<i class='fa fa-question fa-fw'></i> ";
-  public static String FA_TAGS = "<i class='fa fa-tags fa-fw'></i> ";
-  public static String FA_SELECT = "<i class='fa fa-plus'></i> ";
-  public static String FA_ACTION = "<i class='fa fa-chevron-down'></i> ";
-  public static String FA_WRENCH = "<i class='fa fa-wrench fa-fw'></i> ";
-  public static String FA_CLOBBER = "<i class='fa fa-times fa-fw'></i> ";
   
   private Boolean developmentMode;
   private Boolean apiDevelopmentMode;

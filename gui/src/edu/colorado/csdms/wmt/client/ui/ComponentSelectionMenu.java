@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
 
 /**
@@ -20,8 +21,6 @@ import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class ComponentSelectionMenu extends PopupPanel {
-
-  private static String ALL_COMPONENTS = "__all_components";
 
   private DataManager data;
   private ComponentCell cell;
@@ -83,14 +82,14 @@ public class ComponentSelectionMenu extends PopupPanel {
     menu.clear();
 
     // Display a wait message in the componentMenu.
-    if (portId.matches(DataManager.DRIVER)) {
+    if (portId.matches(Constants.DRIVER)) {
       HTML item = new HTML("Loading...");
       menu.add(item);
       return;
     }
 
     // Load all available components into the componentMenu!
-    if (portId.matches(ALL_COMPONENTS)) {
+    if (portId.matches(Constants.ALL_COMPONENTS)) {
       for (int i = 0; i < data.componentIdList.size(); i++) {
         String componentId = data.componentIdList.get(i);
         insertComponentMenuItem(componentId);
@@ -117,7 +116,7 @@ public class ComponentSelectionMenu extends PopupPanel {
    * menu.
    */
   public void updateComponents() {
-    updateComponents(ALL_COMPONENTS);
+    updateComponents(Constants.ALL_COMPONENTS);
   }
 
   /**

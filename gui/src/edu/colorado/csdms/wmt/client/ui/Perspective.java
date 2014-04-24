@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.handler.AuthenticationHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 import edu.colorado.csdms.wmt.client.ui.widgets.LoginPanel;
@@ -31,17 +32,8 @@ public class Perspective extends DockLayoutPanel {
 
   private DataManager data;
 
-  // Fractional sizes of views.
-  private final static Double VIEW_EAST_FRACTION = 0.50;
-
   // Browser window dimensions (in px) used for setting up UI views.
   private Integer browserWindowWidth;
-
-  // Width (in px) of splitter grabby bar.
-  private final static Integer SPLITTER_SIZE = 5;
-
-  // Height (in px) of tab bars.
-  private final static Double TAB_BAR_HEIGHT = 40.0;
 
   // Primary UI panels.
   private ViewNorth viewNorth;
@@ -73,14 +65,14 @@ public class Perspective extends DockLayoutPanel {
     // Determine initial view sizes based on browser window dimensions.
     browserWindowWidth = Window.getClientWidth();
     Integer viewEastInitialWidth =
-        (int) Math.round(VIEW_EAST_FRACTION * browserWindowWidth);
+        (int) Math.round(Constants.VIEW_EAST_FRACTION * browserWindowWidth);
     Integer headerHeight = 50; // TODO diagnose from largest header elt
 
     // The Perspective has two children, a header in the north panel
     // and a SplitLayoutPanel below.
     viewNorth = new ViewNorth();
     this.addNorth(viewNorth, headerHeight);
-    SplitLayoutPanel splitter = new SplitLayoutPanel(SPLITTER_SIZE);
+    SplitLayoutPanel splitter = new SplitLayoutPanel(Constants.SPLITTER_SIZE);
     splitter.addStyleName("wmt-SplitLayoutPanel");
     this.add(splitter);
 
@@ -127,7 +119,7 @@ public class Perspective extends DockLayoutPanel {
      * Makes the West view of the WMT client. It displays the model.
      */
     public ViewWest() {
-      super(TAB_BAR_HEIGHT, Unit.PX);
+      super(Constants.TAB_BAR_HEIGHT, Unit.PX);
       setModelPanel(new ScrollPanel());
       String tabTitle = data.tabPrefix("model") + "Model";
       this.add(scrollModel, tabTitle, true);
@@ -144,7 +136,7 @@ public class Perspective extends DockLayoutPanel {
      * currently selected model.
      */
     public ViewEast() {
-      super(TAB_BAR_HEIGHT, Unit.PX);
+      super(Constants.TAB_BAR_HEIGHT, Unit.PX);
       setParametersPanel(new ScrollPanel());
       String tabTitle = data.tabPrefix("parameter") + "Parameters";
       this.add(scrollParameters, tabTitle, true);

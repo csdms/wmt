@@ -7,6 +7,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
 
 /**
@@ -32,14 +33,14 @@ public class ModelActionPanelDeleteHandler implements ClickHandler {
   
   @Override
   public void onClick(ClickEvent event) {
-    
+
     // Hide the MoreActionsMenu.
     data.getPerspective().getActionButtonPanel().getMoreMenu().hide();
-    
+
     deleteDialog = new DroplistDialogBox();
     deleteDialog.setText("Delete Model...");
     deleteDialog.getChoicePanel().getOkButton().setHTML(
-        DataManager.FA_DELETE + "Delete");
+        Constants.FA_DELETE + "Delete");
 
     // Populate the ModelDroplist with the available models on the server.
     for (int i = 0; i < data.modelNameList.size(); i++) {

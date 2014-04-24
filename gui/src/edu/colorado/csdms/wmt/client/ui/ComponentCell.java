@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 
 /**
  * A container for displaying a model component in the {@link ModelTree}.
@@ -20,8 +21,6 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class ComponentCell extends VerticalPanel implements ClickHandler {
-
-  private static Integer TRIM = 10; // the number of characters to display
 
   private DataManager data;
   private String portId;
@@ -38,7 +37,7 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
    * @param data the DataManager object for the WMT session
    */
   public ComponentCell(DataManager data) {
-    this(data, DataManager.DRIVER);
+    this(data, Constants.DRIVER);
   }
 
   /**
@@ -59,7 +58,7 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
     // The ComponentCell consists of a nameCell and a menuCell in a Grid.
     nameCell = new HTML(trimName(portId));
     nameCell.setStyleName("wmt-ComponentCell-NameCell");
-    menuCell = new HTML(DataManager.FA_SELECT);
+    menuCell = new HTML(Constants.FA_SELECT);
     menuCell.setStyleName("wmt-ComponentCell-MenuCell");
     Grid grid = new Grid(1, 2); // one row, two cols
     this.add(grid);
@@ -70,7 +69,7 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
     componentMenu = new ComponentSelectionMenu(this.data, this);
 
     String tooltip = "Click to select a component";
-    if (portId.matches(DataManager.DRIVER)) {
+    if (portId.matches(Constants.DRIVER)) {
       tooltip += " to be the driver for the model.";
     } else {
       tooltip += " to fill this \"" + portId + "\" port.";
@@ -164,8 +163,8 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
    */
   public String trimName(String name) {
     String trimmedName;
-    if (name.length() > TRIM) {
-      trimmedName = name.substring(0, TRIM) + "\u2026";
+    if (name.length() > Constants.TRIM) {
+      trimmedName = name.substring(0, Constants.TRIM) + Constants.ELLIPSIS;
     } else {
       trimmedName = name;
     }

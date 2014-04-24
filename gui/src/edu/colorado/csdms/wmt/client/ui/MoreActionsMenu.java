@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelDeleteHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelHelpHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelSaveHandler;
@@ -49,14 +50,14 @@ public class MoreActionsMenu extends PopupPanel {
 
     // Save as
     HTML saveAsButton =
-        new HTML(DataManager.FA_SAVE + "Save model as...");
+        new HTML(Constants.FA_SAVE + "Save model as...");
     saveAsButton.setTitle("Save a model with a new name.");
     saveAsButton.addClickHandler(new ModelActionPanelSaveHandler(data, true));    
     menu.add(saveAsButton);
 
     // Manage labels
     final HTML labelsButton =
-        new HTML(DataManager.FA_TAGS + "Manage labels...");
+        new HTML(Constants.FA_TAGS + "Manage labels...");
     labelsButton.setTitle("Manage the labels set on a model.");
     menu.add(labelsButton);
     labelsMenu = new LabelsMenu(data);
@@ -76,19 +77,19 @@ public class MoreActionsMenu extends PopupPanel {
     });
     
     // Delete
-    HTML deleteButton = new HTML(DataManager.FA_DELETE + "Delete model...");
+    HTML deleteButton = new HTML(Constants.FA_DELETE + "Delete model...");
     deleteButton.setTitle("Delete a model from server.");
     deleteButton.addClickHandler(new ModelActionPanelDeleteHandler(data));
     menu.add(deleteButton);
 
     // Run status
-    HTML statusButton = new HTML(DataManager.FA_STATUS + "View run status...");
+    HTML statusButton = new HTML(Constants.FA_STATUS + "View run status...");
     statusButton.setTitle("Get the status of model run.");
     statusButton.addClickHandler(new ModelActionPanelStatusHandler(data));    
     menu.add(statusButton);
     
     // Help
-    HTML helpButton = new HTML(DataManager.FA_HELP + "Help");
+    HTML helpButton = new HTML(Constants.FA_HELP + "Help");
     helpButton.setTitle("View the help documents on using WMT.");
     helpButton.addClickHandler(new ModelActionPanelHelpHandler(data));        
     menu.add(helpButton);

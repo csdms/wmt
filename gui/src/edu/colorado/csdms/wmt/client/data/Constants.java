@@ -3,13 +3,65 @@
  */
 package edu.colorado.csdms.wmt.client.data;
 
+import com.google.gwt.core.client.GWT;
+
 /**
- * A class that defines constants used in the WMT client.
+ * A class that defines, as public static members, constants used in the WMT
+ * client.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class Constants {
 
+  // This switch toggles API development and public mode.
+  public static final Boolean USE_API_DEV_MODE = true;
+
+  // By same-origin policy, must use HTTPS consistently across all URLs.
+  public static final String BASE_URL = "https://csdms.colorado.edu/";
+  public static final String API_URL = BASE_URL + "wmt-server/";
+  public static final String API_DEV_URL = BASE_URL + "wmt/api-dev/";
+  public static final String LOCAL_URL = GWT.getHostPageBaseURL();
+
+  // API URLs for login status.
+  public static final String LOGIN_PATH = "account/login";
+  public static final String LOGOUT_PATH = "account/logout";
+  public static final String USERNAME_PATH = "account/username";
+  
+  // API URLs for components.
+  public static final String COMPONENTS_LIST_PATH = "components/list";
+  public static final String COMPONENTS_SHOW_PATH = "components/show/";
+
+  // API URLs for models.
+  public static final String MODELS_LIST_PATH = "models/list";
+  public static final String MODELS_OPEN_PATH = "models/open/";
+  public static final String MODELS_SHOW_PATH = "models/show/";
+  public static final String MODELS_NEW_PATH = "models/new";
+  public static final String MODELS_EDIT_PATH = "models/edit/";
+  public static final String MODELS_DELETE_PATH = "models/delete/";
+  public static final String MODELS_UPLOAD_PATH = "models/upload";
+
+  // API URLs for running a model.
+  public static final String RUN_NEW_PATH = "run/new";
+  public static final String RUN_SHOW_PATH = "run/show";
+  public static final String RUN_STAGE_PATH = "run/stage";
+  public static final String RUN_LAUNCH_PATH = "run/launch";
+  
+  // Error messages used in DataTransfer.
+  public static String REQUEST_ERR_MSG = "Failed to send the request: ";
+  public static String RESPONSE_ERR_MSG = "No match found in the response.";
+  
+  // Number of tries to fetch a component; a magic number.
+  public static Integer RETRY_ATTEMPTS = 3;
+
+  // Fractional size of viewEast in Perspective.
+  public static Double VIEW_EAST_FRACTION = 0.50;
+  
+  // Width (in px) of splitter grabby bar.
+  public static Integer SPLITTER_SIZE = 5;
+  
+  // Height (in px) of tab bars.
+  public static Double TAB_BAR_HEIGHT = 40.0;
+  
   // The default text displayed in the driver ComponentCell.
   public static String DRIVER = "driver";
   
@@ -23,6 +75,19 @@ public class Constants {
   public static String ELLIPSIS = "\u2026";
   
   public static String ALL_COMPONENTS = "__all_components";
+  
+  // FontAwesome icons.
+  public static String FA_OPEN = "<i class='fa fa-folder-open-o fa-fw'></i> ";
+  public static String FA_SAVE = "<i class='fa fa-floppy-o fa-fw'></i> ";
+  public static String FA_DELETE = "<i class='fa fa-trash-o fa-fw'></i> ";
+  public static String FA_RUN = "<i class='fa fa-play fa-fw'></i> ";
+  public static String FA_STATUS = "<i class='fa fa-info fa-fw'></i> ";
+  public static String FA_HELP = "<i class='fa fa-question fa-fw'></i> ";
+  public static String FA_TAGS = "<i class='fa fa-tags fa-fw'></i> ";
+  public static String FA_SELECT = "<i class='fa fa-plus'></i> ";
+  public static String FA_ACTION = "<i class='fa fa-chevron-down'></i> ";
+  public static String FA_WRENCH = "<i class='fa fa-wrench fa-fw'></i> ";
+  public static String FA_CLOBBER = "<i class='fa fa-times fa-fw'></i> ";  
   
   protected Constants() {
   }

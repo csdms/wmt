@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.LabelDialogBox;
 
@@ -135,7 +136,7 @@ public class LabelsMenu extends PopupPanel {
       
       box.getChoicePanel().getCancelButton().addClickHandler(
           new DialogCancelHandler(box));
-      box.getChoicePanel().getOkButton().setHTML(DataManager.FA_TAGS + type);
+      box.getChoicePanel().getOkButton().setHTML(Constants.FA_TAGS + type);
       box.getChoicePanel().getOkButton().addClickHandler(new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {

@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelOpenHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelSaveHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;
@@ -40,19 +41,19 @@ public class ModelActionPanel extends HorizontalPanel {
     this.setStyleName("wmt-ModelActionPanel");
 
     // Open
-    Button openButton = new Button(DataManager.FA_OPEN);
+    Button openButton = new Button(Constants.FA_OPEN);
     openButton.setTitle("Open model");
     openButton.addClickHandler(new ModelActionPanelOpenHandler(data));
     this.add(openButton);
 
     // Save
-    Button saveButton = new Button(DataManager.FA_SAVE);
+    Button saveButton = new Button(Constants.FA_SAVE);
     saveButton.setTitle("Save model");
     saveButton.addClickHandler(new ModelActionPanelSaveHandler(data));
     this.add(saveButton);
 
     // Run
-    Button runButton = new Button(DataManager.FA_RUN);
+    Button runButton = new Button(Constants.FA_RUN);
     runButton.setTitle("Run model");
     runButton.addClickHandler(new SetupRunModelHandler(data));
     this.add(runButton);

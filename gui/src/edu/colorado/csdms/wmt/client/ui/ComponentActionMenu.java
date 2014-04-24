@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.handler.ComponentDeleteCommand;
 import edu.colorado.csdms.wmt.client.ui.handler.ComponentGetInformationCommand;
 import edu.colorado.csdms.wmt.client.ui.handler.ComponentShowParametersCommand;
@@ -45,12 +46,12 @@ public class ComponentActionMenu extends PopupPanel {
     VerticalPanel menu = new VerticalPanel();
     this.add(menu);
 
-    HTML showParameters = new HTML(DataManager.FA_WRENCH + "Show parameters");
+    HTML showParameters = new HTML(Constants.FA_WRENCH + "Show parameters");
     showParameters.addClickHandler(new ComponentActionHandler("show"));
     showParameters.setStyleName("wmt-PopupPanelItem");
     menu.add(showParameters);
 
-    HTML getInformation = new HTML(DataManager.FA_HELP + "Get information");
+    HTML getInformation = new HTML(Constants.FA_HELP + "Get information");
     getInformation.addClickHandler(new ComponentActionHandler("info"));
     getInformation.setStyleName("wmt-PopupPanelItem");
     menu.add(getInformation);
@@ -59,7 +60,7 @@ public class ComponentActionMenu extends PopupPanel {
     separator.setStyleName("wmt-PopupPanelSeparator");
     menu.add(separator);
 
-    HTML deleteComponent = new HTML(DataManager.FA_CLOBBER + "Delete");
+    HTML deleteComponent = new HTML(Constants.FA_CLOBBER + "Delete");
     deleteComponent.addClickHandler(new ComponentActionHandler("delete"));
     deleteComponent.setStyleName("wmt-PopupPanelItem");
     menu.add(deleteComponent);

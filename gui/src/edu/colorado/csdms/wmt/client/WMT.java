@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.Perspective;
 
 /**
@@ -19,9 +20,6 @@ import edu.colorado.csdms.wmt.client.ui.Perspective;
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class WMT implements EntryPoint {
-
-  // This switch toggles API development and public mode.
-  private static final Boolean USE_API_DEV_MODE = true;
   
   private Perspective perspective;
   private DataManager data;
@@ -40,7 +38,7 @@ public class WMT implements EntryPoint {
     data.isDevelopmentMode(!GWT.isProdMode() && GWT.isClient());
     
     // Are we using the development mode of the API?
-    data.isApiDevelopmentMode(USE_API_DEV_MODE);
+    data.isApiDevelopmentMode(Constants.USE_API_DEV_MODE);
 
     // Set up the basic framework of views for the GUI.
     perspective = new Perspective(data);
