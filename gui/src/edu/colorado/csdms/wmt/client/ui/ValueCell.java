@@ -123,7 +123,8 @@ public class ValueCell extends HorizontalPanel {
   private void makeFileCell(String value) {
     fileDroplist = new ListBox(false); // no multi select
     fileDroplist.addChangeHandler(new ListSelectionHandler());
-    fileDroplist.setStyleName("wmt-FileUploadBox");
+    fileDroplist.setStyleName("wmt-DroplistBox");
+    fileDroplist.addStyleDependentName("upload");
 
     // Load the droplist. If the value of the incoming parameter isn't listed
     // in the component, append it to the end of the list and select it.
@@ -146,7 +147,6 @@ public class ValueCell extends HorizontalPanel {
 
     Button uploadButton = new Button("<i class='fa fa-cloud-upload'></i>");
     uploadButton.setStyleName("wmt-Button");
-    uploadButton.setStyleDependentName("slim", true);
     uploadButton.addClickHandler(new UploadHandler());
 
     uploadButton.setTitle("Upload file to server");

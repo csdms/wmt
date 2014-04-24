@@ -190,6 +190,7 @@
 .wmt-ComponentCell-MenuCell {
   padding: 2px;
   margin-right: 3px;
+  cursor: default; /* for Firefox */
 }
 
 /* Pull-down menu items in the ComponentSelectionMenu. */
@@ -258,26 +259,35 @@
   width: 200px;
 }
 .wmt-ValueBoxen-outofrange {
-  background-color: #fdd;
+  background-color: rgb(203,73,54);
 }
 
 /* Droplists, used primarily in the ParameterTable. */
+/* See: http://stackoverflow.com/questions/5439782/i-want-to-vertical-align-text-in-select-box */
 .wmt-DroplistBox {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: small;
-  /* padding: 5px 4px; */ /* does nothing */
+  margin: 2px 0px;
+  padding: 2px 0px; /* centers text on Firefox; does nothing on Chrome */
   border: 1px solid rgb(3,54,73); /* adding this changes the font?!? */
   width: 210px; /* calculated by comparison with ValueBoxen */
+  height: 32px;
   background-color: rgb(232,221,203);
+}
+.wmt-DroplistBox-upload {
+  width: 175px; /* calculated by comparison with DroplistBox */
 }
 
 /* For the droplist + button width for "file" parameter types. */
 .wmt-FileUploadBox {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: small;
-  background-color: rgb(232,221,203);
+  margin: 2px 0px;
+  padding: 2px 0px; /* centers text on Firefox; does nothing on Chrome */
   border: 1px solid rgb(3,54,73); /* adding this changes the font?!? */
   width: 175px; /* calculated by comparison with DroplistBox */
+  height: 32px;
+  background-color: rgb(232,221,203);  
 }
 
 /* A consistent style for all buttons. */
@@ -291,9 +301,6 @@
 }
 .wmt-Button:hover {
   background-color: rgb(205,179,128);
-}
-.wmt-Button-slim {
-  padding: 2px 7px !important;
 }
 
 /* All labels. */
