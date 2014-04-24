@@ -671,7 +671,12 @@ public class DataTransfer {
         ComponentJSO jso = parse(rtxt);
         data.addComponent(jso); // "class" component
         data.addModelComponent(copy(jso)); // "instance" component, for model
+        data.nComponents++;
 
+        if (data.nComponents == data.componentIdList.size()) {
+          data.showDefaultCursor();
+        }
+        
         // Replace the associated placeholder ComponentSelectionMenu item.
         ((ComponentSelectionMenu) data.getPerspective().getModelTree()
             .getDriverComponentCell().getComponentMenu()).replaceMenuItem(jso
@@ -689,6 +694,7 @@ public class DataTransfer {
         if (attempt < RETRY_ATTEMPTS) {
           getComponent(data, componentId);
         } else {
+          data.nComponents++;
           String msg =
               "The URL '" + url + "' did not give an 'OK' response. "
                   + "Response code: " + response.getStatusCode();

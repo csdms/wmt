@@ -88,6 +88,7 @@ public class ComponentActionMenu extends PopupPanel {
     @Override
     public void onClick(ClickEvent event) {
       ComponentActionMenu.this.hide();
+      data.showWaitCursor();      
       Command cmd = null;
       if (type.equalsIgnoreCase("show")) {
         cmd = new ComponentShowParametersCommand(data, cell);
@@ -97,6 +98,7 @@ public class ComponentActionMenu extends PopupPanel {
         cmd = new ComponentDeleteCommand(data, cell);
       }
       cmd.execute();
+      data.showDefaultCursor();
     }
   }
 }

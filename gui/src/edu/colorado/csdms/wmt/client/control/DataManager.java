@@ -62,6 +62,7 @@ public class DataManager {
   // Experiment with public members, for convenience.
   public Security security;
   public List<String> componentIdList;
+  public Integer nComponents = 0;
   public HashMap<String, Integer> retryComponentLoad;
   public List<Integer> modelIdList;
   public List<String> modelNameList;
