@@ -4,6 +4,7 @@
 package edu.colorado.csdms.wmt.client.ui;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -73,8 +74,9 @@ public class ParameterTable extends FlexTable {
     // Keep track of where we are in the table.
     Integer tableRowIndex = 0;
     
-    // Add the ParameterActionPanel.
+    // Add the ParameterActionPanel. Align it with the ModelActionPanel.
     actionPanel = new ParameterActionPanel(data);
+    actionPanel.getElement().getStyle().setMarginTop(2.0, Unit.PX);
     this.setWidget(tableRowIndex, 0, actionPanel);
     tableRowIndex++;
     

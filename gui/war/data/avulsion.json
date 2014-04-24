@@ -1,6 +1,42 @@
 {
+  "files":[
+    
+  ],
+  "doi":"10.1594/IEDA/100091",
   "name":"Avulsion",
+  "license":"MIT",
+  "author":"Eric Hutton",
+  "url":"http://csdms.colorado.edu/wiki/Model_help:Avulsion",
+  "argv":[
+    
+  ],
+  "summary":"Avulsion dictates the movement of rivermouths along a coastline by modeling the changes of river channel angles through the floodplain as a stochastic random walk process",
+  "version":"0.1",
+  "uses":[
+    {
+      "required":false,
+      "id":"discharge"
+    },
+    {
+      "required":false,
+      "id":"elevation"
+    }
+  ],
+  "provides":[
+    {
+      "id":"river"
+    }
+  ],
   "parameters":[
+    {
+      "value":{
+        "default":"",
+        "type":"string"
+      },
+      "name":"Run Parameters",
+      "key":"separator",
+      "description":"Run Parameters"
+    },
     {
       "value":{
         "default":"Avulsion",
@@ -66,6 +102,118 @@
     },
     {
       "value":{
+        "default":250,
+        "units":"-",
+        "range":{
+          "max":1000,
+          "min":0
+        },
+        "type":"int"
+      },
+      "name":"Row location of inflow",
+      "key":"row_location_of_inflow",
+      "description":"Grid row containing point of inflow"
+    },
+    {
+      "value":{
+        "default":0,
+        "units":"-",
+        "range":{
+          "max":1000,
+          "min":0
+        },
+        "type":"int"
+      },
+      "name":"Column location of inflow",
+      "key":"column_location_of_inflow",
+      "description":"Grid column containing point of inflow"
+    },
+    {
+      "value":{
+        "default":45.0,
+        "units":"deg",
+        "range":{
+          "max":180.0,
+          "min":-180.0
+        },
+        "type":"float"
+      },
+      "name":"Minimum river angle",
+      "key":"minimum_angle_limit_of_river",
+      "description":"Minimum river angle"
+    },
+    {
+      "value":{
+        "default":135.0,
+        "units":"deg",
+        "range":{
+          "max":180.0,
+          "min":-180.0
+        },
+        "type":"float"
+      },
+      "name":"Maximum river angle",
+      "key":"maximum_angle_limit_of_river",
+      "description":"Maximum river angle"
+    },
+    {
+      "value":{
+        "default":10.0,
+        "units":"deg",
+        "range":{
+          "max":100.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Variance of avulsion angle changes",
+      "key":"random_walk_variance",
+      "description":"Variance of avulsion angle changes"
+    },
+    {
+      "value":{
+        "default":1.67,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Bed-load exponent",
+      "key":"bed_load_exponent",
+      "description":"Exponent used to divide sediment among branches"
+    },
+    {
+      "value":{
+        "default":1.0,
+        "units":"-",
+        "range":{
+          "max":10.0,
+          "min":0.0
+        },
+        "type":"float"
+      },
+      "name":"Water discharge exponent",
+      "key":"water_discharge_exponent",
+      "description":"Exponent used to divide water among branches"
+    },
+    {
+      "value":{
+        "default":1,
+        "units":"-",
+        "range":{
+          "max":25,
+          "min":0
+        },
+        "type":"int"
+      },
+      "name":"Number of rivers",
+      "key":"number_of_rivers",
+      "description":"Number of rivers"
+    },
+    {
+      "value":{
         "default":"netcdf",
         "type":"choice",
         "choices":[
@@ -76,22 +224,6 @@
       "name":"Output format",
       "key":"output_format",
       "description":"File format for output files"
-    }
-  ],
-  "url":"http://csdms.colorado.edu/wiki/Model_help:Avulsion",
-  "uses":[
-    {
-      "required":false,
-      "id":"discharge"
-    },
-    {
-      "required":false,
-      "id":"elevation"
-    }
-  ],
-  "provides":[
-    {
-      "id":"river"
     }
   ],
   "id":"avulsion"

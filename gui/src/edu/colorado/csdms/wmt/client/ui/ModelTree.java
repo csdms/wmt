@@ -35,6 +35,7 @@ public class ModelTree extends Tree {
   public ModelTree(DataManager data) {
 
     this.data = data;
+    this.setStyleName("wmt-ModelTree");
     initializeTree();
   }
 

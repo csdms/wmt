@@ -137,6 +137,11 @@
   border-top: 1px solid rgb(232,221,203);
 }
 
+/* Rules for the ModelTree. */
+.wmt-ModelTree {
+  margin-top: 14px;
+}
+
 /* The offset for TreeItems in the ModelTree. */
 .wmt-TreeItem {
    margin-left: 90px !important;
