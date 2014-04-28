@@ -25,6 +25,7 @@ public class ViewInputFilesMenu extends PopupPanel {
 
   private DataManager data;
   private String componentId;
+  private VerticalPanel menu;
   private FileTypesMenu currentMenu;
   private FileTypesMenu defaultsMenu;
   
@@ -41,14 +42,22 @@ public class ViewInputFilesMenu extends PopupPanel {
     this.setStyleName("wmt-PopupPanel");
 
     // A VerticalPanel for the menu items. (PopupPanels have only one child.)
-    VerticalPanel menu = new VerticalPanel();
+    menu = new VerticalPanel();
     this.add(menu);
+
+    populateMenu();
+  }
+
+  /**
+   * A helper that fills in the {@link ViewInputFilesMenu}.
+   */
+  public void populateMenu() {
 
     // Current model
     final HTML currentButton = new HTML(Constants.FA_COGS + "Current model");
     currentButton.setTitle(Constants.PARAMETER_VIEW_CURRENT);
     menu.add(currentButton);
-    currentMenu = new FileTypesMenu(this.data, this.componentId, false);
+    currentMenu = new FileTypesMenu(data, componentId, false);
     currentButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
@@ -68,7 +77,7 @@ public class ViewInputFilesMenu extends PopupPanel {
         new HTML(Constants.FA_COG + "Defaults for component");
     defaultsButton.setTitle(Constants.PARAMETER_VIEW_DEFAULT);
     menu.add(defaultsButton);
-    defaultsMenu = new FileTypesMenu(this.data, this.componentId, true);
+    defaultsMenu = new FileTypesMenu(data, componentId, true);
     defaultsButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {

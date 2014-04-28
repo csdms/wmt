@@ -26,6 +26,7 @@ public class FileTypesMenu extends PopupPanel {
   private DataManager data;
   private String componentId;
   private Boolean useDefaults;
+  private VerticalPanel menu;
   
   /**
    * Creates a new {@link FileTypesMenu}.
@@ -43,9 +44,17 @@ public class FileTypesMenu extends PopupPanel {
     this.setStyleName("wmt-PopupPanel");
 
     // A VerticalPanel for the menu items. (PopupPanels have only one child.)
-    VerticalPanel menu = new VerticalPanel();
+    menu = new VerticalPanel();
     this.add(menu);
 
+    populateMenu();
+  }
+  
+  /**
+   * A helper used to load the {@link FileTypesMenu}.
+   */
+  public void populateMenu() {
+    
     // HTML
     HTML htmlButton = new HTML("HTML");
     htmlButton.addClickHandler(new FileTypesClickHandler("html"));
@@ -68,7 +77,7 @@ public class FileTypesMenu extends PopupPanel {
       button.setStyleName("wmt-PopupPanelItem");
     }
   }
-  
+
   /**
    * Handles a click in the {@link FileTypesMenu}.
    */
