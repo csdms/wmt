@@ -36,7 +36,7 @@ public class ParameterActionPanel extends HorizontalPanel {
 
     this.data = data;
     this.componentId = componentId;
-    this.setStyleName("wmt-ModelActionPanel");
+    this.setStyleName("wmt-ActionPanel");
 
     // Reset
     Button resetButton = new Button("<i class='fa fa-bolt'></i>");

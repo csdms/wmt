@@ -85,11 +85,11 @@
   color: rgb(3,22,52) !important;
 }
 
-/* The ModelActionPanel is a button group at the top of the Model tab. */
-.wmt-ModelActionPanel {
+/* ActionPanels are button groups on top of the Model & Parameters tabs. */
+.wmt-ActionPanel {
   margin: 5px 0px 10px 2px;
 }
-.wmt-ModelActionPanelButton {
+.wmt-ActionPanelButton {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   width: 75px;
   color: rgb(3,22,52);
@@ -99,7 +99,7 @@
   border: 1px solid rgb(3,54,73);
   border-bottom: 1px solid rgb(3,22,52);
 }
-.wmt-ModelActionPanelButton:hover {
+.wmt-ActionPanelButton:hover {
   background-color: rgb(205,179,128);
 }
 

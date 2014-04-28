@@ -38,7 +38,7 @@ public class ModelActionPanel extends HorizontalPanel {
   public ModelActionPanel(DataManager data) {
 
     this.data = data;
-    this.setStyleName("wmt-ModelActionPanel");
+    this.setStyleName("wmt-ActionPanel");
 
     // Open
     Button openButton = new Button(Constants.FA_OPEN);
