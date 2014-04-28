@@ -4,8 +4,6 @@
 package edu.colorado.csdms.wmt.client.control;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -188,33 +186,11 @@ public class DataManager {
 
   /**
    * A convenience method that adds a component to the ArrayList of components.
-   * <p>
-   * Once all the components have been pulled from the server, sort them
-   * alphabetically and initialize the {@link ModelTree}.
    * 
    * @param component the component to add, a ComponentJSO object
    */
   public void addComponent(ComponentJSO component) {
     this.components.add(component);
-//    if (this.components.size() == this.componentIdList.size()) {
-//      sortComponents();
-//      perspective.getModelTree().getDriverComponentCell().getComponentMenu()
-//          .updateComponents();
-//      showDefaultCursor();
-//    }
-  }
-
-  /**
-   * Performs an in-place sort of the ArrayList of components using a
-   * {@link Comparator}.
-   */
-  public void sortComponents() {
-    Collections.sort(components, new Comparator<ComponentJSO>() {
-      @Override
-      public int compare(ComponentJSO o1, ComponentJSO o2) {
-        return o1.getName().compareTo(o2.getName());
-      }
-    });
   }
 
   /**
