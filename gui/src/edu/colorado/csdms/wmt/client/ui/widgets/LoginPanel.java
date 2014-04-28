@@ -11,6 +11,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 
+import edu.colorado.csdms.wmt.client.data.Constants;
+
 /**
  * A GWT composite widget that provides boxes for an email address and an
  * obscured password, as well as a "Sign In" button.
@@ -18,9 +20,6 @@ import com.google.gwt.user.client.ui.TextBox;
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class LoginPanel extends Composite {
-
-  public static String SIGN_IN = "<i class='fa fa-sign-in'></i> Sign In";
-  public static String SIGN_OUT = "<i class='fa fa-sign-out'></i> Sign Out";
   
   private TextBox emailBox;
   private PasswordTextBox passwordBox;
@@ -55,7 +54,7 @@ public class LoginPanel extends Composite {
     statusPanel = new HorizontalPanel();
     statusPanel.add(loginName);
 
-    signInButton = new Button(SIGN_IN);
+    signInButton = new Button(Constants.SIGN_IN);
     signInButton.setStyleName("wmt-SignInButton");
     
     HorizontalPanel contents = new HorizontalPanel();
@@ -79,7 +78,7 @@ public class LoginPanel extends Composite {
     passwordBox.setText(null);
     inputPanel.setVisible(true);
     statusPanel.setVisible(false);
-    signInButton.setHTML(SIGN_IN);
+    signInButton.setHTML(Constants.SIGN_IN);
   }
   
   /**
@@ -89,7 +88,7 @@ public class LoginPanel extends Composite {
   public void showStatusPanel() {
     inputPanel.setVisible(false);
     statusPanel.setVisible(true);
-    signInButton.setHTML(SIGN_OUT);
+    signInButton.setHTML(Constants.SIGN_OUT);
   }
   
   public TextBox getEmailBox() {
