@@ -100,6 +100,7 @@ public class Constants {
   public static String FA_CLOBBER = "<i class='fa fa-times fa-fw'></i> ";
   public static String FA_MORE = " <i class='fa fa-caret-down'></i>";
   public static String FA_COG = "<i class='fa fa-cog fa-fw'></i> ";
+  public static String FA_COGS = "<i class='fa fa-cogs fa-fw'></i> ";
 
   // Tooltip text strings.
   public static String MODEL_OPEN = "Open an existing model.";

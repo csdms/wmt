@@ -136,9 +136,9 @@ public class DataManager {
   public String tabPrefix(String tabName) {
     String prefix = "";
     if (tabName.matches("model")) {
-      prefix = "<i class='fa fa-cogs'></i> ";
+      prefix = Constants.FA_COGS;
     } else if (tabName.matches("parameter")) {
-      prefix = "<i class='fa fa-wrench'></i> ";
+      prefix = Constants.FA_WRENCH;
     }
     return prefix;
   }
