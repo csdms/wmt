@@ -27,9 +27,6 @@ import edu.colorado.csdms.wmt.client.ui.widgets.LabelDialogBox;
  */
 public class LabelsMenu extends PopupPanel {
 
-  private static final String MENU_WIDTH = "200px"; // arbitrary, aesthetic
-  private static final String MENU_HEIGHT = "20em";
-  
   private DataManager data;
   private VerticalPanel labelPanel;
   private HTML addNewHtml;
@@ -55,7 +52,7 @@ public class LabelsMenu extends PopupPanel {
     // All labels are listed on the labelPanel, which sits on a ScrollPanel.
     labelPanel = new VerticalPanel();
     ScrollPanel scroller = new ScrollPanel(labelPanel);
-    scroller.setSize(MENU_WIDTH, MENU_HEIGHT);
+    scroller.setSize(Constants.MENU_WIDTH, Constants.MENU_HEIGHT);
     menu.add(scroller);
 
     // Populate the menu with the stored model labels and their values.

@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 
 /**
@@ -20,9 +21,6 @@ import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class ComponentsMenu extends PopupPanel {
-
-  private static final String MENU_WIDTH = "200px"; // arbitrary, aesthetic
-  private static final String MENU_HEIGHT = "20em";
   
   private DataManager data;
   private VerticalPanel componentsPanel;
@@ -46,7 +44,7 @@ public class ComponentsMenu extends PopupPanel {
     // Components are listed on the componentsPanel, situated on a ScrollPanel.
     componentsPanel = new VerticalPanel();
     ScrollPanel scroller = new ScrollPanel(componentsPanel);
-    scroller.setSize(MENU_WIDTH, MENU_HEIGHT);
+    scroller.setSize(Constants.MENU_WIDTH, Constants.MENU_HEIGHT);
     menu.add(scroller);
     
     // Populate the menu with the components.
