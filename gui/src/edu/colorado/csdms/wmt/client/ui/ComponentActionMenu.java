@@ -49,11 +49,13 @@ public class ComponentActionMenu extends PopupPanel {
     HTML showParameters = new HTML(Constants.FA_WRENCH + "Show parameters");
     showParameters.addClickHandler(new ComponentActionHandler("show"));
     showParameters.setStyleName("wmt-PopupPanelItem");
+    showParameters.setTitle(Constants.COMPONENT_SHOW);
     menu.add(showParameters);
 
     HTML getInformation = new HTML(Constants.FA_HELP + "Get information");
     getInformation.addClickHandler(new ComponentActionHandler("info"));
     getInformation.setStyleName("wmt-PopupPanelItem");
+    getInformation.setTitle(Constants.COMPONENT_INFO);
     menu.add(getInformation);
 
     HTML separator = new HTML();
@@ -63,6 +65,7 @@ public class ComponentActionMenu extends PopupPanel {
     HTML deleteComponent = new HTML(Constants.FA_CLOBBER + "Delete");
     deleteComponent.addClickHandler(new ComponentActionHandler("delete"));
     deleteComponent.setStyleName("wmt-PopupPanelItem");
+    deleteComponent.setTitle(Constants.COMPONENT_DELETE);
     menu.add(deleteComponent);
   }
   
