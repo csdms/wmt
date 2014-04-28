@@ -3,7 +3,6 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
@@ -33,7 +32,6 @@ public class ComponentsMenu extends PopupPanel {
   public ComponentsMenu(DataManager data) {
 
     super(true); // autohide
-    this.getElement().getStyle().setCursor(Cursor.POINTER); // use pointer
     this.data = data;
     this.setStyleName("wmt-PopupPanel");
 

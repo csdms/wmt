@@ -109,6 +109,7 @@
   background-color: white;
   padding: 5px 1px 5px 1px;
   box-shadow: 2px 2px 1px rgba(192, 192, 192, 0.75);
+  cursor: pointer;
 }
 
 /* Items shown in a WMT PopupPanel. */
