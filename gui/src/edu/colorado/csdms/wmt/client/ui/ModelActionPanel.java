@@ -81,7 +81,7 @@ public class ModelActionPanel extends HorizontalPanel {
     Iterator<Widget> iter = this.iterator();
     while (iter.hasNext()) {
       Button button = (Button) iter.next();
-      button.setStyleName("wmt-ModelActionPanelButton");
+      button.setStyleName("wmt-ActionPanelButton");
     }
   }
 

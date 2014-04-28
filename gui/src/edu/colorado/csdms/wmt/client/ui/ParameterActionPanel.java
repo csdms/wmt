@@ -7,9 +7,9 @@ import java.util.Iterator;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
@@ -26,6 +26,7 @@ public class ParameterActionPanel extends HorizontalPanel {
 
   private DataManager data;
   private String componentId;
+  private ViewInputFilesMenu inputFilesMenu;
   
   /**
    * Makes a new {@link ParameterActionPanel}.
@@ -46,21 +47,31 @@ public class ParameterActionPanel extends HorizontalPanel {
     this.add(resetButton);
 
     // View input files
-    Button viewFilesButton = new Button("<i class='fa fa-cloud-download'></i>");
+    final Button viewFilesButton =
+        new Button("<i class='fa fa-cloud-download'></i>");
     viewFilesButton.setTitle(Constants.PARAMETER_VIEW_FILE);
+    this.add(viewFilesButton);
+    inputFilesMenu = new ViewInputFilesMenu(this.data, this.componentId);
     viewFilesButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        Window.alert("view input files");
+        inputFilesMenu.setPopupPositionAndShow(new PositionCallback() {
+          final Integer x = viewFilesButton.getElement().getAbsoluteLeft();
+          final Integer y = viewFilesButton.getElement().getAbsoluteBottom();
+
+          @Override
+          public void setPosition(int offsetWidth, int offsetHeight) {
+            inputFilesMenu.setPopupPosition(x, y);
+          }
+        });
       }
     });
-    this.add(viewFilesButton);
 
     // Apply a style to each button.
     Iterator<Widget> iter = this.iterator();
     while (iter.hasNext()) {
       Button button = (Button) iter.next();
-      button.setStyleName("wmt-ModelActionPanelButton");
+      button.setStyleName("wmt-ActionPanelButton");
     }
   }
 }
