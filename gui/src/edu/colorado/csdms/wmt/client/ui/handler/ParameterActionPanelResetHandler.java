@@ -7,6 +7,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
+import edu.colorado.csdms.wmt.client.ui.widgets.QuestionDialogBox;
 
 /**
  * Handles a click on the "Reset" button in the ParameterActionPanel. Calls
@@ -34,10 +36,22 @@ public class ParameterActionPanelResetHandler implements ClickHandler {
   
   @Override
   public void onClick(ClickEvent event) {
-    data.replaceModelComponent(data.getComponent(componentId));
-    data.getPerspective().getParameterTable().clearTable();
-    data.getPerspective().getParameterTable().loadTable(componentId);
-    data.modelIsSaved(false);
-    data.getPerspective().setModelPanelTitle();
+    final QuestionDialogBox questionDialog =
+        new QuestionDialogBox(Constants.QUESTION_PARAMETER_RESET);
+    questionDialog.getChoicePanel().getOkButton().addClickHandler(
+        new ClickHandler() {
+          @Override
+          public void onClick(ClickEvent event) {
+            questionDialog.hide();
+            data.replaceModelComponent(data.getComponent(componentId));
+            data.getPerspective().getParameterTable().clearTable();
+            data.getPerspective().getParameterTable().loadTable(componentId);
+            data.modelIsSaved(false);
+            data.getPerspective().setModelPanelTitle();
+          }
+        });
+    questionDialog.getChoicePanel().getCancelButton().addClickHandler(
+        new DialogCancelHandler(questionDialog));
+    questionDialog.center();
   }
 }
