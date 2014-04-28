@@ -18,6 +18,7 @@ import edu.colorado.csdms.wmt.client.control.DataURL;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
+@Deprecated
 public class ViewInputFilesPanel extends FlexTable {
 
   private DataManager data;

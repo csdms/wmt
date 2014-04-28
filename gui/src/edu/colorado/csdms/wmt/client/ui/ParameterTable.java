@@ -12,7 +12,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.data.ParameterJSO;
-import edu.colorado.csdms.wmt.client.ui.widgets.ViewInputFilesPanel;
 
 /**
  * Builds a table of parameters for a single WMT model component. The value of
@@ -25,7 +24,6 @@ public class ParameterTable extends FlexTable {
   public DataManager data;
   private String componentId; // the id of the displayed component
   private ParameterActionPanel actionPanel;
-  private ViewInputFilesPanel viewFilesPanel;
 
   /**
    * Initializes a table of parameters for a single WMT model component. The
@@ -100,13 +98,6 @@ public class ParameterTable extends FlexTable {
       }
       tableRowIndex++;
     }
-
-    // Append links to view input files.
-    viewFilesPanel = new ViewInputFilesPanel(data, componentId);
-    this.setWidget(tableRowIndex, 0, viewFilesPanel);
-    this.getFlexCellFormatter().setColSpan(tableRowIndex, 0, 2);
-    this.getFlexCellFormatter().setHorizontalAlignment(tableRowIndex, 0,
-        HasHorizontalAlignment.ALIGN_CENTER);
   }
 
   /**
