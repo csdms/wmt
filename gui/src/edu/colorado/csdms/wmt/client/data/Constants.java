@@ -129,9 +129,10 @@ public class Constants {
 
   // Questions
   public static final String QUESTION_START = "Are you sure you want to ";
+  public static String QUESTION_SIGN_OUT = QUESTION_START
+      + "sign out from WMT?";
   public static String QUESTION_PARAMETER_RESET = QUESTION_START
       + "reset all parameters to their default values?";
-    
 
   protected Constants() {
   }
