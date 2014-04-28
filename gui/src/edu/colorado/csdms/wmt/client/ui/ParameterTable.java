@@ -75,7 +75,7 @@ public class ParameterTable extends FlexTable {
     Integer tableRowIndex = 0;
     
     // Add the ParameterActionPanel. Align it with the ModelActionPanel.
-    actionPanel = new ParameterActionPanel(data);
+    actionPanel = new ParameterActionPanel(data, componentId);
     actionPanel.getElement().getStyle().setMarginTop(2.0, Unit.PX);
     this.setWidget(tableRowIndex, 0, actionPanel);
     tableRowIndex++;

@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.data.Constants;
+import edu.colorado.csdms.wmt.client.ui.handler.ParameterActionPanelResetHandler;
 
 /**
  * Makes a row of action buttons ("Reset", "View input files", etc.) for working
@@ -23,28 +24,25 @@ import edu.colorado.csdms.wmt.client.data.Constants;
  */
 public class ParameterActionPanel extends HorizontalPanel {
 
-  @SuppressWarnings("unused")
   private DataManager data;
+  private String componentId;
   
   /**
    * Makes a new {@link ParameterActionPanel}.
    * 
    * @param data the DataManager instance for the WMT session
    */
-  public ParameterActionPanel(DataManager data) {
+  public ParameterActionPanel(DataManager data, String componentId) {
 
     this.data = data;
+    this.componentId = componentId;
     this.setStyleName("wmt-ModelActionPanel");
 
     // Reset
-    Button resetButton = new Button("<i class='fa fa-refresh'></i>");
+    Button resetButton = new Button("<i class='fa fa-bolt'></i>");
     resetButton.setTitle(Constants.PARAMETER_RESET);
-    resetButton.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        Window.alert("reset");
-      }
-    });
+    resetButton.addClickHandler(new ParameterActionPanelResetHandler(this.data,
+        this.componentId));
     this.add(resetButton);
 
     // View input files
