@@ -31,6 +31,7 @@ public class MoreActionsMenu extends PopupPanel {
   @SuppressWarnings("unused")
   private DataManager data;
   private LabelsMenu labelsMenu;
+  private ComponentsMenu componentsMenu;
   
   /**
    * Makes a new {@link MoreActionsMenu}.
@@ -43,21 +44,25 @@ public class MoreActionsMenu extends PopupPanel {
     this.getElement().getStyle().setCursor(Cursor.POINTER); // use pointer
     this.data = data;
     this.setStyleName("wmt-PopupPanel");
-    
+
     // A VerticalPanel for the menu items. (PopupPanels have only one child.)
     VerticalPanel menu = new VerticalPanel();
     this.add(menu);
 
     // Save as
-    HTML saveAsButton =
-        new HTML(Constants.FA_SAVE + "Save model as...");
+    HTML saveAsButton = new HTML(Constants.FA_SAVE + "Save model as...");
     saveAsButton.setTitle(Constants.MODEL_SAVE_AS);
-    saveAsButton.addClickHandler(new ModelActionPanelSaveHandler(data, true));    
+    saveAsButton.addClickHandler(new ModelActionPanelSaveHandler(data, true));
     menu.add(saveAsButton);
 
+    // Delete
+    HTML deleteButton = new HTML(Constants.FA_DELETE + "Delete model...");
+    deleteButton.setTitle(Constants.MODEL_DELETE);
+    deleteButton.addClickHandler(new ModelActionPanelDeleteHandler(data));
+    menu.add(deleteButton);
+
     // Manage labels
-    final HTML labelsButton =
-        new HTML(Constants.FA_TAGS + "Manage labels...");
+    final HTML labelsButton = new HTML(Constants.FA_TAGS + "Manage labels");
     labelsButton.setTitle(Constants.MODEL_LABELS);
     menu.add(labelsButton);
     labelsMenu = new LabelsMenu(data);
@@ -68,6 +73,7 @@ public class MoreActionsMenu extends PopupPanel {
         labelsMenu.setPopupPositionAndShow(new PositionCallback() {
           final Integer x = labelsButton.getElement().getAbsoluteRight();
           final Integer y = labelsButton.getAbsoluteTop();
+
           @Override
           public void setPosition(int offsetWidth, int offsetHeight) {
             labelsMenu.setPopupPosition(x, y);
@@ -75,30 +81,45 @@ public class MoreActionsMenu extends PopupPanel {
         });
       }
     });
-    
-    // Delete
-    HTML deleteButton = new HTML(Constants.FA_DELETE + "Delete model...");
-    deleteButton.setTitle(Constants.MODEL_DELETE);
-    deleteButton.addClickHandler(new ModelActionPanelDeleteHandler(data));
-    menu.add(deleteButton);
+
+    // Component information
+    final HTML componentsButton =
+        new HTML(Constants.FA_COG + "Component information");
+    componentsButton.setTitle(Constants.COMPONENT_INFO);
+    menu.add(componentsButton);
+    componentsMenu = new ComponentsMenu(data);
+    componentsButton.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        componentsMenu.populateMenu();
+        componentsMenu.setPopupPositionAndShow(new PositionCallback() {
+          final Integer x = componentsButton.getElement().getAbsoluteRight();
+          final Integer y = componentsButton.getAbsoluteTop();
+          @Override
+          public void setPosition(int offsetWidth, int offsetHeight) {
+            componentsMenu.setPopupPosition(x, y);
+          }
+        });
+      }
+    });
 
     // Run status
     HTML statusButton = new HTML(Constants.FA_STATUS + "View run status...");
     statusButton.setTitle(Constants.MODEL_RUN_STATUS);
-    statusButton.addClickHandler(new ModelActionPanelStatusHandler(data));    
+    statusButton.addClickHandler(new ModelActionPanelStatusHandler(data));
     menu.add(statusButton);
-    
+
     // Help
     HTML helpButton = new HTML(Constants.FA_HELP + "Help");
     helpButton.setTitle(Constants.MODEL_HELP);
-    helpButton.addClickHandler(new ModelActionPanelHelpHandler(data));        
+    helpButton.addClickHandler(new ModelActionPanelHelpHandler(data));
     menu.add(helpButton);
-    
+
     // Apply a style to each button.
     Iterator<Widget> iter = menu.iterator();
     while (iter.hasNext()) {
       HTML button = (HTML) iter.next();
       button.setStyleName("wmt-PopupPanelItem");
-    }    
+    }
   }
 }

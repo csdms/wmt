@@ -93,6 +93,7 @@ public class Constants {
   public static String FA_WRENCH = "<i class='fa fa-wrench fa-fw'></i> ";
   public static String FA_CLOBBER = "<i class='fa fa-times fa-fw'></i> ";
   public static String FA_MORE = " <i class='fa fa-caret-down'></i>";
+  public static String FA_COG = "<i class='fa fa-cog fa-fw'></i> ";
 
   // Tooltip text strings.
   public static String MODEL_OPEN = "Open an existing model.";
@@ -104,6 +105,7 @@ public class Constants {
   public static String MODEL_DELETE = "Delete a model from server.";
   public static String MODEL_RUN_STATUS = "Get the status of model run.";
   public static String MODEL_HELP = "View the help documents on using WMT.";
+  public static String COMPONENT_INFO = "View information on a component.";
   public static String PARAMETER_RESET = "Reset all parameters to their"
       + " default values.";
   public static String PARAMETER_VIEW_FILE = "View the input files for this"
