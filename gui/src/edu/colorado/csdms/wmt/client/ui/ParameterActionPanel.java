@@ -55,6 +55,7 @@ public class ParameterActionPanel extends HorizontalPanel {
     viewFilesButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
+        inputFilesMenu.populateMenu();
         inputFilesMenu.setPopupPositionAndShow(new PositionCallback() {
           final Integer x = viewFilesButton.getElement().getAbsoluteLeft();
           final Integer y = viewFilesButton.getElement().getAbsoluteBottom();

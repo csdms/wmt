@@ -55,14 +55,21 @@ public class ViewInputFilesMenu extends PopupPanel {
    */
   public void populateMenu() {
 
+    menu.clear();
+    
     // Current model
     final HTML currentButton = new HTML(Constants.FA_COGS + "Current model");
+    currentButton.setStyleName("wmt-PopupPanelItem");
+    currentButton.setStyleDependentName("disabled", !data.modelIsSaved());
     currentButton.setTitle(Constants.PARAMETER_VIEW_CURRENT);
     menu.add(currentButton);
     currentMenu = new FileTypesMenu(false);
     currentButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
+        if (!data.modelIsSaved()) {
+          return;
+        }
         currentMenu.setPopupPositionAndShow(new PositionCallback() {
           final Integer x = currentButton.getElement().getAbsoluteRight();
           final Integer y = currentButton.getAbsoluteTop();
@@ -77,6 +84,7 @@ public class ViewInputFilesMenu extends PopupPanel {
     // Defaults for component
     final HTML defaultsButton =
         new HTML(Constants.FA_COG + "Defaults for component");
+    defaultsButton.setStyleName("wmt-PopupPanelItem");
     defaultsButton.setTitle(Constants.PARAMETER_VIEW_DEFAULT);
     menu.add(defaultsButton);
     defaultsMenu = new FileTypesMenu(true);
@@ -93,13 +101,6 @@ public class ViewInputFilesMenu extends PopupPanel {
         });
       }
     });
-
-    // Apply a style to each button.
-    Iterator<Widget> iter = menu.iterator();
-    while (iter.hasNext()) {
-      HTML button = (HTML) iter.next();
-      button.setStyleName("wmt-PopupPanelItem");
-    }
   }
   
   /**

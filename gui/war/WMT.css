@@ -122,6 +122,12 @@
 .wmt-PopupPanelItem:hover {
   background-color: rgb(232,221,203);
 }
+.wmt-PopupPanelItem-disabled {
+  color: rgb(192,192,192);
+}
+.wmt-PopupPanelItem-disabled:hover {
+  background-color: white;
+}
 
 /* For CheckBox items -- Don't use :hover, set line-height. */
 .wmt-PopupPanelCheckBoxItem {
