@@ -4,8 +4,6 @@
 package edu.colorado.csdms.wmt.client.control;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +12,7 @@ import java.util.TreeMap;
 import com.google.gwt.dom.client.Style.Cursor;
 
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.security.Security;
@@ -27,21 +26,11 @@ import edu.colorado.csdms.wmt.client.ui.Perspective;
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class DataManager {
-
-  public static String DRIVER = "driver";
-  public static String DEFAULT_MODEL = "Model 0";
-  public static String FA_OPEN = "<i class='fa fa-folder-open-o fa-fw'></i> ";
-  public static String FA_SAVE = "<i class='fa fa-floppy-o fa-fw'></i> ";
-  public static String FA_DELETE = "<i class='fa fa-trash-o fa-fw'></i> ";
-  public static String FA_RUN = "<i class='fa fa-play fa-fw'></i> ";
-  public static String FA_STATUS = "<i class='fa fa-info fa-fw'></i> ";
-  public static String FA_HELP = "<i class='fa fa-question fa-fw'></i> ";
-  public static String FA_TAGS = "<i class='fa fa-tags fa-fw'></i> ";
-  public static String FA_SELECT = "<i class='fa fa-plus'></i> ";
-  public static String FA_ACTION = "<i class='fa fa-chevron-down'></i> ";
   
   private Boolean developmentMode;
   private Boolean apiDevelopmentMode;
+  
+  public Constants constants;
 
   // Get the state of UI elements through the Perspective. 
   private Perspective perspective;
@@ -60,6 +49,7 @@ public class DataManager {
   // Experiment with public members, for convenience.
   public Security security;
   public List<String> componentIdList;
+  public Integer nComponents = 0;
   public HashMap<String, Integer> retryComponentLoad;
   public List<Integer> modelIdList;
   public List<String> modelNameList;
@@ -144,9 +134,9 @@ public class DataManager {
   public String tabPrefix(String tabName) {
     String prefix = "";
     if (tabName.matches("model")) {
-      prefix = "<i class='fa fa-cogs'></i> ";
+      prefix = Constants.FA_COGS;
     } else if (tabName.matches("parameter")) {
-      prefix = "<i class='fa fa-wrench'></i> ";
+      prefix = Constants.FA_WRENCH;
     }
     return prefix;
   }
@@ -196,33 +186,11 @@ public class DataManager {
 
   /**
    * A convenience method that adds a component to the ArrayList of components.
-   * <p>
-   * Once all the components have been pulled from the server, sort them
-   * alphabetically and initialize the {@link ModelTree}.
    * 
    * @param component the component to add, a ComponentJSO object
    */
   public void addComponent(ComponentJSO component) {
     this.components.add(component);
-//    if (this.components.size() == this.componentIdList.size()) {
-//      sortComponents();
-//      perspective.getModelTree().getDriverComponentCell().getComponentMenu()
-//          .updateComponents();
-//      showDefaultCursor();
-//    }
-  }
-
-  /**
-   * Performs an in-place sort of the ArrayList of components using a
-   * {@link Comparator}.
-   */
-  public void sortComponents() {
-    Collections.sort(components, new Comparator<ComponentJSO>() {
-      @Override
-      public int compare(ComponentJSO o1, ComponentJSO o2) {
-        return o1.getName().compareTo(o2.getName());
-      }
-    });
   }
 
   /**

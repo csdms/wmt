@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.LabelsMenu;
 
 /**
@@ -45,7 +46,7 @@ public class OpenDialogBox extends DialogBox {
     
     droplistPanel = new DroplistPanel();
 
-    final Button labelsButton = new Button(DataManager.FA_TAGS + "Labels");
+    final Button labelsButton = new Button(Constants.FA_TAGS + "Labels");
     labelsButton.setStyleName("wmt-Button");
     labelsMenu = new LabelsMenu(data);
     labelsButton.addClickHandler(new ClickHandler() {
@@ -72,7 +73,7 @@ public class OpenDialogBox extends DialogBox {
         HasVerticalAlignment.ALIGN_MIDDLE);
 
     choicePanel = new ChoicePanel();
-    choicePanel.getOkButton().setHTML(DataManager.FA_OPEN + "Open");
+    choicePanel.getOkButton().setHTML(Constants.FA_OPEN + "Open");
 
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);

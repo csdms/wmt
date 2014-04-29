@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
@@ -35,6 +36,7 @@ public class ModelTree extends Tree {
   public ModelTree(DataManager data) {
 
     this.data = data;
+    this.setStyleName("wmt-ModelTree");
     initializeTree();
   }
 
@@ -53,7 +55,7 @@ public class ModelTree extends Tree {
     this.addItem(driverItem);
 
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
-    model.setName(DataManager.DEFAULT_MODEL);
+    model.setName(Constants.DEFAULT_MODEL);
     data.setModel(model);
     ModelMetadataJSO metadata =
         (ModelMetadataJSO) ModelMetadataJSO.createObject();
@@ -264,7 +266,7 @@ public class ModelTree extends Tree {
 
         // When the port is listed as "driver", it obscures the provides port
         // of the connected component. Find the provides port and use it.
-        if (cellPortId.matches(DataManager.DRIVER)) {
+        if (cellPortId.matches(Constants.DRIVER)) {
           if (data.getComponent(cell.getComponentId()).nProvidesPorts() > 0) {
             cellPortId =
                 data.getComponent(cell.getComponentId()).getProvidesPorts()
@@ -304,7 +306,7 @@ public class ModelTree extends Tree {
 
         // When the port is listed as "driver", it obscures the provides port
         // of the connected component. Find the provides port and use it.
-        if (cellPortId.matches(DataManager.DRIVER)) {
+        if (cellPortId.matches(Constants.DRIVER)) {
           if (data.getComponent(cell.getComponentId()).nProvidesPorts() > 0) {
             cellPortId =
                 data.getComponent(cell.getComponentId()).getProvidesPorts()

@@ -5,7 +5,6 @@ package edu.colorado.csdms.wmt.client.ui;
 
 import java.util.Map;
 
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -15,6 +14,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.LabelDialogBox;
 
@@ -26,9 +26,6 @@ import edu.colorado.csdms.wmt.client.ui.widgets.LabelDialogBox;
  */
 public class LabelsMenu extends PopupPanel {
 
-  private static final String MENU_WIDTH = "200px"; // arbitrary, aesthetic
-  private static final String MENU_HEIGHT = "20em";
-  
   private DataManager data;
   private VerticalPanel labelPanel;
   private HTML addNewHtml;
@@ -43,7 +40,6 @@ public class LabelsMenu extends PopupPanel {
   public LabelsMenu(DataManager data) {
 
     super(true); // autohide
-    this.getElement().getStyle().setCursor(Cursor.POINTER); // use pointer
     this.data = data;
     this.setStyleName("wmt-PopupPanel");
 
@@ -54,7 +50,7 @@ public class LabelsMenu extends PopupPanel {
     // All labels are listed on the labelPanel, which sits on a ScrollPanel.
     labelPanel = new VerticalPanel();
     ScrollPanel scroller = new ScrollPanel(labelPanel);
-    scroller.setSize(MENU_WIDTH, MENU_HEIGHT);
+    scroller.setSize(Constants.MENU_WIDTH, Constants.MENU_HEIGHT);
     menu.add(scroller);
 
     // Populate the menu with the stored model labels and their values.
@@ -135,7 +131,7 @@ public class LabelsMenu extends PopupPanel {
       
       box.getChoicePanel().getCancelButton().addClickHandler(
           new DialogCancelHandler(box));
-      box.getChoicePanel().getOkButton().setHTML(DataManager.FA_TAGS + type);
+      box.getChoicePanel().getOkButton().setHTML(Constants.FA_TAGS + type);
       box.getChoicePanel().getOkButton().addClickHandler(new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {

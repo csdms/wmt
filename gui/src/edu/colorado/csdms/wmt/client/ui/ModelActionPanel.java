@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelOpenHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelSaveHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;
@@ -31,32 +32,35 @@ public class ModelActionPanel extends HorizontalPanel {
   
   /**
    * Makes a new {@link ModelActionPanel}.
+   * 
+   * @param data the DataManager instance for the WMT session
    */
   public ModelActionPanel(DataManager data) {
 
     this.data = data;
-    this.setStyleName("wmt-ModelActionPanel");
+    this.setStyleName("wmt-ActionPanel");
 
     // Open
-    Button openButton = new Button(DataManager.FA_OPEN);
-    openButton.setTitle("Open model");
+    Button openButton = new Button(Constants.FA_OPEN);
+    openButton.setTitle(Constants.MODEL_OPEN);
     openButton.addClickHandler(new ModelActionPanelOpenHandler(data));
     this.add(openButton);
 
     // Save
-    Button saveButton = new Button(DataManager.FA_SAVE);
-    saveButton.setTitle("Save model");
+    Button saveButton = new Button(Constants.FA_SAVE);
+    saveButton.setTitle(Constants.MODEL_SAVE);
     saveButton.addClickHandler(new ModelActionPanelSaveHandler(data));
     this.add(saveButton);
 
     // Run
-    Button runButton = new Button(DataManager.FA_RUN);
-    runButton.setTitle("Run model");
+    Button runButton = new Button(Constants.FA_RUN);
+    runButton.setTitle(Constants.MODEL_RUN);
     runButton.addClickHandler(new SetupRunModelHandler(data));
     this.add(runButton);
 
     // More
-    final Button moreButton = new Button("More <i class='fa fa-caret-down'></i>");
+    final Button moreButton = new Button("More" + Constants.FA_MORE);
+    moreButton.setTitle(Constants.MODEL_MORE);
     this.add(moreButton);
     moreMenu = new MoreActionsMenu(data);
     moreButton.addClickHandler(new ClickHandler() {
@@ -77,7 +81,7 @@ public class ModelActionPanel extends HorizontalPanel {
     Iterator<Widget> iter = this.iterator();
     while (iter.hasNext()) {
       Button button = (Button) iter.next();
-      button.setStyleName("wmt-ModelActionPanelButton");
+      button.setStyleName("wmt-ActionPanelButton");
     }
   }
 

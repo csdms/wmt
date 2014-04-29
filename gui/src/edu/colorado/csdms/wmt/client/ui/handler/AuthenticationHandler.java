@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.widgets.LoginPanel;
 import edu.colorado.csdms.wmt.client.ui.widgets.QuestionDialogBox;
 
@@ -38,10 +39,9 @@ public class AuthenticationHandler implements ClickHandler {
 
     if (data.security.isLoggedIn()) {
 
-      String question = "Are you sure you want to sign out from WMT?";
-      final QuestionDialogBox questionDialog = new QuestionDialogBox(question);
-      questionDialog.getChoicePanel().getOkButton()
-          .setHTML(LoginPanel.SIGN_OUT);
+      final QuestionDialogBox questionDialog =
+          new QuestionDialogBox(Constants.QUESTION_SIGN_OUT);
+      questionDialog.getChoicePanel().getOkButton().setHTML(Constants.SIGN_OUT);
       questionDialog.getChoicePanel().getOkButton().addClickHandler(
           new ClickHandler() {
             @Override

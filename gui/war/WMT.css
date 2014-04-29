@@ -85,11 +85,11 @@
   color: rgb(3,22,52) !important;
 }
 
-/* The ModelActionPanel is a button group at the top of the Model tab. */
-.wmt-ModelActionPanel {
+/* ActionPanels are button groups on top of the Model & Parameters tabs. */
+.wmt-ActionPanel {
   margin: 5px 0px 10px 2px;
 }
-.wmt-ModelActionPanelButton {
+.wmt-ActionPanelButton {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   width: 75px;
   color: rgb(3,22,52);
@@ -99,7 +99,7 @@
   border: 1px solid rgb(3,54,73);
   border-bottom: 1px solid rgb(3,22,52);
 }
-.wmt-ModelActionPanelButton:hover {
+.wmt-ActionPanelButton:hover {
   background-color: rgb(205,179,128);
 }
 
@@ -109,16 +109,24 @@
   background-color: white;
   padding: 5px 1px 5px 1px;
   box-shadow: 2px 2px 1px rgba(192, 192, 192, 0.75);
+  cursor: pointer;
 }
 
 /* Items shown in a WMT PopupPanel. */
 .wmt-PopupPanelItem {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  color: rgb(3,22,52);
+  color: rgb(3, 54, 73);
   padding: 5px 40px 5px 5px;
+  cursor: pointer;
 }
 .wmt-PopupPanelItem:hover {
   background-color: rgb(232,221,203);
+}
+.wmt-PopupPanelItem-disabled {
+  color: rgb(192,192,192);
+}
+.wmt-PopupPanelItem-disabled:hover {
+  background-color: white;
 }
 
 /* For CheckBox items -- Don't use :hover, set line-height. */
@@ -134,6 +142,11 @@
   width: 100%;
   height: 1px;
   border-top: 1px solid rgb(232,221,203);
+}
+
+/* Rules for the ModelTree. */
+.wmt-ModelTree {
+  margin-top: 14px;
 }
 
 /* The offset for TreeItems in the ModelTree. */
@@ -184,6 +197,7 @@
 .wmt-ComponentCell-MenuCell {
   padding: 2px;
   margin-right: 3px;
+  cursor: default; /* for Firefox */
 }
 
 /* Pull-down menu items in the ComponentSelectionMenu. */
@@ -197,7 +211,7 @@
   font-family: "FontAwesome";
   font-style: normal;
   content: "\f013";
-  color: rgb(3,22,52);
+  color: rgb(3, 54, 73);
   margin-right: 0.5em;
 }
 .wmt-ComponentSelectionMenuItem:hover {
@@ -205,16 +219,6 @@
 }
 .wmt-ComponentSelectionMenuItem-missing {
   background-color: #fdd;
-}
-
-/* Pull-down menu items in the ComponentActionMenu. */
-.wmt-ComponentActionMenuItem {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  padding: 5px 40px 5px 5px;
-  cursor: pointer;
-}
-.wmt-ComponentActionMenuItem:hover {
-  background-color: rgb(232,221,203);
 }
 
 /* Text used in a parameter description. */
@@ -262,26 +266,35 @@
   width: 200px;
 }
 .wmt-ValueBoxen-outofrange {
-  background-color: #fdd;
+  background-color: rgb(203,73,54);
 }
 
 /* Droplists, used primarily in the ParameterTable. */
+/* See: http://stackoverflow.com/questions/5439782/i-want-to-vertical-align-text-in-select-box */
 .wmt-DroplistBox {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: small;
-  /* padding: 5px 4px; */ /* does nothing */
+  margin: 2px 0px;
+  padding: 2px 0px; /* centers text on Firefox; does nothing on Chrome */
   border: 1px solid rgb(3,54,73); /* adding this changes the font?!? */
   width: 210px; /* calculated by comparison with ValueBoxen */
+  height: 32px;
   background-color: rgb(232,221,203);
+}
+.wmt-DroplistBox-upload {
+  width: 175px; /* calculated by comparison with DroplistBox */
 }
 
 /* For the droplist + button width for "file" parameter types. */
 .wmt-FileUploadBox {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: small;
-  background-color: rgb(232,221,203);
+  margin: 2px 0px;
+  padding: 2px 0px; /* centers text on Firefox; does nothing on Chrome */
   border: 1px solid rgb(3,54,73); /* adding this changes the font?!? */
   width: 175px; /* calculated by comparison with DroplistBox */
+  height: 32px;
+  background-color: rgb(232,221,203);  
 }
 
 /* A consistent style for all buttons. */
@@ -295,9 +308,6 @@
 }
 .wmt-Button:hover {
   background-color: rgb(205,179,128);
-}
-.wmt-Button-slim {
-  padding: 2px 7px !important;
 }
 
 /* All labels. */
