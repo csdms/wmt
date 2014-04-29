@@ -48,7 +48,7 @@ public class ParameterActionPanel extends HorizontalPanel {
 
     // View input files
     final Button viewFilesButton =
-        new Button("<i class='fa fa-cloud-download'></i>");
+        new Button("<i class='fa fa-external-link'></i>");
     viewFilesButton.setTitle(Constants.PARAMETER_VIEW_FILE);
     this.add(viewFilesButton);
     inputFilesMenu = new ViewInputFilesMenu(this.data, this.componentId);
