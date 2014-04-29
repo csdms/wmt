@@ -40,6 +40,10 @@ public class WMT implements EntryPoint {
     // Are we using the development mode of the API?
     data.isApiDevelopmentMode(Constants.USE_API_DEV_MODE);
 
+    // Load WMT's CSS rules. 
+    // (See http://www.gwtproject.org/doc/latest/DevGuideUiCss.html#cssfiles)
+    Resources.INSTANCE.css().ensureInjected();
+    
     // Set up the basic framework of views for the GUI.
     perspective = new Perspective(data);
     RootLayoutPanel.get().add(perspective);
