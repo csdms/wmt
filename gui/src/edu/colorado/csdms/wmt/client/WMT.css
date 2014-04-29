@@ -241,60 +241,66 @@
   padding: 4px 2px;
 }
 
-/* Used for all TextBox widgets. */
-.wmt-TextBoxen {
+/* Used for all TextBox widgets. See http://stackoverflow.com/a/5891865/1563298 */
+input.wmt-TextBoxen {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   color: rgb(3,22,52);
   background-color: rgb(232,221,203);
+  margin: 5px 1px;
   padding: 5px 4px;
   border: 1px solid rgb(3,54,73);
   border-top: 1px solid rgb(3,22,52);
+  border-radius: 0px;
   font-size: small;
   width: 200px;
 }
 
 /* All TextBoxen that display numeric values. Used in the ParameterTable. */
-.wmt-ValueBoxen {
+input.wmt-ValueBoxen {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   color: rgb(3,22,52);
   background-color: rgb(232,221,203);
+  margin: 5px 1px;
   padding: 5px 4px;
   border: 1px solid rgb(3,54,73);
   border-top: 1px solid rgb(3,22,52);
+  border-radius: 0px;
   font-size: small;
   text-align: right;
   width: 200px;
 }
-.wmt-ValueBoxen-outofrange {
+input.wmt-ValueBoxen-outofrange {
   background-color: rgb(203,73,54);
 }
 
 /* Droplists, used primarily in the ParameterTable. */
 /* See: http://stackoverflow.com/questions/5439782/i-want-to-vertical-align-text-in-select-box */
-.wmt-DroplistBox {
+select.wmt-DroplistBox {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: small;
-  margin: 2px 0px;
+  color: rgb(3,22,52);
+  background-color: rgb(232,221,203);  
+  margin: 5px 1px;
   padding: 2px 0px; /* centers text on Firefox; does nothing on Chrome */
   border: 1px solid rgb(3,54,73); /* adding this changes the font?!? */
   width: 210px; /* calculated by comparison with ValueBoxen */
   height: 32px;
-  background-color: rgb(232,221,203);
 }
-.wmt-DroplistBox-upload {
+select.wmt-DroplistBox-upload {
   width: 175px; /* calculated by comparison with DroplistBox */
 }
 
 /* For the droplist + button width for "file" parameter types. */
-.wmt-FileUploadBox {
+select.wmt-FileUploadBox {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: small;
-  margin: 2px 0px;
+  color: rgb(3,22,52);
+  background-color: rgb(232,221,203);
+  margin: 5px 1px;
   padding: 2px 0px; /* centers text on Firefox; does nothing on Chrome */
   border: 1px solid rgb(3,54,73); /* adding this changes the font?!? */
   width: 175px; /* calculated by comparison with DroplistBox */
   height: 32px;
-  background-color: rgb(232,221,203);  
 }
 
 /* A consistent style for all buttons. */
