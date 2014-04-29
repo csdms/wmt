@@ -18,6 +18,7 @@
    <!-- Other module inherits -->
    <inherits name="com.google.gwt.http.HTTP" />
    <inherits name="com.google.gwt.i18n.I18N" />
+   <inherits name ="com.github.gwtbootstrap.Bootstrap"/>
 
    <!-- Specify the app entry point class. -->
    <entry-point class='edu.colorado.csdms.wmt.client.WMT' />
