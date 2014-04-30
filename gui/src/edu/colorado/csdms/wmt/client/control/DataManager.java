@@ -128,8 +128,8 @@ public class DataManager {
   }
   
   /**
-   * Sets a GWT-Bootstrap tooltip on the input Widget. A reference to the
-   * tooltip is returned.
+   * Sets a GWT-Bootstrap tooltip on the input Widget, positioned to the right
+   * of the Widget. A reference to the tooltip is returned.
    * 
    * @param w a Widget
    * @param text the tooltip text for the Widget

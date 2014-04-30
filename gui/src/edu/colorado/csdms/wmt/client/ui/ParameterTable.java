@@ -90,7 +90,7 @@ public class ParameterTable extends FlexTable {
         this.getFlexCellFormatter().setStyleName(tableRowIndex, 0,
             "wmt-ParameterSeparator");
       } else {
-        this.setWidget(tableRowIndex, 1, new ValueCell(parameter));
+        this.setWidget(tableRowIndex, 1, new ValueCell(data, parameter));
         this.getFlexCellFormatter().setStyleName(tableRowIndex, 0,
             "wmt-ParameterDescription");
         this.getFlexCellFormatter().setHorizontalAlignment(tableRowIndex, 1,

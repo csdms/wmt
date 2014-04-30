@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 
+import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataURL;
 import edu.colorado.csdms.wmt.client.data.ParameterJSO;
 import edu.colorado.csdms.wmt.client.ui.widgets.UploadDialogBox;
@@ -33,6 +34,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.UploadDialogBox;
  */
 public class ValueCell extends HorizontalPanel {
 
+  private DataManager data;
   private ParameterJSO parameter;
   private UploadDialogBox upload;
   private ListBox fileDroplist;
@@ -43,8 +45,9 @@ public class ValueCell extends HorizontalPanel {
    * 
    * @param parameter a ParameterJSO object
    */
-  public ValueCell(ParameterJSO parameter) {
+  public ValueCell(DataManager data, ParameterJSO parameter) {
 
+    this.data = data;
     this.parameter = parameter;
     this.setStyleName("wmt-ValueCell");
 
@@ -80,7 +83,7 @@ public class ValueCell extends HorizontalPanel {
       range +=
           "Valid range: (" + parameter.getValue().getMin() + ", "
               + parameter.getValue().getMax() + ")";
-      this.setTitle(range);
+      this.data.setTooltip(this, range, "top");
     }
   }
 
