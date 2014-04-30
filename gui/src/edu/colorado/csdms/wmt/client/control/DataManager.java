@@ -9,7 +9,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.github.gwtbootstrap.client.ui.Tooltip;
+import com.github.gwtbootstrap.client.ui.constants.Placement;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.Constants;
@@ -122,6 +125,42 @@ public class DataManager {
    */
   public void showDefaultCursor() {
     perspective.getElement().getStyle().setCursor(Cursor.DEFAULT);
+  }
+  
+  /**
+   * Sets a GWT-Bootstrap tooltip on the input Widget. A reference to the
+   * tooltip is returned.
+   * 
+   * @param w a Widget
+   * @param text the tooltip text for the Widget
+   */
+  public Tooltip setTooltip(Widget w, String text) {
+    return setTooltip(w, text, "");
+  }
+  
+  /**
+   * Sets a GWT-Bootstrap tooltip on the input Widget. A reference to the
+   * tooltip is returned.
+   * 
+   * @param w a Widget
+   * @param text the tooltip text for the Widget
+   * @param direction the location of the tooltip: bottom, top, left right
+   */
+  public Tooltip setTooltip(Widget w, String text, String direction) {
+    Tooltip tooltip = new Tooltip();
+    tooltip.setWidget(w);
+    tooltip.setText(text);
+    if (direction.equalsIgnoreCase("bottom")) {
+      tooltip.setPlacement(Placement.BOTTOM);
+    } else if (direction.equalsIgnoreCase("top")) {
+      tooltip.setPlacement(Placement.TOP);
+    } else if (direction.equalsIgnoreCase("left")) {
+      tooltip.setPlacement(Placement.LEFT);
+    } else {
+      tooltip.setPlacement(Placement.RIGHT);
+    }
+    tooltip.reconfigure();
+    return tooltip;
   }
   
   /**
