@@ -41,7 +41,7 @@ public class ParameterActionPanel extends HorizontalPanel {
 
     // Reset
     Button resetButton = new Button("<i class='fa fa-bolt'></i>");
-    resetButton.setTitle(Constants.PARAMETER_RESET);
+    data.setTooltip(resetButton, Constants.PARAMETER_RESET, "bottom");
     resetButton.addClickHandler(new ParameterActionPanelResetHandler(this.data,
         this.componentId));
     this.add(resetButton);
@@ -49,7 +49,7 @@ public class ParameterActionPanel extends HorizontalPanel {
     // View input files
     final Button viewFilesButton =
         new Button("<i class='fa fa-external-link'></i>");
-    viewFilesButton.setTitle(Constants.PARAMETER_VIEW_FILE);
+    data.setTooltip(viewFilesButton, Constants.PARAMETER_VIEW_FILE, "bottom");
     this.add(viewFilesButton);
     inputFilesMenu = new ViewInputFilesMenu(this.data, this.componentId);
     viewFilesButton.addClickHandler(new ClickHandler() {
