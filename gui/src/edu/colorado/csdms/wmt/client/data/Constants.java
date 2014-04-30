@@ -58,7 +58,7 @@ public class Constants {
   public static Integer RETRY_ATTEMPTS = 3;
 
   // Fractional size of viewEast in Perspective.
-  public static Double VIEW_EAST_FRACTION = 0.50;
+  public static Double VIEW_EAST_FRACTION = 0.60;
 
   // Width (in px) of splitter grabby bar.
   public static Integer SPLITTER_SIZE = 5;
