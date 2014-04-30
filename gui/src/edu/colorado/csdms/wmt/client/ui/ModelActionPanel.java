@@ -5,6 +5,7 @@ package edu.colorado.csdms.wmt.client.ui;
 
 import java.util.Iterator;
 
+import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -42,25 +43,25 @@ public class ModelActionPanel extends HorizontalPanel {
 
     // Open
     Button openButton = new Button(Constants.FA_OPEN);
-    openButton.setTitle(Constants.MODEL_OPEN);
-    openButton.addClickHandler(new ModelActionPanelOpenHandler(data));
+    Tooltip openButtonTooltip = data.setTooltip(openButton, Constants.MODEL_OPEN, "bottom");
+    openButton.addClickHandler(new ModelActionPanelOpenHandler(data, openButtonTooltip));
     this.add(openButton);
 
     // Save
     Button saveButton = new Button(Constants.FA_SAVE);
-    saveButton.setTitle(Constants.MODEL_SAVE);
+    data.setTooltip(saveButton, Constants.MODEL_SAVE, "bottom");
     saveButton.addClickHandler(new ModelActionPanelSaveHandler(data));
     this.add(saveButton);
 
     // Run
     Button runButton = new Button(Constants.FA_RUN);
-    runButton.setTitle(Constants.MODEL_RUN);
+    data.setTooltip(runButton, Constants.MODEL_RUN, "bottom");
     runButton.addClickHandler(new SetupRunModelHandler(data));
     this.add(runButton);
 
     // More
     final Button moreButton = new Button("More" + Constants.FA_MORE);
-    moreButton.setTitle(Constants.MODEL_MORE);
+    data.setTooltip(moreButton, Constants.MODEL_MORE, "right");
     this.add(moreButton);
     moreMenu = new MoreActionsMenu(data);
     moreButton.addClickHandler(new ClickHandler() {

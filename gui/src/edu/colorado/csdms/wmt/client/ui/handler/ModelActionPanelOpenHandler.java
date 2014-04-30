@@ -3,6 +3,7 @@
  */
 package edu.colorado.csdms.wmt.client.ui.handler;
 
+import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
@@ -17,6 +18,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.OpenDialogBox;
 public class ModelActionPanelOpenHandler implements ClickHandler {
 
   private DataManager data;
+  private Tooltip tooltip;
   private OpenDialogBox openDialog;
 
   /**
@@ -24,13 +26,17 @@ public class ModelActionPanelOpenHandler implements ClickHandler {
    * 
    * @param data the DataManager object for the WMT session
    */
-  public ModelActionPanelOpenHandler(DataManager data) {
+  public ModelActionPanelOpenHandler(DataManager data, Tooltip tooltip) {
     this.data = data;
+    this.tooltip = tooltip;
   }
 
   @Override
   public void onClick(ClickEvent event) {
 
+    // Necessary to work around a bug in the tooltip.
+    tooltip.hide();
+    
     openDialog = new OpenDialogBox(data);
 
     // Populate the droplist with the available models on the server.
