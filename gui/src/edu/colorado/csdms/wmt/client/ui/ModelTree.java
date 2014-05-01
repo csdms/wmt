@@ -94,7 +94,7 @@ public class ModelTree extends Tree {
    */
   public TreeItem insertTreeItem(String portId, TreeItem target, Integer index) {
     ComponentCell cell = new ComponentCell(data, portId);
-    TreeItem item = target.insertItem(index, cell);    
+    TreeItem item = target.insertItem(index, cell);
     item.setStyleName("wmt-TreeItem");
     cell.setEnclosingTreeItem(item);
     return item;
@@ -141,7 +141,7 @@ public class ModelTree extends Tree {
 
     // If this component already exists elsewhere in the ModelTree, set a link
     // to it and exit.
-    if (thisComponentIsADuplicate(componentId)) {
+    if (isThisComponentADuplicate(componentId)) {
       GWT.log("This component is a duplicate!");
       ComponentCell cell = (ComponentCell) target.getWidget();
       cell.isLinked(true);
@@ -162,7 +162,7 @@ public class ModelTree extends Tree {
 
       // If the new port has a connected component higher in the ModelTree,
       // create the component and set a link to it.
-      String connectedId = providesComponentIsADuplicate(portId);
+      String connectedId = isProvidesComponentADuplicate(portId);
       if (connectedId != null) {
         GWT.log("This provides port has been used elsewhere!");
         ComponentCell newCell = (ComponentCell) newItem.getWidget();
@@ -240,45 +240,26 @@ public class ModelTree extends Tree {
   }
 
   /**
-   * Checks whether the input port has appeared higher in the ModelTree
-   * hierarchy, and has a connected component. If so, the id of the component is
-   * returned; otherwise, a null object is returned.
-   * <p>
-   * I'm concerned that this technique may be inefficient since each TreeItem is
-   * hit in iterating through the ModelTree.
+   * Checks whether the input component has appeared elsewhere in the ModelTree;
+   * returns true if a match is found.
    * 
-   * @param portId the id the port to check
+   * @param componentId the id the component to check
    */
-  public Boolean thisComponentIsADuplicate(String portId) {
+  public Boolean isThisComponentADuplicate(String componentId) {
 
-    GWT.log("Checking for connection on port: " + portId);
+    GWT.log("Checking for duplicate component: " + componentId);
 
     Integer nMatches = 0;
-
     Iterator<TreeItem> iter = this.treeItemIterator();
     while (iter.hasNext()) {
-
       TreeItem treeItem = (TreeItem) iter.next();
       ComponentCell cell = (ComponentCell) treeItem.getWidget();
-
-      if (cell.getComponentId() != null) {
-        String cellPortId = cell.getPortId();
-
-        // When the port is listed as "driver", it obscures the provides port
-        // of the connected component. Find the provides port and use it.
-        if (cellPortId.matches(Constants.DRIVER)) {
-          if (data.getComponent(cell.getComponentId()).nProvidesPorts() > 0) {
-            cellPortId =
-                data.getComponent(cell.getComponentId()).getProvidesPorts()
-                    .get(0).getId();
-          }
-        }
-        
-        if ((cellPortId != null) && cellPortId.matches(portId)) {
-          nMatches++;
-          if (nMatches > 1) {
-            return true;
-          }
+      if ((cell.getComponentId() != null)
+          && cell.getComponentId().matches(componentId)) {
+        nMatches++;
+        // The first match is with the current ComponentCell.
+        if (nMatches > 1) {
+          return true;
         }
       }
     }
@@ -286,12 +267,12 @@ public class ModelTree extends Tree {
   }
 
   /**
-   * Checks whether the input provides port has been filled higher in the 
+   * Checks whether the input provides port has been filled higher in the
    * ModelTree. Returns the id of the component that fills it.
    * 
    * @param portId the id the port to check
    */
-  public String providesComponentIsADuplicate(String portId) {
+  public String isProvidesComponentADuplicate(String portId) {
 
     GWT.log("Checking for connection on port: " + portId);
 
