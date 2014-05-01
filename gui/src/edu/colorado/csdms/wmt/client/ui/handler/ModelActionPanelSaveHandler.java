@@ -5,6 +5,7 @@ package edu.colorado.csdms.wmt.client.ui.handler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
@@ -56,13 +57,25 @@ public class ModelActionPanelSaveHandler implements ClickHandler {
    * {@link DialogCancelHandler}.
    */
   private void showSaveDialogBox() {
+    
     saveDialog = new SaveDialogBox(data, data.getModel().getName());
     saveDialog.getNamePanel().setTitle(
         "Enter a name for the model. No file extension is needed.");
-    saveDialog.getChoicePanel().getOkButton().addClickHandler(
-        new SaveModelHandler(data, saveDialog));
-    saveDialog.getChoicePanel().getCancelButton().addClickHandler(
-        new DialogCancelHandler(saveDialog));
+    
+    // Define handlers.
+    final SaveModelHandler saveHandler = new SaveModelHandler(data, saveDialog);
+    final DialogCancelHandler cancelHandler =
+        new DialogCancelHandler(saveDialog);
+
+    // Apply handlers to OK and Cancel buttons.
+    saveDialog.getChoicePanel().getOkButton().addClickHandler(saveHandler);
+    saveDialog.getChoicePanel().getCancelButton()
+        .addClickHandler(cancelHandler);
+
+    // Also apply handlers to "Enter" and "Esc" keys.    
+    saveDialog.addDomHandler(new ModalKeyHandler(saveHandler, cancelHandler),
+        KeyDownEvent.getType());
+        
     saveDialog.center();
     saveDialog.getNamePanel().getField().setFocus(true);
   }
