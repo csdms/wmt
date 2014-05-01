@@ -5,9 +5,7 @@ package edu.colorado.csdms.wmt.client.ui.handler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.data.Constants;
@@ -16,7 +14,9 @@ import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
 /**
  * Handles click on the "Delete" button in the ModelActionPanel. It presents an
  * instance of {@link DroplistDialogBox} with a "Delete" button. Events are sent
- * to {@link DeleteModelHandler} and {@link DialogCancelHandler}.
+ * to {@link DeleteModelHandler} (on clicking "OK" button or hitting
+ * <code>Enter</code> key) and {@link DialogCancelHandler} (on clicking "Cancel"
+ * or hitting <code>Esc</code> key).
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -63,17 +63,9 @@ public class ModelActionPanelDeleteHandler implements ClickHandler {
         cancelHandler);
 
     // Also apply handlers to "Enter" and "Esc" keys.
-    deleteDialog.addDomHandler(new KeyDownHandler() {
-      @Override
-      public void onKeyDown(KeyDownEvent event) {
-        Integer keyCode = event.getNativeKeyCode();
-        if (keyCode == KeyCodes.KEY_ESCAPE) {
-          cancelHandler.onClick(null);
-        } else if (keyCode == KeyCodes.KEY_ENTER) {
-          deleteHandler.onClick(null);
-        }
-      }
-    }, KeyDownEvent.getType());
+    deleteDialog.addDomHandler(
+        new ModalKeyHandler(deleteHandler, cancelHandler), KeyDownEvent
+            .getType());
 
     deleteDialog.center();
 
