@@ -54,5 +54,6 @@ public class SetupRunModelHandler implements ClickHandler {
         new DialogCancelHandler(runDialog));
 
     runDialog.center();
+    runDialog.getHostPanel().getDroplist().setFocus(true);
   }
 }

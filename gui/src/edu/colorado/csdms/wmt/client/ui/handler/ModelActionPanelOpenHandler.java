@@ -45,5 +45,8 @@ public class ModelActionPanelOpenHandler implements ClickHandler {
         new DialogCancelHandler(openDialog));
 
     openDialog.center();
+
+    // Give the droplist focus.
+    openDialog.getDroplistPanel().getDroplist().setFocus(true);    
   }
 }

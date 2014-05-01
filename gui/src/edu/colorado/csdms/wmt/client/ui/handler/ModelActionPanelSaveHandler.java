@@ -64,5 +64,6 @@ public class ModelActionPanelSaveHandler implements ClickHandler {
     saveDialog.getChoicePanel().getCancelButton().addClickHandler(
         new DialogCancelHandler(saveDialog));
     saveDialog.center();
+    saveDialog.getNamePanel().getField().setFocus(true);
   }
 }
