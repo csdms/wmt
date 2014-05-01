@@ -6,6 +6,7 @@ package edu.colorado.csdms.wmt.client.ui.handler;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
@@ -22,7 +23,7 @@ public class AuthenticationHandler implements ClickHandler {
 
   private DataManager data;
   private LoginPanel panel;
-  
+
   /**
    * Creates a new {@link AuthenticationHandler}.
    * 
@@ -33,7 +34,7 @@ public class AuthenticationHandler implements ClickHandler {
     this.data = data;
     this.panel = panel;
   }
-  
+
   @Override
   public void onClick(ClickEvent event) {
 
@@ -42,17 +43,30 @@ public class AuthenticationHandler implements ClickHandler {
       final QuestionDialogBox questionDialog =
           new QuestionDialogBox(Constants.QUESTION_SIGN_OUT);
       questionDialog.getChoicePanel().getOkButton().setHTML(Constants.SIGN_OUT);
-      questionDialog.getChoicePanel().getOkButton().addClickHandler(
-          new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-              DataTransfer.logout(data);
-              questionDialog.hide();
-            }
-          });
+
+      // Define handlers.
+      ClickHandler okHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+          DataTransfer.logout(data);
+          questionDialog.hide();
+        }
+      };
+      DialogCancelHandler cancelHandler =
+          new DialogCancelHandler(questionDialog);
+
+      // Apply handlers to OK and Cancel buttons.
+      questionDialog.getChoicePanel().getOkButton().addClickHandler(okHandler);
       questionDialog.getChoicePanel().getCancelButton().addClickHandler(
-          new DialogCancelHandler(questionDialog));
+          cancelHandler);
+
+      // Also apply handlers to "Enter" and "Esc" keys.
+      questionDialog
+          .addDomHandler(new ModalKeyHandler(okHandler, cancelHandler),
+              KeyDownEvent.getType());
+
       questionDialog.center();
+      questionDialog.getChoicePanel().getOkButton().setFocus(true);
 
     } else {
 
