@@ -5,6 +5,9 @@ package edu.colorado.csdms.wmt.client.ui.handler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.data.Constants;
@@ -30,7 +33,7 @@ public class ModelActionPanelDeleteHandler implements ClickHandler {
   public ModelActionPanelDeleteHandler(DataManager data) {
     this.data = data;
   }
-  
+
   @Override
   public void onClick(ClickEvent event) {
 
@@ -48,11 +51,33 @@ public class ModelActionPanelDeleteHandler implements ClickHandler {
           data.modelNameList.get(i));
     }
 
-    deleteDialog.getChoicePanel().getOkButton().addClickHandler(
-        new DeleteModelHandler(data, deleteDialog));
+    // Define handlers.
+    final DeleteModelHandler deleteHandler =
+        new DeleteModelHandler(data, deleteDialog);
+    final DialogCancelHandler cancelHandler =
+        new DialogCancelHandler(deleteDialog);
+
+    // Apply handlers to OK and Cancel buttons.
+    deleteDialog.getChoicePanel().getOkButton().addClickHandler(deleteHandler);
     deleteDialog.getChoicePanel().getCancelButton().addClickHandler(
-        new DialogCancelHandler(deleteDialog));
+        cancelHandler);
+
+    // Also apply handlers to "Enter" and "Esc" keys.
+    deleteDialog.addDomHandler(new KeyDownHandler() {
+      @Override
+      public void onKeyDown(KeyDownEvent event) {
+        Integer keyCode = event.getNativeKeyCode();
+        if (keyCode == KeyCodes.KEY_ESCAPE) {
+          cancelHandler.onClick(null);
+        } else if (keyCode == KeyCodes.KEY_ENTER) {
+          deleteHandler.onClick(null);
+        }
+      }
+    }, KeyDownEvent.getType());
 
     deleteDialog.center();
+
+    // Give the droplist focus.
+    deleteDialog.getDroplistPanel().getDroplist().setFocus(true);
   }
 }
