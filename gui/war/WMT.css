@@ -118,6 +118,7 @@
   color: rgb(3, 54, 73);
   padding: 5px 40px 5px 5px;
   cursor: pointer;
+  min-width: 150px;
 }
 .wmt-PopupPanelItem:hover {
   background-color: rgb(232,221,203);
@@ -205,7 +206,7 @@
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   padding: 5px 40px 5px 5px;
   cursor: pointer;
-  min-width: 100px; /* matches ComponentCell-NameCell */
+  min-width: 150px;
 }
 .wmt-ComponentSelectionMenuItem:before {
   font-family: "FontAwesome";
