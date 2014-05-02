@@ -254,7 +254,7 @@ body, table td, select, button {
 .wmt-TextBoxen {
   color: colorAbisso;
   background-color: colorTerraTerra;
-  padding: 5px 4px;
+  padding: 7px 4px;
   border: 1px solid colorAcquaProfonda;
   border-top: 1px solid colorAbisso;
   font-size: fontSmall;
@@ -265,7 +265,7 @@ body, table td, select, button {
 .wmt-ValueBoxen {
   color: colorAbisso;
   background-color: colorTerraTerra;
-  padding: 5px 4px;
+  padding: 7px 4px;
   border: 1px solid colorAcquaProfonda;
   border-top: 1px solid colorAbisso;
   font-size: fontSmall;
