@@ -16,6 +16,7 @@ URLS = (
     '/show', 'wmt.controllers.actions.Show',
 
     '/account/login', 'wmt.controllers.account.Login',
+    '/account/new', 'wmt.controllers.account.New',
     '/account/logout', 'wmt.controllers.account.Logout',
     '/account/username', 'wmt.controllers.account.Username',
 
@@ -45,6 +46,7 @@ URLS = (
     '/models/submit', 'wmt.controllers.actions.Submit',
 
     '/run/new', 'wmt.controllers.run.New',
+    '/run/delete/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Delete',
     '/run/show', 'wmt.controllers.run.Show',
     '/run/status', 'wmt.controllers.run.Status',
     '/run/stage', 'wmt.controllers.run.Stage',

@@ -138,6 +138,12 @@ class New(object):
         return json.dumps(uuid)
 
 
+class Delete(object):
+    def POST(self, uuid):
+        submissions.remove(uuid)
+        raise web.seeother('/')
+
+
 class Update(object):
     form = web.form.Form(
         web.form.Textbox('uuid',
