@@ -5,7 +5,7 @@ package edu.colorado.csdms.wmt.client.control;
 
 import com.google.gwt.user.client.Window;
 
-import edu.colorado.csdms.wmt.client.data.Constants;
+import edu.colorado.csdms.wmt.client.Constants;
 
 /**
  * A class defining static methods that return URLs for accessing components
