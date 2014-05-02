@@ -1,8 +1,19 @@
 /* 
    CSS rules for the WMT client.
    
+   These rules are injected into the client through a GWT CssResource. See:
+   http://www.gwtproject.org/doc/latest/DevGuideClientBundle.html#CssResource
+   
    Color palette adapted from http://www.colourlovers.com/palette/292482/Terra.
 */
+
+/* Variables. */
+@def colorAbisso rgb(3,22,52);
+@def colorAcquaProfonda rgb(3,54,73);
+@def colorAcqua rgb(3,101,100);
+@def colorTerra rgb(205,179,128);
+@def colorTerraTerra rgb(232,221,203);
+@def colorWarning rgb(203,73,54);
 
 /* All HTML widgets obey this rule. */
 .gwt-HTML {
@@ -20,7 +31,7 @@
 /* The navbar runs along the top of the client interface. */
 .wmt-NavBar {
   width: 100%;
-  background-color: rgb(3,22,52);
+  background-color: colorAbisso;
   /* min-height: 50px; */ /* Height is set in code by DockLayoutPanel */
 }
 .wmt-NavBarTitle {
@@ -39,7 +50,7 @@
   margin: 8px 10px 8px 0px;
 }
 .wmt-LoginBox {
-  color: rgb(3,54,73);
+  color: colorAcquaProfonda;
   font-size: 14px;
   line-height: 1.25;
   padding: 6px 12px;
@@ -49,13 +60,13 @@
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   display: inline-block;
   color: white;
-  background-color: rgb(3,101,100);
+  background-color: colorAcqua;
   font-size: 14px;
   line-height: 1.25;
   padding: 6px 12px;
   cursor: pointer;
   margin: 2px;
-  border: 2px solid rgb(3,101,100);
+  border: 2px solid colorAcqua;
 }
 
 /* The splitter base divides the Model and Parameters tabs. */
@@ -63,7 +74,7 @@
 }
 .gwt-SplitLayoutPanel .gwt-SplitLayoutPanel-HDragger {
   background-color: white;
-  border-left: 1px solid rgb(3,22,52);
+  border-left: 1px solid colorAbisso;
 }
 
 /* Rules for the Model and Parameters tabs. */
@@ -82,7 +93,7 @@
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
   font-weight: normal !important;
-  color: rgb(3,22,52) !important;
+  color: colorAbisso !important;
 }
 
 /* ActionPanels are button groups on top of the Model & Parameters tabs. */
@@ -92,15 +103,15 @@
 .wmt-ActionPanelButton {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   width: 75px;
-  color: rgb(3,22,52);
-  background-color: rgb(232,221,203);
+  color: colorAbisso;
+  background-color: colorTerraTerra;
   padding: 5px 7px;
   margin-right: 5px; /* provides inter-button spacing */
-  border: 1px solid rgb(3,54,73);
-  border-bottom: 1px solid rgb(3,22,52);
+  border: 1px solid colorAcquaProfonda;
+  border-bottom: 1px solid colorAbisso;
 }
 .wmt-ActionPanelButton:hover {
-  background-color: rgb(205,179,128);
+  background-color: colorTerra;
 }
 
 /* Rules for WMT widgets derived from a GWT PopupPanel. */
@@ -108,23 +119,23 @@
   border: 1px solid #ccc; /* matches gwt-MenuBar-vertical */
   background-color: white;
   padding: 5px 1px 5px 1px;
-  box-shadow: 2px 2px 1px rgba(192, 192, 192, 0.75);
+  box-shadow: 2px 2px 1px lightgray;
   cursor: pointer;
 }
 
 /* Items shown in a WMT PopupPanel. */
 .wmt-PopupPanelItem {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  color: rgb(3, 54, 73);
+  color: colorAcquaProfonda;
   padding: 5px 40px 5px 5px;
   cursor: pointer;
   min-width: 150px;
 }
 .wmt-PopupPanelItem:hover {
-  background-color: rgb(232,221,203);
+  background-color: colorTerraTerra;
 }
 .wmt-PopupPanelItem-disabled {
-  color: rgb(192,192,192);
+  color: lightgray;
 }
 .wmt-PopupPanelItem-disabled:hover {
   background-color: white;
@@ -133,7 +144,7 @@
 /* For CheckBox items -- Don't use :hover, set line-height. */
 .wmt-PopupPanelCheckBoxItem {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  color: rgb(3,22,52);
+  color: colorAbisso;
   padding: 5px 40px 5px 3px;
   line-height: 2.0;
 }
@@ -142,7 +153,7 @@
 .wmt-PopupPanelSeparator {
   width: 100%;
   height: 1px;
-  border-top: 1px solid rgb(232,221,203);
+  border-top: 1px solid colorTerraTerra;
 }
 
 /* Rules for the ModelTree. */
@@ -160,9 +171,9 @@
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-style: italic;
   text-align: center;
-  color: rgb(3,22,52);
-  background-color: rgb(232,221,203);
-  border: 2px solid rgb(3,54,73);
+  color: colorAbisso;
+  background-color: colorTerraTerra;
+  border: 2px solid colorAcquaProfonda;
   height: 60px;
 }
 
@@ -170,7 +181,7 @@
 .wmt-ComponentCell-connected {  
   font-style: normal;
   color: white;
-  background-color: rgb(3,101,100);
+  background-color: colorAcqua;
 }
 
 /* The name (port or component) shown inside the ComponentCell. */
@@ -191,7 +202,7 @@
    font-family: "FontAwesome";
    padding: 3px;
    content: "\f112";
-   color: rgb(232,221,203);
+   color: colorTerraTerra;
 }
 
 /* For the menuCell inside the ComponentCell. */
@@ -212,28 +223,28 @@
   font-family: "FontAwesome";
   font-style: normal;
   content: "\f013";
-  color: rgb(3, 54, 73);
+  color: colorAcquaProfonda;
   margin-right: 0.5em;
 }
 .wmt-ComponentSelectionMenuItem:hover {
-  background-color: rgb(232,221,203);
+  background-color: colorTerraTerra;
 }
 .wmt-ComponentSelectionMenuItem-missing {
-  background-color: #fdd;
+  background-color: colorWarning;
 }
 
 /* Text used in a parameter description. */
 .wmt-ParameterDescription {
    padding: 0 1em 0 1.5em;
-   color: rgb(3,54,73);
+   color: colorAcquaProfonda;
 }
 
 /* Separates parameter groups in the ParameterTable. */
 .wmt-ParameterSeparator {
    font-style: oblique;
    padding: 10px 0 5px 0;
-   color: rgb(3,54,73);
-   border: solid rgb(3,54,73);
+   color: colorAcquaProfonda;
+   border: solid colorAcquaProfonda;
    border-width: 0 0 1px 0;
 }
 
@@ -245,11 +256,11 @@
 /* Used for all TextBox widgets. */
 .wmt-TextBoxen {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  color: rgb(3,22,52);
-  background-color: rgb(232,221,203);
+  color: colorAbisso;
+  background-color: colorTerraTerra;
   padding: 5px 4px;
-  border: 1px solid rgb(3,54,73);
-  border-top: 1px solid rgb(3,22,52);
+  border: 1px solid colorAcquaProfonda;
+  border-top: 1px solid colorAbisso;
   font-size: small;
   width: 200px;
 }
@@ -257,17 +268,17 @@
 /* All TextBoxen that display numeric values. Used in the ParameterTable. */
 .wmt-ValueBoxen {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  color: rgb(3,22,52);
-  background-color: rgb(232,221,203);
+  color: colorAbisso;
+  background-color: colorTerraTerra;
   padding: 5px 4px;
-  border: 1px solid rgb(3,54,73);
-  border-top: 1px solid rgb(3,22,52);
+  border: 1px solid colorAcquaProfonda;
+  border-top: 1px solid colorAbisso;
   font-size: small;
   text-align: right;
   width: 200px;
 }
 .wmt-ValueBoxen-outofrange {
-  background-color: rgb(203,73,54);
+  background-color: colorWarning;
 }
 
 /* Droplists, used primarily in the ParameterTable. */
@@ -277,10 +288,10 @@
   font-size: small;
   margin: 2px 0px;
   padding: 2px 0px; /* centers text on Firefox; does nothing on Chrome */
-  border: 1px solid rgb(3,54,73); /* adding this changes the font?!? */
+  border: 1px solid colorAcquaProfonda; /* adding this changes the font?!? */
   width: 210px; /* calculated by comparison with ValueBoxen */
   height: 32px;
-  background-color: rgb(232,221,203);
+  background-color: colorTerraTerra;
 }
 .wmt-DroplistBox-upload {
   width: 175px; /* calculated by comparison with DroplistBox */
@@ -292,23 +303,23 @@
   font-size: small;
   margin: 2px 0px;
   padding: 2px 0px; /* centers text on Firefox; does nothing on Chrome */
-  border: 1px solid rgb(3,54,73); /* adding this changes the font?!? */
+  border: 1px solid colorAcquaProfonda; /* adding this changes the font?!? */
   width: 175px; /* calculated by comparison with DroplistBox */
   height: 32px;
-  background-color: rgb(232,221,203);  
+  background-color: colorTerraTerra;  
 }
 
 /* A consistent style for all buttons. */
 .wmt-Button {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  color: rgb(3,22,52);
-  background-color: rgb(232,221,203);
+  color: colorAbisso;
+  background-color: colorTerraTerra;
   padding: 5px 7px;
-  border: 1px solid rgb(3,54,73);
-  border-bottom: 1px solid rgb(3,22,52);
+  border: 1px solid colorAcquaProfonda;
+  border-bottom: 1px solid colorAbisso;
 }
 .wmt-Button:hover {
-  background-color: rgb(205,179,128);
+  background-color: colorTerra;
 }
 
 /* All labels. */
@@ -319,12 +330,12 @@
 /* Styles for use by all DialogBoxes. */
 .wmt-DialogBox {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  color: rgb(3,22,52);
+  color: colorAbisso;
   background: white;
-  border: 2px solid rgb(3,54,73);
+  border: 2px solid colorAcquaProfonda;
 }
 .wmt-DialogBox .dialogTop {
-  background: rgb(3,22,52);
+  background: colorAbisso;
 }
 .wmt-DialogBox .Caption {
   font-size: 14px;
