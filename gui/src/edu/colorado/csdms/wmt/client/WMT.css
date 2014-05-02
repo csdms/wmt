@@ -14,10 +14,11 @@
 @def colorTerra rgb(205,179,128);
 @def colorTerraTerra rgb(232,221,203);
 @def colorWarning rgb(203,73,54);
+@def fontFamily "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 
-/* All HTML widgets obey this rule. */
-.gwt-HTML {
-   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+body, table td, select, button {
+  font-family: fontFamily;
+  font-size: small;
 }
 
 /* The primary structuring element of the WMT client. */
@@ -35,7 +36,6 @@
   /* min-height: 50px; */ /* Height is set in code by DockLayoutPanel */
 }
 .wmt-NavBarTitle {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   color: white;
   float: left;
   padding: 15px;
@@ -57,7 +57,6 @@
   margin-right: 5px;
 }
 .wmt-SignInButton {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   display: inline-block;
   color: white;
   background-color: colorAcqua;
@@ -101,7 +100,6 @@
   margin: 5px 0px 10px 2px;
 }
 .wmt-ActionPanelButton {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   width: 75px;
   color: colorAbisso;
   background-color: colorTerraTerra;
@@ -125,7 +123,6 @@
 
 /* Items shown in a WMT PopupPanel. */
 .wmt-PopupPanelItem {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   color: colorAcquaProfonda;
   padding: 5px 40px 5px 5px;
   cursor: pointer;
@@ -143,7 +140,6 @@
 
 /* For CheckBox items -- Don't use :hover, set line-height. */
 .wmt-PopupPanelCheckBoxItem {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   color: colorAbisso;
   padding: 5px 40px 5px 3px;
   line-height: 2.0;
@@ -168,7 +164,6 @@
 
 /* Base style for a ComponentCell. */
 .wmt-ComponentCell {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-style: italic;
   text-align: center;
   color: colorAbisso;
@@ -186,7 +181,6 @@
 
 /* The name (port or component) shown inside the ComponentCell. */
 .wmt-ComponentCell-NameCell {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   text-align: center;
   width: 100px;
   max-width: 100px;
@@ -214,7 +208,6 @@
 
 /* Pull-down menu items in the ComponentSelectionMenu. */
 .wmt-ComponentSelectionMenuItem {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   padding: 5px 40px 5px 5px;
   cursor: pointer;
   min-width: 150px;
@@ -255,7 +248,6 @@
 
 /* Used for all TextBox widgets. */
 .wmt-TextBoxen {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   color: colorAbisso;
   background-color: colorTerraTerra;
   padding: 5px 4px;
@@ -267,7 +259,6 @@
 
 /* All TextBoxen that display numeric values. Used in the ParameterTable. */
 .wmt-ValueBoxen {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   color: colorAbisso;
   background-color: colorTerraTerra;
   padding: 5px 4px;
@@ -284,7 +275,6 @@
 /* Droplists, used primarily in the ParameterTable. */
 /* See: http://stackoverflow.com/questions/5439782/i-want-to-vertical-align-text-in-select-box */
 .wmt-DroplistBox {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: small;
   margin: 2px 0px;
   padding: 2px 0px; /* centers text on Firefox; does nothing on Chrome */
@@ -299,7 +289,6 @@
 
 /* For the droplist + button width for "file" parameter types. */
 .wmt-FileUploadBox {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: small;
   margin: 2px 0px;
   padding: 2px 0px; /* centers text on Firefox; does nothing on Chrome */
@@ -311,7 +300,6 @@
 
 /* A consistent style for all buttons. */
 .wmt-Button {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   color: colorAbisso;
   background-color: colorTerraTerra;
   padding: 5px 7px;
@@ -322,14 +310,8 @@
   background-color: colorTerra;
 }
 
-/* All labels. */
-.gwt-Label {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-}
-
 /* Styles for use by all DialogBoxes. */
 .wmt-DialogBox {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   color: colorAbisso;
   background: white;
   border: 2px solid colorAcquaProfonda;
