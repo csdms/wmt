@@ -33,12 +33,16 @@ public class WMT implements EntryPoint {
 
     // Initialize the DataManager object.
     data = new DataManager();
-    
-    // Is GWT running in development mode or in production mode?
+
+    // Is GWT in development or production mode?
     data.isDevelopmentMode(!GWT.isProdMode() && GWT.isClient());
-    
+
     // Are we using the development mode of the API?
     data.isApiDevelopmentMode(Constants.USE_API_DEV_MODE);
+
+    // Load WMT's CSS rules. 
+    // (See http://www.gwtproject.org/doc/latest/DevGuideUiCss.html#cssfiles)
+    Resources.INSTANCE.css().ensureInjected();
 
     // Set up the basic framework of views for the GUI.
     perspective = new Perspective(data);
