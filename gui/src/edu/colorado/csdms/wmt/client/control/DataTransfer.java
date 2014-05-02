@@ -569,6 +569,14 @@ public class DataTransfer {
           Window.alert(Constants.RESPONSE_ERR_MSG);
         }
 
+      } else if (Response.SC_BAD_REQUEST == response.getStatusCode()) {
+        
+        Window.alert("Email address not registered. New user?");
+        
+      } else if (Response.SC_UNAUTHORIZED == response.getStatusCode()) {
+        
+        Window.alert("Email address registered. Password not valid.");
+        
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "

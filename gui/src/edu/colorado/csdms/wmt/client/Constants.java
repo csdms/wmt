@@ -46,14 +46,15 @@ public class Constants {
   public static final String RUN_STAGE_PATH = "run/stage";
   public static final String RUN_LAUNCH_PATH = "run/launch";
 
-  // Error messages used in DataTransfer.
+  // Error and warning messages.
   public static String REQUEST_ERR_MSG = "Failed to send the request: ";
   public static String RESPONSE_ERR_MSG = "No match found in the response.";
-
   public static String CLOSE_MSG =
       "Any unsaved model data will be lost if this page"
           + " is reloaded or closed.";
-
+  public static String LOGIN_ERR = "Please sign in with an email address"
+      + " and a password.";
+  
   // Number of tries to fetch a component; a magic number.
   public static Integer RETRY_ATTEMPTS = 3;
 
