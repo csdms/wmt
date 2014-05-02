@@ -15,10 +15,13 @@
 @def colorTerraTerra rgb(232,221,203);
 @def colorWarning rgb(203,73,54);
 @def fontFamily "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+@def fontSmall 13px;
+@def fontMedium 14px;
+@def fontLarge 18px;
 
 body, table td, select, button {
   font-family: fontFamily;
-  font-size: small;
+  font-size: fontSmall;
 }
 
 /* The primary structuring element of the WMT client. */
@@ -39,7 +42,7 @@ body, table td, select, button {
   color: white;
   float: left;
   padding: 15px;
-  font-size: 18px;
+  font-size: fontLarge;
   line-height: 20px;
   cursor: pointer;
 }
@@ -51,7 +54,7 @@ body, table td, select, button {
 }
 .wmt-LoginBox {
   color: colorAcquaProfonda;
-  font-size: 14px;
+  font-size: fontMedium;
   line-height: 1.25;
   padding: 6px 12px;
   margin-right: 5px;
@@ -60,7 +63,7 @@ body, table td, select, button {
   display: inline-block;
   color: white;
   background-color: colorAcqua;
-  font-size: 14px;
+  font-size: fontMedium;
   line-height: 1.25;
   padding: 6px 12px;
   cursor: pointer;
@@ -79,7 +82,7 @@ body, table td, select, button {
 /* Rules for the Model and Parameters tabs. */
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
   background: white !important;
-  font-size: 18px;
+  font-size: fontLarge;
   padding-left: 1px !important;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelContentContainer {
@@ -181,6 +184,7 @@ body, table td, select, button {
 
 /* The name (port or component) shown inside the ComponentCell. */
 .wmt-ComponentCell-NameCell {
+  font-size: fontMedium;  
   text-align: center;
   width: 100px;
   max-width: 100px;
@@ -253,7 +257,7 @@ body, table td, select, button {
   padding: 5px 4px;
   border: 1px solid colorAcquaProfonda;
   border-top: 1px solid colorAbisso;
-  font-size: small;
+  font-size: fontSmall;
   width: 200px;
 }
 
@@ -264,7 +268,7 @@ body, table td, select, button {
   padding: 5px 4px;
   border: 1px solid colorAcquaProfonda;
   border-top: 1px solid colorAbisso;
-  font-size: small;
+  font-size: fontSmall;
   text-align: right;
   width: 200px;
 }
@@ -275,7 +279,7 @@ body, table td, select, button {
 /* Droplists, used primarily in the ParameterTable. */
 /* See: http://stackoverflow.com/questions/5439782/i-want-to-vertical-align-text-in-select-box */
 .wmt-DroplistBox {
-  font-size: small;
+  font-size: fontSmall;
   margin: 2px 0px;
   padding: 2px 0px; /* centers text on Firefox; does nothing on Chrome */
   border: 1px solid colorAcquaProfonda; /* adding this changes the font?!? */
@@ -289,7 +293,7 @@ body, table td, select, button {
 
 /* For the droplist + button width for "file" parameter types. */
 .wmt-FileUploadBox {
-  font-size: small;
+  font-size: fontSmall;
   margin: 2px 0px;
   padding: 2px 0px; /* centers text on Firefox; does nothing on Chrome */
   border: 1px solid colorAcquaProfonda; /* adding this changes the font?!? */
@@ -320,7 +324,7 @@ body, table td, select, button {
   background: colorAbisso;
 }
 .wmt-DialogBox .Caption {
-  font-size: 14px;
+  font-size: fontMedium;
   color: white;
   padding: 5px;
 }
