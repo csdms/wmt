@@ -17,44 +17,34 @@ import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.LabelsMenu;
 
 /**
- * A customized DialogBox with a field for setting the name/description of the
- * model, and a "Labels" button for applying labels to the model (used for
- * filtering). "OK" and "Cancel" buttons are shown on the bottom of the dialog.
+ * A customized DialogBox with a droplist for selecting a model and a "Labels"
+ * button for selecting labels, used to filter the list of models. "OK" and
+ * "Cancel" buttons are shown on the bottom of the dialog.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class SaveDialogBox extends DialogBox {
-  
+public class OpenDialogBox extends DialogBox {
+
   @SuppressWarnings("unused")
   private DataManager data;
-  private FieldPanel namePanel;
+  private DroplistPanel droplistPanel;
   private ChoicePanel choicePanel;
   private LabelsMenu labelsMenu;
   
   /**
-   * Makes a {@link SaveDialogBox} with a default name.
+   * Makes an {@link OpenDialogBox}.
    * 
    * @param data the DataManager object for the WMT session
    */
-  public SaveDialogBox(DataManager data) {
-    this(data, Constants.DEFAULT_MODEL);
-  }
-  
-  /**
-   * Makes a SaveDialogBox with a user-supplied name.
-   * 
-   * @param data the DataManager object for the WMT session
-   * @param modelName a descriptive name for the model
-   */
-  public SaveDialogBox(DataManager data, String modelName) {
-
+  public OpenDialogBox(DataManager data) {
+    
     super(false); // autohide
     this.setModal(true);
-    this.setText("Save Model As...");
     this.setStyleName("wmt-DialogBox");
-    this.data = data;
-
-    namePanel = new FieldPanel(modelName);
+    this.setText("Open Model...");
+    this.data = data;    
+    
+    droplistPanel = new DroplistPanel();
 
     final Button labelsButton = new Button(Constants.FA_TAGS + "Labels");
     labelsButton.setStyleName("wmt-Button");
@@ -62,6 +52,8 @@ public class SaveDialogBox extends DialogBox {
     labelsButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
+        labelsMenu.areButtonsUnchecked(true);; // show all labels, unselected
+        labelsMenu.populateMenu();
         labelsMenu.setPopupPositionAndShow(new PositionCallback() {
           final Integer x = labelsButton.getElement().getAbsoluteRight();
           final Integer y = labelsButton.getAbsoluteTop();
@@ -72,16 +64,16 @@ public class SaveDialogBox extends DialogBox {
         });
       }
     });
-
+    
     HorizontalPanel row = new HorizontalPanel();
     row.setSpacing(5); // px
-    row.add(namePanel);
+    row.add(droplistPanel);
     row.add(labelsButton);
     row.setCellVerticalAlignment(labelsButton,
         HasVerticalAlignment.ALIGN_MIDDLE);
 
     choicePanel = new ChoicePanel();
-    choicePanel.getOkButton().setHTML(Constants.FA_SAVE + "Save");
+    choicePanel.getOkButton().setHTML(Constants.FA_OPEN + "Open");
 
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
@@ -91,12 +83,12 @@ public class SaveDialogBox extends DialogBox {
     this.setWidget(contents);
   }
 
-  public FieldPanel getNamePanel() {
-    return namePanel;
+  public DroplistPanel getDroplistPanel() {
+    return droplistPanel;
   }
 
-  public void setNamePanel(FieldPanel namePanel) {
-    this.namePanel = namePanel;
+  public void setDroplistPanel(DroplistPanel droplistPanel) {
+    this.droplistPanel = droplistPanel;
   }
 
   public ChoicePanel getChoicePanel() {

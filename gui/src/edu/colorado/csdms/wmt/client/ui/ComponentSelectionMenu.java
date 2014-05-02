@@ -3,27 +3,28 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
-import java.util.List;
-
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.handler.ComponentSelectionCommand;
 
 /**
- * A menu that shows a list of components. This is the initial menu displayed in
- * a {@link ComponentCell}.
+ * A {@link PopupPanel} menu that shows a list of components. This is the
+ * initial menu displayed in a {@link ComponentCell}.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ComponentSelectionMenu extends MenuBar {
-
-  private static String ALL_COMPONENTS = "__all_components";
+public class ComponentSelectionMenu extends PopupPanel {
 
   private DataManager data;
   private ComponentCell cell;
+  private VerticalPanel menu;
   private MenuItem componentItem;
 
   /**
@@ -34,24 +35,40 @@ public class ComponentSelectionMenu extends MenuBar {
    * @param cell the {@link ComponentCell} this menu depends on
    */
   public ComponentSelectionMenu(DataManager data, ComponentCell cell) {
-    super(true); // vertical
+    super(true); // autohide
     this.data = data;
     this.cell = cell;
+    this.setStyleName("wmt-PopupPanel");
+    
+    // A VerticalPanel for the menu items. (PopupPanels have only one child.)
+    menu = new VerticalPanel();
+    this.add(menu);
+    
     updateComponents(cell.getPortId());
   }
 
   /**
-   * A worker for adding a new MenuItem to the {@link ComponentSelectionMenu}.
+   * A worker for adding a new MenuItem to the bottom of the
+   * {@link ComponentSelectionMenu}.
    * 
    * @param componentId the id of the component to add to the menu
    */
-  private void addComponentMenuItem(String componentId) {
-    MenuItem item =
-        new MenuItem(data.getComponent(componentId).getName(), true,
-            new ComponentSelectionCommand(data, cell, data.getComponent(
-                componentId).getId()));
+  private void insertComponentMenuItem(String componentId) {
+    insertComponentMenuItem(componentId, menu.getWidgetCount());
+  }
+
+  /**
+   * A worker for adding a new MenuItem to the {@link ComponentSelectionMenu} at
+   * the given index.
+   * 
+   * @param componentId the id of the component to add to the menu
+   * @param index where to add the component to the menu
+   */
+  private void insertComponentMenuItem(String componentId, Integer index) {
+    HTML item = new HTML(data.getComponent(componentId).getName());
     item.setStyleName("wmt-ComponentSelectionMenuItem");
-    this.addItem(item);
+    item.addClickHandler(new ComponentSelectionHandler(componentId));
+    menu.insert(item, index);
   }
 
   /**
@@ -62,19 +79,20 @@ public class ComponentSelectionMenu extends MenuBar {
    */
   public void updateComponents(String portId) {
 
-    this.clearItems();
+    menu.clear();
 
     // Display a wait message in the componentMenu.
-    if (portId.matches(DataManager.DRIVER)) {
-      this.addItem("Loading...", new NullCommand());
+    if (portId.matches(Constants.DRIVER)) {
+      HTML item = new HTML("Loading...");
+      menu.add(item);
       return;
     }
 
     // Load all available components into the componentMenu!
-    if (portId.matches(ALL_COMPONENTS)) {
+    if (portId.matches(Constants.ALL_COMPONENTS)) {
       for (int i = 0; i < data.componentIdList.size(); i++) {
         String componentId = data.componentIdList.get(i);
-        addComponentMenuItem(componentId);
+        insertComponentMenuItem(componentId);
       }
       return;
     }
@@ -87,7 +105,7 @@ public class ComponentSelectionMenu extends MenuBar {
       for (int j = 0; j < nProvidesPorts; j++) {
         if (data.getComponent(componentId).getProvidesPorts().get(j).getId()
             .matches(portId)) {
-          addComponentMenuItem(componentId);
+          insertComponentMenuItem(componentId);
         }
       }
     }
@@ -98,7 +116,7 @@ public class ComponentSelectionMenu extends MenuBar {
    * menu.
    */
   public void updateComponents() {
-    updateComponents(ALL_COMPONENTS);
+    updateComponents(Constants.ALL_COMPONENTS);
   }
 
   /**
@@ -109,13 +127,12 @@ public class ComponentSelectionMenu extends MenuBar {
    * when their associated component is successfully loaded from the server.
    */
   public void initializeComponents() {
-    this.clearItems();
+    menu.clear();
     for (int i = 0; i < data.componentIdList.size(); i++) {
-      MenuItem item =
-          new MenuItem(data.componentIdList.get(i), true, new NullCommand());
+      HTML item = new HTML(data.componentIdList.get(i));
       item.setStyleName("wmt-ComponentSelectionMenuItem");
       item.addStyleDependentName("missing");
-      this.addItem(item);
+      menu.add(item);
     };
   }
   
@@ -129,16 +146,11 @@ public class ComponentSelectionMenu extends MenuBar {
    *          replace
    */
   public void replaceMenuItem(String componentId) {
-    List<MenuItem> allItems = this.getItems();
-    for (int i = 0; i < allItems.size(); i++) {
-      MenuItem currentItem = allItems.get(i);
+    for (int i = 0; i < menu.getWidgetCount(); i++) {
+      HTML currentItem = (HTML) menu.getWidget(i);
       if (currentItem.getText().matches(componentId)) {
-        MenuItem newItem =
-            new MenuItem(data.getComponent(componentId).getName(), true,
-                new ComponentSelectionCommand(data, cell, componentId));
-        newItem.setStyleName("wmt-ComponentSelectionMenuItem");
-        this.insertItem(newItem, i);
-        this.removeItem(currentItem);
+        insertComponentMenuItem(componentId, i);
+        menu.remove(currentItem);
         return;
       }
     }
@@ -151,11 +163,33 @@ public class ComponentSelectionMenu extends MenuBar {
   public void setComponentItem(MenuItem componentItem) {
     this.componentItem = componentItem;
   }
-  
-  public class NullCommand implements Command {
+
+  /**
+   * Handles a click on a menu item in the {@link ComponentSelectionMenu}.
+   * <p>
+   * <b>Note:</b> This class wraps {@link ComponentSelectionCommand}. It might
+   * be helpful to port the code from there to this handler.
+   */
+  public class ComponentSelectionHandler implements ClickHandler {
+
+    private String componentId;
+    
+    /**
+     * Makes a new {@link ComponentSelectionHandler}.
+     * 
+     * @param componentId the id of the component of the selected menu item
+     */
+    public ComponentSelectionHandler(String componentId) {
+      this.componentId = componentId;
+    }
+    
     @Override
-    public void execute() {
-      // Do nothing
+    public void onClick(ClickEvent event) {
+      ComponentSelectionMenu.this.hide();
+      ComponentSelectionCommand cmd =
+          new ComponentSelectionCommand(data, cell, data.getComponent(
+              componentId).getId());
+      cmd.execute();
     }
   }
 }

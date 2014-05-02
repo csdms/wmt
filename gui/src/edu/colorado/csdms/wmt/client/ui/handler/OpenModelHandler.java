@@ -5,18 +5,18 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
-import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
+import edu.colorado.csdms.wmt.client.ui.widgets.OpenDialogBox;
 
 /**
  * Handles click on the "OK" button in the open dialog that appears when the
- * "Open Model..." button is clicked in the ModelMenuPanel. Calls
+ * "Open Model..." button is clicked in the ModelActionPanel. Calls
  * {@link DataTransfer#getModel(DataManager, Integer)} to pull the selected
  * model from the server.
  */
 public class OpenModelHandler implements ClickHandler {
   
   private DataManager data;
-  private DroplistDialogBox box;
+  private OpenDialogBox box;
   
   /**
    * Creates a new {@link OpenModelHandler}.
@@ -24,7 +24,7 @@ public class OpenModelHandler implements ClickHandler {
    * @param data the DataManager object for the WMT session
    * @param box the dialog box
    */
-  public OpenModelHandler(DataManager data, DroplistDialogBox box) {
+  public OpenModelHandler(DataManager data, OpenDialogBox box) {
     this.data = data;
     this.box = box;
   }

@@ -17,6 +17,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.LoginDialogBox;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
+@Deprecated
 public class LoginHandler implements ClickHandler {
 
   private DataManager data;
@@ -39,12 +40,12 @@ public class LoginHandler implements ClickHandler {
     box.hide();
     
     // Get WMT username.
-    String userName = box.getUsernamePanel().getField();
+    String userName = box.getUsernamePanel().getField().getText();
     data.security.setWmtUsername(userName);
     GWT.log(data.security.getWmtUsername());
 
     // Get WMT password.
-    String password = box.getPasswordPanel().getField();
+    String password = box.getPasswordPanel().getField().getText();
     data.security.setWmtPassword(password);
     GWT.log(data.security.getWmtPassword());
 

@@ -28,6 +28,7 @@ public class ClosePanel extends HorizontalPanel {
     button = new Button("<i class='fa fa-times'></i> Close");
     button.getElement().getStyle().setMarginTop(1, Unit.EM);
     button.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
+    button.setStyleName("wmt-Button");
 
     this.add(button);
   }

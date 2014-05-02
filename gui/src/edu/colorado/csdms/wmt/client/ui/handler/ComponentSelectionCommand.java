@@ -7,6 +7,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.ComponentActionMenu;
 import edu.colorado.csdms.wmt.client.ui.ComponentCell;
 
@@ -66,30 +67,30 @@ public class ComponentSelectionCommand implements Command {
     String componentName = data.getComponent(componentId).getName();
     GWT.log("Selected component: " + componentName);
 
-    // Display the name of the selected component.
+    // Display the name of the selected component and set the "connected" style.
     String displayName = cell.trimName(componentName);
     cell.getNameCell().setText(displayName);
-
-    // Replace the componentMenu with the actionMenu.
-    ComponentActionMenu actionMenu = new ComponentActionMenu(data, cell);
-    cell.getMenuItem().setSubMenu(actionMenu);
-
-    // Update styles.
-    cell.getMenuItem().setStyleName("wmt-ComponentCell-ActionButton");
-    cell.getMenuCell().addStyleDependentName("connected");
     cell.addStyleDependentName("connected");
     
+    // Replace the componentMenu with the actionMenu.
+    cell.setComponentMenu(new ComponentActionMenu(data, cell)); 
+    cell.getMenuCell().setHTML(Constants.FA_ACTION);
+
+    // Is this the driver?
+    Boolean isDriver = (cell.getEnclosingTreeItem().getParentItem() == null);
+    
+    // If this is the driver, select its label in the list of model labels.
+    if (isDriver) {
+      data.modelLabels.put(componentName, true);
+    }
+    
     // Update the tooltip text.
-    String ctype;
-    ctype =
-        (cell.getEnclosingTreeItem().getParentItem() == null)
-            ? DataManager.DRIVER : "component";
+    String ctype = isDriver ? Constants.DRIVER : "component";
     String tooltip = "Model " + ctype + ": " + componentName + ". ";
-    if (!ctype.matches(DataManager.DRIVER)) {
+    if (!ctype.matches(Constants.DRIVER)) {
       tooltip += "Provides \"" + cell.getPortId() + "\" port. ";
     }
+    tooltip += "Click to get information, to view parameters, or to delete.";
     cell.setTitle(tooltip);
-    cell.getMenuCell().setTitle(
-        "Click to get information, to view parameters, or to delete.");
   }
 }

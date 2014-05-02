@@ -1,0 +1,295 @@
+/* 
+   CSS rules for the WMT client.
+   
+   These rules are injected into the client through a GWT CssResource. See:
+   http://www.gwtproject.org/doc/latest/DevGuideClientBundle.html#CssResource
+   
+   Color palette adapted from http://www.colourlovers.com/palette/292482/Terra.
+*/
+
+/* Variables. */
+@def colorAbisso rgb(3,22,52);
+@def colorAcquaProfonda rgb(3,54,73);
+@def colorAcqua rgb(3,101,100);
+@def colorTerra rgb(205,179,128);
+@def colorTerraTerra rgb(232,221,203);
+@def colorWarning rgb(203,73,54);
+@def fontFamily "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+@def fontSmall 13px;
+@def fontMedium 14px;
+@def fontLarge 18px;
+
+body, table td, select, button {
+  font-family: fontFamily;
+  font-size: fontSmall;
+}
+
+/* The primary structuring element of the WMT client. */
+.wmt-DockLayoutPanel {
+  padding: 3px;
+}
+.wmt-DockLayoutPanel-devmode {
+  /* border: 1px dashed burlywood; */
+}
+
+/* The navbar runs along the top of the client interface. Includes login. */
+.wmt-NavBar {
+  width: 100%;
+  background-color: colorAbisso;
+}
+.wmt-NavBarTitle {
+  color: white;
+  float: left;
+  padding: 15px;
+  font-size: fontLarge;
+  line-height: 20px;
+  cursor: pointer;
+}
+.wmt-LoginPanel {
+  float: right;
+  margin: 8px 10px 8px 0px;
+}
+.wmt-LoginBox {
+  color: colorAcquaProfonda;
+  font-size: fontMedium;
+  line-height: 1.25;
+  padding: 6px 12px;
+  margin-right: 5px;
+}
+.wmt-SignInButton {
+  display: inline-block;
+  color: white;
+  background-color: colorAcqua;
+  font-size: fontMedium;
+  line-height: 1.25;
+  padding: 6px 12px;
+  cursor: pointer;
+  margin: 2px;
+  border: 2px solid colorAcqua;
+}
+
+/* The splitter base divides the Model and Parameters tabs. */
+.wmt-SplitLayoutPanel {
+}
+.gwt-SplitLayoutPanel .gwt-SplitLayoutPanel-HDragger {
+  background-color: white;
+  border-left: 1px solid colorAbisso;
+}
+
+/* Rules for the Model and Parameters tabs. */
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
+  background: white !important;
+  font-size: fontLarge;
+  padding-left: 1px !important;
+}
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelContentContainer {
+  border-color: white !important;
+}
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
+  border-radius: 0px !important;
+  margin-left: 0px !important;
+  padding: 4px 10px !important;
+}
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
+  font-weight: normal !important;
+  color: colorAbisso !important;
+}
+
+/* A consistent style for all buttons. */
+.wmt-Button, .wmt-ActionPanelButton {
+  color: colorAbisso;
+  background-color: colorTerraTerra;
+  padding: 5px 7px;
+  border: 1px solid colorAcquaProfonda;
+  border-bottom: 1px solid colorAbisso;
+}
+.wmt-Button:hover {
+  background-color: colorTerra;
+}
+
+/* ActionPanels are button groups on top of the Model & Parameters tabs. */
+.wmt-ActionPanel {
+  margin: 5px 0px 10px 2px;
+}
+.wmt-ActionPanelButton {
+  width: 75px;
+  margin-right: 5px; /* provides inter-button spacing */
+}
+.wmt-ActionPanelButton:hover {
+  background-color: colorTerra;
+}
+
+/* Rules for the ModelTree. */
+.wmt-ModelTree {
+  margin-top: 14px;
+}
+
+/* The offset for TreeItems in the ModelTree. */
+.wmt-TreeItem {
+   margin-left: 90px !important;
+}
+
+/* Base style for a ComponentCell. */
+.wmt-ComponentCell {
+  font-style: italic;
+  text-align: center;
+  color: colorAbisso;
+  background-color: colorTerraTerra;
+  border: 2px solid colorAcquaProfonda;
+  height: 60px;
+}
+
+/* A ComponentCell that displays a component. */
+.wmt-ComponentCell-connected {  
+  font-style: normal;
+  color: white;
+  background-color: colorAcqua;
+}
+
+/* The name (port or component) shown inside the ComponentCell. */
+.wmt-ComponentCell-NameCell {
+  font-size: fontMedium;  
+  text-align: center;
+  width: 100px;
+  max-width: 100px;
+  min-width: 100px;
+  margin-left: 5px;
+}
+
+/* A ComponentCell that displays a linked component. */
+.wmt-ComponentCell-NameCell-linked {
+   color: white;
+}
+.wmt-ComponentCell-NameCell-linked:after {
+   font-family: "FontAwesome";
+   padding: 3px;
+   content: "\f112"; /* fa-reply */
+   color: colorTerraTerra;
+}
+
+/* For the menuCell inside the ComponentCell. */
+.wmt-ComponentCell-MenuCell {
+  padding: 2px;
+  margin-right: 3px;
+  cursor: default; /* for Firefox */
+}
+
+/* Rules for WMT widgets derived from a GWT PopupPanel. */
+.wmt-PopupPanel {
+  border: 1px solid #ccc; /* matches gwt-MenuBar-vertical */
+  background-color: white;
+  padding: 5px 1px 5px 1px;
+  box-shadow: 2px 2px 1px lightgray;
+  cursor: pointer;
+}
+
+/* Items shown in a WMT PopupPanel. */
+.wmt-PopupPanelItem, .wmt-ComponentSelectionMenuItem, .wmt-PopupPanelCheckBoxItem {
+  color: colorAcquaProfonda;
+  padding: 5px 40px 5px 5px;
+}
+.wmt-PopupPanelItem, .wmt-ComponentSelectionMenuItem {
+  cursor: pointer;
+  min-width: 150px;
+}
+.wmt-PopupPanelItem:hover {
+  background-color: colorTerraTerra;
+}
+.wmt-PopupPanelItem-disabled {
+  color: lightgray;
+}
+.wmt-PopupPanelItem-disabled:hover {
+  background-color: white;
+}
+.wmt-PopupPanelCheckBoxItem {
+  line-height: 2.0; /* Don't use :hover, set line-height. */
+}
+
+/* Separators used between groups of WMT PopupPanel items. */
+.wmt-PopupPanelSeparator {
+  width: 100%;
+  height: 1px;
+  border-top: 1px solid colorTerraTerra;
+}
+
+/* Items in the ComponentSelectionMenu. */
+.wmt-ComponentSelectionMenuItem:before {
+  font-family: "FontAwesome";
+  font-style: normal;
+  content: "\f013"; /* fa-cog */
+  color: colorAcquaProfonda;
+  margin-right: 0.5em;
+}
+.wmt-ComponentSelectionMenuItem:hover {
+  background-color: colorTerraTerra;
+}
+.wmt-ComponentSelectionMenuItem-missing {
+  background-color: colorWarning;
+}
+
+/* Text used in a parameter description. */
+.wmt-ParameterDescription {
+   padding: 0 1em 0 1.5em;
+   color: colorAcquaProfonda;
+}
+
+/* Separates parameter groups in the ParameterTable. */
+.wmt-ParameterSeparator {
+   font-style: oblique;
+   padding: 10px 0 5px 0;
+   color: colorAcquaProfonda;
+   border: solid colorAcquaProfonda;
+   border-width: 0 0 1px 0;
+}
+
+/* The ValueCell displays parameter values in the ParameterTable. */
+.wmt-ValueCell {
+  padding: 4px 2px;
+}
+
+/* Used for all input widgets. ValueBoxen display numeric values. */
+.wmt-TextBoxen, .wmt-ValueBoxen {
+  color: colorAbisso;
+  background-color: colorTerraTerra;
+  padding: 7px 4px;
+  border: 1px solid colorAcquaProfonda;
+  border-top: 1px solid colorAbisso;
+  font-size: fontSmall;
+  width: 200px;
+}
+.wmt-ValueBoxen {
+  text-align: right;
+}
+.wmt-ValueBoxen-outofrange {
+  background-color: colorWarning;
+}
+
+/* Droplists, used primarily in the ParameterTable. */
+/* See: http://stackoverflow.com/questions/5439782/i-want-to-vertical-align-text-in-select-box */
+.wmt-DroplistBox {
+  font-size: fontSmall;
+  margin: 2px 0px;
+  padding: 2px 0px; /* centers text on Firefox; does nothing on Chrome */
+  border: 1px solid colorAcquaProfonda; /* adding this changes the font?!? */
+  width: 210px; /* calculated by comparison with ValueBoxen */
+  height: 32px;
+  background-color: colorTerraTerra;
+}
+.wmt-DroplistBox-upload {
+  width: 175px; /* calculated by comparison with DroplistBox */
+}
+
+/* Styles for use by all DialogBoxes. */
+.wmt-DialogBox {
+  color: colorAbisso;
+  background: white;
+  border: 2px solid colorAcquaProfonda;
+}
+.wmt-DialogBox .dialogTop {
+  background: colorAbisso;
+}
+.wmt-DialogBox .Caption {
+  font-size: fontMedium;
+  color: white;
+  padding: 5px;
+}

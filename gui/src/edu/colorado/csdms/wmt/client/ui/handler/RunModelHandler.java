@@ -10,7 +10,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.RunDialogBox;
 
 /**
  * Handles click on the "Run" button in the dialog that appears when the
- * "Run Model..." button is clicked in the ModelMenuPanel. Initializes a
+ * "Run Model..." button is clicked in the ModelActionPanel. Initializes a
  * model run with a call to {@link DataTransfer#initModelRun(DataManager)}.
  */
 public class RunModelHandler implements ClickHandler {
@@ -43,12 +43,12 @@ public class RunModelHandler implements ClickHandler {
     GWT.log(data.security.getHpccHostname());
 
     // Get username.
-    String userName = box.getUsernamePanel().getField();
+    String userName = box.getUsernamePanel().getField().getText();
     data.security.setHpccUsername(userName);
     GWT.log(data.security.getHpccUsername());
 
     // Get password.
-    String password = box.getPasswordPanel().getField();
+    String password = box.getPasswordPanel().getField().getText();
     data.security.setHpccPassword(password);
     GWT.log(data.security.getHpccPassword());
 

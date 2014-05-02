@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
+import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.Perspective;
 
 /**
@@ -19,9 +20,6 @@ import edu.colorado.csdms.wmt.client.ui.Perspective;
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class WMT implements EntryPoint {
-
-  // This switch toggles API development and public mode.
-  private static final Boolean USE_API_DEV_MODE = true;
   
   private Perspective perspective;
   private DataManager data;
@@ -35,24 +33,31 @@ public class WMT implements EntryPoint {
 
     // Initialize the DataManager object.
     data = new DataManager();
-    
-    // Is GWT running in development mode or in production mode?
+
+    // Is GWT in development or production mode?
     data.isDevelopmentMode(!GWT.isProdMode() && GWT.isClient());
-    
+
     // Are we using the development mode of the API?
-    data.isApiDevelopmentMode(USE_API_DEV_MODE);
+    data.isApiDevelopmentMode(Constants.USE_API_DEV_MODE);
+
+    // Load WMT's CSS rules. 
+    // (See http://www.gwtproject.org/doc/latest/DevGuideUiCss.html#cssfiles)
+    Resources.INSTANCE.css().ensureInjected();
 
     // Set up the basic framework of views for the GUI.
     perspective = new Perspective(data);
     RootLayoutPanel.get().add(perspective);
     perspective.initializeModel();
     perspective.initializeParameterTable();
+    
+    // Check whether the user is already logged in.
+    DataTransfer.getLoginState(data);
 
     // Retrieve (asynchronously) and store the list of available components
     // and models. Note that when DataTransfer#getComponentList completes,
     // it immediately starts pulling component data from the server with calls
     // to DataTransfer#getComponent. Asynchronous requests are cool!
-//    data.showWaitCursor();
+    data.showWaitCursor();
     DataTransfer.getComponentList(data);
     DataTransfer.getModelList(data);
 
@@ -62,9 +67,7 @@ public class WMT implements EntryPoint {
       @Override
       public void onWindowClosing(ClosingEvent event) {
         if (!data.isDevelopmentMode() && !data.modelIsSaved()) {
-          String msg = "Any unsaved model data will be lost if this page"
-              + " is reloaded or closed.";
-          event.setMessage(msg);
+          event.setMessage(Constants.CLOSE_MSG);
         }
       }
     });

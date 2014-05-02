@@ -5,6 +5,7 @@ package edu.colorado.csdms.wmt.client.ui.handler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.user.client.Window;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
@@ -48,11 +49,21 @@ public class SetupRunModelHandler implements ClickHandler {
       runDialog.getHostPanel().getDroplist().addItem(hosts[i]);
     }
 
-    runDialog.getChoicePanel().getOkButton().addClickHandler(
-        new RunModelHandler(data, runDialog));
-    runDialog.getChoicePanel().getCancelButton().addClickHandler(
-        new DialogCancelHandler(runDialog));
+    // Define handlers.
+    final RunModelHandler runHandler = new RunModelHandler(data, runDialog);
+    final DialogCancelHandler cancelHandler =
+        new DialogCancelHandler(runDialog);
+
+    // Apply handlers to OK and Cancel buttons.
+    runDialog.getChoicePanel().getOkButton().addClickHandler(runHandler);
+    runDialog.getChoicePanel().getCancelButton()
+        .addClickHandler(cancelHandler);
+
+    // Also apply handlers to "Enter" and "Esc" keys.
+    runDialog.addDomHandler(new ModalKeyHandler(runHandler, cancelHandler),
+        KeyDownEvent.getType());
 
     runDialog.center();
+    runDialog.getHostPanel().getDroplist().setFocus(true);
   }
 }

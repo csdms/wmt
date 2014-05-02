@@ -39,6 +39,8 @@ public class ChoicePanel extends Composite {
     VerticalPanel contents = new VerticalPanel();
     contents.add(choicePanel);
     
+    okButton.setStyleName("wmt-Button");
+    cancelButton.setStyleName("wmt-Button");
     okButton.getElement().getStyle().setMarginRight(3, Unit.PX);
     
     initWidget(contents);

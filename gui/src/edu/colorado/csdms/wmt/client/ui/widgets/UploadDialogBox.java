@@ -47,6 +47,7 @@ public class UploadDialogBox extends DialogBox {
 
     super(false); // autohide
     this.setModal(true);
+    this.setStyleName("wmt-DialogBox");
 
     // Create a FormPanel. When employed, point it at a service.
     form = new FormPanel();

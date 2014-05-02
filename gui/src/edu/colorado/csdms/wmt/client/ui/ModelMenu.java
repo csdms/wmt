@@ -23,6 +23,7 @@ import edu.colorado.csdms.wmt.client.ui.handler.OpenModelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SaveModelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.DroplistDialogBox;
+import edu.colorado.csdms.wmt.client.ui.widgets.OpenDialogBox;
 import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
 
 /**
@@ -42,7 +43,7 @@ public class ModelMenu extends PopupPanel {
   private DataManager data;
   private HTML menuButton;
   private SaveDialogBox saveDialog;
-  private DroplistDialogBox openDialog;
+  private OpenDialogBox openDialog;
   private DroplistDialogBox deleteDialog;
 
   /**
@@ -175,10 +176,7 @@ public class ModelMenu extends PopupPanel {
     @Override
     public void onClick(ClickEvent event) {
 
-      openDialog = new DroplistDialogBox();
-      openDialog.setText("Open Model...");
-      openDialog.getChoicePanel().getOkButton().setHTML(
-          "<i class='fa fa-folder-open-o'></i> Open");      
+      openDialog = new OpenDialogBox(data);
 
       // Populate the ModelDroplist with the available models on the server.
       for (int i = 0; i < data.modelNameList.size(); i++) {
@@ -253,8 +251,8 @@ public class ModelMenu extends PopupPanel {
    * {@link GenericCancelHandler}.
    */
   private void showSaveDialogBox() {
-    saveDialog = new SaveDialogBox(data.getModel().getName());
-    saveDialog.getFilePanel().setTitle(
+    saveDialog = new SaveDialogBox(data, data.getModel().getName());
+    saveDialog.getNamePanel().setTitle(
         "Enter a name for the model. No file extension is needed.");
     saveDialog.getChoicePanel().getOkButton().addClickHandler(
         new SaveModelHandler(data, saveDialog));

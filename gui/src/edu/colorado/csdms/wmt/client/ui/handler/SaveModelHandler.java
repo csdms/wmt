@@ -9,7 +9,7 @@ import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
 
 /**
  * Handles click on the "OK" button in the save dialog that appears when the
- * "Save Model As..." button is clicked in the ModelMenuPanel. Uses
+ * "Save Model As..." button is clicked in the ModelActionPanel. Uses
  * {@link DataManager#serialize()} to serialize the model, then posts it to
  * the server with {@link DataTransfer#postModel(DataManager)}.
  */
@@ -35,7 +35,7 @@ public class SaveModelHandler implements ClickHandler {
     box.hide();
 
     // Set the model name in the DataManager.
-    String modelName = box.getFilePanel().getField();
+    String modelName = box.getNamePanel().getField().getText();
     if (modelName.isEmpty()) {
       return;
     }

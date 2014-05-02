@@ -26,6 +26,7 @@ public class DroplistDialogBox extends DialogBox {
 
     super(false); // autohide
     this.setModal(true);
+    this.setStyleName("wmt-DialogBox");
 
     itemPanel = new DroplistPanel();
     choicePanel = new ChoicePanel();
