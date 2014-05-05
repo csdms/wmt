@@ -3,13 +3,16 @@
  */
 package edu.colorado.csdms.wmt.client.ui.widgets;
 
+import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.SuggestBox;
 
 import edu.colorado.csdms.wmt.client.Constants;
 
@@ -21,7 +24,7 @@ import edu.colorado.csdms.wmt.client.Constants;
  */
 public class LoginPanel extends Composite {
   
-  private TextBox emailBox;
+  private SuggestBox emailBox;
   private PasswordTextBox passwordBox;
   private HTML loginName;
   private Button signInButton;
@@ -33,8 +36,17 @@ public class LoginPanel extends Composite {
    */
   public LoginPanel() {
 
+    // Use a Cookie and a SuggestBox to help autocomplete the user's login.
+    // TODO Replace with the browser's login autocomplete mechanism.
+    MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
+    String storedWmtUsername = Cookies.getCookie(Constants.USERNAME_COOKIE);
+    Window.alert(storedWmtUsername);
+    if (storedWmtUsername != null) {
+      oracle.add(storedWmtUsername);
+    }
+
     // TextBoxes for entering email and password.
-    emailBox = new TextBox();
+    emailBox = new SuggestBox(oracle);
     emailBox.setStyleName("wmt-LoginBox");
     emailBox.getElement().setAttribute("placeholder", "Email");
     passwordBox = new PasswordTextBox();
@@ -45,18 +57,18 @@ public class LoginPanel extends Composite {
     inputPanel = new HorizontalPanel();
     inputPanel.add(emailBox);
     inputPanel.add(passwordBox);
-    
+
     // A widget to show the user's email address when logged in.
     loginName = new HTML();
     loginName.setStyleName("wmt-SignInButton");
-    
+
     // The status panel, initially hidden, shows the user's loginName.
     statusPanel = new HorizontalPanel();
     statusPanel.add(loginName);
 
     signInButton = new Button(Constants.SIGN_IN);
     signInButton.setStyleName("wmt-SignInButton");
-    
+
     HorizontalPanel contents = new HorizontalPanel();
     contents.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     contents.setStyleName("wmt-LoginPanel");
@@ -91,11 +103,11 @@ public class LoginPanel extends Composite {
     signInButton.setHTML(Constants.SIGN_OUT);
   }
   
-  public TextBox getEmailBox() {
+  public SuggestBox getEmailBox() {
     return emailBox;
   }
 
-  public void setEmailBox(TextBox emailBox) {
+  public void setEmailBox(SuggestBox emailBox) {
     this.emailBox = emailBox;
   }
 

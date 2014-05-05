@@ -3,6 +3,7 @@
  */
 package edu.colorado.csdms.wmt.client.control;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -14,6 +15,7 @@ import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 
 import edu.colorado.csdms.wmt.client.Constants;
@@ -565,6 +567,13 @@ public class DataTransfer {
       data.getPerspective().getLoginPanel().getLoginName().setText(
           data.security.getWmtUsername());
       data.getPerspective().getLoginPanel().showStatusPanel();
+
+      // Set a cookie to store the most recent username.
+      // TODO Replace with the browser's login autocomplete mechanism.
+      Date expires =
+          new Date(System.currentTimeMillis() + Constants.COOKIE_DURATION);
+      Cookies.setCookie(Constants.USERNAME_COOKIE, data.security
+          .getWmtUsername(), expires);
     }
 
     /*

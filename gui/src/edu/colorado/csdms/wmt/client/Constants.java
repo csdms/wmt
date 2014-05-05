@@ -22,11 +22,13 @@ public class Constants {
   public static final String API_DEV_URL = BASE_URL + "wmt/api-dev/";
   public static final String LOCAL_URL = GWT.getHostPageBaseURL();
 
-  // API URLs for login, logout, status.
+  // API URLs for user login, logout, and status. Also, a cookie.
   public static final String NEW_USER_LOGIN_PATH = "account/new";
   public static final String LOGIN_PATH = "account/login";
   public static final String LOGOUT_PATH = "account/logout";
   public static final String USERNAME_PATH = "account/username";
+  public static final String USERNAME_COOKIE = "__WMT_username";
+  public static final Long COOKIE_DURATION = (long) (1000*60*60*24*14); // 2 wks
 
   // API URLs for components.
   public static final String COMPONENTS_LIST_PATH = "components/list";
