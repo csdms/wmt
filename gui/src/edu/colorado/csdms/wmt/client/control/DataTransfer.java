@@ -23,6 +23,9 @@ import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelListJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.ui.ComponentSelectionMenu;
+import edu.colorado.csdms.wmt.client.ui.handler.AddNewUserHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
+import edu.colorado.csdms.wmt.client.ui.widgets.NewUserDialogBox;
 import edu.colorado.csdms.wmt.client.ui.widgets.RunInfoDialogBox;
 
 /**
@@ -152,6 +155,36 @@ public class DataTransfer {
     }
 
     return sb.toString();
+  }
+
+  /**
+   * Makes an asynchronous HTTPS POST request to create a new user login to WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void newUserLogin(DataManager data) {
+
+    String url = DataURL.newUserLogin(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("username", data.security.getWmtUsername());
+    entries.put("password", data.security.getWmtPassword());
+    entries.put("password2", data.security.getWmtPassword());    
+    String queryString = buildQueryString(entries);
+
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new AuthenticationRequestCallback(
+              data, url, "login"));
+    } catch (RequestException e) {
+      Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
+    }
   }
 
   /**
@@ -571,13 +604,20 @@ public class DataTransfer {
         }
 
       } else if (Response.SC_BAD_REQUEST == response.getStatusCode()) {
-        
-        Window.alert("Email address not registered. New user?");
+
+        // Display the NewUserDialogBox if the email address isn't recognized.
+        final NewUserDialogBox box = new NewUserDialogBox();
+        box.getChoicePanel().getCancelButton().addClickHandler(
+            new DialogCancelHandler(box));
+        box.getChoicePanel().getOkButton().addClickHandler(
+            new AddNewUserHandler(data, box));
+        box.center();
         
       } else if (Response.SC_UNAUTHORIZED == response.getStatusCode()) {
-        
-        Window.alert("Email address registered. Password not valid.");
-        
+
+        // Display message if email address is valid, but password is not.
+        Window.alert(Constants.PASSWORD_ERR);
+
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "

@@ -22,7 +22,8 @@ public class Constants {
   public static final String API_DEV_URL = BASE_URL + "wmt/api-dev/";
   public static final String LOCAL_URL = GWT.getHostPageBaseURL();
 
-  // API URLs for login status.
+  // API URLs for login, logout, status.
+  public static final String NEW_USER_LOGIN_PATH = "account/new";
   public static final String LOGIN_PATH = "account/login";
   public static final String LOGOUT_PATH = "account/logout";
   public static final String USERNAME_PATH = "account/username";
@@ -54,6 +55,9 @@ public class Constants {
           + " is reloaded or closed.";
   public static String LOGIN_ERR = "Please sign in with an email address"
       + " and a password.";
+  public static String PASSWORD_ERR = "This email address registered,"
+      + " but the password is not valid.";
+  
   
   // Number of tries to fetch a component; a magic number.
   public static Integer RETRY_ATTEMPTS = 3;

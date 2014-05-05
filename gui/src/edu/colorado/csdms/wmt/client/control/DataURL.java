@@ -38,6 +38,19 @@ public class DataURL {
   }
 
   /**
+   * Returns the new user account login URL provided by the API.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String newUserLogin(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return Constants.LOCAL_URL + "save/authenticate.json";
+    } else {
+      return getApiUrl(data) + Constants.NEW_USER_LOGIN_PATH;
+    }
+  }
+
+  /**
    * Returns the account login URL provided by the API.
    * 
    * @param data the DataManager object for the WMT session
