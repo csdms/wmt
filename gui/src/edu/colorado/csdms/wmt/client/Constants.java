@@ -55,7 +55,7 @@ public class Constants {
           + " is reloaded or closed.";
   public static String LOGIN_ERR = "Please sign in with an email address"
       + " and a password.";
-  public static String PASSWORD_ERR = "This email address registered,"
+  public static String PASSWORD_ERR = "This email address is registered,"
       + " but the password is not valid.";
   
   
