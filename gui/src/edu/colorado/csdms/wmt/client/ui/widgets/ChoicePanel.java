@@ -9,6 +9,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.colorado.csdms.wmt.client.Constants;
+
 /**
  * A GWT composite widget that displays right-aligned "OK" and "Cancel"
  * buttons, with icons. Each button's text and icon can be modified.
@@ -25,8 +27,8 @@ public class ChoicePanel extends Composite {
    */
   public ChoicePanel() {
 
-    okButton = new Button("<i class='fa fa-check'></i> OK");
-    cancelButton = new Button("<i class='fa fa-ban'></i> Cancel");
+    okButton = new Button(Constants.FA_OK + "OK");
+    cancelButton = new Button(Constants.FA_CANCEL + "Cancel");
     HorizontalPanel buttonPanel = new HorizontalPanel();
     buttonPanel.setSpacing(5); // px
     buttonPanel.add(okButton);

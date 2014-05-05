@@ -88,6 +88,8 @@ public class Constants {
   // FontAwesome icons.
   public static String SIGN_IN = "<i class='fa fa-sign-in'></i> Sign In";
   public static String SIGN_OUT = "<i class='fa fa-sign-out'></i> Sign Out";
+  public static String FA_OK = "<i class='fa fa-check'></i> ";
+  public static String FA_CANCEL = "<i class='fa fa-ban'></i> ";
   public static String FA_OPEN = "<i class='fa fa-folder-open-o fa-fw'></i> ";
   public static String FA_SAVE = "<i class='fa fa-floppy-o fa-fw'></i> ";
   public static String FA_DELETE = "<i class='fa fa-trash-o fa-fw'></i> ";
