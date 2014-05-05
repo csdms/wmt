@@ -4,7 +4,6 @@
 package edu.colorado.csdms.wmt.client.ui.widgets;
 
 import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -24,6 +23,7 @@ import edu.colorado.csdms.wmt.client.Constants;
  */
 public class LoginPanel extends Composite {
   
+  private MultiWordSuggestOracle oracle;
   private SuggestBox emailBox;
   private PasswordTextBox passwordBox;
   private HTML loginName;
@@ -38,12 +38,7 @@ public class LoginPanel extends Composite {
 
     // Use a Cookie and a SuggestBox to help autocomplete the user's login.
     // TODO Replace with the browser's login autocomplete mechanism.
-    MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-    String storedWmtUsername = Cookies.getCookie(Constants.USERNAME_COOKIE);
-    Window.alert(storedWmtUsername);
-    if (storedWmtUsername != null) {
-      oracle.add(storedWmtUsername);
-    }
+    oracle = new MultiWordSuggestOracle();
 
     // TextBoxes for entering email and password.
     emailBox = new SuggestBox(oracle);
@@ -86,6 +81,10 @@ public class LoginPanel extends Composite {
    * button.
    */
   public void showInputPanel() {
+    String storedWmtUsername = Cookies.getCookie(Constants.USERNAME_COOKIE);
+    if (storedWmtUsername != null) {
+      oracle.add(storedWmtUsername);
+    }
     emailBox.setText(null);
     passwordBox.setText(null);
     inputPanel.setVisible(true);

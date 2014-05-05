@@ -570,10 +570,13 @@ public class DataTransfer {
 
       // Set a cookie to store the most recent username.
       // TODO Replace with the browser's login autocomplete mechanism.
-      Date expires =
-          new Date(System.currentTimeMillis() + Constants.COOKIE_DURATION);
-      Cookies.setCookie(Constants.USERNAME_COOKIE, data.security
-          .getWmtUsername(), expires);
+      String currentCookie = Cookies.getCookie(Constants.USERNAME_COOKIE);
+      if (!data.security.getWmtUsername().equals(currentCookie)) {
+        Date expires =
+            new Date(System.currentTimeMillis() + Constants.COOKIE_DURATION);
+        Cookies.setCookie(Constants.USERNAME_COOKIE, data.security
+            .getWmtUsername(), expires);
+      }
     }
 
     /*
