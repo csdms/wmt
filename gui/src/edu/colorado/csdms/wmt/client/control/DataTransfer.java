@@ -541,6 +541,7 @@ public class DataTransfer {
       data.security.isLoggedIn(false);
       data.modelLabels.remove(data.security.getWmtUsername());
       data.getPerspective().getLoginPanel().showInputPanel();
+      data.getPerspective().reset();
     }
     
     @Override
