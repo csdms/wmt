@@ -11,14 +11,15 @@ import com.google.gwt.core.client.JsArray;
  * HTTP GET call to <a
  * href="http://csdms.colorado.edu/wmt/api/tag/list">tag/list</a>. Declares
  * JSNI methods to access attributes.
+ * <p>
+ * Note that an instance of LabelJSO can represent a single label or a JsArray
+ * of labels.
  * 
  * @see <a
  *      href="http://www.gwtproject.org/doc/latest/DevGuideCodingBasicsOverlay.html">http://www.gwtproject.org/doc/latest/DevGuideCodingBasicsOverlay.html</a>
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class LabelJSO extends JavaScriptObject {
-
-  private Boolean selected = false; 
   
   // Overlay types always have protected, zero-arg constructors.
   protected LabelJSO() {
@@ -53,18 +54,20 @@ public class LabelJSO extends JavaScriptObject {
   }-*/;
   
   /**
-   * Returns the state of the label button; true = selected. Not a JSNI method.
+   * Returns the state of the label button; true = selected. This is a JSNI
+   * method.
    */
-  public Boolean isSelected() {
-    return this.selected;
-  }
+  public final native boolean isSelected() /*-{
+    return (typeof this.selected != 'undefined') ? this.selected : false;
+  }-*/;
   
   /**
-   * Stores the state of the label button. Not a JSNI method.
+   * Stores the state of the label button. This is a JSNI method. (It actually
+   * adds a "selected" object to the JSON.)
    * 
    * @param selected a value of true indicates button is selected
    */
-  public void isSelected(Boolean selected) {
+  public final native void isSelected(Boolean selected) /*-{
     this.selected = selected;
-  }
+  }-*/;
 }
