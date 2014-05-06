@@ -739,9 +739,6 @@ public class DataTransfer {
         ((ComponentSelectionMenu) data.getPerspective().getModelTree()
             .getDriverComponentCell().getComponentMenu()).replaceMenuItem(jso
             .getId());
-        
-        // Add the component name to the list of model labels.
-        data.modelLabels.put(jso.getName(), false);
 
       } else {
 

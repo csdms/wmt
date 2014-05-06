@@ -69,7 +69,7 @@ public class DataManager {
     modelLabels = new TreeMap<String, Boolean>();
     modelNameList = new ArrayList<String>();
 
-    // Labels that are always present.
+    // The "public" label is always present.
     String[] labels = {"public"};
     Boolean[] values = {false};
     for (int i = 0; i < values.length; i++) {
