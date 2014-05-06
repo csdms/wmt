@@ -80,9 +80,10 @@ public class ComponentSelectionCommand implements Command {
     Boolean isDriver = (cell.getEnclosingTreeItem().getParentItem() == null);
     
     // If this is the driver, select its label in the list of model labels.
-    if (isDriver) {
-      data.modelLabels.put(componentName, true);
-    }
+    // XXX Revisit
+//    if (isDriver) {
+//      data.modelLabels.put(componentName, true);
+//    }
     
     // Update the tooltip text.
     String ctype = isDriver ? Constants.DRIVER : "component";

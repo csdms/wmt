@@ -71,7 +71,8 @@ public class ComponentDeleteCommand implements Command {
       tree.initializeTree();
       ((ComponentSelectionMenu) tree.getDriverComponentCell()
           .getComponentMenu()).updateComponents();
-      data.modelLabels.put(data.getComponent(componentId).getName(), false);
+      // XXX Revisit
+//      data.modelLabels.put(data.getComponent(componentId).getName(), false);
       data.saveAttempts++;
     }
 

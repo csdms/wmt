@@ -40,6 +40,13 @@ public class LabelJSO extends JavaScriptObject {
   }-*/;
 
   /**
+   * Sets the text of the label, a String. This is a JSNI method.
+   */
+  public final native void setLabel(String label) /*-{
+		this.tag = label;
+  }-*/;
+
+  /**
    * A JSNI method to get the id of the label, an int. 
    */
   public final native int getId() /*-{

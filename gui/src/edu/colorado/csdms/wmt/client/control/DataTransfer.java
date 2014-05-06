@@ -564,8 +564,8 @@ public class DataTransfer {
       builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
       @SuppressWarnings("unused")
       Request request =
-          builder.sendRequest(queryString, new LabelRequestCallback(
-              data, url, label, "add"));
+          builder.sendRequest(queryString, new LabelRequestCallback(data, url,
+              "add"));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -588,8 +588,8 @@ public class DataTransfer {
     try {
       @SuppressWarnings("unused")
       Request request =
-          builder.sendRequest(null, new LabelRequestCallback(data, url, null,
-              "list"));
+          builder
+              .sendRequest(null, new LabelRequestCallback(data, url, "list"));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -992,14 +992,11 @@ public class DataTransfer {
 
     private DataManager data;
     private String url;
-    private String label;
     private String type;
 
-    public LabelRequestCallback(DataManager data, String url, String label,
-        String type) {
+    public LabelRequestCallback(DataManager data, String url, String type) {
       this.data = data;
       this.url = url;
-      this.label = label;
       this.type = type;
     }
 
@@ -1009,19 +1006,21 @@ public class DataTransfer {
 
         String rtxt = response.getText();
         GWT.log(rtxt);
-
+        LabelJSO jso = parse(rtxt);
+          
         if (type.matches("add")) {
-          data.modelLabels.put(label, true); // swallow the returned id
+          data.modelLabels.put(jso.getLabel(), jso);
         } else if (type.matches("delete")) {
           ;
         } else if (type.matches("list")) {
-          LabelJSO jso = parse(rtxt);
           Integer nLabels = jso.getLabels().length();
           if (nLabels > 0) {
             for (int i = 0; i < nLabels; i++) {
-              String label = jso.getLabels().get(i).getLabel();
+              LabelJSO labelJSO = jso.getLabels().get(i);
+              String label = labelJSO.getLabel();
               Boolean isUser = data.security.getWmtUsername().matches(label);
-              data.modelLabels.put(label, isUser);
+              labelJSO.isSelected(isUser);
+              data.modelLabels.put(label, labelJSO);
             }
           }
         } else {

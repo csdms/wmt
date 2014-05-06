@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.LabelJSO;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.LabelDialogBox;
 
@@ -77,10 +78,10 @@ public class LabelsMenu extends PopupPanel {
    */
   public void populateMenu() {
     labelPanel.clear();
-    for (Map.Entry<String, Boolean> entry : data.modelLabels.entrySet()) {
+    for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
       CheckBox labelBox = new CheckBox(entry.getKey());
       if (!buttonsUnchecked) {
-        labelBox.setValue(entry.getValue());
+        labelBox.setValue(entry.getValue().isSelected());
       }
       labelBox.setWordWrap(false);
       labelBox.setStyleName("wmt-PopupPanelCheckBoxItem");
@@ -137,9 +138,11 @@ public class LabelsMenu extends PopupPanel {
         public void onClick(ClickEvent event) {
           String label = box.getSuggestBox().getText();
           if (type.equalsIgnoreCase("add")) {
-            data.modelLabels.put(label, false);
+            // XXX Revisit
+//            data.modelLabels.put(label, false);
           } else if (type.equalsIgnoreCase("delete")) {
-            data.modelLabels.remove(label);
+            // XXX Revisit
+//            data.modelLabels.remove(label);
           }
           populateMenu();
           box.hide();
