@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Window;
 import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ComponentListJSO;
+import edu.colorado.csdms.wmt.client.data.LabelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelListJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
@@ -571,6 +572,30 @@ public class DataTransfer {
   }
 
   /**
+   * Makes an asynchronous HTTPS GET request to list all labels belonging to the
+   * current user, as well as all public labels, in WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void listLabels(DataManager data) {
+
+    String url = DataURL.listLabels(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.GET, URL.encode(url));
+
+    try {
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(null, new LabelRequestCallback(data, url, null,
+              "list"));
+    } catch (RequestException e) {
+      Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
    * A RequestCallback handler class that processes WMT login and logout
    * requests.
    */
@@ -592,10 +617,12 @@ public class DataTransfer {
      */
     private void loginActions() {
       data.security.isLoggedIn(true);
-//      data.modelLabels.put(data.security.getWmtUsername(), true);
       data.getPerspective().getLoginPanel().getLoginName().setText(
           data.security.getWmtUsername());
       data.getPerspective().getLoginPanel().showStatusPanel();
+      
+      // Get all labels belonging to the user, as well as all public labels.
+      listLabels(data);
 
       // Set a cookie to store the most recent username.
       // TODO Replace with the browser's login autocomplete mechanism.
@@ -988,7 +1015,15 @@ public class DataTransfer {
         } else if (type.matches("delete")) {
           ;
         } else if (type.matches("list")) {
-          ;
+          LabelJSO jso = parse(rtxt);
+          Integer nLabels = jso.getLabels().length();
+          if (nLabels > 0) {
+            for (int i = 0; i < nLabels; i++) {
+              String label = jso.getLabels().get(i).getLabel();
+              Boolean isUser = data.security.getWmtUsername().matches(label);
+              data.modelLabels.put(label, isUser);
+            }
+          }
         } else {
           Window.alert(Constants.RESPONSE_ERR_MSG);
         }

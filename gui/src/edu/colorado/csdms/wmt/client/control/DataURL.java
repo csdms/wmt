@@ -97,9 +97,23 @@ public class DataURL {
    */
   public static String addLabel(DataManager data) {
     if (data.isDevelopmentMode()) {
-      return Constants.LOCAL_URL + "save/authenticate.json";
+      return Constants.LOCAL_URL + "save/labels.json";
     } else {
       return getApiUrl(data) + Constants.LABELS_NEW_PATH;
+    }
+  }
+
+  /**
+   * Returns the API URL for listing all labels belonging to the current user,
+   * as well as all public labels, in WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String listLabels(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return Constants.LOCAL_URL + "save/labels.json";
+    } else {
+      return getApiUrl(data) + Constants.LABELS_LIST_PATH;
     }
   }
 
