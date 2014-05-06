@@ -1,0 +1,22 @@
+[
+  {
+    "owner":"mark.piper@colorado.edu",
+    "tag":"test-2",
+    "id":6
+  },
+  {
+    "owner":"mark.piper@colorado.edu",
+    "tag":"test-1",
+    "id":5
+  },
+  {
+    "owner":"mark.piper@colorado.edu",
+    "tag":"mark.piper@colorado.edu",
+    "id":4
+  },
+  {
+    "owner":"",
+    "tag":"Test",
+    "id":1
+  }
+]
