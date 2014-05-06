@@ -18,6 +18,8 @@ import com.google.gwt.core.client.JsArray;
  */
 public class LabelJSO extends JavaScriptObject {
 
+  private Boolean selected = false; 
+  
   // Overlay types always have protected, zero-arg constructors.
   protected LabelJSO() {
   }
@@ -48,5 +50,21 @@ public class LabelJSO extends JavaScriptObject {
    */
   public final native JsArray<LabelJSO> getLabels() /*-{
 		return this;
-  }-*/;  
+  }-*/;
+  
+  /**
+   * Returns the state of the label button; true = selected. Not a JSNI method.
+   */
+  public Boolean isSelected() {
+    return this.selected;
+  }
+  
+  /**
+   * Stores the state of the label button. Not a JSNI method.
+   * 
+   * @param selected a value of true indicates button is selected
+   */
+  public void isSelected(Boolean selected) {
+    this.selected = selected;
+  }
 }
