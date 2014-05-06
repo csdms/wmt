@@ -91,6 +91,19 @@ public class DataURL {
   }
 
   /**
+   * Returns the API URL for adding a new label to WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String addLabel(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return Constants.LOCAL_URL + "save/authenticate.json";
+    } else {
+      return getApiUrl(data) + Constants.LABELS_NEW_PATH;
+    }
+  }
+
+  /**
    * Returns the URL for the list of available components on the server.
    * 
    * @param data the DataManager object for the WMT session

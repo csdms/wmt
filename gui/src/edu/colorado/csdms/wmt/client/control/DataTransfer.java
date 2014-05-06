@@ -183,7 +183,7 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(queryString, new AuthenticationRequestCallback(
-              data, url, "login"));
+              data, url, "new"));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -542,6 +542,35 @@ public class DataTransfer {
   }
 
   /**
+   * Makes an asynchronous HTTPS POST request to add a label to WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param label the label to add, a String
+   */
+  public static void addLabel(DataManager data, String label) {
+
+    String url = DataURL.addLabel(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("tag", label);
+    String queryString = buildQueryString(entries);
+
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new LabelRequestCallback(
+              data, url, label, "add"));
+    } catch (RequestException e) {
+      Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
    * A RequestCallback handler class that processes WMT login and logout
    * requests.
    */
@@ -563,7 +592,7 @@ public class DataTransfer {
      */
     private void loginActions() {
       data.security.isLoggedIn(true);
-      data.modelLabels.put(data.security.getWmtUsername(), true);
+//      data.modelLabels.put(data.security.getWmtUsername(), true);
       data.getPerspective().getLoginPanel().getLoginName().setText(
           data.security.getWmtUsername());
       data.getPerspective().getLoginPanel().showStatusPanel();
@@ -599,7 +628,10 @@ public class DataTransfer {
         // Need to refresh the model list on login and logout.
         getModelList(data);
 
-        if (type.matches("login")) {
+        if (type.matches("new")) {
+          loginActions();
+          addLabel(data, data.security.getWmtUsername());
+        } else if (type.matches("login")) {
           loginActions();
         } else if (type.matches("logout")) {
           logoutActions();
@@ -925,4 +957,54 @@ public class DataTransfer {
     }
   }
 
+  /**
+   * A RequestCallback handler class that handles listing, adding, and deleting 
+   * labels.
+   */
+  public static class LabelRequestCallback implements RequestCallback {
+
+    private DataManager data;
+    private String url;
+    private String label;
+    private String type;
+
+    public LabelRequestCallback(DataManager data, String url, String label,
+        String type) {
+      this.data = data;
+      this.url = url;
+      this.label = label;
+      this.type = type;
+    }
+
+    @Override
+    public void onResponseReceived(Request request, Response response) {
+      if (Response.SC_OK == response.getStatusCode()) {
+
+        String rtxt = response.getText();
+        GWT.log(rtxt);
+
+        if (type.matches("add")) {
+          data.modelLabels.put(label, true); // swallow the returned id
+        } else if (type.matches("delete")) {
+          ;
+        } else if (type.matches("list")) {
+          ;
+        } else {
+          Window.alert(Constants.RESPONSE_ERR_MSG);
+        }
+
+      } else {
+        String msg =
+            "The URL '" + url + "' did not give an 'OK' response. "
+                + "Response code: " + response.getStatusCode();
+        Window.alert(msg);
+      }
+    }
+
+    @Override
+    public void onError(Request request, Throwable exception) {
+      Window.alert(Constants.REQUEST_ERR_MSG + exception.getMessage());
+    }
+  }
+  
 }

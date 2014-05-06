@@ -30,6 +30,11 @@ public class Constants {
   public static final String USERNAME_COOKIE = "__WMT_username";
   public static final Long COOKIE_DURATION = (long) (1000*60*60*24*14); // 2 wks
 
+  // API URLs for labels.
+  public static final String LABELS_LIST_PATH = "tag/list";
+  public static final String LABELS_NEW_PATH = "tag/new";
+  public static final String LABELS_DELETE_PATH = "tag/delete/";
+  
   // API URLs for components.
   public static final String COMPONENTS_LIST_PATH = "components/list";
   public static final String COMPONENTS_SHOW_PATH = "components/show/";
