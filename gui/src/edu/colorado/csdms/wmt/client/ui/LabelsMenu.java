@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -152,7 +153,11 @@ public class LabelsMenu extends PopupPanel {
           } else if (type.equalsIgnoreCase("delete")) {
             LabelJSO jso = data.modelLabels.get(label);
             if (jso != null) {
-              DataTransfer.deleteLabel(data, jso.getId());
+              if (!data.security.getWmtUsername().matches(jso.getOwner())) {
+                Window.alert("You can't delete a label that you don't own.");
+              } else {
+                DataTransfer.deleteLabel(data, jso.getId());
+              }
             }
           }
           box.hide();
