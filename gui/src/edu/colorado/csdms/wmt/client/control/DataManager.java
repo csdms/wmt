@@ -74,6 +74,7 @@ public class DataManager {
     String label = "public";
     LabelJSO value = (LabelJSO) LabelJSO.createObject();
     value.setLabel(label);
+    value.setId(-1);
     modelLabels.put(label, value);
   }
 
