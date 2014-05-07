@@ -573,6 +573,30 @@ public class DataTransfer {
   }
 
   /**
+   * Makes an asynchronous HTTPS POST request to delete a label from WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param labelId the id of the label to delete, an Integer
+   */
+  public static void deleteLabel(DataManager data, Integer labelId) {
+
+    String url = DataURL.deleteLabel(data, labelId);
+    GWT.log(url);
+    
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+
+    try {
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(null, new LabelRequestCallback(data, url,
+              "delete"));
+    } catch (RequestException e) {
+      Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
    * Makes an asynchronous HTTPS GET request to list all labels belonging to the
    * current user, as well as all public labels, in WMT.
    * 
@@ -1013,14 +1037,23 @@ public class DataTransfer {
 
         String rtxt = response.getText();
         GWT.log(rtxt);
-        LabelJSO jso = parse(rtxt);
           
         if (type.matches("add")) {
+          LabelJSO jso = parse(rtxt);
           data.modelLabels.put(jso.getLabel(), jso);
           data.getPerspective().getLabelsMenu().populateMenu();
         } else if (type.matches("delete")) {
-          ;
+          Integer labelId = Integer.valueOf(rtxt.replaceAll("^\"|\"$", ""));
+          for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
+            LabelJSO jso = entry.getValue();
+            if (jso.getId() == labelId) {
+              data.modelLabels.remove(jso.getLabel());
+              break;
+            }
+          }
+          data.getPerspective().getLabelsMenu().populateMenu();
         } else if (type.matches("list")) {
+          LabelJSO jso = parse(rtxt);          
           Integer nLabels = jso.getLabels().length();
           if (nLabels > 0) {
             for (int i = 0; i < nLabels; i++) {

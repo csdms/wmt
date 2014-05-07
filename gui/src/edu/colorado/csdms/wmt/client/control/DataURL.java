@@ -104,6 +104,21 @@ public class DataURL {
   }
 
   /**
+   * Returns the API URL for deleting a label from WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param labelId the id of the label to delete, an Integer
+   */
+  public static String deleteLabel(DataManager data, Integer labelId) {
+    if (data.isDevelopmentMode()) {
+      return Constants.LOCAL_URL + "save/labels.json";
+    } else {
+      return getApiUrl(data) + Constants.LABELS_DELETE_PATH
+          + labelId.toString();
+    }
+  }
+
+  /**
    * Returns the API URL for listing all labels belonging to the current user,
    * as well as all public labels, in WMT.
    * 

@@ -150,8 +150,10 @@ public class LabelsMenu extends PopupPanel {
           if (type.equalsIgnoreCase("add")) {
             DataTransfer.addLabel(data, label);
           } else if (type.equalsIgnoreCase("delete")) {
-            // XXX Revisit
-//            data.modelLabels.remove(label);
+            LabelJSO jso = data.modelLabels.get(label);
+            if (jso != null) {
+              DataTransfer.deleteLabel(data, jso.getId());
+            }
           }
           box.hide();
         }
