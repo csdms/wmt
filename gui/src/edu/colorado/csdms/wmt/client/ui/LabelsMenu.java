@@ -3,7 +3,6 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -156,7 +155,7 @@ public class LabelsMenu extends PopupPanel {
           String label = box.getSuggestBox().getText();
           if (type.equalsIgnoreCase("add")) {
             if (data.modelLabels.containsKey(label)) {
-              Window.alert("You can't add a label that already exists.");
+              Window.alert(Constants.ADD_LABEL_ERR);
             } else {
               DataTransfer.addLabel(data, label);
             }
@@ -164,7 +163,7 @@ public class LabelsMenu extends PopupPanel {
             LabelJSO jso = data.modelLabels.get(label);
             if (jso != null) {
               if (!data.security.getWmtUsername().matches(jso.getOwner())) {
-                Window.alert("You can't delete a label that you don't own.");
+                Window.alert(Constants.DELETE_LABEL_ERR);
               } else {
                 DataTransfer.deleteLabel(data, jso.getId());
               }

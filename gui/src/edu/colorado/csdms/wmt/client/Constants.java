@@ -64,6 +64,10 @@ public class Constants {
       + " and a password.";
   public static String PASSWORD_ERR = "This email address is registered,"
       + " but the password is not valid.";
+  public static String ADD_LABEL_ERR = "This label already exists."
+      + " Please choose a different name.";
+  public static String DELETE_LABEL_ERR = "This label cannot be deleted because"
+      + " it is not owned by the current user.";
   
   
   // Number of tries to fetch a component; a magic number.
