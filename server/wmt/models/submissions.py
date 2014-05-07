@@ -8,7 +8,7 @@ from ..config import submission_db as db
 from ..config import site
 from ..utils.io import write_readme, execute_in_dir
 from ..utils.time import current_time_as_string
-from ..utils.ssh import launch_cmt_on_host
+#from ..utils.ssh import launch_cmt_on_host
 from ..session import get_username
 
 
@@ -116,12 +116,12 @@ def _create_stage_dir(uuid):
     })
 
 
-def launch(uuid, username, host, password=None):
-    script = os.path.join(os.path.dirname(__file__), '..', 'scripts',
-                          'launch.py')
-    resp = launch_cmt_on_host(uuid, host, username, password=password)
-
-    return resp
+#def launch(uuid, username, host, password=None):
+#    script = os.path.join(os.path.dirname(__file__), '..', 'scripts',
+#                          'launch.py')
+#    resp = launch_cmt_on_host(uuid, host, username, password=password)
+#
+#    return resp
 
 
 def stage(uuid):

@@ -9,13 +9,15 @@ from ..validators import (not_too_long, not_too_short, not_bad_json,
 from ..cca import rc_from_json
 from ..utils.io import chunk_copy
 from ..config import logger, site
+from ..utils.ssh import launch_cmt_on_host
 
 import threading
 
 
 def launch_simulation(uuid, username, host, password):
     try:
-        resp = submissions.launch(uuid, username, host, password=password)
+        #resp = submissions.launch(uuid, username, host, password=password)
+        resp = launch_cmt_on_host(uuid, host, username, password=password)
     except Exception as error:
         submissions.update(
             uuid,
@@ -31,7 +33,7 @@ def launch_simulation(uuid, username, host, password):
         submissions.update(
             uuid,
             status='error',
-            message='unexpected error launching simulation on %s' % host)
+            message='unexpected error launching simulation on %s (%d: %s)' % (host, resp['status_code'], resp['stderr']))
 
 
 class Launch(object):
@@ -114,7 +116,7 @@ class New(object):
     form = web.form.Form(
         web.form.Textbox('name',
                          not_too_short(3),
-                         not_too_long(20),
+                         not_too_long(512),
                          size=30, description='Name:'),
         web.form.Textbox('description',
                          size=30, description='Description:'),
@@ -140,8 +142,8 @@ class New(object):
 
 class Delete(object):
     def POST(self, uuid):
-        submissions.remove(uuid)
-        raise web.seeother('/')
+        submissions.delete(uuid)
+        raise web.seeother('/run/show')
 
 
 class Update(object):
@@ -152,7 +154,7 @@ class Update(object):
                          size=80, description='Simulation id:'),
         web.form.Textbox('status',
                          not_too_short(3),
-                         not_too_long(20),
+                         not_too_long(512),
                          size=80, description='status:'),
         web.form.Textbox('message',
                          not_too_long(10240),
@@ -232,7 +234,7 @@ class DownloadBundle(object):
                          submission_exists(),
                          size=80, description='Simulation id:'),
         web.form.Textbox('filename',
-                         not_too_long(256),
+                         not_too_long(512),
                          size=80, description='filename:'),
         web.form.Button('Download')
     )

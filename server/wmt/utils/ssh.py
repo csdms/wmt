@@ -5,6 +5,13 @@ import getpass
 import os
 
 from ..config import site
+from ..models import submissions
+
+
+def site_url():
+    import urlparse
+    parts = (site['scheme'], site['netloc'], site['path'], '', '')
+    return urlparse.urlunsplit(parts)
 
 
 def open_connection_to_host(host, username, password=None, onerror='raise'):
@@ -39,7 +46,9 @@ def copy_launch_file(sftp, local_path, remote_path):
 
 def execute_launch_command(ssh, wmt_prefix, uuid):
     wmt_execute = os.path.join(wmt_prefix, 'bin', 'wmt-execute.sh')
-    run_command = '/usr/bin/env -i /bin/bash %s %s' % (wmt_execute, uuid)
+
+    run_command = '/usr/bin/env -i /bin/bash %s %s --server-url=%s' % (wmt_execute, uuid, site_url())
+    submissions.update(uuid, status='launching', message='Running command: %s' % run_command)
 
     stdin, stdout, stderr = ssh.exec_command(run_command)
 
@@ -72,6 +81,12 @@ def launch_cmt_on_host(uuid, host, username, password=None, args=[]):
             'stdout': '',
             'stderr': '',
         }
+    except Exception as error:
+        resp = {
+            'status_code': 500,
+            'stdout': '',
+            'stderr': str(error),
+        }
     else:
         remote_path = os.path.join('.wmt', uuid)
 
@@ -85,8 +100,8 @@ def launch_cmt_on_host(uuid, host, username, password=None, args=[]):
             'stdout': ''.join(stdout.readlines()),
             'stderr': ''.join(stderr.readlines()),
         }
-    finally:
         ssh.close()
+    #finally:
 
     return resp
 
