@@ -74,18 +74,26 @@ public class LabelsMenu extends PopupPanel {
   }
   
   /**
-   * A helper that loads the menu with {@link CheckBox} labels.
+   * A helper that loads the {@link LabelsMenu} with {@link CheckBox} labels.
+   * Each CheckBox has a handler that maps the selection state of the box to the
+   * labels variable stored in the {@link DataManager}.
    */
   public void populateMenu() {
     labelPanel.clear();
-    for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
-      CheckBox labelBox = new CheckBox(entry.getKey());
+    for (final Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
+      final CheckBox labelBox = new CheckBox(entry.getKey());
+      labelBox.setWordWrap(false);
+      labelBox.setStyleName("wmt-PopupPanelCheckBoxItem");
       if (!buttonsUnchecked) {
         labelBox.setValue(entry.getValue().isSelected());
       }
-      labelBox.setWordWrap(false);
-      labelBox.setStyleName("wmt-PopupPanelCheckBoxItem");
-      labelPanel.add(labelBox);
+      labelBox.addClickHandler(new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+          entry.getValue().isSelected(labelBox.getValue());
+        }
+      });
+      labelPanel.add(labelBox);      
     }
   }
 
