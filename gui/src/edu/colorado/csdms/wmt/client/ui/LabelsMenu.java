@@ -3,6 +3,7 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -154,7 +155,11 @@ public class LabelsMenu extends PopupPanel {
         public void onClick(ClickEvent event) {
           String label = box.getSuggestBox().getText();
           if (type.equalsIgnoreCase("add")) {
-            DataTransfer.addLabel(data, label);
+            if (data.modelLabels.containsKey(label)) {
+              Window.alert("You can't add a label that already exists.");
+            } else {
+              DataTransfer.addLabel(data, label);
+            }
           } else if (type.equalsIgnoreCase("delete")) {
             LabelJSO jso = data.modelLabels.get(label);
             if (jso != null) {
