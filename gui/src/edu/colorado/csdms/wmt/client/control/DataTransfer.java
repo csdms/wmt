@@ -5,6 +5,7 @@ package edu.colorado.csdms.wmt.client.control;
 
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.gwt.core.client.GWT;
@@ -640,9 +641,15 @@ public class DataTransfer {
      */
     private void logoutActions() {
       data.security.isLoggedIn(false);
-      data.modelLabels.remove(data.security.getWmtUsername());
       data.getPerspective().getLoginPanel().showInputPanel();
       data.getPerspective().reset();
+      
+      // Clear any user-owned labels from list.
+      for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
+        if (data.security.getWmtUsername().equals(entry.getValue().getOwner())) {
+          data.modelLabels.remove(entry.getKey());
+        }
+      }
     }
     
     @Override
