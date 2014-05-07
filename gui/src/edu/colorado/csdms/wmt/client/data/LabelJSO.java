@@ -74,7 +74,7 @@ public class LabelJSO extends JavaScriptObject {
    * 
    * @param selected a value of true indicates button is selected
    */
-  public final native void isSelected(Boolean selected) /*-{
+  public final native void isSelected(boolean selected) /*-{
     this.selected = selected;
   }-*/;
 }
