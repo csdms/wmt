@@ -1017,6 +1017,7 @@ public class DataTransfer {
           
         if (type.matches("add")) {
           data.modelLabels.put(jso.getLabel(), jso);
+          data.getPerspective().getLabelsMenu().populateMenu();
         } else if (type.matches("delete")) {
           ;
         } else if (type.matches("list")) {

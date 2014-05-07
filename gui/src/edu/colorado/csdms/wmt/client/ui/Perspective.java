@@ -48,6 +48,7 @@ public class Perspective extends DockLayoutPanel {
   private ModelTree modelTree;
   private ParameterTable parameterTable;
   private ComponentInfoDialogBox componentInfoBox;
+  private LabelsMenu labelsMenu;
 
   /**
    * Draws the panels and their children that compose the basic WMT GUI.
@@ -244,6 +245,14 @@ public class Perspective extends DockLayoutPanel {
 
   public void setActionButtonPanel(ModelActionPanel modelActionPanel) {
     this.modelActionPanel = modelActionPanel;
+  }
+
+  public LabelsMenu getLabelsMenu() {
+    return labelsMenu;
+  }
+
+  public void setLabelsMenu(LabelsMenu labelsMenu) {
+    this.labelsMenu = labelsMenu;
   }
 
   public LoginPanel getLoginPanel() {

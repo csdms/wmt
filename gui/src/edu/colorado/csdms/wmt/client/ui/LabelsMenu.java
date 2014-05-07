@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.data.LabelJSO;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.LabelDialogBox;
@@ -43,6 +44,7 @@ public class LabelsMenu extends PopupPanel {
     super(true); // autohide
     this.data = data;
     this.setStyleName("wmt-PopupPanel");
+    data.getPerspective().setLabelsMenu(this);
 
     // A VerticalPanel for the menu items. (PopupPanels have only one child.)
     VerticalPanel menu = new VerticalPanel();
@@ -146,13 +148,11 @@ public class LabelsMenu extends PopupPanel {
         public void onClick(ClickEvent event) {
           String label = box.getSuggestBox().getText();
           if (type.equalsIgnoreCase("add")) {
-            // XXX Revisit
-//            data.modelLabels.put(label, false);
+            DataTransfer.addLabel(data, label);
           } else if (type.equalsIgnoreCase("delete")) {
             // XXX Revisit
 //            data.modelLabels.remove(label);
           }
-          populateMenu();
           box.hide();
         }
       });
