@@ -20,6 +20,15 @@ URLS = (
     '/account/logout', 'wmt.controllers.account.Logout',
     '/account/username', 'wmt.controllers.account.Username',
 
+    '/tag/new', 'wmt.controllers.tag.New',
+    '/tag/delete/(\d+)', 'wmt.controllers.tag.Delete',
+    '/tag/get/(\d+)', 'wmt.controllers.tag.Get',
+    '/tag/list', 'wmt.controllers.tag.List',
+
+    '/tag/model/add', 'wmt.controllers.tag.TagModel',
+    '/tag/model/remove', 'wmt.controllers.tag.UntagModel',
+    '/tag/model/query', 'wmt.controllers.tag.Query',
+
     '/components/list', 'wmt.controllers.components.List',
     '/components/dump', 'wmt.controllers.components.Dump',
     '/components/show/(\w+)', 'wmt.controllers.components.Show',
