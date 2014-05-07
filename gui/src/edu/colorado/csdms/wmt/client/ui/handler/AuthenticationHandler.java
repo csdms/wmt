@@ -7,10 +7,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.user.client.Window;
 
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
-import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.widgets.LoginPanel;
 import edu.colorado.csdms.wmt.client.ui.widgets.QuestionDialogBox;
 
@@ -71,14 +72,21 @@ public class AuthenticationHandler implements ClickHandler {
     } else {
 
       // Get WMT username.
-      String userName = panel.getEmailBox().getText();
-      data.security.setWmtUsername(userName);
-      GWT.log(data.security.getWmtUsername());
+      String username = panel.getEmailBox().getText();
+      data.security.setWmtUsername(username);
+      GWT.log("Email: " + data.security.getWmtUsername());
 
       // Get WMT password.
       String password = panel.getPasswordBox().getText();
       data.security.setWmtPassword(password);
-      GWT.log(data.security.getWmtPassword());
+      GWT.log("Password: " + data.security.getWmtPassword());
+
+      // Very basic input check.
+      if (username.isEmpty() || password.isEmpty() || !username.contains("@")
+          || !username.contains(".")) {
+        Window.alert(Constants.LOGIN_ERR);
+        return;
+      }
 
       // Authenticate the user.
       DataTransfer.login(data);

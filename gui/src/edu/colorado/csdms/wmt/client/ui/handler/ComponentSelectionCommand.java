@@ -6,8 +6,8 @@ package edu.colorado.csdms.wmt.client.ui.handler;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.ComponentActionMenu;
 import edu.colorado.csdms.wmt.client.ui.ComponentCell;
 
@@ -80,9 +80,10 @@ public class ComponentSelectionCommand implements Command {
     Boolean isDriver = (cell.getEnclosingTreeItem().getParentItem() == null);
     
     // If this is the driver, select its label in the list of model labels.
-    if (isDriver) {
-      data.modelLabels.put(componentName, true);
-    }
+    // XXX Revisit
+//    if (isDriver) {
+//      data.modelLabels.put(componentName, true);
+//    }
     
     // Update the tooltip text.
     String ctype = isDriver ? Constants.DRIVER : "component";

@@ -12,8 +12,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelOpenHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelSaveHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;

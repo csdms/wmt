@@ -3,7 +3,9 @@
  */
 package edu.colorado.csdms.wmt.client.control;
 
+import java.sql.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.gwt.core.client.GWT;
@@ -14,15 +16,20 @@ import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ComponentListJSO;
-import edu.colorado.csdms.wmt.client.data.Constants;
+import edu.colorado.csdms.wmt.client.data.LabelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelListJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.ui.ComponentSelectionMenu;
+import edu.colorado.csdms.wmt.client.ui.handler.AddNewUserHandler;
+import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
+import edu.colorado.csdms.wmt.client.ui.widgets.NewUserDialogBox;
 import edu.colorado.csdms.wmt.client.ui.widgets.RunInfoDialogBox;
 
 /**
@@ -152,6 +159,36 @@ public class DataTransfer {
     }
 
     return sb.toString();
+  }
+
+  /**
+   * Makes an asynchronous HTTPS POST request to create a new user login to WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void newUserLogin(DataManager data) {
+
+    String url = DataURL.newUserLogin(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("username", data.security.getWmtUsername());
+    entries.put("password", data.security.getWmtPassword());
+    entries.put("password2", data.security.getWmtPassword());    
+    String queryString = buildQueryString(entries);
+
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new AuthenticationRequestCallback(
+              data, url, "new"));
+    } catch (RequestException e) {
+      Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
+    }
   }
 
   /**
@@ -507,6 +544,59 @@ public class DataTransfer {
   }
 
   /**
+   * Makes an asynchronous HTTPS POST request to add a label to WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param label the label to add, a String
+   */
+  public static void addLabel(DataManager data, String label) {
+
+    String url = DataURL.addLabel(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("tag", label);
+    String queryString = buildQueryString(entries);
+
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new LabelRequestCallback(data, url,
+              "add"));
+    } catch (RequestException e) {
+      Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
+   * Makes an asynchronous HTTPS GET request to list all labels belonging to the
+   * current user, as well as all public labels, in WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static void listLabels(DataManager data) {
+
+    String url = DataURL.listLabels(data);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.GET, URL.encode(url));
+
+    try {
+      @SuppressWarnings("unused")
+      Request request =
+          builder
+              .sendRequest(null, new LabelRequestCallback(data, url, "list"));
+    } catch (RequestException e) {
+      Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
    * A RequestCallback handler class that processes WMT login and logout
    * requests.
    */
@@ -528,10 +618,22 @@ public class DataTransfer {
      */
     private void loginActions() {
       data.security.isLoggedIn(true);
-      data.modelLabels.put(data.security.getWmtUsername(), true);
       data.getPerspective().getLoginPanel().getLoginName().setText(
           data.security.getWmtUsername());
       data.getPerspective().getLoginPanel().showStatusPanel();
+      
+      // Get all labels belonging to the user, as well as all public labels.
+      listLabels(data);
+
+      // Set a cookie to store the most recent username.
+      // TODO Replace with the browser's login autocomplete mechanism.
+      String currentCookie = Cookies.getCookie(Constants.USERNAME_COOKIE);
+      if (!data.security.getWmtUsername().equals(currentCookie)) {
+        Date expires =
+            new Date(System.currentTimeMillis() + Constants.COOKIE_DURATION);
+        Cookies.setCookie(Constants.USERNAME_COOKIE, data.security
+            .getWmtUsername(), expires);
+      }
     }
 
     /*
@@ -539,8 +641,15 @@ public class DataTransfer {
      */
     private void logoutActions() {
       data.security.isLoggedIn(false);
-      data.modelLabels.remove(data.security.getWmtUsername());
       data.getPerspective().getLoginPanel().showInputPanel();
+      data.getPerspective().reset();
+      
+      // Clear any user-owned labels from list.
+      for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
+        if (data.security.getWmtUsername().equals(entry.getValue().getOwner())) {
+          data.modelLabels.remove(entry.getKey());
+        }
+      }
     }
     
     @Override
@@ -553,7 +662,10 @@ public class DataTransfer {
         // Need to refresh the model list on login and logout.
         getModelList(data);
 
-        if (type.matches("login")) {
+        if (type.matches("new")) {
+          loginActions();
+          addLabel(data, data.security.getWmtUsername());
+        } else if (type.matches("login")) {
           loginActions();
         } else if (type.matches("logout")) {
           logoutActions();
@@ -568,6 +680,21 @@ public class DataTransfer {
         } else {
           Window.alert(Constants.RESPONSE_ERR_MSG);
         }
+
+      } else if (Response.SC_BAD_REQUEST == response.getStatusCode()) {
+
+        // Display the NewUserDialogBox if the email address isn't recognized.
+        final NewUserDialogBox box = new NewUserDialogBox();
+        box.getChoicePanel().getCancelButton().addClickHandler(
+            new DialogCancelHandler(box));
+        box.getChoicePanel().getOkButton().addClickHandler(
+            new AddNewUserHandler(data, box));
+        box.center();
+        
+      } else if (Response.SC_UNAUTHORIZED == response.getStatusCode()) {
+
+        // Display message if email address is valid, but password is not.
+        Window.alert(Constants.PASSWORD_ERR);
 
       } else {
         String msg =
@@ -678,9 +805,6 @@ public class DataTransfer {
         ((ComponentSelectionMenu) data.getPerspective().getModelTree()
             .getDriverComponentCell().getComponentMenu()).replaceMenuItem(jso
             .getId());
-        
-        // Add the component name to the list of model labels.
-        data.modelLabels.put(jso.getName(), false);
 
       } else {
 
@@ -867,4 +991,62 @@ public class DataTransfer {
     }
   }
 
+  /**
+   * A RequestCallback handler class that handles listing, adding, and deleting 
+   * labels.
+   */
+  public static class LabelRequestCallback implements RequestCallback {
+
+    private DataManager data;
+    private String url;
+    private String type;
+
+    public LabelRequestCallback(DataManager data, String url, String type) {
+      this.data = data;
+      this.url = url;
+      this.type = type;
+    }
+
+    @Override
+    public void onResponseReceived(Request request, Response response) {
+      if (Response.SC_OK == response.getStatusCode()) {
+
+        String rtxt = response.getText();
+        GWT.log(rtxt);
+        LabelJSO jso = parse(rtxt);
+          
+        if (type.matches("add")) {
+          data.modelLabels.put(jso.getLabel(), jso);
+          data.getPerspective().getLabelsMenu().populateMenu();
+        } else if (type.matches("delete")) {
+          ;
+        } else if (type.matches("list")) {
+          Integer nLabels = jso.getLabels().length();
+          if (nLabels > 0) {
+            for (int i = 0; i < nLabels; i++) {
+              LabelJSO labelJSO = jso.getLabels().get(i);
+              String label = labelJSO.getLabel();
+              Boolean isUser = data.security.getWmtUsername().matches(label);
+              labelJSO.isSelected(isUser);
+              data.modelLabels.put(label, labelJSO);
+            }
+          }
+        } else {
+          Window.alert(Constants.RESPONSE_ERR_MSG);
+        }
+
+      } else {
+        String msg =
+            "The URL '" + url + "' did not give an 'OK' response. "
+                + "Response code: " + response.getStatusCode();
+        Window.alert(msg);
+      }
+    }
+
+    @Override
+    public void onError(Request request, Throwable exception) {
+      Window.alert(Constants.REQUEST_ERR_MSG + exception.getMessage());
+    }
+  }
+  
 }

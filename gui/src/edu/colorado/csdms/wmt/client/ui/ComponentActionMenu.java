@@ -10,8 +10,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.handler.ComponentDeleteCommand;
 import edu.colorado.csdms.wmt.client.ui.handler.ComponentGetInformationCommand;
 import edu.colorado.csdms.wmt.client.ui.handler.ComponentShowParametersCommand;

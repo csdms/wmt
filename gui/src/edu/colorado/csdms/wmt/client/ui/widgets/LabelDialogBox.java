@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.LabelJSO;
 
 /**
  * A customized DialogBox with a {@link SuggestBox} for entering a label and a
@@ -39,7 +40,7 @@ public class LabelDialogBox extends DialogBox {
 
     // OMG is this fun!
     MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-    for (Map.Entry<String, Boolean> entry : data.modelLabels.entrySet()) {
+    for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
       oracle.add(entry.getKey());
     }
     

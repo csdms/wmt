@@ -13,9 +13,9 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataURL;
-import edu.colorado.csdms.wmt.client.data.Constants;
 
 /**
  * Shows a menu that allows a user to select to view the input files generated

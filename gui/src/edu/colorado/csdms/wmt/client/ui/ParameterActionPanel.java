@@ -12,9 +12,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.handler.ParameterActionPanelResetHandler;
+import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 
 /**
  * Makes a row of action buttons ("Reset", "View input files", etc.) for working
@@ -59,7 +60,6 @@ public class ParameterActionPanel extends HorizontalPanel {
         inputFilesMenu.setPopupPositionAndShow(new PositionCallback() {
           final Integer x = viewFilesButton.getElement().getAbsoluteLeft();
           final Integer y = viewFilesButton.getElement().getAbsoluteBottom();
-
           @Override
           public void setPosition(int offsetWidth, int offsetHeight) {
             inputFilesMenu.setPopupPosition(x, y);
@@ -68,6 +68,22 @@ public class ParameterActionPanel extends HorizontalPanel {
       }
     });
 
+    // Component help
+    Button helpButton = new Button(Constants.FA_HELP);
+    helpButton.setTitle(Constants.COMPONENT_INFO);
+    helpButton.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        ComponentInfoDialogBox componentInfoDialogBox =
+            ParameterActionPanel.this.data.getPerspective()
+                .getComponentInfoBox();
+        componentInfoDialogBox.update(ParameterActionPanel.this.data
+            .getComponent(ParameterActionPanel.this.componentId));
+        componentInfoDialogBox.center();
+      }
+    });
+    this.add(helpButton);
+    
     // Apply a style to each button.
     Iterator<Widget> iter = this.iterator();
     while (iter.hasNext()) {

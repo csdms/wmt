@@ -1,7 +1,7 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.data;
+package edu.colorado.csdms.wmt.client;
 
 import com.google.gwt.core.client.GWT;
 
@@ -22,11 +22,19 @@ public class Constants {
   public static final String API_DEV_URL = BASE_URL + "wmt/api-dev/";
   public static final String LOCAL_URL = GWT.getHostPageBaseURL();
 
-  // API URLs for login status.
+  // API URLs for user login, logout, and status. Also, a cookie.
+  public static final String NEW_USER_LOGIN_PATH = "account/new";
   public static final String LOGIN_PATH = "account/login";
   public static final String LOGOUT_PATH = "account/logout";
   public static final String USERNAME_PATH = "account/username";
+  public static final String USERNAME_COOKIE = "__WMT_username";
+  public static final Long COOKIE_DURATION = (long) (1000*60*60*24*14); // 2 wks
 
+  // API URLs for labels.
+  public static final String LABELS_LIST_PATH = "tag/list";
+  public static final String LABELS_NEW_PATH = "tag/new";
+  public static final String LABELS_DELETE_PATH = "tag/delete/";
+  
   // API URLs for components.
   public static final String COMPONENTS_LIST_PATH = "components/list";
   public static final String COMPONENTS_SHOW_PATH = "components/show/";
@@ -46,14 +54,18 @@ public class Constants {
   public static final String RUN_STAGE_PATH = "run/stage";
   public static final String RUN_LAUNCH_PATH = "run/launch";
 
-  // Error messages used in DataTransfer.
+  // Error and warning messages.
   public static String REQUEST_ERR_MSG = "Failed to send the request: ";
   public static String RESPONSE_ERR_MSG = "No match found in the response.";
-
   public static String CLOSE_MSG =
       "Any unsaved model data will be lost if this page"
           + " is reloaded or closed.";
-
+  public static String LOGIN_ERR = "Please sign in with an email address"
+      + " and a password.";
+  public static String PASSWORD_ERR = "This email address is registered,"
+      + " but the password is not valid.";
+  
+  
   // Number of tries to fetch a component; a magic number.
   public static Integer RETRY_ATTEMPTS = 3;
 
@@ -87,6 +99,8 @@ public class Constants {
   // FontAwesome icons.
   public static String SIGN_IN = "<i class='fa fa-sign-in'></i> Sign In";
   public static String SIGN_OUT = "<i class='fa fa-sign-out'></i> Sign Out";
+  public static String FA_OK = "<i class='fa fa-check'></i> ";
+  public static String FA_CANCEL = "<i class='fa fa-ban'></i> ";
   public static String FA_OPEN = "<i class='fa fa-folder-open-o fa-fw'></i> ";
   public static String FA_SAVE = "<i class='fa fa-floppy-o fa-fw'></i> ";
   public static String FA_DELETE = "<i class='fa fa-trash-o fa-fw'></i> ";
@@ -101,6 +115,7 @@ public class Constants {
   public static String FA_MORE = " <i class='fa fa-caret-down'></i>";
   public static String FA_COG = "<i class='fa fa-cog fa-fw'></i> ";
   public static String FA_COGS = "<i class='fa fa-cogs fa-fw'></i> ";
+  public static String FA_USER = "<i class='fa fa-user fa-fw'></i> ";
 
   // Tooltip text strings.
   public static String MODEL_OPEN = "Open an existing model.";

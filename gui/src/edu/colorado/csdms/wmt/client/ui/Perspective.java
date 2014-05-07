@@ -13,8 +13,8 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.data.Constants;
 import edu.colorado.csdms.wmt.client.ui.handler.AuthenticationHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 import edu.colorado.csdms.wmt.client.ui.widgets.LoginPanel;
@@ -48,6 +48,7 @@ public class Perspective extends DockLayoutPanel {
   private ModelTree modelTree;
   private ParameterTable parameterTable;
   private ComponentInfoDialogBox componentInfoBox;
+  private LabelsMenu labelsMenu;
 
   /**
    * Draws the panels and their children that compose the basic WMT GUI.
@@ -246,6 +247,14 @@ public class Perspective extends DockLayoutPanel {
     this.modelActionPanel = modelActionPanel;
   }
 
+  public LabelsMenu getLabelsMenu() {
+    return labelsMenu;
+  }
+
+  public void setLabelsMenu(LabelsMenu labelsMenu) {
+    this.labelsMenu = labelsMenu;
+  }
+
   public LoginPanel getLoginPanel() {
     return loginPanel;
   }
@@ -284,6 +293,7 @@ public class Perspective extends DockLayoutPanel {
     data.resetModelComponents();
     parameterTable.clearTable();
     modelTree.initializeTree();
+    data.modelIsSaved(false);
     ((ComponentSelectionMenu) modelTree.getDriverComponentCell()
         .getComponentMenu()).updateComponents();;
     setModelPanelTitle();

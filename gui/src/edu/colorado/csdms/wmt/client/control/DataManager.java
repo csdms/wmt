@@ -11,8 +11,9 @@ import java.util.TreeMap;
 
 import com.google.gwt.dom.client.Style.Cursor;
 
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
-import edu.colorado.csdms.wmt.client.data.Constants;
+import edu.colorado.csdms.wmt.client.data.LabelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.security.Security;
@@ -53,7 +54,7 @@ public class DataManager {
   public HashMap<String, Integer> retryComponentLoad;
   public List<Integer> modelIdList;
   public List<String> modelNameList;
-  public TreeMap<String, Boolean> modelLabels; // maintains sort
+  public TreeMap<String, LabelJSO> modelLabels; // maintains sort
   public Integer saveAttempts = 0;
 
   /**
@@ -66,15 +67,14 @@ public class DataManager {
     components = new ArrayList<ComponentJSO>();
     modelComponents = new ArrayList<ComponentJSO>();
     modelIdList = new ArrayList<Integer>();
-    modelLabels = new TreeMap<String, Boolean>();
+    modelLabels = new TreeMap<String, LabelJSO>();
     modelNameList = new ArrayList<String>();
 
-    // Labels that are always present.
-    String[] labels = {"public"};
-    Boolean[] values = {false};
-    for (int i = 0; i < values.length; i++) {
-      modelLabels.put(labels[i], values[i]);
-    }
+    // The "public" label is always present.
+    String label = "public";
+    LabelJSO value = (LabelJSO) LabelJSO.createObject();
+    value.setLabel(label);
+    modelLabels.put(label, value);
   }
 
   /**

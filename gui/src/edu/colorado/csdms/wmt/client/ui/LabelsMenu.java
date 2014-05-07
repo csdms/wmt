@@ -13,8 +13,10 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.data.Constants;
+import edu.colorado.csdms.wmt.client.control.DataTransfer;
+import edu.colorado.csdms.wmt.client.data.LabelJSO;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.LabelDialogBox;
 
@@ -42,6 +44,7 @@ public class LabelsMenu extends PopupPanel {
     super(true); // autohide
     this.data = data;
     this.setStyleName("wmt-PopupPanel");
+    data.getPerspective().setLabelsMenu(this);
 
     // A VerticalPanel for the menu items. (PopupPanels have only one child.)
     VerticalPanel menu = new VerticalPanel();
@@ -73,18 +76,26 @@ public class LabelsMenu extends PopupPanel {
   }
   
   /**
-   * A helper that loads the menu with {@link CheckBox} labels.
+   * A helper that loads the {@link LabelsMenu} with {@link CheckBox} labels.
+   * Each CheckBox has a handler that maps the selection state of the box to the
+   * labels variable stored in the {@link DataManager}.
    */
   public void populateMenu() {
     labelPanel.clear();
-    for (Map.Entry<String, Boolean> entry : data.modelLabels.entrySet()) {
-      CheckBox labelBox = new CheckBox(entry.getKey());
-      if (!buttonsUnchecked) {
-        labelBox.setValue(entry.getValue());
-      }
+    for (final Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
+      final CheckBox labelBox = new CheckBox(entry.getKey());
       labelBox.setWordWrap(false);
       labelBox.setStyleName("wmt-PopupPanelCheckBoxItem");
-      labelPanel.add(labelBox);
+      if (!buttonsUnchecked) {
+        labelBox.setValue(entry.getValue().isSelected());
+      }
+      labelBox.addClickHandler(new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+          entry.getValue().isSelected(labelBox.getValue());
+        }
+      });
+      labelPanel.add(labelBox);      
     }
   }
 
@@ -137,11 +148,11 @@ public class LabelsMenu extends PopupPanel {
         public void onClick(ClickEvent event) {
           String label = box.getSuggestBox().getText();
           if (type.equalsIgnoreCase("add")) {
-            data.modelLabels.put(label, false);
+            DataTransfer.addLabel(data, label);
           } else if (type.equalsIgnoreCase("delete")) {
-            data.modelLabels.remove(label);
+            // XXX Revisit
+//            data.modelLabels.remove(label);
           }
-          populateMenu();
           box.hide();
         }
       });

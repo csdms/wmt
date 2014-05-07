@@ -5,7 +5,7 @@ package edu.colorado.csdms.wmt.client.control;
 
 import com.google.gwt.user.client.Window;
 
-import edu.colorado.csdms.wmt.client.data.Constants;
+import edu.colorado.csdms.wmt.client.Constants;
 
 /**
  * A class defining static methods that return URLs for accessing components
@@ -35,6 +35,19 @@ public class DataURL {
    */
   public static String applicationURL(DataManager data) {
     return Window.Location.getHref();
+  }
+
+  /**
+   * Returns the new user account login URL provided by the API.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String newUserLogin(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return Constants.LOCAL_URL + "save/authenticate.json";
+    } else {
+      return getApiUrl(data) + Constants.NEW_USER_LOGIN_PATH;
+    }
   }
 
   /**
@@ -74,6 +87,33 @@ public class DataURL {
       return Constants.LOCAL_URL + "save/authenticate.json";
     } else {
       return getApiUrl(data) + Constants.USERNAME_PATH;
+    }
+  }
+
+  /**
+   * Returns the API URL for adding a new label to WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String addLabel(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return Constants.LOCAL_URL + "save/labels.json";
+    } else {
+      return getApiUrl(data) + Constants.LABELS_NEW_PATH;
+    }
+  }
+
+  /**
+   * Returns the API URL for listing all labels belonging to the current user,
+   * as well as all public labels, in WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String listLabels(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return Constants.LOCAL_URL + "save/labels.json";
+    } else {
+      return getApiUrl(data) + Constants.LABELS_LIST_PATH;
     }
   }
 
