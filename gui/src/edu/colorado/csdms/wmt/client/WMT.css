@@ -204,6 +204,13 @@ body, table td, select, button {
 .wmt-PopupPanelCheckBoxItem {
   line-height: 2.0; /* Don't use :hover, set line-height. */
 }
+.wmt-PopupPanelCheckBoxItem-public:after {
+  content: "public";
+  font-variant: small-caps;
+  float: right;
+  color: colorTerra;
+  margin-right: 1em;
+}
 
 /* Separators used between groups of WMT PopupPanel items. */
 .wmt-PopupPanelSeparator {

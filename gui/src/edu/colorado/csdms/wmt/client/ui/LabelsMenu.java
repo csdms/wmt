@@ -90,13 +90,18 @@ public class LabelsMenu extends PopupPanel {
       if (!buttonsUnchecked) {
         labelBox.setValue(entry.getValue().isSelected());
       }
+      if (data.security.isLoggedIn()
+          && !data.security.getWmtUsername()
+              .equals(entry.getValue().getOwner())) {
+        labelBox.addStyleDependentName("public");
+      }
       labelBox.addClickHandler(new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
           entry.getValue().isSelected(labelBox.getValue());
         }
       });
-      labelPanel.add(labelBox);      
+      labelPanel.add(labelBox);
     }
   }
 
