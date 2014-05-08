@@ -1073,6 +1073,47 @@ public class DataTransfer {
       this.type = type;
     }
 
+    /*
+     * A helper for adding a new label.
+     */
+    private void addActions(String rtxt) {
+      LabelJSO jso = parse(rtxt);
+      data.modelLabels.put(jso.getLabel(), jso);
+      data.getPerspective().getLabelsMenu().populateMenu();
+    }
+
+    /*
+     * A helper for deleting a label.
+     */
+    private void deleteActions(String rtxt) {
+      Integer labelId = Integer.valueOf(rtxt.replaceAll("^\"|\"$", ""));
+      for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
+        LabelJSO jso = entry.getValue();
+        if (jso.getId() == labelId) {
+          data.modelLabels.remove(jso.getLabel());
+          break;
+        }
+      }
+      data.getPerspective().getLabelsMenu().populateMenu();
+    }
+
+    /*
+     * A helper for listing all labels.
+     */
+    private void listActions(String rtxt) {
+      LabelJSO jso = parse(rtxt);
+      Integer nLabels = jso.getLabels().length();
+      if (nLabels > 0) {
+        for (int i = 0; i < nLabels; i++) {
+          LabelJSO labelJSO = jso.getLabels().get(i);
+          String label = labelJSO.getLabel();
+          Boolean isUser = data.security.getWmtUsername().matches(label);
+          labelJSO.isSelected(isUser);
+          data.modelLabels.put(label, labelJSO);
+        }
+      }
+    }
+
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
@@ -1081,33 +1122,13 @@ public class DataTransfer {
         GWT.log(rtxt);
 
         if (type.matches("add")) {
-          LabelJSO jso = parse(rtxt);
-          data.modelLabels.put(jso.getLabel(), jso);
-          data.getPerspective().getLabelsMenu().populateMenu();
+          addActions(rtxt);
         } else if (type.matches("delete")) {
-          Integer labelId = Integer.valueOf(rtxt.replaceAll("^\"|\"$", ""));
-          for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
-            LabelJSO jso = entry.getValue();
-            if (jso.getId() == labelId) {
-              data.modelLabels.remove(jso.getLabel());
-              break;
-            }
-          }
-          data.getPerspective().getLabelsMenu().populateMenu();
+          deleteActions(rtxt);
         } else if (type.matches("list")) {
-          LabelJSO jso = parse(rtxt);          
-          Integer nLabels = jso.getLabels().length();
-          if (nLabels > 0) {
-            for (int i = 0; i < nLabels; i++) {
-              LabelJSO labelJSO = jso.getLabels().get(i);
-              String label = labelJSO.getLabel();
-              Boolean isUser = data.security.getWmtUsername().matches(label);
-              labelJSO.isSelected(isUser);
-              data.modelLabels.put(label, labelJSO);
-            }
-          } else if (type.matches("attach")) {
-            ; // Do nothing
-          }
+          listActions(rtxt);
+        } else if (type.matches("attach")) {
+          ; // Do nothing
         } else {
           Window.alert(Constants.RESPONSE_ERR_MSG);
         }
