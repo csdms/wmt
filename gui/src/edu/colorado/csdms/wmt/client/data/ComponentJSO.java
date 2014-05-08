@@ -30,6 +30,14 @@ public class ComponentJSO extends JavaScriptObject {
   }-*/;
 
   /**
+   * A JSNI method to access the "class" attribute of a WMT component model, a
+   * string.
+   */
+  public final native String getComponentClass() /*-{
+		return (typeof this["class"] != 'undefined') ? this["class"] : null;
+  }-*/;
+
+  /**
    * A JSNI method to access the "name" attribute of a WMT component model.
    * This attribute is always present, and is a string.
    */

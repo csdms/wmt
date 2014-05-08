@@ -3,6 +3,7 @@ package edu.colorado.csdms.wmt.client.data;
 import java.util.Vector;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayString;
 
 /**
  * A GWT JavaScript overlay (JSO) type that describes ports that a WMT component
@@ -50,8 +51,17 @@ public class PortJSO extends JavaScriptObject {
    * 
    * @param required true if port is required
    */
-  public final native void isRequired(Boolean required) /*-{
+  public final native void isRequired(boolean required) /*-{
 		this.required = required;
+  }-*/;
+
+  /**
+   * A JSNI method to access the "exchange_items" attribute of a PortJSO. May not be
+   * present, though ignored without an exception; is an array of strings,
+   * represented by a JsArrayString object.
+   */
+  public final native JsArrayString getExchangeItems() /*-{
+		return this.exchange_items;
   }-*/;
 
   /**
