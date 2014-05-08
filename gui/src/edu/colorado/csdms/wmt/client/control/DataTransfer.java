@@ -647,8 +647,6 @@ public class DataTransfer {
 
     String url = DataURL.addModelLabel(data);
     GWT.log(url);
-
-    Window.alert("addModelLabel");
     
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
@@ -972,6 +970,45 @@ public class DataTransfer {
       this.type = type;
     }
 
+    /*
+     * A helper for processing the return from models/show.
+     */
+    private void showActions(String rtxt) {
+      ModelJSO jso = parse(rtxt);
+      data.setModel(jso);
+      data.modelIsSaved(true);
+      data.deserialize();
+    }
+
+    /*
+     * A helper for processing the return from models/open.
+     */
+    private void openActions(String rtxt) {
+      ModelMetadataJSO jso = parse(rtxt);
+      data.setMetadata(jso);
+    }
+
+    /*
+     * A helper for processing the return from models/new and models/edit.
+     */
+    private void editActions() {
+      data.modelIsSaved(true);
+      data.getPerspective().setModelPanelTitle();
+      DataTransfer.getModelList(data);
+      addLabels(data.getMetadata().getId());
+    }
+
+    /*
+     * A helper for adding all selected labels to a model.
+     */
+    private void addLabels(Integer modelId) {
+      for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
+        if (entry.getValue().isSelected()) {
+          addModelLabel(data, modelId, entry.getValue().getId());
+        }
+      }
+    }
+
     @Override
     public void onResponseReceived(Request request, Response response) {
 
@@ -982,41 +1019,15 @@ public class DataTransfer {
         GWT.log(rtxt);
 
         if (type.matches(SHOW)) {
-          ModelJSO jso = parse(rtxt);
-          data.setModel(jso);
-          data.modelIsSaved(true);
-          data.deserialize();
+          showActions(rtxt);
         } else if (type.matches(OPEN)) {
-          ModelMetadataJSO jso = parse(rtxt);
-          data.setMetadata(jso);
+          openActions(rtxt);
         } else if (type.matches(NEW)) {
-          
-          data.modelIsSaved(true);
-          data.getPerspective().setModelPanelTitle();
-          DataTransfer.getModelList(data);
           Integer modelId = Integer.valueOf(rtxt);
           data.getMetadata().setId(modelId);
-          
-          // Add all selected labels to the model.
-          for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
-            if (entry.getValue().isSelected()) {
-              addModelLabel(data, modelId, entry.getValue().getId());
-            }
-          }
-
+          editActions();
         } else if (type.matches(EDIT)) {
-          
-          data.modelIsSaved(true);
-          data.getPerspective().setModelPanelTitle();
-          DataTransfer.getModelList(data);
-          
-          // Add all selected labels to the model.
-          for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
-            if (entry.getValue().isSelected()) {
-              addModelLabel(data, data.getMetadata().getId(), entry.getValue().getId());
-            }
-          }
-          
+          editActions();
         } else if (type.matches(DELETE)) {
           DataTransfer.getModelList(data);
         } else {
