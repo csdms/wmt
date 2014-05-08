@@ -5,6 +5,7 @@ package edu.colorado.csdms.wmt.client.control;
 
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -55,6 +56,7 @@ public class DataTransfer {
   private static final String LAUNCH = "launch";
   private static final String LIST = "list";
   private static final String ATTACH = "attach";
+  private static final String QUERY = "query";
 
   /**
    * A JSNI method for creating a String from a JavaScriptObject.
@@ -668,6 +670,39 @@ public class DataTransfer {
   }
 
   /**
+   * Makes an asynchronous HTTPS GET request to query what models use the
+   * given labels, input as an List of Integer ids. 
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param labelIds a List of Integer label ids
+   */
+  public static void queryModelLabels(DataManager data, List<Integer> labelIds) {
+
+    String url = DataURL.queryModelLabel(data);
+
+    // Build the URL parameters from the list of input labelIds.
+    url += "?tags=";
+    for (int i = 0; i < labelIds.size(); i++) {
+      if (i > 0) {
+        url += ",";
+      }
+      url += labelIds.get(i);
+    }
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.GET, URL.encode(url));
+
+    try {
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(null, new LabelRequestCallback(data, url, QUERY));
+    } catch (RequestException e) {
+      Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
    * A RequestCallback handler class that processes WMT login and logout
    * requests.
    */
@@ -1170,6 +1205,8 @@ public class DataTransfer {
           listActions(rtxt);
         } else if (type.matches(ATTACH)) {
           ; // Do nothing
+        } else if (type.matches(QUERY)) {
+          Window.alert(rtxt); // TODO
         } else {
           Window.alert(Constants.RESPONSE_ERR_MSG);
         }
