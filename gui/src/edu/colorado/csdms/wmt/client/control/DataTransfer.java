@@ -621,6 +621,39 @@ public class DataTransfer {
   }
 
   /**
+   * Makes an asynchronous HTTPS POST request to attach a label to a model.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param modelId the id of the model, an Integer
+   * @param labelId the id of the label to add, an Integer
+   */
+  public static void addModelLabel(DataManager data, Integer modelId, Integer labelId) {
+
+    String url = DataURL.addModelLabel(data);
+    GWT.log(url);
+
+    Window.alert("addModelLabel");
+    
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+
+    HashMap<String, String> entries = new HashMap<String, String>();
+    entries.put("model", modelId.toString()); // type="text" in API
+    entries.put("tag", labelId.toString());
+    String queryString = buildQueryString(entries);
+
+    try {
+      builder.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(queryString, new LabelRequestCallback(data, url,
+              "attach"));
+    } catch (RequestException e) {
+      Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
    * A RequestCallback handler class that processes WMT login and logout
    * requests.
    */
@@ -925,6 +958,7 @@ public class DataTransfer {
 
     @Override
     public void onResponseReceived(Request request, Response response) {
+
       data.showDefaultCursor();
       if (Response.SC_OK == response.getStatusCode()) {
 
@@ -945,6 +979,14 @@ public class DataTransfer {
           DataTransfer.getModelList(data);
           Integer modelId = Integer.valueOf(rtxt);
           data.getMetadata().setId(modelId);
+          
+          // Add all selected labels to the model.
+          for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
+            if (entry.getValue().isSelected()) {
+              addModelLabel(data, modelId, entry.getValue().getId());
+            }
+          }
+
         } else if (type.matches("delete")) {
           DataTransfer.getModelList(data);
         } else {
@@ -1037,7 +1079,7 @@ public class DataTransfer {
 
         String rtxt = response.getText();
         GWT.log(rtxt);
-          
+
         if (type.matches("add")) {
           LabelJSO jso = parse(rtxt);
           data.modelLabels.put(jso.getLabel(), jso);
@@ -1063,6 +1105,8 @@ public class DataTransfer {
               labelJSO.isSelected(isUser);
               data.modelLabels.put(label, labelJSO);
             }
+          } else if (type.matches("attach")) {
+            ; // Do nothing
           }
         } else {
           Window.alert(Constants.RESPONSE_ERR_MSG);

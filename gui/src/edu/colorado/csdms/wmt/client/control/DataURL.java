@@ -133,6 +133,19 @@ public class DataURL {
   }
 
   /**
+   * Returns the API URL for attaching a new label to a model.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String addModelLabel(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return Constants.LOCAL_URL + "save/labels.json";
+    } else {
+      return getApiUrl(data) + Constants.LABELS_MODEL_ADD_PATH;
+    }
+  }
+
+  /**
    * Returns the URL for the list of available components on the server.
    * 
    * @param data the DataManager object for the WMT session

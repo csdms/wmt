@@ -34,6 +34,8 @@ public class Constants {
   public static final String LABELS_LIST_PATH = "tag/list";
   public static final String LABELS_NEW_PATH = "tag/new";
   public static final String LABELS_DELETE_PATH = "tag/delete/";
+  public static final String LABELS_MODEL_ADD_PATH = "tag/model/add";
+  public static final String LABELS_MODEL_QUERY_PATH = "tag/model/query";  
   
   // API URLs for components.
   public static final String COMPONENTS_LIST_PATH = "components/list";
