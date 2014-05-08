@@ -40,6 +40,21 @@ import edu.colorado.csdms.wmt.client.ui.widgets.RunInfoDialogBox;
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class DataTransfer {
+  
+  // Labels. If I make a spelling error, at least it'll only be in one place.
+  private static final String NEW = "new";
+  private static final String OPEN = "open";
+  private static final String SHOW = "show";
+  private static final String LOGIN = "login";
+  private static final String LOGOUT = "logout";
+  private static final String ADD = "add";
+  private static final String DELETE = "delete";
+  private static final String EDIT = "edit"; 
+  private static final String INIT = "init";
+  private static final String STAGE = "stage";
+  private static final String LAUNCH = "launch";
+  private static final String LIST = "list";
+  private static final String ATTACH = "attach";
 
   /**
    * A JSNI method for creating a String from a JavaScriptObject.
@@ -185,7 +200,7 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(queryString, new AuthenticationRequestCallback(
-              data, url, "new"));
+              data, url, NEW));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -214,7 +229,7 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(queryString, new AuthenticationRequestCallback(
-              data, url, "login"));
+              data, url, LOGIN));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -238,7 +253,7 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(null, new AuthenticationRequestCallback(data,
-              url, "logout"));
+              url, LOGOUT));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -263,7 +278,7 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(null, new AuthenticationRequestCallback(data,
-              url, "state"));
+              url, LIST));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -368,7 +383,7 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request openRequest =
           openBuilder.sendRequest(null, new ModelRequestCallback(data, openURL,
-              "open"));
+              OPEN));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -379,7 +394,7 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request showRequest =
           showBuilder.sendRequest(null, new ModelRequestCallback(data, showURL,
-              "show"));
+              SHOW));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -444,8 +459,8 @@ public class DataTransfer {
     try {
       @SuppressWarnings("unused")
       Request request =
-          builder.sendRequest(null, new ModelRequestCallback(data, url,
-              "delete"));
+          builder
+              .sendRequest(null, new ModelRequestCallback(data, url, DELETE));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -476,7 +491,7 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(queryString, new RunRequestCallback(data, url,
-              "init"));
+              INIT));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -505,7 +520,7 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(queryString, new RunRequestCallback(data, url,
-              "stage"));
+              STAGE));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -537,7 +552,7 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(queryString, new RunRequestCallback(data, url,
-              "launch"));
+              LAUNCH));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -566,7 +581,7 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(queryString, new LabelRequestCallback(data, url,
-              "add"));
+              ADD));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -582,15 +597,15 @@ public class DataTransfer {
 
     String url = DataURL.deleteLabel(data, labelId);
     GWT.log(url);
-    
+
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 
     try {
       @SuppressWarnings("unused")
       Request request =
-          builder.sendRequest(null, new LabelRequestCallback(data, url,
-              "delete"));
+          builder
+              .sendRequest(null, new LabelRequestCallback(data, url, DELETE));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -613,8 +628,7 @@ public class DataTransfer {
     try {
       @SuppressWarnings("unused")
       Request request =
-          builder
-              .sendRequest(null, new LabelRequestCallback(data, url, "list"));
+          builder.sendRequest(null, new LabelRequestCallback(data, url, LIST));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -719,14 +733,14 @@ public class DataTransfer {
         // Need to refresh the model list on login and logout.
         getModelList(data);
 
-        if (type.matches("new")) {
+        if (type.matches(NEW)) {
           loginActions();
           addLabel(data, data.security.getWmtUsername());
-        } else if (type.matches("login")) {
+        } else if (type.matches(LOGIN)) {
           loginActions();
-        } else if (type.matches("logout")) {
+        } else if (type.matches(LOGOUT)) {
           logoutActions();
-        } else if (type.matches("state")) {
+        } else if (type.matches(LIST)) {
           String username = rtxt.replace("\"", ""); // strip quote marks
           if (username.isEmpty()) {
             logoutActions();
@@ -965,12 +979,12 @@ public class DataTransfer {
         String rtxt = response.getText();
         GWT.log(rtxt);
 
-        if (type.matches("show")) {
+        if (type.matches(SHOW)) {
           ModelJSO jso = parse(rtxt);
           data.setModel(jso);
           data.modelIsSaved(true);
           data.deserialize();
-        } else if (type.matches("open")) {
+        } else if (type.matches(OPEN)) {
           ModelMetadataJSO jso = parse(rtxt);
           data.setMetadata(jso);
         } else if (type.matches("new/edit")) {
@@ -987,7 +1001,7 @@ public class DataTransfer {
             }
           }
 
-        } else if (type.matches("delete")) {
+        } else if (type.matches(DELETE)) {
           DataTransfer.getModelList(data);
         } else {
           Window.alert(Constants.RESPONSE_ERR_MSG);
@@ -1030,13 +1044,13 @@ public class DataTransfer {
         String rtxt = response.getText();
         GWT.log(rtxt);
 
-        if (type.matches("init")) {
+        if (type.matches(INIT)) {
           String uuid = rtxt.replaceAll("^\"|\"$", "");
           data.setSimulationId(uuid); // store the run's uuid
           DataTransfer.stageModelRun(data);
-        } else if (type.matches("stage")) {
+        } else if (type.matches(STAGE)) {
           DataTransfer.launchModelRun(data);
-        } else if (type.matches("launch")) {
+        } else if (type.matches(LAUNCH)) {
           RunInfoDialogBox runInfo = new RunInfoDialogBox(data);
           runInfo.center();
         } else {
@@ -1121,13 +1135,13 @@ public class DataTransfer {
         String rtxt = response.getText();
         GWT.log(rtxt);
 
-        if (type.matches("add")) {
+        if (type.matches(ADD)) {
           addActions(rtxt);
-        } else if (type.matches("delete")) {
+        } else if (type.matches(DELETE)) {
           deleteActions(rtxt);
-        } else if (type.matches("list")) {
+        } else if (type.matches(LIST)) {
           listActions(rtxt);
-        } else if (type.matches("attach")) {
+        } else if (type.matches(ATTACH)) {
           ; // Do nothing
         } else {
           Window.alert(Constants.RESPONSE_ERR_MSG);
