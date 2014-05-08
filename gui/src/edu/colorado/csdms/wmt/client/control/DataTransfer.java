@@ -413,13 +413,15 @@ public class DataTransfer {
     GWT.log("all model ids: " + data.modelIdList.toString());
     GWT.log("this model id: " + modelId.toString());
 
-    String url;
+    String url, type;
     if (data.modelIdList.contains(modelId)) {
       url = DataURL.editModel(data, modelId);
+      type = EDIT;
     } else {
       url = DataURL.newModel(data);
+      type = NEW;
     }
-    GWT.log(url);
+    GWT.log(type + ": " + url);
     GWT.log(data.getModelString());
 
     RequestBuilder builder =
@@ -435,7 +437,7 @@ public class DataTransfer {
       @SuppressWarnings("unused")
       Request request =
           builder.sendRequest(queryString, new ModelRequestCallback(data, url,
-              "new/edit"));
+              type));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -987,7 +989,8 @@ public class DataTransfer {
         } else if (type.matches(OPEN)) {
           ModelMetadataJSO jso = parse(rtxt);
           data.setMetadata(jso);
-        } else if (type.matches("new/edit")) {
+        } else if (type.matches(NEW)) {
+          
           data.modelIsSaved(true);
           data.getPerspective().setModelPanelTitle();
           DataTransfer.getModelList(data);
@@ -1001,6 +1004,19 @@ public class DataTransfer {
             }
           }
 
+        } else if (type.matches(EDIT)) {
+          
+          data.modelIsSaved(true);
+          data.getPerspective().setModelPanelTitle();
+          DataTransfer.getModelList(data);
+          
+          // Add all selected labels to the model.
+          for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
+            if (entry.getValue().isSelected()) {
+              addModelLabel(data, data.getMetadata().getId(), entry.getValue().getId());
+            }
+          }
+          
         } else if (type.matches(DELETE)) {
           DataTransfer.getModelList(data);
         } else {
