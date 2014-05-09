@@ -48,11 +48,10 @@ public class OpenDialogBox extends DialogBox {
 
     final Button labelsButton = new Button(Constants.FA_TAGS + "Labels");
     labelsButton.setStyleName("wmt-Button");
-    labelsMenu = new LabelsMenu(data);
+    labelsMenu = new LabelsMenu(data, true); // isOpenAction
     labelsButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        labelsMenu.areButtonsUnchecked(true);; // show all labels, unselected
         labelsMenu.populateMenu();
         labelsMenu.setPopupPositionAndShow(new PositionCallback() {
           final Integer x = labelsButton.getElement().getAbsoluteRight();

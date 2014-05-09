@@ -4,6 +4,7 @@
 package edu.colorado.csdms.wmt.client.ui;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -30,10 +31,10 @@ import edu.colorado.csdms.wmt.client.ui.widgets.LabelDialogBox;
 public class LabelsMenu extends PopupPanel {
 
   private DataManager data;
+  private Boolean isOpenAction;
   private VerticalPanel labelPanel;
   private HTML addNewHtml;
   private HTML deleteHtml;
-  private Boolean buttonsUnchecked = false; // show selected labels
   
   /**
    * Makes a new {@link LabelsMenu}.
@@ -41,9 +42,21 @@ public class LabelsMenu extends PopupPanel {
    * @param data the DataManager object for the WMT session
    */
   public LabelsMenu(DataManager data) {
+    this(data, false);
+  }
 
+  /**
+   * Makes a new {@link LabelsMenu}, optionally specifying whether the menu is 
+   * used in the context of opening a saved model.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param isOpenAction set to true if used in context of opening a model
+   */
+  public LabelsMenu(DataManager data, Boolean isOpenAction) {
+    
     super(true); // autohide
     this.data = data;
+    this.isOpenAction = isOpenAction;
     this.setStyleName("wmt-PopupPanel");
     data.getPerspective().setLabelsMenu(this);
 
@@ -72,8 +85,8 @@ public class LabelsMenu extends PopupPanel {
     menu.add(deleteHtml);
     
     // Show a SuggestBox to add or delete a label.
-    addNewHtml.addClickHandler(new LabelHandler(data, "Add"));
-    deleteHtml.addClickHandler(new LabelHandler(data, "Delete"));
+    addNewHtml.addClickHandler(new LabelAddRemoveHandler(data, "Add"));
+    deleteHtml.addClickHandler(new LabelAddRemoveHandler(data, "Delete"));    
   }
   
   /**
@@ -87,7 +100,7 @@ public class LabelsMenu extends PopupPanel {
       final CheckBox labelBox = new CheckBox(entry.getKey());
       labelBox.setWordWrap(false);
       labelBox.setStyleName("wmt-PopupPanelCheckBoxItem");
-      if (!buttonsUnchecked) {
+      if (!isOpenAction) {
         labelBox.setValue(entry.getValue().isSelected());
       }
       if (data.security.isLoggedIn()
@@ -95,49 +108,47 @@ public class LabelsMenu extends PopupPanel {
               .equals(entry.getValue().getOwner())) {
         labelBox.addStyleDependentName("public");
       }
-      labelBox.addClickHandler(new ClickHandler() {
-        @Override
-        public void onClick(ClickEvent event) {
-          entry.getValue().isSelected(labelBox.getValue());
-          data.updateModelSaveState(false);
-        }
-      });
+      labelBox.addClickHandler(new LabelSelectionHandler(data, entry));
       labelPanel.add(labelBox);
     }
   }
 
   /**
-   * Gets the state of the buttonsUnchecked member.
+   * Handles actions when the selection state of a label changes.
    */
-  public Boolean areButtonsUnchecked() {
-    return buttonsUnchecked;
-  }
+  public class LabelSelectionHandler implements ClickHandler {
 
-  /**
-   * Sets the state of the buttonsUnchecked member, used to toggle whether the 
-   * states of the {@link LabelsMenu} buttons are shown or are turned off.
-   * 
-   * @param buttonsUnchecked true if all buttons are to be shown unselected
-   */
-  public void areButtonsUnchecked(Boolean buttonsUnchecked) {
-    this.buttonsUnchecked = buttonsUnchecked;
+    private DataManager data;
+    private Entry<String, LabelJSO> entry;
+    
+    public LabelSelectionHandler(DataManager data, Entry<String, LabelJSO> entry) {
+      this.data = data;
+      this.entry = entry;
+    }
+    
+    @Override
+    public void onClick(ClickEvent event) {
+      CheckBox labelBox = (CheckBox) event.getSource();
+      entry.getValue().isSelected(labelBox.getValue());
+      data.updateModelSaveState(false);
+    } 
   }
-
+  
   /**
    * Handles adding and deleting model labels using a {@link LabelDialogBox}.
    */
-  public class LabelHandler implements ClickHandler {
+  public class LabelAddRemoveHandler implements ClickHandler {
 
     private DataManager data;
     private String type;
 
     /**
-     * Creates a new {@link LabelHandler}.
+     * Creates a new {@link LabelAddRemoveHandler}.
      * 
      * @param data the DataManager object for the WMT session
      * @param type the event type, currently "Add" or "Delete"
      */
-    public LabelHandler(DataManager data, String type) {
+    public LabelAddRemoveHandler(DataManager data, String type) {
       this.data = data;
       this.type = type; // use sentence case
     }
