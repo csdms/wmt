@@ -1027,8 +1027,7 @@ public class DataTransfer {
      * A helper for processing the return from models/new and models/edit.
      */
     private void editActions() {
-      data.modelIsSaved(true);
-      data.getPerspective().setModelPanelTitle();
+      data.updateModelSaveState(true);
       DataTransfer.getModelList(data);
       addSelectedLabels(data.getMetadata().getId());
     }

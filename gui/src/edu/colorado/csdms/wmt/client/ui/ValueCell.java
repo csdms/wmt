@@ -293,8 +293,7 @@ public class ValueCell extends HorizontalPanel {
         
         // Mark the model as unsaved.
         ParameterTable pt = (ParameterTable) ValueCell.this.getParent();
-        pt.data.modelIsSaved(false);
-        pt.data.getPerspective().setModelPanelTitle();
+        pt.data.updateModelSaveState(false);
       }
     }
   }

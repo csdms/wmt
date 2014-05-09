@@ -46,8 +46,7 @@ public class ParameterActionPanelResetHandler implements ClickHandler {
             data.replaceModelComponent(data.getComponent(componentId));
             data.getPerspective().getParameterTable().clearTable();
             data.getPerspective().getParameterTable().loadTable(componentId);
-            data.modelIsSaved(false);
-            data.getPerspective().setModelPanelTitle();
+            data.updateModelSaveState(false);
           }
         });
     questionDialog.getChoicePanel().getCancelButton().addClickHandler(

@@ -126,8 +126,7 @@ public class ModelTree extends Tree {
     }
 
     // Mark the model state as unsaved.
-    data.modelIsSaved(false);
-    data.getPerspective().setModelPanelTitle();
+    data.updateModelSaveState(false);
   }
 
   /**

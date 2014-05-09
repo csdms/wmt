@@ -120,8 +120,7 @@ public class ParameterTable extends FlexTable {
     if (!newValue.matches(previousValue)) {
       data.getModelComponent(componentId).getParameter(key).getValue()
           .setDefault(newValue);
-      data.modelIsSaved(false);
-      data.getPerspective().setModelPanelTitle();
+      data.updateModelSaveState(false);
     }
   }
 

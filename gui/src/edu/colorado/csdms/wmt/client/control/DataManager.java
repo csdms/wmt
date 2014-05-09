@@ -356,6 +356,16 @@ public class DataManager {
   }
 
   /**
+   * A helper method that updates the current model's save state and title.
+   * 
+   * @param state true if saved
+   */
+  public void updateModelSaveState(Boolean state) {
+    modelIsSaved(state);
+    perspective.setModelPanelTitle();
+  }
+  
+  /**
    * Gets the stringified model JSON created by {@link #serialize()}.
    */
   public String getModelString() {

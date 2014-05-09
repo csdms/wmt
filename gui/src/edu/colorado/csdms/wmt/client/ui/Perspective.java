@@ -297,10 +297,9 @@ public class Perspective extends DockLayoutPanel {
     data.resetModelComponents();
     parameterTable.clearTable();
     modelTree.initializeTree();
-    data.modelIsSaved(false);
+    data.updateModelSaveState(false);
     ((ComponentSelectionMenu) modelTree.getDriverComponentCell()
         .getComponentMenu()).updateComponents();
-    setModelPanelTitle();
     
     // Deselect all labels except for the owner label.
     for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {

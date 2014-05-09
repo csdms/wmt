@@ -82,7 +82,6 @@ public class ComponentDeleteCommand implements Command {
     }
 
     // Update the title of the Model tab.
-    data.modelIsSaved(false);
-    data.getPerspective().setModelPanelTitle();
+    data.updateModelSaveState(false);
   }
 }
