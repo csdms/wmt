@@ -361,10 +361,8 @@ public class DataManager {
    * @param state true if saved
    */
   public void updateModelSaveState(Boolean state) {
-    if (metadata.getId() != Constants.DEFAULT_MODEL_ID) {
-      modelIsSaved(state);
-      perspective.setModelPanelTitle();
-    }
+    modelIsSaved(state);
+    perspective.setModelPanelTitle();
   }
   
   /**
