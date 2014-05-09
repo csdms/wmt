@@ -50,3 +50,6 @@ def update(id, **kwds):
     db.update('users', vars=dict(id=id), where='id=$id', **kwds)
 
 
+def change_password(id, password):
+    hashed_password = site['pw'].encrypt(password)
+    db.update('users', vars=dict(id=id), where='id=$id', password=hashed_password)

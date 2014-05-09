@@ -19,6 +19,7 @@ URLS = (
     '/account/new', 'wmt.controllers.account.New',
     '/account/logout', 'wmt.controllers.account.Logout',
     '/account/username', 'wmt.controllers.account.Username',
+    '/account/reset', 'wmt.controllers.account.ResetPassword',
 
     '/tag/new', 'wmt.controllers.tag.New',
     '/tag/delete/(\d+)', 'wmt.controllers.tag.Delete',

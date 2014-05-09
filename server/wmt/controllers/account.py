@@ -81,6 +81,21 @@ class New(object):
 
         raise web.seeother('/')
 
+
+class ResetPassword(object):
+    def POST(self):
+        params = web.input(pw="", user="")
+        if len(params.pw) == 0:
+            raise web.BadRequest('password must not be null')
+
+        try:
+            user_id = users.get_user(params.user).id
+        except AttributeError:
+            raise web.BadRequest('user does not exist')
+        else:
+            users.change_password(user_id, params.pw)
+
+
 class Logout(object):
     def GET(self):
         logout()
