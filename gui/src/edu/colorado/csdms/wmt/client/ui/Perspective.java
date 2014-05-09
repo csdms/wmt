@@ -305,7 +305,7 @@ public class Perspective extends DockLayoutPanel {
     // Deselect all labels except for the owner label.
     for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
       try {
-        entry.getValue().isSelected(!entry.getKey().equals(data.security.getWmtUsername()));
+        entry.getValue().isSelected(entry.getKey().equals(data.security.getWmtUsername()));
       } catch (Exception e) {
         GWT.log(e.toString());
       }
