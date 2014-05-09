@@ -101,8 +101,8 @@ public class LabelsMenu extends PopupPanel {
    */
   public void populateMenu() {
     labelPanel.clear();
-    for (final Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
-      final CheckBox labelBox = new CheckBox(entry.getKey());
+    for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
+      CheckBox labelBox = new CheckBox(entry.getKey());
       labelBox.setWordWrap(false);
       labelBox.setStyleName("wmt-PopupPanelCheckBoxItem");
       if (box == null) {

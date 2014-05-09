@@ -1190,6 +1190,25 @@ public class DataTransfer {
       }
     }
 
+    /*
+     * A helper for acting on a query of models associated with a given label.
+     */
+    private void queryActions(String rtxt) {
+      LabelModelQueryJSO jso = parse(rtxt);
+      // Window.alert(jso.getModelIds().join());
+
+      // Populate the droplist with the restricted list of models.
+      data.getPerspective().getOpenDialogBox().getDroplistPanel().getDroplist()
+          .clear();
+      for (int i = 0; i < jso.getModelIds().length(); i++) {
+        Integer modelId = jso.getModelIds().get(i);
+        Integer modelIndex = data.modelIdList.indexOf(modelId);
+        String modelName = data.modelNameList.get(modelIndex);
+        data.getPerspective().getOpenDialogBox().getDroplistPanel()
+            .getDroplist().addItem(modelName);
+      }
+    }
+
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
@@ -1206,24 +1225,7 @@ public class DataTransfer {
         } else if (type.matches(ATTACH)) {
           ; // Do nothing
         } else if (type.matches(QUERY)) {
-
-          LabelModelQueryJSO jso = parse(rtxt);
-          Window.alert(jso.getModelIds().join());
-
-          data.getPerspective().getOpenDialogBox().getDroplistPanel()
-              .getDroplist().clear();
-
-          // Populate the droplist with the restricted list of models.
-          for (int i = 0; i < jso.getModelIds().length(); i++) {
-
-            Integer modelId = jso.getModelIds().get(i);
-            Integer modelIndex = data.modelIdList.indexOf(modelId);
-            String modelName = data.modelNameList.get(modelIndex);
-            
-            data.getPerspective().getOpenDialogBox().getDroplistPanel()
-                .getDroplist().addItem(modelName);
-          }
-
+          queryActions(rtxt);
         } else {
           Window.alert(Constants.RESPONSE_ERR_MSG);
         }
