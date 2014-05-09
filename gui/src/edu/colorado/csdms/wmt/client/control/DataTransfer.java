@@ -1030,13 +1030,13 @@ public class DataTransfer {
       data.modelIsSaved(true);
       data.getPerspective().setModelPanelTitle();
       DataTransfer.getModelList(data);
-      addLabels(data.getMetadata().getId());
+      addSelectedLabels(data.getMetadata().getId());
     }
 
     /*
      * A helper for adding all selected labels to a model.
      */
-    private void addLabels(Integer modelId) {
+    private void addSelectedLabels(Integer modelId) {
       for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
         if (entry.getValue().isSelected()) {
           addModelLabel(data, modelId, entry.getValue().getId());
