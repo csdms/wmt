@@ -1,4 +1,4 @@
-package edu.colorado.csdms.wmt.client.ui.widgets;
+package edu.colorado.csdms.wmt.obsolete;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.data.ModelComponentParametersJSO;
+import edu.colorado.csdms.wmt.client.ui.widgets.ChoicePanel;
 
 @Deprecated
 public class ViewInputFilesDialogBox extends DialogBox {

@@ -1,11 +1,14 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.ui.widgets;
+package edu.colorado.csdms.wmt.obsolete;
 
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+import edu.colorado.csdms.wmt.client.ui.widgets.ChoicePanel;
+import edu.colorado.csdms.wmt.client.ui.widgets.FieldPanel;
 
 /**
  * A {@link DialogBox} with {@link FieldPanel}s for entering a username and

@@ -1,7 +1,7 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.ui;
+package edu.colorado.csdms.wmt.obsolete;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.control.DataURL;
+import edu.colorado.csdms.wmt.client.ui.Perspective;
 import edu.colorado.csdms.wmt.client.ui.handler.DeleteModelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.OpenModelHandler;
