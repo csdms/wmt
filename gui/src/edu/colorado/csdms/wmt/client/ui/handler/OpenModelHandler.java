@@ -44,7 +44,11 @@ public class OpenModelHandler implements ClickHandler {
     // better if they both resided in the same data structure.
     Integer selIndex =
         box.getDroplistPanel().getDroplist().getSelectedIndex();
-    Integer modelId = data.modelIdList.get(selIndex);
+//    Integer modelId = data.modelIdList.get(selIndex);
+    
+    String modelName = box.getDroplistPanel().getDroplist().getItemText(selIndex);
+    Integer modelNameIndex = data.modelNameList.indexOf(modelName);
+    Integer modelId = data.modelIdList.get(modelNameIndex);
 
     // Get the data + metadata for the selected model. On success, #getModel
     // calls DataManager#deserialize, which populates the WMT GUI.

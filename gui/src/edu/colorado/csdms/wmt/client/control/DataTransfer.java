@@ -24,6 +24,7 @@ import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ComponentListJSO;
 import edu.colorado.csdms.wmt.client.data.LabelJSO;
+import edu.colorado.csdms.wmt.client.data.LabelModelQueryJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelListJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
@@ -1205,7 +1206,24 @@ public class DataTransfer {
         } else if (type.matches(ATTACH)) {
           ; // Do nothing
         } else if (type.matches(QUERY)) {
-          Window.alert(rtxt); // TODO
+
+          LabelModelQueryJSO jso = parse(rtxt);
+          Window.alert(jso.getModelIds().join());
+
+          data.getPerspective().getOpenDialogBox().getDroplistPanel()
+              .getDroplist().clear();
+
+          // Populate the droplist with the restricted list of models.
+          for (int i = 0; i < jso.getModelIds().length(); i++) {
+
+            Integer modelId = jso.getModelIds().get(i);
+            Integer modelIndex = data.modelIdList.indexOf(modelId);
+            String modelName = data.modelNameList.get(modelIndex);
+            
+            data.getPerspective().getOpenDialogBox().getDroplistPanel()
+                .getDroplist().addItem(modelName);
+          }
+
         } else {
           Window.alert(Constants.RESPONSE_ERR_MSG);
         }

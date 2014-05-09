@@ -3,6 +3,8 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -21,6 +23,7 @@ import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.data.LabelJSO;
 import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.LabelDialogBox;
+import edu.colorado.csdms.wmt.client.ui.widgets.OpenDialogBox;
 
 /**
  * Encapsulates an alphabetized, scrollable list of labels used to tag and
@@ -31,10 +34,11 @@ import edu.colorado.csdms.wmt.client.ui.widgets.LabelDialogBox;
 public class LabelsMenu extends PopupPanel {
 
   private DataManager data;
-  private Boolean isOpenAction;
+  private OpenDialogBox box;
   private VerticalPanel labelPanel;
   private HTML addNewHtml;
   private HTML deleteHtml;
+  private List<Integer> selectedLabelIds;
   
   /**
    * Makes a new {@link LabelsMenu}.
@@ -42,7 +46,7 @@ public class LabelsMenu extends PopupPanel {
    * @param data the DataManager object for the WMT session
    */
   public LabelsMenu(DataManager data) {
-    this(data, false);
+    this(data, null);
   }
 
   /**
@@ -50,13 +54,14 @@ public class LabelsMenu extends PopupPanel {
    * used in the context of opening a saved model.
    * 
    * @param data the DataManager object for the WMT session
-   * @param isOpenAction set to true if used in context of opening a model
+   * @param box the reference of an enclosing {@link OpenDialogBox}
    */
-  public LabelsMenu(DataManager data, Boolean isOpenAction) {
+  public LabelsMenu(DataManager data, OpenDialogBox box) {
     
     super(true); // autohide
     this.data = data;
-    this.isOpenAction = isOpenAction;
+    this.box = box;
+    this.selectedLabelIds = new ArrayList<Integer>();
     this.setStyleName("wmt-PopupPanel");
     data.getPerspective().setLabelsMenu(this);
 
@@ -100,8 +105,10 @@ public class LabelsMenu extends PopupPanel {
       final CheckBox labelBox = new CheckBox(entry.getKey());
       labelBox.setWordWrap(false);
       labelBox.setStyleName("wmt-PopupPanelCheckBoxItem");
-      if (!isOpenAction) {
+      if (box == null) {
         labelBox.setValue(entry.getValue().isSelected());
+      } else {
+        selectedLabelIds.clear();
       }
       if (data.security.isLoggedIn()
           && !data.security.getWmtUsername()
@@ -130,7 +137,19 @@ public class LabelsMenu extends PopupPanel {
     public void onClick(ClickEvent event) {
       CheckBox labelBox = (CheckBox) event.getSource();
       entry.getValue().isSelected(labelBox.getValue());
-      data.updateModelSaveState(false);
+
+      // If used with an OpenDialogBox, filter results with selected labels.
+      if (box != null) {
+        if (labelBox.getValue()) {
+          selectedLabelIds.add(entry.getValue().getId());
+        } else {
+          Integer element = entry.getValue().getId();
+          selectedLabelIds.remove(element);
+        }
+        DataTransfer.queryModelLabels(data, selectedLabelIds);
+      } else {
+        data.updateModelSaveState(false);
+      }
     } 
   }
   

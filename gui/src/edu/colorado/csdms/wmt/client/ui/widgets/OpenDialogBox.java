@@ -42,13 +42,14 @@ public class OpenDialogBox extends DialogBox {
     this.setModal(true);
     this.setStyleName("wmt-DialogBox");
     this.setText("Open Model...");
-    this.data = data;    
+    this.data = data;
+    data.getPerspective().setOpenDialogBox(this);
     
     droplistPanel = new DroplistPanel();
 
     final Button labelsButton = new Button(Constants.FA_TAGS + "Labels");
     labelsButton.setStyleName("wmt-Button");
-    labelsMenu = new LabelsMenu(data, true); // isOpenAction
+    labelsMenu = new LabelsMenu(data, this);
     labelsButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {

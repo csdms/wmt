@@ -22,6 +22,7 @@ import edu.colorado.csdms.wmt.client.data.LabelJSO;
 import edu.colorado.csdms.wmt.client.ui.handler.AuthenticationHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 import edu.colorado.csdms.wmt.client.ui.widgets.LoginPanel;
+import edu.colorado.csdms.wmt.client.ui.widgets.OpenDialogBox;
 
 /**
  * Defines the initial layout of views (a perspective, in Eclipse parlance)
@@ -51,8 +52,11 @@ public class Perspective extends DockLayoutPanel {
   private ModelActionPanel modelActionPanel;
   private ModelTree modelTree;
   private ParameterTable parameterTable;
+  
+  // Tertiary UI widgets!
   private ComponentInfoDialogBox componentInfoBox;
   private LabelsMenu labelsMenu;
+  private OpenDialogBox openDialogBox;
 
   /**
    * Draws the panels and their children that compose the basic WMT GUI.
@@ -257,6 +261,14 @@ public class Perspective extends DockLayoutPanel {
 
   public void setLabelsMenu(LabelsMenu labelsMenu) {
     this.labelsMenu = labelsMenu;
+  }
+
+  public OpenDialogBox getOpenDialogBox() {
+    return openDialogBox;
+  }
+
+  public void setOpenDialogBox(OpenDialogBox openDialogBox) {
+    this.openDialogBox = openDialogBox;
   }
 
   public LoginPanel getLoginPanel() {
