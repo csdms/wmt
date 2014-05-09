@@ -3,6 +3,9 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import java.util.Map;
+
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
@@ -15,6 +18,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.LabelJSO;
 import edu.colorado.csdms.wmt.client.ui.handler.AuthenticationHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 import edu.colorado.csdms.wmt.client.ui.widgets.LoginPanel;
@@ -295,7 +299,17 @@ public class Perspective extends DockLayoutPanel {
     modelTree.initializeTree();
     data.modelIsSaved(false);
     ((ComponentSelectionMenu) modelTree.getDriverComponentCell()
-        .getComponentMenu()).updateComponents();;
+        .getComponentMenu()).updateComponents();
     setModelPanelTitle();
+    
+    // Deselect all labels except for the owner label.
+    for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
+      try {
+        entry.getValue().isSelected(!entry.getKey().equals(data.security.getWmtUsername()));
+      } catch (Exception e) {
+        GWT.log(e.toString());
+      }
+    }
+    labelsMenu.populateMenu();
   }
 }
