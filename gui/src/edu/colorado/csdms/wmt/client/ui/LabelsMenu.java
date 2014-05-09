@@ -99,6 +99,8 @@ public class LabelsMenu extends PopupPanel {
         @Override
         public void onClick(ClickEvent event) {
           entry.getValue().isSelected(labelBox.getValue());
+          data.modelIsSaved(false);
+          data.getPerspective().setModelPanelTitle();
         }
       });
       labelPanel.add(labelBox);
@@ -158,6 +160,8 @@ public class LabelsMenu extends PopupPanel {
               Window.alert(Constants.ADD_LABEL_ERR);
             } else {
               DataTransfer.addLabel(data, label);
+              data.modelIsSaved(false);
+              data.getPerspective().setModelPanelTitle();
             }
           } else if (type.equalsIgnoreCase("delete")) {
             LabelJSO jso = data.modelLabels.get(label);
@@ -166,6 +170,8 @@ public class LabelsMenu extends PopupPanel {
                 Window.alert(Constants.DELETE_LABEL_ERR);
               } else {
                 DataTransfer.deleteLabel(data, jso.getId());
+                data.modelIsSaved(false);
+                data.getPerspective().setModelPanelTitle();
               }
             }
           }
