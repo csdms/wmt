@@ -91,8 +91,9 @@ public class Constants {
   // The default text displayed in the driver ComponentCell.
   public static String DRIVER = "driver";
 
-  // The default model name.
-  public static String DEFAULT_MODEL = "Model 0";
+  // The default model name and id.
+  public static String DEFAULT_MODEL_NAME = "Model 0";
+  public static Integer DEFAULT_MODEL_ID = -1;
 
   // The number of characters to display in a ComponentCell.
   public static Integer TRIM = 10;

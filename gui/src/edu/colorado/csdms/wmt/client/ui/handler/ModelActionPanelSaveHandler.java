@@ -7,6 +7,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
@@ -41,7 +42,7 @@ public class ModelActionPanelSaveHandler implements ClickHandler {
       showSaveDialogBox();
     } else {
       if (!data.modelIsSaved()) {
-        if (data.getMetadata().getId() == -1) {
+        if (data.getMetadata().getId() == Constants.DEFAULT_MODEL_ID) {
           showSaveDialogBox();
         } else {
           data.serialize();
