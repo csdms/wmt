@@ -10,10 +10,10 @@ import org.junit.Test;
 import com.google.gwt.core.client.JsArrayInteger;
 import com.google.gwt.junit.client.GWTTestCase;
 
-import edu.colorado.csdms.wmt.client.data.LabelModelQueryJSO;
+import edu.colorado.csdms.wmt.client.data.LabelQueryJSO;
 
 /**
- * Tests for {@link LabelModelQueryJSO}. JUnit integration is provided by
+ * Tests for {@link LabelQueryJSO}. JUnit integration is provided by
  * extending {@link GWTTestCase}.
  * 
  * @see http://www.gwtproject.org/doc/latest/DevGuideTesting.html
@@ -23,9 +23,9 @@ import edu.colorado.csdms.wmt.client.data.LabelModelQueryJSO;
  *      -overlay-types-in-gwt-15.html
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class LabelModelQueryJSOTest extends GWTTestCase {
+public class LabelQueryJSOTest extends GWTTestCase {
 
-  private LabelModelQueryJSO jso;
+  private LabelQueryJSO jso;
   private JsArrayInteger ids;
   
   /**
@@ -38,11 +38,11 @@ public class LabelModelQueryJSOTest extends GWTTestCase {
   
   /**
    * A JSNI method that defines a fixture for the tests. Returns a
-   * {@link LabelModelQueryJSO} object for testing.
+   * {@link LabelQueryJSO} object for testing.
    * 
    * @param ids
    */
-  private native LabelModelQueryJSO testLabelModelQueryJSO(JsArrayInteger ids) /*-{
+  private native LabelQueryJSO testLabelModelQueryJSO(JsArrayInteger ids) /*-{
 		return {
 			"ids" : ids
 		}
@@ -66,11 +66,11 @@ public class LabelModelQueryJSOTest extends GWTTestCase {
   @Test
   public void testLength() {
     int arrayLength = 3;
-    assertEquals(arrayLength, jso.getModelIds().length());
+    assertEquals(arrayLength, jso.getIds().length());
   }
   
   @Test
   public void testGetModelIds() {
-    assertEquals(ids, jso.getModelIds());
+    assertEquals(ids, jso.getIds());
   }
 }

@@ -24,7 +24,7 @@ import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.data.ComponentListJSO;
 import edu.colorado.csdms.wmt.client.data.LabelJSO;
-import edu.colorado.csdms.wmt.client.data.LabelModelQueryJSO;
+import edu.colorado.csdms.wmt.client.data.LabelQueryJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelListJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
@@ -1222,14 +1222,14 @@ public class DataTransfer {
      * A helper for acting on a query of models associated with a given label.
      */
     private void queryActions(String rtxt) {
-      LabelModelQueryJSO jso = parse(rtxt);
+      LabelQueryJSO jso = parse(rtxt);
       // Window.alert(jso.getModelIds().join());
 
       // Populate the droplist with the restricted list of models.
       data.getPerspective().getOpenDialogBox().getDroplistPanel().getDroplist()
           .clear();
-      for (int i = 0; i < jso.getModelIds().length(); i++) {
-        Integer modelId = jso.getModelIds().get(i);
+      for (int i = 0; i < jso.getIds().length(); i++) {
+        Integer modelId = jso.getIds().get(i);
         Integer modelIndex = data.modelIdList.indexOf(modelId);
         String modelName = data.modelNameList.get(modelIndex);
         data.getPerspective().getOpenDialogBox().getDroplistPanel()
@@ -1241,10 +1241,10 @@ public class DataTransfer {
      * A helper for selecting the labels attached to a model.
      */
     private void getActions(String rtxt) {
-      LabelModelQueryJSO jso = parse(rtxt);
+      LabelQueryJSO jso = parse(rtxt);
       for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
-        for (int i = 0; i < jso.getModelIds().length(); i++) {
-          if (entry.getValue().getId() == jso.getModelIds().get(i)) {
+        for (int i = 0; i < jso.getIds().length(); i++) {
+          if (entry.getValue().getId() == jso.getIds().get(i)) {
             entry.getValue().isSelected(true);
           }
         }
