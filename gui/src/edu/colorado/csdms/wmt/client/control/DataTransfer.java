@@ -42,8 +42,8 @@ import edu.colorado.csdms.wmt.client.ui.widgets.RunInfoDialogBox;
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class DataTransfer {
-  
-  // Labels. If I make a spelling error, at least it'll only be in one place.
+
+  // Labels. If I make a spelling error, at least it'll be consistent.
   private static final String NEW = "new";
   private static final String OPEN = "open";
   private static final String SHOW = "show";
@@ -51,13 +51,14 @@ public class DataTransfer {
   private static final String LOGOUT = "logout";
   private static final String ADD = "add";
   private static final String DELETE = "delete";
-  private static final String EDIT = "edit"; 
+  private static final String EDIT = "edit";
   private static final String INIT = "init";
   private static final String STAGE = "stage";
   private static final String LAUNCH = "launch";
   private static final String LIST = "list";
   private static final String ATTACH = "attach";
   private static final String QUERY = "query";
+  private static final String GET = "get";
 
   /**
    * A JSNI method for creating a String from a JavaScriptObject.
@@ -78,8 +79,8 @@ public class DataTransfer {
   }-*/;
 
   /**
-   * A JSNI method for evaluating JSONs. This is a generic method. It returns
-   * a JavaScript object of the type denoted by the type parameter T.
+   * A JSNI method for evaluating JSONs. This is a generic method. It returns a
+   * JavaScript object of the type denoted by the type parameter T.
    * 
    * @see <a
    *      href="http://docs.oracle.com/javase/tutorial/extra/generics/methods.html">Generic
@@ -98,8 +99,8 @@ public class DataTransfer {
   /**
    * Returns a deep copy of the input JavaScriptObject.
    * <p>
-   * This is the public interface to {@link #copyImpl(JavaScriptObject)},
-   * which does the heavy lifting.
+   * This is the public interface to {@link #copyImpl(JavaScriptObject)}, which
+   * does the heavy lifting.
    * 
    * @param jso a JavaScriptObject
    */
@@ -195,7 +196,7 @@ public class DataTransfer {
     HashMap<String, String> entries = new HashMap<String, String>();
     entries.put("username", data.security.getWmtUsername());
     entries.put("password", data.security.getWmtPassword());
-    entries.put("password2", data.security.getWmtPassword());    
+    entries.put("password2", data.security.getWmtPassword());
     String queryString = buildQueryString(entries);
 
     try {
@@ -263,8 +264,8 @@ public class DataTransfer {
   }
 
   /**
-   * Makes an asynchronous HTTPS GET request to get the WMT login state from
-   * the server.
+   * Makes an asynchronous HTTPS GET request to get the WMT login state from the
+   * server.
    * 
    * @param data the DataManager object for the WMT session
    */
@@ -272,7 +273,7 @@ public class DataTransfer {
 
     String url = DataURL.loginState(data);
     GWT.log(url);
-    
+
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.GET, URL.encode(url));
 
@@ -286,7 +287,7 @@ public class DataTransfer {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
   }
-  
+
   /**
    * Makes an asynchronous HTTP GET request to retrieve the list of components
    * stored in the WMT database.
@@ -334,7 +335,8 @@ public class DataTransfer {
     try {
       @SuppressWarnings("unused")
       Request request =
-          builder.sendRequest(null, new ComponentRequestCallback(data, url, componentId));
+          builder.sendRequest(null, new ComponentRequestCallback(data, url,
+              componentId));
     } catch (RequestException e) {
       Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
     }
@@ -404,8 +406,8 @@ public class DataTransfer {
   }
 
   /**
-   * Makes an asynchronous HTTP POST request to save a new model, or edits to
-   * an existing model, to the server.
+   * Makes an asynchronous HTTP POST request to save a new model, or edits to an
+   * existing model, to the server.
    * 
    * @param data the DataManager object for the WMT session
    */
@@ -646,11 +648,12 @@ public class DataTransfer {
    * @param modelId the id of the model, an Integer
    * @param labelId the id of the label to add, an Integer
    */
-  public static void addModelLabel(DataManager data, Integer modelId, Integer labelId) {
+  public static void addModelLabel(DataManager data, Integer modelId,
+      Integer labelId) {
 
     String url = DataURL.addModelLabel(data);
     GWT.log(url);
-    
+
     RequestBuilder builder =
         new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 
@@ -671,8 +674,8 @@ public class DataTransfer {
   }
 
   /**
-   * Makes an asynchronous HTTPS GET request to query what models use the
-   * given labels, input as an List of Integer ids. 
+   * Makes an asynchronous HTTPS GET request to query what models use the given
+   * labels, input as an List of Integer ids.
    * 
    * @param data the DataManager object for the WMT session
    * @param labelIds a List of Integer label ids
@@ -704,15 +707,39 @@ public class DataTransfer {
   }
 
   /**
+   * Makes an asynchronous HTTPS GET request to query what models use the given
+   * labels, input as an List of Integer ids.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param labelIds a List of Integer label ids
+   */
+  public static void getModelLabels(DataManager data, Integer modelId) {
+
+    String url = DataURL.getModelLabel(data, modelId);
+    GWT.log(url);
+
+    RequestBuilder builder =
+        new RequestBuilder(RequestBuilder.GET, URL.encode(url));
+
+    try {
+      @SuppressWarnings("unused")
+      Request request =
+          builder.sendRequest(null, new LabelRequestCallback(data, url, GET));
+    } catch (RequestException e) {
+      Window.alert(Constants.REQUEST_ERR_MSG + e.getMessage());
+    }
+  }
+
+  /**
    * A RequestCallback handler class that processes WMT login and logout
    * requests.
    */
   public static class AuthenticationRequestCallback implements RequestCallback {
-    
+
     private DataManager data;
     private String url;
     private String type;
-    
+
     public AuthenticationRequestCallback(DataManager data, String url,
         String type) {
       this.data = data;
@@ -728,7 +755,7 @@ public class DataTransfer {
       data.getPerspective().getLoginPanel().getLoginName().setText(
           data.security.getWmtUsername());
       data.getPerspective().getLoginPanel().showStatusPanel();
-      
+
       // Get all labels belonging to the user, as well as all public labels.
       listLabels(data);
 
@@ -750,7 +777,7 @@ public class DataTransfer {
       data.security.isLoggedIn(false);
       data.getPerspective().getLoginPanel().showInputPanel();
       data.getPerspective().reset();
-      
+
       // Clear any user-owned labels from list.
       for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
         if (data.security.getWmtUsername().equals(entry.getValue().getOwner())) {
@@ -758,7 +785,7 @@ public class DataTransfer {
         }
       }
     }
-    
+
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
@@ -797,7 +824,7 @@ public class DataTransfer {
         box.getChoicePanel().getOkButton().addClickHandler(
             new AddNewUserHandler(data, box));
         box.center();
-        
+
       } else if (Response.SC_UNAUTHORIZED == response.getStatusCode()) {
 
         // Display message if email address is valid, but password is not.
@@ -816,7 +843,7 @@ public class DataTransfer {
       Window.alert(Constants.REQUEST_ERR_MSG + exception.getMessage());
     }
   }
-  
+
   /**
    * A RequestCallback handler class that provides the callback for a GET
    * request of the list of available components in the WMT database. On
@@ -876,9 +903,9 @@ public class DataTransfer {
    * A RequestCallback handler class that provides the callback for a GET
    * request of a component. On success,
    * {@link DataManager#addComponent(ComponentJSO)} and
-   * {@link DataManager#addModelComponent(ComponentJSO)} are called to store
-   * the (class) component and the model component in the DataManager object
-   * for the WMT session.
+   * {@link DataManager#addModelComponent(ComponentJSO)} are called to store the
+   * (class) component and the model component in the DataManager object for the
+   * WMT session.
    */
   public static class ComponentRequestCallback implements RequestCallback {
 
@@ -907,7 +934,7 @@ public class DataTransfer {
         if (data.nComponents == data.componentIdList.size()) {
           data.showDefaultCursor();
         }
-        
+
         // Replace the associated placeholder ComponentSelectionMenu item.
         ((ComponentSelectionMenu) data.getPerspective().getModelTree()
             .getDriverComponentCell().getComponentMenu()).replaceMenuItem(jso
@@ -986,8 +1013,8 @@ public class DataTransfer {
   }
 
   /**
-   * A RequestCallback handler class that provides the callback for a model
-   * GET or POST request.
+   * A RequestCallback handler class that provides the callback for a model GET
+   * or POST request.
    * <p>
    * On a successful GET, {@link DataManager#deserialize()} is called to
    * populate the WMT GUI. On a successful POST,
@@ -1022,6 +1049,7 @@ public class DataTransfer {
     private void openActions(String rtxt) {
       ModelMetadataJSO jso = parse(rtxt);
       data.setMetadata(jso);
+      getModelLabels(data, data.getMetadata().getId());
     }
 
     /*
@@ -1068,7 +1096,7 @@ public class DataTransfer {
         } else {
           Window.alert(Constants.RESPONSE_ERR_MSG);
         }
-        
+
       } else {
         String msg =
             "The URL '" + url + "' did not give an 'OK' response. "
@@ -1134,7 +1162,7 @@ public class DataTransfer {
   }
 
   /**
-   * A RequestCallback handler class that handles listing, adding, and deleting 
+   * A RequestCallback handler class that handles listing, adding, and deleting
    * labels.
    */
   public static class LabelRequestCallback implements RequestCallback {
@@ -1209,6 +1237,20 @@ public class DataTransfer {
       }
     }
 
+    /*
+     * A helper for selecting the labels attached to a model.
+     */
+    private void getActions(String rtxt) {
+      LabelModelQueryJSO jso = parse(rtxt);
+      for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
+        for (int i = 0; i < jso.getModelIds().length(); i++) {
+          if (entry.getValue().getId() == jso.getModelIds().get(i)) {
+            entry.getValue().isSelected(true);
+          }
+        }
+      }
+    }
+
     @Override
     public void onResponseReceived(Request request, Response response) {
       if (Response.SC_OK == response.getStatusCode()) {
@@ -1226,6 +1268,8 @@ public class DataTransfer {
           ; // Do nothing
         } else if (type.matches(QUERY)) {
           queryActions(rtxt);
+        } else if (type.matches(GET)) {
+          getActions(rtxt);
         } else {
           Window.alert(Constants.RESPONSE_ERR_MSG);
         }
@@ -1243,5 +1287,5 @@ public class DataTransfer {
       Window.alert(Constants.REQUEST_ERR_MSG + exception.getMessage());
     }
   }
-  
+
 }
