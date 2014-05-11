@@ -3,14 +3,11 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
-import java.util.Iterator;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
@@ -27,8 +24,8 @@ import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelStatusHandler;
  */
 public class MoreActionsMenu extends PopupPanel {
 
-  @SuppressWarnings("unused")
   private DataManager data;
+  private VerticalPanel menu;
   private LabelsMenu labelsMenu;
   private ComponentsMenu componentsMenu;
   
@@ -44,23 +41,36 @@ public class MoreActionsMenu extends PopupPanel {
     this.setStyleName("wmt-PopupPanel");
 
     // A VerticalPanel for the menu items. (PopupPanels have only one child.)
-    VerticalPanel menu = new VerticalPanel();
+    menu = new VerticalPanel();
     this.add(menu);
+    
+    populateMenu();
+  }
+  
+  /**
+   * A helper that fills in the {@link MoreActionsMenu}.
+   */
+  public void populateMenu() {
 
+    menu.clear();
+    
     // Save as
     HTML saveAsButton = new HTML(Constants.FA_SAVE + "Save model as...");
+    saveAsButton.setStyleName("wmt-PopupPanelItem");
     saveAsButton.setTitle(Constants.MODEL_SAVE_AS);
     saveAsButton.addClickHandler(new ModelActionPanelSaveHandler(data, true));
     menu.add(saveAsButton);
 
     // Delete
     HTML deleteButton = new HTML(Constants.FA_DELETE + "Delete model...");
+    deleteButton.setStyleName("wmt-PopupPanelItem");
     deleteButton.setTitle(Constants.MODEL_DELETE);
     deleteButton.addClickHandler(new ModelActionPanelDeleteHandler(data));
     menu.add(deleteButton);
 
     // Manage labels
     final HTML labelsButton = new HTML(Constants.FA_TAGS + "Manage labels");
+    labelsButton.setStyleName("wmt-PopupPanelItem");
     labelsButton.setTitle(Constants.MODEL_LABELS);
     menu.add(labelsButton);
     labelsMenu = new LabelsMenu(data);
@@ -83,6 +93,7 @@ public class MoreActionsMenu extends PopupPanel {
     // Component information
     final HTML componentsButton =
         new HTML(Constants.FA_COG + "Component information");
+    componentsButton.setStyleName("wmt-PopupPanelItem");
     componentsButton.setTitle(Constants.COMPONENT_INFO);
     menu.add(componentsButton);
     componentsMenu = new ComponentsMenu(data);
@@ -103,21 +114,16 @@ public class MoreActionsMenu extends PopupPanel {
 
     // Run status
     HTML statusButton = new HTML(Constants.FA_STATUS + "View run status...");
+    statusButton.setStyleName("wmt-PopupPanelItem");
     statusButton.setTitle(Constants.MODEL_RUN_STATUS);
     statusButton.addClickHandler(new ModelActionPanelStatusHandler(data));
     menu.add(statusButton);
 
     // Help
     HTML helpButton = new HTML(Constants.FA_HELP + "Help");
+    helpButton.setStyleName("wmt-PopupPanelItem");
     helpButton.setTitle(Constants.MODEL_HELP);
     helpButton.addClickHandler(new ModelActionPanelHelpHandler(data));
     menu.add(helpButton);
-
-    // Apply a style to each button.
-    Iterator<Widget> iter = menu.iterator();
-    while (iter.hasNext()) {
-      HTML button = (HTML) iter.next();
-      button.setStyleName("wmt-PopupPanelItem");
-    }
   }
 }
