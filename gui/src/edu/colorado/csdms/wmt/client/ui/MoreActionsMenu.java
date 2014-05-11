@@ -61,6 +61,14 @@ public class MoreActionsMenu extends PopupPanel {
     saveAsButton.addClickHandler(new ModelActionPanelSaveHandler(data, true));
     menu.add(saveAsButton);
 
+    // Duplicate
+    HTML duplicateButton = new HTML(Constants.FA_COPY + "Duplicate model");
+    duplicateButton.setStyleName("wmt-PopupPanelItem");
+    duplicateButton.setStyleDependentName("disabled", !data.modelIsSaved());
+    duplicateButton.setTitle(Constants.MODEL_DUPLICATE);
+    duplicateButton.addClickHandler(new ModelActionPanelSaveHandler(data, true));
+    menu.add(duplicateButton);
+    
     // Delete
     HTML deleteButton = new HTML(Constants.FA_DELETE + "Delete model...");
     deleteButton.setStyleName("wmt-PopupPanelItem");

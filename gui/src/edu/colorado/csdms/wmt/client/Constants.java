@@ -111,6 +111,7 @@ public class Constants {
   public static String FA_CANCEL = "<i class='fa fa-ban'></i> ";
   public static String FA_OPEN = "<i class='fa fa-folder-open-o fa-fw'></i> ";
   public static String FA_SAVE = "<i class='fa fa-floppy-o fa-fw'></i> ";
+  public static String FA_COPY = "<i class='fa fa-copy fa-fw'></i> ";
   public static String FA_DELETE = "<i class='fa fa-trash-o fa-fw'></i> ";
   public static String FA_RUN = "<i class='fa fa-play fa-fw'></i> ";
   public static String FA_STATUS = "<i class='fa fa-info fa-fw'></i> ";
@@ -131,6 +132,7 @@ public class Constants {
   public static String MODEL_RUN = "Run the current model on a HPCC.";
   public static String MODEL_MORE = "See more options...";
   public static String MODEL_SAVE_AS = "Save a model with a new name.";
+  public static String MODEL_DUPLICATE = "Make a duplicate of this model.";
   public static String MODEL_LABELS = "Manage the labels set on a model.";
   public static String MODEL_DELETE = "Delete a model from server.";
   public static String MODEL_RUN_STATUS = "Get the status of model run.";
