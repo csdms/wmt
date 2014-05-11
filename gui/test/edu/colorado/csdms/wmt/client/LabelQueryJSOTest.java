@@ -43,15 +43,14 @@ public class LabelQueryJSOTest extends GWTTestCase {
    * @param ids
    */
   private native LabelQueryJSO testLabelModelQueryJSO(JsArrayInteger ids) /*-{
-		return {
-			"ids" : ids
-		}
+		return ids;
   }-*/;  
   
   @Before
   @Override
   protected void gwtSetUp() throws Exception {
-    ids = (JsArrayInteger) JsArrayInteger.createArray();
+    ids = (JsArrayInteger) JsArrayInteger.createObject();
+    ids.setLength(3);
     ids.push(4);
     ids.push(3);
     ids.push(12);
@@ -63,14 +62,16 @@ public class LabelQueryJSOTest extends GWTTestCase {
   protected void gwtTearDown() throws Exception {
   }
 
+  // Test the length of the array.
   @Test
   public void testLength() {
     int arrayLength = 3;
     assertEquals(arrayLength, jso.getIds().length());
   }
-  
+
+  // Test whether all ids can be accessed.
   @Test
-  public void testGetModelIds() {
+  public void testGetIds() {
     assertEquals(ids, jso.getIds());
   }
 }
