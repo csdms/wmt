@@ -3,6 +3,7 @@ package edu.colorado.csdms.wmt.client.ui.handler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
 import edu.colorado.csdms.wmt.client.ui.widgets.SaveDialogBox;
@@ -45,6 +46,7 @@ public class SaveModelHandler implements ClickHandler {
     }
 
     // Serialize the model from the GUI and post it to the server.
+    data.getMetadata().setId(Constants.DEFAULT_MODEL_ID);
     data.serialize();
     DataTransfer.postModel(data);
   }

@@ -52,7 +52,14 @@ public class LabelJSO extends JavaScriptObject {
   public final native int getId() /*-{
 		return this.id;
   }-*/;    
-  
+
+  /**
+   * Sets the id of the label, an int. This is a JSNI method.
+   */
+  public final native void setId(int id) /*-{
+		this.id = id;
+  }-*/;
+
   /**
    * Gets a JsArray of labels. This is a JSNI method.
    */

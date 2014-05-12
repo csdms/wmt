@@ -74,6 +74,7 @@ public class DataManager {
     String label = "public";
     LabelJSO value = (LabelJSO) LabelJSO.createObject();
     value.setLabel(label);
+    value.setId(-1);
     modelLabels.put(label, value);
   }
 
@@ -354,6 +355,16 @@ public class DataManager {
     this.modelIsSaved = modelIsSaved;
   }
 
+  /**
+   * A helper method that updates the current model's save state and title.
+   * 
+   * @param state true if saved
+   */
+  public void updateModelSaveState(Boolean state) {
+    modelIsSaved(state);
+    perspective.setModelPanelTitle();
+  }
+  
   /**
    * Gets the stringified model JSON created by {@link #serialize()}.
    */

@@ -1,7 +1,7 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.ui;
+package edu.colorado.csdms.wmt.obsolete;
 
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;

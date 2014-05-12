@@ -55,10 +55,11 @@ public class ModelTree extends Tree {
     this.addItem(driverItem);
 
     ModelJSO model = (ModelJSO) ModelJSO.createObject();
-    model.setName(Constants.DEFAULT_MODEL);
+    model.setName(Constants.DEFAULT_MODEL_NAME);
     data.setModel(model);
     ModelMetadataJSO metadata =
         (ModelMetadataJSO) ModelMetadataJSO.createObject();
+    metadata.setId(Constants.DEFAULT_MODEL_ID);
     data.setMetadata(metadata);
   }
 
@@ -126,8 +127,7 @@ public class ModelTree extends Tree {
     }
 
     // Mark the model state as unsaved.
-    data.modelIsSaved(false);
-    data.getPerspective().setModelPanelTitle();
+    data.updateModelSaveState(false);
   }
 
   /**

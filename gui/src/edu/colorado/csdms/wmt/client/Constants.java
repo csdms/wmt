@@ -34,6 +34,9 @@ public class Constants {
   public static final String LABELS_LIST_PATH = "tag/list";
   public static final String LABELS_NEW_PATH = "tag/new";
   public static final String LABELS_DELETE_PATH = "tag/delete/";
+  public static final String LABELS_MODEL_ADD_PATH = "tag/model/add";
+  public static final String LABELS_MODEL_QUERY_PATH = "tag/model/query";
+  public static final String LABELS_MODEL_GET_PATH = "tag/model/";
   
   // API URLs for components.
   public static final String COMPONENTS_LIST_PATH = "components/list";
@@ -64,6 +67,10 @@ public class Constants {
       + " and a password.";
   public static String PASSWORD_ERR = "This email address is registered,"
       + " but the password is not valid.";
+  public static String ADD_LABEL_ERR = "This label already exists."
+      + " Please choose a different name.";
+  public static String DELETE_LABEL_ERR = "This label cannot be deleted because"
+      + " it is not owned by the current user.";
   
   
   // Number of tries to fetch a component; a magic number.
@@ -79,14 +86,15 @@ public class Constants {
   public static Double TAB_BAR_HEIGHT = 40.0;
 
   // Standard dimensions for PopupPanels.
-  public static String MENU_WIDTH = "200px"; // arbitrary, aesthetic
+  public static String MENU_WIDTH = "220px"; // arbitrary, aesthetic
   public static String MENU_HEIGHT = "20em";
 
   // The default text displayed in the driver ComponentCell.
   public static String DRIVER = "driver";
 
-  // The default model name.
-  public static String DEFAULT_MODEL = "Model 0";
+  // The default model name and id.
+  public static String DEFAULT_MODEL_NAME = "Model 0";
+  public static Integer DEFAULT_MODEL_ID = -1;
 
   // The number of characters to display in a ComponentCell.
   public static Integer TRIM = 10;
@@ -103,6 +111,7 @@ public class Constants {
   public static String FA_CANCEL = "<i class='fa fa-ban'></i> ";
   public static String FA_OPEN = "<i class='fa fa-folder-open-o fa-fw'></i> ";
   public static String FA_SAVE = "<i class='fa fa-floppy-o fa-fw'></i> ";
+  public static String FA_COPY = "<i class='fa fa-copy fa-fw'></i> ";
   public static String FA_DELETE = "<i class='fa fa-trash-o fa-fw'></i> ";
   public static String FA_RUN = "<i class='fa fa-play fa-fw'></i> ";
   public static String FA_STATUS = "<i class='fa fa-info fa-fw'></i> ";
@@ -123,6 +132,7 @@ public class Constants {
   public static String MODEL_RUN = "Run the current model on a HPCC.";
   public static String MODEL_MORE = "See more options...";
   public static String MODEL_SAVE_AS = "Save a model with a new name.";
+  public static String MODEL_DUPLICATE = "Make a duplicate of this model.";
   public static String MODEL_LABELS = "Manage the labels set on a model.";
   public static String MODEL_DELETE = "Delete a model from server.";
   public static String MODEL_RUN_STATUS = "Get the status of model run.";

@@ -71,13 +71,17 @@ public class ComponentDeleteCommand implements Command {
       tree.initializeTree();
       ((ComponentSelectionMenu) tree.getDriverComponentCell()
           .getComponentMenu()).updateComponents();
-      // XXX Revisit
-//      data.modelLabels.put(data.getComponent(componentId).getName(), false);
+      try {
+        data.modelLabels.get(data.getComponent(componentId).getName())
+            .isSelected(false);
+        data.getPerspective().getLabelsMenu().populateMenu();
+      } catch (Exception e) {
+        GWT.log(e.toString());
+      }
       data.saveAttempts++;
     }
 
     // Update the title of the Model tab.
-    data.modelIsSaved(false);
-    data.getPerspective().setModelPanelTitle();
+    data.updateModelSaveState(false);
   }
 }

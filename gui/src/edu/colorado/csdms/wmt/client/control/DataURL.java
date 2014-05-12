@@ -8,9 +8,9 @@ import com.google.gwt.user.client.Window;
 import edu.colorado.csdms.wmt.client.Constants;
 
 /**
- * A class defining static methods that return URLs for accessing components
- * and models. Works in GWT development mode and in production mode, accessing
- * the WMT API.
+ * A class defining static methods that return URLs for accessing components and
+ * models. Works in GWT development mode and in production mode, accessing the
+ * WMT API.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
@@ -28,8 +28,8 @@ public class DataURL {
   }
 
   /**
-   * A wrapper around Window.Location that returns the application URL in
-   * either development or production mode.
+   * A wrapper around Window.Location that returns the application URL in either
+   * development or production mode.
    * 
    * @param data the DataManager object for the WMT session
    */
@@ -104,6 +104,21 @@ public class DataURL {
   }
 
   /**
+   * Returns the API URL for deleting a label from WMT.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param labelId the id of the label to delete, an Integer
+   */
+  public static String deleteLabel(DataManager data, Integer labelId) {
+    if (data.isDevelopmentMode()) {
+      return Constants.LOCAL_URL + "save/labels.json";
+    } else {
+      return getApiUrl(data) + Constants.LABELS_DELETE_PATH
+          + labelId.toString();
+    }
+  }
+
+  /**
    * Returns the API URL for listing all labels belonging to the current user,
    * as well as all public labels, in WMT.
    * 
@@ -114,6 +129,47 @@ public class DataURL {
       return Constants.LOCAL_URL + "save/labels.json";
     } else {
       return getApiUrl(data) + Constants.LABELS_LIST_PATH;
+    }
+  }
+
+  /**
+   * Returns the API URL for attaching a new label to a model.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String addModelLabel(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return Constants.LOCAL_URL + "save/labels.json";
+    } else {
+      return getApiUrl(data) + Constants.LABELS_MODEL_ADD_PATH;
+    }
+  }
+
+  /**
+   * Returns the API URL for finding what models use a given set of labels.
+   * 
+   * @param data the DataManager object for the WMT session
+   */
+  public static String queryModelLabel(DataManager data) {
+    if (data.isDevelopmentMode()) {
+      return Constants.LOCAL_URL + "save/labels.json";
+    } else {
+      return getApiUrl(data) + Constants.LABELS_MODEL_QUERY_PATH;
+    }
+  }
+
+  /**
+   * Returns the API URL for getting the labels used by a particular model.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param modelId the id of the model, an Integer set by the API
+   */
+  public static String getModelLabel(DataManager data, Integer modelId) {
+    if (data.isDevelopmentMode()) {
+      return Constants.LOCAL_URL + "save/labels.json";
+    } else {
+      return getApiUrl(data) + Constants.LABELS_MODEL_GET_PATH
+          + modelId.toString();
     }
   }
 
@@ -161,8 +217,9 @@ public class DataURL {
       if (useDefaults) {
         modelId = "0";
       }
-      String url = getApiUrl(data) + "models/" + modelId + "/" + componentId 
-          + "/format?format=" + format;
+      String url =
+          getApiUrl(data) + "models/" + modelId + "/" + componentId
+              + "/format?format=" + format;
       return url;
     }
   }
@@ -225,8 +282,7 @@ public class DataURL {
   }
 
   /**
-   * Returns the URL for updating an existing model on the server, given its
-   * id.
+   * Returns the URL for updating an existing model on the server, given its id.
    * 
    * @param data the DataManager object for the WMT session
    * @param modelId the id of the model, an Integer set by the API

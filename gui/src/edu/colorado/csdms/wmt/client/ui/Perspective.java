@@ -3,6 +3,9 @@
  */
 package edu.colorado.csdms.wmt.client.ui;
 
+import java.util.Map;
+
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
@@ -15,9 +18,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.LabelJSO;
 import edu.colorado.csdms.wmt.client.ui.handler.AuthenticationHandler;
 import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 import edu.colorado.csdms.wmt.client.ui.widgets.LoginPanel;
+import edu.colorado.csdms.wmt.client.ui.widgets.OpenDialogBox;
 
 /**
  * Defines the initial layout of views (a perspective, in Eclipse parlance)
@@ -47,8 +52,11 @@ public class Perspective extends DockLayoutPanel {
   private ModelActionPanel modelActionPanel;
   private ModelTree modelTree;
   private ParameterTable parameterTable;
+  
+  // Tertiary UI widgets!
   private ComponentInfoDialogBox componentInfoBox;
   private LabelsMenu labelsMenu;
+  private OpenDialogBox openDialogBox;
 
   /**
    * Draws the panels and their children that compose the basic WMT GUI.
@@ -255,6 +263,14 @@ public class Perspective extends DockLayoutPanel {
     this.labelsMenu = labelsMenu;
   }
 
+  public OpenDialogBox getOpenDialogBox() {
+    return openDialogBox;
+  }
+
+  public void setOpenDialogBox(OpenDialogBox openDialogBox) {
+    this.openDialogBox = openDialogBox;
+  }
+
   public LoginPanel getLoginPanel() {
     return loginPanel;
   }
@@ -293,9 +309,18 @@ public class Perspective extends DockLayoutPanel {
     data.resetModelComponents();
     parameterTable.clearTable();
     modelTree.initializeTree();
-    data.modelIsSaved(false);
+    data.updateModelSaveState(false);
     ((ComponentSelectionMenu) modelTree.getDriverComponentCell()
-        .getComponentMenu()).updateComponents();;
-    setModelPanelTitle();
+        .getComponentMenu()).updateComponents();
+    
+    // Deselect all labels except for the owner label.
+    for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
+      try {
+        entry.getValue().isSelected(entry.getKey().equals(data.security.getWmtUsername()));
+      } catch (Exception e) {
+        GWT.log(e.toString());
+      }
+    }
+    labelsMenu.populateMenu();
   }
 }

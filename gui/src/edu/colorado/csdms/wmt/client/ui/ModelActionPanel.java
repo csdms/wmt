@@ -66,6 +66,7 @@ public class ModelActionPanel extends HorizontalPanel {
     moreButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
+        moreMenu.populateMenu();
         moreMenu.setPopupPositionAndShow(new PositionCallback() {
           final Integer x = moreButton.getElement().getAbsoluteLeft();
           final Integer y = moreButton.getElement().getAbsoluteBottom();

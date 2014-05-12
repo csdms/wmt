@@ -1,7 +1,7 @@
 /**
  * <License>
  */
-package edu.colorado.csdms.wmt.client.ui.handler;
+package edu.colorado.csdms.wmt.obsolete;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -9,7 +9,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
 import edu.colorado.csdms.wmt.client.control.DataTransfer;
-import edu.colorado.csdms.wmt.client.ui.widgets.LoginDialogBox;
 
 /**
  * Saves login information in the {@link DataManager}; calls
