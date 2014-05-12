@@ -103,7 +103,8 @@ class Stage(object):
             submissions.stage(form.d.uuid)
         except Exception as error:
             import traceback
-            submissions.update(form.d.uuid, status='error', message=str(error))
+            submissions.update(form.d.uuid, status='error',
+                               message=traceback.format_exc())
             raise web.internalerror("Error staging simulation: %s" %
                                     traceback.format_exc())
 
