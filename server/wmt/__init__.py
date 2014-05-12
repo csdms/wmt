@@ -29,6 +29,7 @@ URLS = (
     '/tag/model/add', 'wmt.controllers.tag.TagModel',
     '/tag/model/remove', 'wmt.controllers.tag.UntagModel',
     '/tag/model/query', 'wmt.controllers.tag.Query',
+    '/tag/model/(\d+)', 'wmt.controllers.tag.ModelTags',
 
     '/components/list', 'wmt.controllers.components.List',
     '/components/dump', 'wmt.controllers.components.Dump',

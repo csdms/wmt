@@ -11,7 +11,7 @@ from ..session import get_username
 class New(object):
     form = web.form.Form(
         web.form.Textbox('tag',
-                         not_too_short(3),
+                         not_too_short(1),
                          size=30, description='Tag:'),
         web.form.Button('Submit')
     )
@@ -74,8 +74,17 @@ class TagModel(object):
         if not form.validates():
             return render.titled_form('Tag Model', form)
 
-        tags.tag_model(form.d.model, form.d.tag)
+        try:
+            tags.tag_model(int(form.d.model), int(form.d.tag))
+        except tags.BadIdError:
+            raise web.BadRequest('tag does not exist')
         return json.dumps(tags.get_model_tags(form.d.model))
+
+
+class ModelTags(object):
+    def GET(self, id):
+        web.header('Content-Type', 'application/json; charset=utf-8')
+        return json.dumps(tags.get_model_tags(id))
 
 
 class Query(object):
