@@ -42,11 +42,13 @@ import edu.colorado.csdms.wmt.client.ui.Perspective;
 
 /**
  * A class for storing and sharing data, as well as the state of UI elements,
- * within WMT.
+ * within WMT. This is the main controller for the application.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class DataManager {
+  
+  public static String VERSION = "2014-05-19";
   
   private Boolean developmentMode;
   private Boolean apiDevelopmentMode;

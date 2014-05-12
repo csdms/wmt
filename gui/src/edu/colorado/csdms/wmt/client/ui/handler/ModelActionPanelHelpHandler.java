@@ -25,9 +25,9 @@ package edu.colorado.csdms.wmt.client.ui.handler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.ui.widgets.HelpDialogBox;
 
 /**
  * Handles click on "Help" button in the ModelActionPanel.
@@ -37,6 +37,7 @@ import edu.colorado.csdms.wmt.client.control.DataManager;
 public class ModelActionPanelHelpHandler implements ClickHandler {
   
   private DataManager data;
+  private HelpDialogBox helpDialog;
 
   /**
    * Creates a new instance of {@link ModelActionPanelHelpHandler}.
@@ -49,7 +50,9 @@ public class ModelActionPanelHelpHandler implements ClickHandler {
   
   @Override
   public void onClick(ClickEvent event) {
-    data.getPerspective().getActionButtonPanel().getMoreMenu().hide();    
-    Window.alert("Help");
+    data.getPerspective().getActionButtonPanel().getMoreMenu().hide();
+
+    helpDialog = new HelpDialogBox(data);
+    helpDialog.center();
   }
 }

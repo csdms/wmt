@@ -33,6 +33,11 @@ import com.google.gwt.core.client.GWT;
  */
 public class Constants {
 
+  // The CSDMS website and wiki articles.
+  public static final String CSDMS_HOME = "http://csdms.colorado.edu/";
+  public static final String WMT_HELP = CSDMS_HOME + "wiki/WMT_help";
+  public static final String WMT_TUTORIAL = CSDMS_HOME + "wiki/WMT_tutorial";
+  
   // This switch toggles API development and public mode.
   public static final Boolean USE_API_DEV_MODE = true;
 

@@ -151,7 +151,7 @@ public class MoreActionsMenu extends PopupPanel {
     menu.add(statusButton);
 
     // Help
-    HTML helpButton = new HTML(Constants.FA_HELP + "Help");
+    HTML helpButton = new HTML(Constants.FA_HELP + "Help / About WMT");
     helpButton.setStyleName("wmt-PopupPanelItem");
     helpButton.setTitle(Constants.MODEL_HELP);
     helpButton.addClickHandler(new ModelActionPanelHelpHandler(data));
