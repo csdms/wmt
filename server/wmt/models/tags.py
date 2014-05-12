@@ -51,6 +51,7 @@ def new_tag(tag, owner=''):
 
 def del_tag(id):
     db.delete('tags', where='id=$id', vars=locals())
+    db.delete('model_tags', where='tag_id=$id', vars=locals())
 
 
 def del_tag_name(tag):
@@ -107,8 +108,13 @@ def get_tag_by_name(name):
 
 
 def tag_model(model, tag):
-    id = db.insert('model_tags', model_id=model, tag_id=tag)
-    return id
+    try:
+        get_tag(tag)
+    except (BadIdError, AuthorizationError):
+        raise BadIdError(tag)
+    else:
+        if tag not in get_model_tags(model):
+            db.insert('model_tags', model_id=model, tag_id=tag)
 
 
 def untag_model(model, tag):
