@@ -64,7 +64,7 @@ public class SetupRunModelHandler implements ClickHandler {
     runDialog = new RunDialogBox();
 
     // TODO This should be configured. Can't desensitize ListBox elements.
-    String hosts[] = {"beach.colorado.edu", "janus.colorado.edu", "localhost"};
+    String hosts[] = {"beach.colorado.edu"};
     for (int i = 0; i < hosts.length; i++) {
       runDialog.getHostPanel().getDroplist().addItem(hosts[i]);
     }
