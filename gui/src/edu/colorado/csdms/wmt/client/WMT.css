@@ -178,11 +178,11 @@ body, table td, select, button {
   margin-left: 5px;
 }
 
-/* A ComponentCell that displays a linked component. */
-.wmt-ComponentCell-NameCell-linked {
+/* A ComponentCell that displays an aliased component. */
+.wmt-ComponentCell-NameCell-alias {
    color: white;
 }
-.wmt-ComponentCell-NameCell-linked:after {
+.wmt-ComponentCell-NameCell-alias:after {
    font-family: "FontAwesome";
    padding: 3px;
    content: "\f112"; /* fa-reply */

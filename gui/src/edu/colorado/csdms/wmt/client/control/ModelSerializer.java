@@ -89,8 +89,8 @@ public class ModelSerializer {
       treeItem = (TreeItem) iter.next();
       ComponentCell cell = (ComponentCell) treeItem.getWidget();
 
-      // Skip linked components and empty components.
-      if (cell.isLinked()) {
+      // Skip aliased components and empty components.
+      if (cell.isAlias()) {
         continue;
       }
       if (cell.getComponentId() == null) {

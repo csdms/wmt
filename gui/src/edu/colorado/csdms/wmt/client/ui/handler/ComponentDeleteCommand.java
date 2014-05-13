@@ -103,7 +103,7 @@ public class ComponentDeleteCommand implements Command {
 
     // If the deleted cell is not an alias, check the rest of the ModelTree for
     // aliases of this cell's component and delete them all.
-    if (!cell.isLinked()) {
+    if (!cell.isAlias()) {
       Boolean keepLooping = true;
       while (keepLooping) {
         ComponentCell alias = tree.getAliasedComponent(componentId);

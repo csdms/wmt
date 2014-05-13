@@ -137,7 +137,7 @@ public class ModelTree extends Tree {
 
     // If this component is not aliased, ensure that the (class) component
     // replaces the model component.
-    if (!isThisComponentADuplicate(componentId)) {
+    if (!isComponentPresent(componentId, true)) {
       data.replaceModelComponent(data.getComponent(componentId));
     }
 
@@ -162,13 +162,13 @@ public class ModelTree extends Tree {
    */
   public void setComponent(String componentId, TreeItem target) {
 
-    // If this component already exists elsewhere in the ModelTree, set a link
-    // to it and exit.
-    if (isThisComponentADuplicate(componentId)) {
+    // If this component already exists elsewhere in the ModelTree, make an
+    // alias to it and exit.
+    if (isComponentPresent(componentId, true)) {
       GWT.log("This component is a duplicate!");
       ComponentCell cell = (ComponentCell) target.getWidget();
-      cell.isLinked(true);
-      cell.getNameCell().addStyleDependentName("linked");
+      cell.isAlias(true);
+      cell.getNameCell().addStyleDependentName("alias");
       return;
     }
 
@@ -192,8 +192,8 @@ public class ModelTree extends Tree {
         ComponentSelectionCommand cmd =
             new ComponentSelectionCommand(data, newCell, connectedId);
         cmd.updateComponentCell();
-        newCell.isLinked(true);
-        newCell.getNameCell().addStyleDependentName("linked");
+        newCell.isAlias(true);
+        newCell.getNameCell().addStyleDependentName("alias");
       }
     }
   }
@@ -244,33 +244,29 @@ public class ModelTree extends Tree {
   /**
    * Checks whether a given component is present in the ModelTree.
    * 
-   * @param componentId the id of component to check
+   * @param componentId the id of the component to check
    * @return true if the component is in the ModelTree
    */
   public Boolean isComponentPresent(String componentId) {
-    Boolean componentIsPresent = false;
-    if (componentId != null) {
-      Iterator<TreeItem> iter = this.treeItemIterator();
-      while (iter.hasNext() && !componentIsPresent) {
-        TreeItem treeItem = (TreeItem) iter.next();
-        ComponentCell cell = (ComponentCell) treeItem.getWidget();
-        if (cell.getComponentId() != null) {
-          componentIsPresent = cell.getComponentId().matches(componentId);
-        }
-      }
-    }
-    return componentIsPresent;
+    return isComponentPresent(componentId, false);
   }
 
   /**
-   * Checks whether the input component has appeared elsewhere in the ModelTree;
-   * returns true if a match is found.
+   * Checks whether a given component is present, optionally multiple times,
+   * in the ModelTree.
    * 
-   * @param componentId the id the component to check
+   * @param componentId the id of the component to check
+   * @param moreThanOnce true if checking whether present more than once
+   * @return true if the component is in the ModelTree
    */
-  public Boolean isThisComponentADuplicate(String componentId) {
+  public Boolean isComponentPresent(String componentId, Boolean moreThanOnce) {
 
-    GWT.log("Checking for duplicate component: " + componentId);
+    String msg = "Checking if this component is present";
+    if (moreThanOnce) {
+      msg += " more than once";
+    }
+    msg += ": ";
+    GWT.log(msg + componentId);
 
     Integer nMatches = 0;
     Iterator<TreeItem> iter = this.treeItemIterator();
@@ -279,10 +275,13 @@ public class ModelTree extends Tree {
       ComponentCell cell = (ComponentCell) treeItem.getWidget();
       if ((cell.getComponentId() != null)
           && cell.getComponentId().matches(componentId)) {
-        nMatches++;
-        // The first match is with the current ComponentCell.
-        if (nMatches > 1) {
+        if (!moreThanOnce) {
           return true;
+        } else {
+          nMatches++;
+          if (nMatches > 1) { // first match is with current ComponentCell
+            return true;
+          }
         }
       }
     }
@@ -303,7 +302,7 @@ public class ModelTree extends Tree {
       TreeItem treeItem = (TreeItem) iter.next();
       ComponentCell cell = (ComponentCell) treeItem.getWidget();
       if ((cell.getComponentId() != null)
-          && cell.getComponentId().matches(componentId) && cell.isLinked()) {
+          && cell.getComponentId().matches(componentId) && cell.isAlias()) {
         return cell;
       }
     }

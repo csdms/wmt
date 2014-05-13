@@ -49,7 +49,7 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
   private HTML menuCell;
   private PopupPanel componentMenu;
   private TreeItem enclosingTreeItem;
-  private Boolean isLinked = false;
+  private Boolean isAlias = false;
 
   /**
    * Creates a new {@link ComponentCell} displaying the text "driver".
@@ -160,13 +160,23 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
     this.enclosingTreeItem = enclosingTreeItem;
   }
 
-  public Boolean isLinked() {
-    return isLinked;
+  /**
+   * Returns true if this {@link ComponentCell} contains an alias of another
+   * component.
+   */
+  public Boolean isAlias() {
+    return isAlias;
   }
 
-  public void isLinked(Boolean isLinked) {
-    this.isLinked = isLinked;
-    if (this.isLinked && (this.getTitle() != null)) {
+  /**
+   * Stores the "aliased" state of this {@link ComponentCell}; set to true if
+   * this cell contains an alias of another component in the ModelTree.
+   * 
+   * @param isAlias true if this cell is an alias
+   */
+  public void isAlias(Boolean isAlias) {
+    this.isAlias = isAlias;
+    if (this.isAlias && (this.getTitle() != null)) {
       String tooltip =
           " This component is aliased from another instance of "
               + data.getModelComponent(this.componentId).getName() + ".";
