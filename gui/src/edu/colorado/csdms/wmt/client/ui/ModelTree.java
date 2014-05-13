@@ -135,8 +135,11 @@ public class ModelTree extends Tree {
     this.setComponent(componentId, target);
     target.setState(true);
 
-    // Ensure that the (class) component replaces the model component.
-    data.replaceModelComponent(data.getComponent(componentId));
+    // If this component is not aliased, ensure that the (class) component
+    // replaces the model component.
+    if (!isThisComponentADuplicate(componentId)) {
+      data.replaceModelComponent(data.getComponent(componentId));
+    }
 
     // Is this the driver? If so, display the component's parameters. Also
     // suggest a model name.
