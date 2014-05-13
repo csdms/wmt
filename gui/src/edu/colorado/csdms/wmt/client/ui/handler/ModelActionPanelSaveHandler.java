@@ -65,7 +65,6 @@ public class ModelActionPanelSaveHandler implements ClickHandler {
         if (data.getMetadata().getId() == Constants.DEFAULT_MODEL_ID) {
           showSaveDialogBox();
         } else {
-          data.getMetadata().setId(Constants.DEFAULT_MODEL_ID);
           data.serialize();
           DataTransfer.postModel(data);
         }
