@@ -23,7 +23,9 @@
  */
 package edu.colorado.csdms.wmt.client.ui.widgets;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -51,6 +53,10 @@ public class RunDialogBox extends DialogBox {
     this.setText("Run Model...");
 
     hostPanel = new DroplistPanel();
+
+    HTML separator = new HTML();
+    separator.setStyleName("wmt-PopupPanelSeparator");
+    
     usernamePanel = new FieldPanel();
     passwordPanel = new FieldPanel(true); // uses PasswordTextBox
     choicePanel = new ChoicePanel();
@@ -63,10 +69,13 @@ public class RunDialogBox extends DialogBox {
     VerticalPanel panel = new VerticalPanel();
     panel.setWidth("100%");
     panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+    panel.setSpacing(10); // px
     panel.add(hostPanel);
+    panel.add(separator);
     
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+    contents.getElement().getStyle().setMargin(5, Unit.PX);
     contents.add(panel);
     contents.add(usernamePanel);
     contents.add(passwordPanel);
