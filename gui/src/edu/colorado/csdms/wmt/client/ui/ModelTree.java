@@ -290,6 +290,27 @@ public class ModelTree extends Tree {
   }
 
   /**
+   * Returns the {@link ComponentCell} that is the alias of the input component.
+   * 
+   * @param componentId the id the component to check
+   */
+  public ComponentCell getAliasedComponent(String componentId) {
+
+    GWT.log("Getting aliased component: " + componentId);
+
+    Iterator<TreeItem> iter = this.treeItemIterator();
+    while (iter.hasNext()) {
+      TreeItem treeItem = (TreeItem) iter.next();
+      ComponentCell cell = (ComponentCell) treeItem.getWidget();
+      if ((cell.getComponentId() != null)
+          && cell.getComponentId().matches(componentId) && cell.isLinked()) {
+        return cell;
+      }
+    }
+    return null;
+  }
+
+  /**
    * Checks whether the input provides port has been filled higher in the
    * ModelTree. Returns the id of the component that fills it.
    * 

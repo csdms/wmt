@@ -101,6 +101,21 @@ public class ComponentDeleteCommand implements Command {
       data.saveAttempts++;
     }
 
+    // If the deleted cell is not an alias, check the rest of the ModelTree for
+    // aliases of this cell's component and delete them all.
+    if (!cell.isLinked()) {
+      Boolean keepLooping = true;
+      while (keepLooping) {
+        ComponentCell alias = tree.getAliasedComponent(componentId);
+        if (alias == null) {
+          keepLooping = false;
+        } else {
+          ComponentDeleteCommand cmd = new ComponentDeleteCommand(data, alias);
+          cmd.execute(); // recursive
+        }
+      }
+    }
+
     // Update the title of the Model tab.
     data.updateModelSaveState(false);
   }
