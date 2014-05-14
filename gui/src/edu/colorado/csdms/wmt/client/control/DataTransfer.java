@@ -1163,7 +1163,7 @@ public class DataTransfer {
         } else if (type.matches(LAUNCH)) {
           RunInfoDialogBox runInfo = new RunInfoDialogBox(data);
           runInfo.center();
-          runInfo.getClosePanel().getButton().setFocus(true);
+          runInfo.getChoicePanel().getOkButton().setFocus(true);
         } else {
           Window.alert(Constants.RESPONSE_ERR_MSG);
         }
