@@ -92,4 +92,12 @@ public class RunInfoDialogBox extends DialogBox {
       }
     });
   }
+
+  public ClosePanel getClosePanel() {
+    return closePanel;
+  }
+
+  public void setClosePanel(ClosePanel closePanel) {
+    this.closePanel = closePanel;
+  }
 }
