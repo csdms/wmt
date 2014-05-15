@@ -26,6 +26,7 @@ package edu.colorado.csdms.wmt.client.ui.handler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.user.client.Window;
 
 import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
@@ -54,7 +55,7 @@ public class ModelActionPanelSaveHandler implements ClickHandler {
 
   @Override
   public void onClick(ClickEvent event) {
-    
+
     // Hide the MoreActionsMenu.
     data.getPerspective().getActionButtonPanel().getMoreMenu().hide();
 
@@ -65,8 +66,22 @@ public class ModelActionPanelSaveHandler implements ClickHandler {
         if (data.getMetadata().getId() == Constants.DEFAULT_MODEL_ID) {
           showSaveDialogBox();
         } else {
-          data.serialize();
-          DataTransfer.postModel(data);
+
+          // Don't allow a user to save a model that doesn't belong to them.
+          // Give them the option to save a copy with their username.
+          if (data.getMetadata().getOwner() != data.security.getWmtUsername()) {
+            String msg =
+                "This model cannot be saved because the current user is not"
+                    + " the model owner. Would you like to save a copy of"
+                    + " this model with the current user as the owner?";
+            Boolean saveCopy = Window.confirm(msg);
+            if (saveCopy) {
+              showSaveDialogBox();
+            }
+          } else {
+            data.serialize();
+            DataTransfer.postModel(data);
+          }
         }
       }
     }
