@@ -30,7 +30,6 @@ import java.util.Map.Entry;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -106,9 +105,8 @@ public class LabelsOpenModelMenu extends PopupPanel {
       labelPanel.add(labelBox);
     }
 
+    // Rebuild the list of available models in the droplist.    
     if (rebuildDroplist) {
-      // Rebuild the list of available models in the droplist.
-      Window.alert("here");
       selectedLabelIds.clear();
       openDialog.getDroplistPanel().getDroplist().clear();
       for (int i = 0; i < data.modelNameList.size(); i++) {
