@@ -107,15 +107,23 @@ public class LabelsOpenModelMenu extends PopupPanel {
 
     // Rebuild the list of available models in the droplist.    
     if (rebuildDroplist) {
-      selectedLabelIds.clear();
-      openDialog.getDroplistPanel().getDroplist().clear();
-      for (int i = 0; i < data.modelNameList.size(); i++) {
-        openDialog.getDroplistPanel().getDroplist().addItem(
-            data.modelNameList.get(i));
-      }
+      rebuildDroplist();
     }
   }
 
+  /**
+   * Builds the {@link OpenDialogBox} droplist with every available model made
+   * by the user, plus all public models.
+   */
+  private void rebuildDroplist() {
+    selectedLabelIds.clear();
+    openDialog.getDroplistPanel().getDroplist().clear();
+    for (int i = 0; i < data.modelNameList.size(); i++) {
+      openDialog.getDroplistPanel().getDroplist().addItem(
+          data.modelNameList.get(i));
+    }
+  }
+  
   /**
    * Handles actions when the selection state of a label changes.
    */
@@ -141,7 +149,14 @@ public class LabelsOpenModelMenu extends PopupPanel {
         Integer element = entry.getValue().getId();
         selectedLabelIds.remove(element);
       }
-      DataTransfer.queryModelLabels(data, selectedLabelIds);
+      
+      // If no labels are selected, rebuild the droplist; otherwise, go find
+      // models that have the selected labels.
+      if (selectedLabelIds.isEmpty()) {
+        rebuildDroplist();
+      } else {
+        DataTransfer.queryModelLabels(data, selectedLabelIds);
+      }
     } 
   }
 
