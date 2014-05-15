@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.ui.LabelsMenu;
+import edu.colorado.csdms.wmt.client.ui.LabelsSaveModelMenu;
 
 /**
  * A customized DialogBox with a field for setting the name/description of the
@@ -49,7 +49,7 @@ public class SaveDialogBox extends DialogBox {
   private DataManager data;
   private FieldPanel namePanel;
   private ChoicePanel choicePanel;
-  private LabelsMenu labelsMenu;
+  private LabelsSaveModelMenu labelsMenu;
   
   /**
    * Makes a {@link SaveDialogBox} with a default name.
@@ -78,7 +78,7 @@ public class SaveDialogBox extends DialogBox {
 
     final Button labelsButton = new Button(Constants.FA_TAGS + "Labels");
     labelsButton.setStyleName("wmt-Button");
-    labelsMenu = new LabelsMenu(data);
+    labelsMenu = new LabelsSaveModelMenu(data);
     labelsButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {

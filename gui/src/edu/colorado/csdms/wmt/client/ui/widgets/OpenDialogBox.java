@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.ui.LabelsMenu;
+import edu.colorado.csdms.wmt.client.ui.LabelsOpenModelMenu;
 
 /**
  * A customized DialogBox with a droplist for selecting a model and a "Labels"
@@ -49,7 +49,7 @@ public class OpenDialogBox extends DialogBox {
   private DataManager data;
   private DroplistPanel droplistPanel;
   private ChoicePanel choicePanel;
-  private LabelsMenu labelsMenu;
+  private LabelsOpenModelMenu labelsMenu;
   
   /**
    * Makes an {@link OpenDialogBox}.
@@ -69,11 +69,11 @@ public class OpenDialogBox extends DialogBox {
 
     final Button labelsButton = new Button(Constants.FA_TAGS + "Labels");
     labelsButton.setStyleName("wmt-Button");
-    labelsMenu = new LabelsMenu(data, this);
+    labelsMenu = new LabelsOpenModelMenu(data, this);
     labelsButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        labelsMenu.populateMenu();
+        labelsMenu.populateMenu(true); // rebuild droplist
         labelsMenu.setPopupPositionAndShow(new PositionCallback() {
           final Integer x = labelsButton.getElement().getAbsoluteRight();
           final Integer y = labelsButton.getAbsoluteTop();
