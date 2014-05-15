@@ -91,13 +91,6 @@ public class DataManager {
     modelIdList = new ArrayList<Integer>();
     modelLabels = new TreeMap<String, LabelJSO>();
     modelNameList = new ArrayList<String>();
-
-    // The "public" label is always present.
-    String label = "public";
-    LabelJSO value = (LabelJSO) LabelJSO.createObject();
-    value.setLabel(label);
-    value.setId(-1);
-    modelLabels.put(label, value);
   }
 
   /**

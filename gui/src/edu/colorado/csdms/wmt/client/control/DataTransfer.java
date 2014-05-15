@@ -1244,7 +1244,7 @@ public class DataTransfer {
      */
     private void queryActions(String rtxt) {
       LabelQueryJSO jso = parse(rtxt);
-      // Window.alert(jso.getModelIds().join());
+//       Window.alert(jso.getIds().join());
 
       // Populate the droplist with the restricted list of models.
       data.getPerspective().getOpenDialogBox().getDroplistPanel().getDroplist()
@@ -1252,6 +1252,9 @@ public class DataTransfer {
       for (int i = 0; i < jso.getIds().length(); i++) {
         Integer modelId = jso.getIds().get(i);
         Integer modelIndex = data.modelIdList.indexOf(modelId);
+        if (modelIndex == -1) { // the API shouldn't return nonexistent models,
+          continue;             // but just in case...
+        }
         String modelName = data.modelNameList.get(modelIndex);
         data.getPerspective().getOpenDialogBox().getDroplistPanel()
             .getDroplist().addItem(modelName);
