@@ -136,9 +136,9 @@ public class LabelsMenu extends PopupPanel {
       CheckBox labelBox = (CheckBox) event.getSource();
       entry.getValue().isSelected(labelBox.getValue());
       data.updateModelSaveState(false);
-    } 
+    }
   }
-  
+
   /**
    * Handles adding and deleting model labels using a {@link LabelDialogBox}.
    */
@@ -175,7 +175,6 @@ public class LabelsMenu extends PopupPanel {
               Window.alert(Constants.ADD_LABEL_ERR);
             } else {
               DataTransfer.addLabel(data, label);
-              data.updateModelSaveState(false);
             }
           } else if (type.equalsIgnoreCase("delete")) {
             LabelJSO jso = data.modelLabels.get(label);
@@ -183,8 +182,10 @@ public class LabelsMenu extends PopupPanel {
               if (!data.security.getWmtUsername().matches(jso.getOwner())) {
                 Window.alert(Constants.DELETE_LABEL_ERR);
               } else {
+                if (jso.isSelected()) {
+                  data.updateModelSaveState(false);
+                }
                 DataTransfer.deleteLabel(data, jso.getId());
-                data.updateModelSaveState(false);
               }
             }
           }
