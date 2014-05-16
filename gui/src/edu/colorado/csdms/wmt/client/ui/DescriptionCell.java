@@ -51,6 +51,5 @@ public class DescriptionCell extends HTML {
     }
 
     this.setHTML(description);
-    this.setTitle("Key: " + parameter.getKey());
   }
 }
