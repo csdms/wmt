@@ -775,6 +775,7 @@ public class DataTransfer {
       data.getPerspective().getLoginPanel().getLoginName().setText(
           data.security.getWmtUsername());
       data.getPerspective().getLoginPanel().showStatusPanel();
+      data.getPerspective().getLoginPanel().getSignInButton().setFocus(false);
 
       // Get all labels belonging to the user, as well as all public labels.
       listLabels(data);
