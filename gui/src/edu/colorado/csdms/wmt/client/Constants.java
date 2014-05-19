@@ -91,7 +91,8 @@ public class Constants {
   public static String LOGIN_ERR = "Please sign in with an email address"
       + " and a password.";
   public static String PASSWORD_ERR = "This email address is registered,"
-      + " but the password is not valid.";
+      + " but the password is not valid.\n\nIf you've forgotten your password,"
+      + " please contact Mark Piper (mark.piper@colorado.edu) for assistance.";
   public static String ADD_LABEL_ERR = "This label already exists."
       + " Please choose a different name.";
   public static String DELETE_LABEL_ERR = "This label cannot be deleted because"
