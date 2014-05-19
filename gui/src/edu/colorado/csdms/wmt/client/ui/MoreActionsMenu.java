@@ -125,7 +125,7 @@ public class MoreActionsMenu extends PopupPanel {
     final HTML componentsButton =
         new HTML(Constants.FA_COG + "Component information");
     componentsButton.setStyleName("wmt-PopupPanelItem");
-    componentsButton.setTitle(Constants.COMPONENT_INFO);
+    componentsButton.setTitle(Constants.COMPONENT_INFO_1);
     menu.add(componentsButton);
     componentsMenu = new ComponentsMenu(data);
     componentsButton.addClickHandler(new ClickHandler() {

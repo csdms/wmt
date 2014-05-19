@@ -168,6 +168,8 @@ public class Constants {
       "View and edit this component's parameters.";
   public static String COMPONENT_INFO =
       "View information about this component.";
+  public static String COMPONENT_INFO_1 =
+      "View information about a component.";  
   public static String COMPONENT_DELETE =
       "Delete this component from the model.";
   public static String PARAMETER_RESET = "Reset all parameters for this"
