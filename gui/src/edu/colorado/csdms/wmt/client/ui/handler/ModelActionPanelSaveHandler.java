@@ -59,6 +59,10 @@ public class ModelActionPanelSaveHandler implements ClickHandler {
     // Hide the MoreActionsMenu.
     data.getPerspective().getActionButtonPanel().getMoreMenu().hide();
 
+    if (!data.security.isLoggedIn()) {
+      return;
+    }
+    
     if (isSaveAs) {
       showSaveDialogBox();
     } else {

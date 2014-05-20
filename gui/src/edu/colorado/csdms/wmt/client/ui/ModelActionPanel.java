@@ -39,17 +39,16 @@ import edu.colorado.csdms.wmt.client.ui.handler.ModelActionPanelSaveHandler;
 import edu.colorado.csdms.wmt.client.ui.handler.SetupRunModelHandler;
 
 /**
- * Makes a row of action buttons ("Open", "Save", "Run", etc.) for working with 
+ * Makes a row of action buttons ("Open", "Save", "Run", etc.) for working with
  * the model built in WMT.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class ModelActionPanel extends HorizontalPanel {
 
-  @SuppressWarnings("unused")
   private DataManager data;
   private MoreActionsMenu moreMenu;
-  
+
   /**
    * Makes a new {@link ModelActionPanel}.
    * 
@@ -86,6 +85,9 @@ public class ModelActionPanel extends HorizontalPanel {
     moreButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
+        if (!ModelActionPanel.this.data.security.isLoggedIn()) {
+          return;
+        }
         moreMenu.populateMenu();
         moreMenu.setPopupPositionAndShow(new PositionCallback() {
           final Integer x = moreButton.getElement().getAbsoluteLeft();

@@ -54,6 +54,10 @@ public class SetupRunModelHandler implements ClickHandler {
   @Override
   public void onClick(ClickEvent event) {
 
+    if (!data.security.isLoggedIn()) {
+      return;
+    }    
+
     if (!data.modelIsSaved()) {
       String msg =
           "The model must be saved before it can be run.";

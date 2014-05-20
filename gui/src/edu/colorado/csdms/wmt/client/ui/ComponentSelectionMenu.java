@@ -206,6 +206,9 @@ public class ComponentSelectionMenu extends PopupPanel {
     @Override
     public void onClick(ClickEvent event) {
       ComponentSelectionMenu.this.hide();
+      if (!data.security.isLoggedIn()) {
+        return;
+      }
       ComponentSelectionCommand cmd =
           new ComponentSelectionCommand(data, cell, data.getComponent(
               componentId).getId());
