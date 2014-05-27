@@ -74,12 +74,20 @@ body
 
 h1
 {
-	font-size: 36px;
+  font-family: "Georgia", "Times", Serif;
+  /*font-family: "Arial Black", "Arial", fantasy;*/
+  /*font-family: "Impact", "Impact", fantasy;*/
+	/*font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;*/
+  font-weight: lighter;
+  font-style: italic;
+	font-size: 24px;
+	/*color: #039;*/
+	color: #669;
 }
 
 h2
 {
-	font-size: 24px;
+	font-size: 18px;
 }
 
 /* ------------------
