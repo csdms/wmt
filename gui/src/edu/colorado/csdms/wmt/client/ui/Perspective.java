@@ -27,6 +27,9 @@ import java.util.Map;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -132,10 +135,23 @@ public class Perspective extends DockLayoutPanel {
       title.setStyleName("wmt-NavBarTitle");
       this.add(title);
 
+      // Set up LoginPanel. Send login event when user clicks "Sign In" button,
+      // or when user hits "Enter" key in the password box.
       loginPanel = new LoginPanel();
-      loginPanel.getSignInButton().addClickHandler(
-          new AuthenticationHandler(data, loginPanel));
       this.add(loginPanel);
+      final AuthenticationHandler authHandler =
+          new AuthenticationHandler(data, loginPanel);
+      loginPanel.getSignInButton().addClickHandler(authHandler);
+      loginPanel.getPasswordBox().addKeyUpHandler(new KeyUpHandler() {
+        @Override
+        public void onKeyUp(KeyUpEvent event) {
+          Integer keyCode = event.getNativeKeyCode();
+          if (keyCode == KeyCodes.KEY_ENTER) {
+            authHandler.onClick(null);
+          }
+        }
+      });
+
     }
   } // end ViewNorth
 
