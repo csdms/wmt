@@ -47,7 +47,11 @@ def new(name, model_id):
 
 def delete(uuid):
     _remove_stage_dir(uuid)
+    id = get_submission(uuid).id
+
     db.delete('submission', where='uuid=$uuid', vars=locals())
+    #db.delete('history', where='submission_id=$id',
+    #          vars=dict(submission_id=id))
 
 
 def _remove_stage_dir(uuid):
@@ -58,6 +62,10 @@ def _remove_stage_dir(uuid):
 def update(uuid, **kwds):
     kwds['updated'] = current_time_as_string(format='iso')
     db.update('submission', vars=dict(uuid=uuid), where='uuid=$uuid', **kwds)
+
+    #id = get_submission(uuid).id
+    #db.insert('history', submission_id=id, updated=kwds['updated'],
+    #          message=kwds['message'])
 
 
 def get_submissions():
@@ -140,6 +148,14 @@ def stage(uuid):
         update(uuid,
             status='staging', message='staging %s...' % component['class'])
         stage_component(path, component)
+
+    model, components = models.get_model_yaml(get_model_id(uuid))
+    with open(os.path.join(_get_stage_dir(uuid), 'model.yaml'), 'w') as f:
+        f.write(model)
+    with open(os.path.join(_get_stage_dir(uuid), 'components.yaml'), 'w') as f:
+        f.write(components)
+    #with open(os.path.join(_get_stage_dir(uuid), 'model.yaml'), 'w') as f:
+    #    f.write(models.get_model_yaml(get_model_id(uuid)))
 
 
 def _component_stagein(component):

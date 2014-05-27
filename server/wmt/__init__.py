@@ -64,11 +64,14 @@ URLS = (
     '/run/launch', 'wmt.controllers.run.Launch',
     '/run/update', 'wmt.controllers.run.Update',
     '/run/upload', 'wmt.controllers.run.Upload',
+    '/run/upload/(%s)' % _UUID_REGEX, 'wmt.controllers.run.UploadUuid',
     '/run/download/(%s)/(.+)' % _UUID_REGEX, 'wmt.controllers.run.Download',
     '/run/download', 'wmt.controllers.run.DownloadBundle',
     '/run/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Get',
     '/run/(%s)/status' % _UUID_REGEX, 'wmt.controllers.run.Status',
     '/run/', 'wmt.controllers.run.GetAll',
+
+    '/run/delete/ui/(%s)' % _UUID_REGEX, 'wmt.controllers.run.UiDelete',
 
     '/hosts/new', 'wmt.controllers.hosts.New',
     '/hosts/view/(\d+)', 'wmt.controllers.hosts.View',

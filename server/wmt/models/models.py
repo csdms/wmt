@@ -3,8 +3,10 @@ import web
 import json
 from datetime import datetime
 
+from .components import get_component
 from ..config import (site, db)
 from ..session import get_username
+from .tags import select_public_models
 
 
 class Error(Exception):
@@ -38,7 +40,6 @@ def del_model(id):
     import shutil
 
 
-    db.delete('models', where='id=$id', vars=locals())
     try:
         shutil.rmtree(get_model_upload_dir(id))
     except os.error as error:
@@ -46,6 +47,8 @@ def del_model(id):
             pass
         else:
             raise
+    db.delete('models', where='id=$id', vars=locals())
+    tag_db.delete('model_tags', where='model_id=$id', vars=locals())
 
 
 def update_model(id, name, text):
@@ -54,8 +57,10 @@ def update_model(id, name, text):
 
 
 def get_public_models():
-    return db.select('models', order='id DESC', where='owner=$owner',
-                     vars=dict(owner=''))
+    #return db.select('models', order='id DESC', where='owner=$owner',
+    #                 vars=dict(owner=''))
+    return set(select_public_models())
+    #return tags.select_models_tagged_with('public'):
 
 
 def get_private_models():
@@ -65,8 +70,24 @@ def get_private_models():
 
 def get_models():
     where = ' OR '.join(['owner=$user', 'owner=\'\''])
-    return db.select('models', order='id DESC', where=where,
-                     vars=dict(user=get_username()))
+    ids = set()
+    for entry in db.select('models', order='id DESC', where=where, what='id', vars=dict(user=get_username())):
+        ids.add(entry['id'])
+    ids |= get_public_models()
+
+    #for model in db.select('models', order='id DESC', where=where, what='id', vars=dict(user=get_username())):
+    #    models.append(model)
+    #for model in get_public_models():
+    #    models.append(model)
+
+    models = []
+    for id in ids:
+        try:
+            models.append(get_model(id))
+        except BadIdError:
+            pass
+
+    return models
 
 
 def get_model(id):
@@ -75,10 +96,11 @@ def get_model(id):
     except IndexError:
         raise BadIdError(id)
 
-    if model['owner'] in ['', get_username()]:
-        return model
-    else:
-        raise AuthorizationError(id)
+    return model
+    #if model['owner'] in ['', get_username()]:
+    #    return model
+    #else:
+    #    raise AuthorizationError(id)
 
 
 def get_model_component(id, component):
@@ -87,6 +109,70 @@ def get_model_component(id, component):
         if item['id'] == component:
             return item
     raise KeyError(component)
+
+
+def get_model_yaml(id):
+    import yaml
+
+    conf = json.loads(get_model(id)['json'])
+    name, model = conf['name'], conf['model']
+
+    components = []
+    info = dict()
+    for component in model:
+        d = {}
+        d['name'] = str(component['id'])
+
+        c = get_component(component['id'])
+
+        c_uses = {}
+        for port in c['uses']:
+            c_uses[port['id']] = port
+
+        try:
+            d['class'] = str(c['class'])
+        except KeyError:
+            d['class'] = str(c['name'])
+        d['run_dir'] = str(component['id'])
+        d['time_step'] = c.get('time_step', 1.)
+        #d['argv'] = [str(component['id'] + '.txt')]
+        d['argv'] = [str(arg) for arg in c['argv']]
+        d['initialize_args'] = str(c.get('initialize_args', ''))
+
+        d['connectivity'] = []
+        for (uses, server) in component['connect'].items():
+            if server is not None:
+                provides, name = server.split('@')
+                d['connectivity'].append({
+                    'name': str(uses),
+                    'connect': str(name),
+                    #'exchange_items': [],
+                    'exchange_items': [ str(item) for item in c_uses[str(uses)]['exchange_items'] ],
+                })
+
+        params = component['parameters']
+
+        d['print'] = []
+        if 'output_interval' in params and 'output_format' in params:
+            interval = params['output_interval']
+            format = params['output_format']
+            for (var, value) in params.items():
+                if '__' in var and value != 'off':
+                    d['print'].append({
+                        'name': str(value),
+                        'interval': float(interval),
+                        'format': str(format),
+                    })
+
+        if component.get('driver', False):
+            info['driver'] = str(component['id'])
+            info['duration'] = float(params['run_duration'])
+
+        components.append(d)
+
+    #return yaml.dump_all([info] + components, default_flow_style=False)
+    return (yaml.dump(info, default_flow_style=False),
+            yaml.dump_all(components, default_flow_style=False))
 
 
 def get_model_ids():

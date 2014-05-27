@@ -1,18 +1,120 @@
 $def with (page)
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WMT</title>
 
-<html>
-<head>
-  <link rel="stylesheet" type="text/css" href="$PREFIX/static/style.css" />
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-</head>
-<body>
-$:page
-</body>
+    <!-- Bootstrap -->
+    <link href="$PREFIX/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
-<p>
-$if CONTEXT.username == '':
-  <a href="$BASE_URL/account/login">Sign In</a>
-$else:
-  Signed in as: $CONTEXT.username | <a href="$BASE_URL/account/logout">Sign Out</a>
-</p>
+    <link href="$PREFIX/static/css/starter-template.css" rel="stylesheet">
+    <link href="$PREFIX/static/css/dashboard.css" rel="stylesheet">
+    <link href="$PREFIX/static/css/bootstrap-rtl.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!--script>
+      /*
+      Auto Refresh Page with Time script
+      By JavaScript Kit (javascriptkit.com)
+      Over 200+ free scripts here!
+      */
+
+      //enter refresh time in "minutes:seconds" Minutes should range from 0 to inifinity. Seconds should range from 0 to 59
+      var limit="0:10"
+
+      if (document.images){
+        var parselimit=limit.split(":")
+        parselimit=parselimit[0]*60+parselimit[1]*1
+      }
+      function beginrefresh(){
+        if (!document.images)
+          return
+        if (parselimit==1)
+          window.location.reload()
+        else{
+          parselimit-=1
+          curmin=Math.floor(parselimit/60)
+          cursec=parselimit%60
+          if (curmin!=0)
+            curtime=curmin+" minutes and "+cursec+" seconds left until page refresh!"
+          else
+            curtime=cursec+" seconds left until page refresh!"
+          window.status=curtime
+          setTimeout("beginrefresh()",1000)
+        }
+      }
+
+      window.onload=beginrefresh
+    </script-->
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">The CSDMS Modeling Tool</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          $if CONTEXT.username == '':
+            <form class="navbar-form navbar-right" role="form" action="account/login" method="post">
+              <div class="form-group">
+                <input id="username" name="username" type="email" placeholder="Email" class="form-control">
+              </div>
+              <div class="form-group">
+                <input id="password" name="password" type="password" placeholder="Password" class="form-control">
+              </div>
+              <button type="submit" class="btn btn-success">Sign in</button>
+            </form>
+          $else:
+            <form class="navbar-form navbar-right" role="form" action="account/logout" method="post">
+              <!--div class="form-group">
+                <input id="username" name="username" type="email" text="$CONTEXT.username" class="form-control">
+              </div-->
+              <div class="btn-group">
+                <button type="submit" class="btn btn-success">$CONTEXT.username</button>
+                <button type="submit" class="btn btn-success">Sign out <span class="fa fa-sign-out"></span></button>
+              </div>
+            </form>
+      <!--div class="btn-group">
+        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+          Job
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="#">Delete</a></li>
+          <li><a href="#">Info</a></li>
+        </ul>
+      </div-->
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="starter-template">
+      $:page
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="$PREFIX/static/js/bootstrap.min.js"></script>
+  </body>
 </html>
+

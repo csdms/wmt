@@ -45,7 +45,8 @@ def copy_launch_file(sftp, local_path, remote_path):
 
 
 def execute_launch_command(ssh, wmt_prefix, uuid):
-    wmt_execute = os.path.join(wmt_prefix, 'bin', 'wmt-execute.sh')
+    #wmt_execute = os.path.join(wmt_prefix, 'bin', 'wmt-execute.sh')
+    wmt_execute = os.path.join(wmt_prefix, 'bin', 'wmt-qsub.sh')
 
     run_command = '/usr/bin/env -i /bin/bash %s %s --server-url=%s' % (wmt_execute, uuid, site_url())
     submissions.update(uuid, status='launching', message='Running command: %s' % run_command)

@@ -126,10 +126,27 @@ def select_models_tagged_with(tag):
     return [entry.model_id for entry in db.select('model_tags', where='tag_id=$tag', vars=dict(tag=tag))]
 
 
+def select_public_models():
+    public_id = get_tag_by_name('public')
+    return select_models_tagged_with(public_id)
+
+
 def select_model(tags):
+    from . import models
+
+
     selected = set([entry.model_id for entry in db.select('model_tags')])
     for tag in tags:
         selected &= set(select_models_tagged_with(tag))
+
+    bad_ids = []
+    for id in selected:
+        try:
+            models.get_model(id)
+        except models.BadIdError:
+            bad_ids.append(id)
+    for id in bad_ids:
+        selected.remove(id)
 
     return selected
 

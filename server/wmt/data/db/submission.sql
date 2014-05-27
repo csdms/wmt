@@ -10,3 +10,9 @@ create table submission (
   owner         text,
   stage_dir     text
 );
+create table history(
+  id            integer primary key,
+  submission_id integer,
+  updated       text,
+  message       text,
+);
