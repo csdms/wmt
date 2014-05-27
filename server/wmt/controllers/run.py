@@ -141,6 +141,29 @@ class New(object):
         return json.dumps(uuid)
 
 
+class UiDelete(object):
+    form = web.form.Form(
+        #web.form.Textbox('uuid',
+        #                 valid_uuid,
+        #                 submission_exists(),
+        #                 size=80, description='Simulation ID:'),
+        web.form.Button('Delete')
+    )
+    def GET(self, uuid):
+        form = self.form()
+        #form.fill(uuid=uuid)
+        return render.confirm_delete(form)
+
+    def POST(self, uuid):
+        form = self.form()
+        #form.fill(uuid=uuid)
+        #if not form.validates():
+        #    return render.confirm_delete(form)
+
+        submissions.delete(uuid)
+        raise web.seeother('/run/show')
+
+
 class Delete(object):
     def POST(self, uuid):
         submissions.delete(uuid)
@@ -196,6 +219,36 @@ class Upload(object):
             path_to_dest = os.path.join(_UPLOAD_DIR, os.path.basename(filename))
         else:
             path_to_dest = os.path.join(_UPLOAD_DIR, user_data['uuid'], filename)
+
+        with open(path_to_dest, 'w') as dest_fp:
+            checksum = chunk_copy(user_data['file'].file, dest_fp,
+                                  chunk_size=_CHUNK_SIZE)
+
+        return json.dumps({
+            'checksum': checksum.hexdigest(),
+            'url': 'http://csdms.colorado.edu/pub/users/wmt/' + os.path.basename(path_to_dest)})
+
+
+class UploadUuid(object):
+    def GET(self):
+        return render.uploadform("uuid")
+
+    def POST(self, uuid):
+        #user_data = web.input(file={}, uuid=None, filename=None)
+        user_data = web.input(file={})
+
+        #if user_data['filename'] is None:
+        #    filename = user_data['file'].filename
+        #else:
+        #    filename = user_data['filename']
+        filename = user_data['file'].filename
+
+        #if user_data['uuid'] is None:
+        #    path_to_dest = os.path.join(_UPLOAD_DIR, os.path.basename(filename))
+        #else:
+        #    path_to_dest = os.path.join(_UPLOAD_DIR, user_data['uuid'], filename)
+        #path_to_dest = os.path.join(_UPLOAD_DIR, uuid, filename)
+        path_to_dest = os.path.join(_UPLOAD_DIR, filename)
 
         with open(path_to_dest, 'w') as dest_fp:
             checksum = chunk_copy(user_data['file'].file, dest_fp,
