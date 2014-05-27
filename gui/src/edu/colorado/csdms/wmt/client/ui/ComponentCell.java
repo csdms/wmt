@@ -1,5 +1,25 @@
 /**
- * <License>
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 mcflugen
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package edu.colorado.csdms.wmt.client.ui;
 
@@ -29,7 +49,7 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
   private HTML menuCell;
   private PopupPanel componentMenu;
   private TreeItem enclosingTreeItem;
-  private Boolean isLinked = false;
+  private Boolean isAlias = false;
 
   /**
    * Creates a new {@link ComponentCell} displaying the text "driver".
@@ -140,13 +160,23 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
     this.enclosingTreeItem = enclosingTreeItem;
   }
 
-  public Boolean isLinked() {
-    return isLinked;
+  /**
+   * Returns true if this {@link ComponentCell} contains an alias of another
+   * component.
+   */
+  public Boolean isAlias() {
+    return isAlias;
   }
 
-  public void isLinked(Boolean isLinked) {
-    this.isLinked = isLinked;
-    if (this.isLinked && (this.getTitle() != null)) {
+  /**
+   * Stores the "aliased" state of this {@link ComponentCell}; set to true if
+   * this cell contains an alias of another component in the ModelTree.
+   * 
+   * @param isAlias true if this cell is an alias
+   */
+  public void isAlias(Boolean isAlias) {
+    this.isAlias = isAlias;
+    if (this.isAlias && (this.getTitle() != null)) {
       String tooltip =
           " This component is aliased from another instance of "
               + data.getModelComponent(this.componentId).getName() + ".";

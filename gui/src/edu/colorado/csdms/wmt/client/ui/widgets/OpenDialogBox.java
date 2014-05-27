@@ -1,5 +1,25 @@
 /**
- * <License>
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 mcflugen
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package edu.colorado.csdms.wmt.client.ui.widgets;
 
@@ -14,7 +34,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
-import edu.colorado.csdms.wmt.client.ui.LabelsMenu;
+import edu.colorado.csdms.wmt.client.ui.LabelsOpenModelMenu;
 
 /**
  * A customized DialogBox with a droplist for selecting a model and a "Labels"
@@ -29,7 +49,7 @@ public class OpenDialogBox extends DialogBox {
   private DataManager data;
   private DroplistPanel droplistPanel;
   private ChoicePanel choicePanel;
-  private LabelsMenu labelsMenu;
+  private LabelsOpenModelMenu labelsMenu;
   
   /**
    * Makes an {@link OpenDialogBox}.
@@ -49,11 +69,11 @@ public class OpenDialogBox extends DialogBox {
 
     final Button labelsButton = new Button(Constants.FA_TAGS + "Labels");
     labelsButton.setStyleName("wmt-Button");
-    labelsMenu = new LabelsMenu(data, this);
+    labelsMenu = new LabelsOpenModelMenu(data, this);
     labelsButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        labelsMenu.populateMenu();
+        labelsMenu.populateMenu(true); // rebuild droplist
         labelsMenu.setPopupPositionAndShow(new PositionCallback() {
           final Integer x = labelsButton.getElement().getAbsoluteRight();
           final Integer y = labelsButton.getAbsoluteTop();

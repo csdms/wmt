@@ -1,5 +1,25 @@
 /**
- * <License>
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 mcflugen
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package edu.colorado.csdms.wmt.client;
 
@@ -13,6 +33,11 @@ import com.google.gwt.core.client.GWT;
  */
 public class Constants {
 
+  // The CSDMS website and wiki articles.
+  public static final String CSDMS_HOME = "http://csdms.colorado.edu/";
+  public static final String WMT_HELP = CSDMS_HOME + "wiki/WMT_help";
+  public static final String WMT_TUTORIAL = CSDMS_HOME + "wiki/WMT_tutorial";
+  
   // This switch toggles API development and public mode.
   public static final Boolean USE_API_DEV_MODE = true;
 
@@ -66,7 +91,8 @@ public class Constants {
   public static String LOGIN_ERR = "Please sign in with an email address"
       + " and a password.";
   public static String PASSWORD_ERR = "This email address is registered,"
-      + " but the password is not valid.";
+      + " but the password is not valid.\n\nIf you've forgotten your password,"
+      + " please contact Mark Piper (mark.piper@colorado.edu) for assistance.";
   public static String ADD_LABEL_ERR = "This label already exists."
       + " Please choose a different name.";
   public static String DELETE_LABEL_ERR = "This label cannot be deleted because"
@@ -125,6 +151,7 @@ public class Constants {
   public static String FA_COG = "<i class='fa fa-cog fa-fw'></i> ";
   public static String FA_COGS = "<i class='fa fa-cogs fa-fw'></i> ";
   public static String FA_USER = "<i class='fa fa-user fa-fw'></i> ";
+  public static String FA_BEER = "<i class='fa fa-beer'></i> ";
 
   // Tooltip text strings.
   public static String MODEL_OPEN = "Open an existing model.";
@@ -141,6 +168,8 @@ public class Constants {
       "View and edit this component's parameters.";
   public static String COMPONENT_INFO =
       "View information about this component.";
+  public static String COMPONENT_INFO_1 =
+      "View information about a component.";  
   public static String COMPONENT_DELETE =
       "Delete this component from the model.";
   public static String PARAMETER_RESET = "Reset all parameters for this"

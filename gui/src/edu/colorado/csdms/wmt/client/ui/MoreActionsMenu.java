@@ -1,5 +1,25 @@
 /**
- * <License>
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 mcflugen
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package edu.colorado.csdms.wmt.client.ui;
 
@@ -62,11 +82,14 @@ public class MoreActionsMenu extends PopupPanel {
     menu.add(saveAsButton);
 
     // Duplicate
-    HTML duplicateButton = new HTML(Constants.FA_COPY + "Duplicate model");
+    HTML duplicateButton = new HTML(Constants.FA_COPY + "Duplicate model...");
     duplicateButton.setStyleName("wmt-PopupPanelItem");
     duplicateButton.setStyleDependentName("disabled", !data.modelIsSaved());
     duplicateButton.setTitle(Constants.MODEL_DUPLICATE);
-    duplicateButton.addClickHandler(new ModelActionPanelSaveHandler(data, true));
+    if (data.modelIsSaved()) {
+      duplicateButton.addClickHandler(new ModelActionPanelSaveHandler(data,
+          true));
+    }
     menu.add(duplicateButton);
     
     // Delete
@@ -102,7 +125,7 @@ public class MoreActionsMenu extends PopupPanel {
     final HTML componentsButton =
         new HTML(Constants.FA_COG + "Component information");
     componentsButton.setStyleName("wmt-PopupPanelItem");
-    componentsButton.setTitle(Constants.COMPONENT_INFO);
+    componentsButton.setTitle(Constants.COMPONENT_INFO_1);
     menu.add(componentsButton);
     componentsMenu = new ComponentsMenu(data);
     componentsButton.addClickHandler(new ClickHandler() {
@@ -128,7 +151,7 @@ public class MoreActionsMenu extends PopupPanel {
     menu.add(statusButton);
 
     // Help
-    HTML helpButton = new HTML(Constants.FA_HELP + "Help");
+    HTML helpButton = new HTML(Constants.FA_HELP + "Help / About WMT");
     helpButton.setStyleName("wmt-PopupPanelItem");
     helpButton.setTitle(Constants.MODEL_HELP);
     helpButton.addClickHandler(new ModelActionPanelHelpHandler(data));

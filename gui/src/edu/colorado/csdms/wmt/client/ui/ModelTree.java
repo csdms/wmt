@@ -1,5 +1,25 @@
 /**
- * <License>
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 mcflugen
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package edu.colorado.csdms.wmt.client.ui;
 
@@ -115,8 +135,11 @@ public class ModelTree extends Tree {
     this.setComponent(componentId, target);
     target.setState(true);
 
-    // Ensure that the (class) component replaces the model component.
-    data.replaceModelComponent(data.getComponent(componentId));
+    // If this component is not aliased, ensure that the (class) component
+    // replaces the model component.
+    if (!isComponentPresent(componentId, true)) {
+      data.replaceModelComponent(data.getComponent(componentId));
+    }
 
     // Is this the driver? If so, display the component's parameters. Also
     // suggest a model name.
@@ -139,13 +162,13 @@ public class ModelTree extends Tree {
    */
   public void setComponent(String componentId, TreeItem target) {
 
-    // If this component already exists elsewhere in the ModelTree, set a link
-    // to it and exit.
-    if (isThisComponentADuplicate(componentId)) {
+    // If this component already exists elsewhere in the ModelTree, make an
+    // alias to it and exit.
+    if (isComponentPresent(componentId, true)) {
       GWT.log("This component is a duplicate!");
       ComponentCell cell = (ComponentCell) target.getWidget();
-      cell.isLinked(true);
-      cell.getNameCell().addStyleDependentName("linked");
+      cell.isAlias(true);
+      cell.getNameCell().addStyleDependentName("alias");
       return;
     }
 
@@ -169,8 +192,8 @@ public class ModelTree extends Tree {
         ComponentSelectionCommand cmd =
             new ComponentSelectionCommand(data, newCell, connectedId);
         cmd.updateComponentCell();
-        newCell.isLinked(true);
-        newCell.getNameCell().addStyleDependentName("linked");
+        newCell.isAlias(true);
+        newCell.getNameCell().addStyleDependentName("alias");
       }
     }
   }
@@ -221,33 +244,29 @@ public class ModelTree extends Tree {
   /**
    * Checks whether a given component is present in the ModelTree.
    * 
-   * @param componentId the id of component to check
+   * @param componentId the id of the component to check
    * @return true if the component is in the ModelTree
    */
   public Boolean isComponentPresent(String componentId) {
-    Boolean componentIsPresent = false;
-    if (componentId != null) {
-      Iterator<TreeItem> iter = this.treeItemIterator();
-      while (iter.hasNext() && !componentIsPresent) {
-        TreeItem treeItem = (TreeItem) iter.next();
-        ComponentCell cell = (ComponentCell) treeItem.getWidget();
-        if (cell.getComponentId() != null) {
-          componentIsPresent = cell.getComponentId().matches(componentId);
-        }
-      }
-    }
-    return componentIsPresent;
+    return isComponentPresent(componentId, false);
   }
 
   /**
-   * Checks whether the input component has appeared elsewhere in the ModelTree;
-   * returns true if a match is found.
+   * Checks whether a given component is present, optionally multiple times,
+   * in the ModelTree.
    * 
-   * @param componentId the id the component to check
+   * @param componentId the id of the component to check
+   * @param moreThanOnce true if checking whether present more than once
+   * @return true if the component is in the ModelTree
    */
-  public Boolean isThisComponentADuplicate(String componentId) {
+  public Boolean isComponentPresent(String componentId, Boolean moreThanOnce) {
 
-    GWT.log("Checking for duplicate component: " + componentId);
+    String msg = "Checking if this component is present";
+    if (moreThanOnce) {
+      msg += " more than once";
+    }
+    msg += ": ";
+    GWT.log(msg + componentId);
 
     Integer nMatches = 0;
     Iterator<TreeItem> iter = this.treeItemIterator();
@@ -256,14 +275,38 @@ public class ModelTree extends Tree {
       ComponentCell cell = (ComponentCell) treeItem.getWidget();
       if ((cell.getComponentId() != null)
           && cell.getComponentId().matches(componentId)) {
-        nMatches++;
-        // The first match is with the current ComponentCell.
-        if (nMatches > 1) {
+        if (!moreThanOnce) {
           return true;
+        } else {
+          nMatches++;
+          if (nMatches > 1) { // first match is with current ComponentCell
+            return true;
+          }
         }
       }
     }
     return false;
+  }
+
+  /**
+   * Returns the {@link ComponentCell} that is the alias of the input component.
+   * 
+   * @param componentId the id the component to check
+   */
+  public ComponentCell getAliasedComponent(String componentId) {
+
+    GWT.log("Getting aliased component: " + componentId);
+
+    Iterator<TreeItem> iter = this.treeItemIterator();
+    while (iter.hasNext()) {
+      TreeItem treeItem = (TreeItem) iter.next();
+      ComponentCell cell = (ComponentCell) treeItem.getWidget();
+      if ((cell.getComponentId() != null)
+          && cell.getComponentId().matches(componentId) && cell.isAlias()) {
+        return cell;
+      }
+    }
+    return null;
   }
 
   /**
