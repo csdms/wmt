@@ -1,9 +1,30 @@
 /**
- * <License>
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 mcflugen
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package edu.colorado.csdms.wmt.client.ui;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -22,7 +43,7 @@ public class ParameterTable extends FlexTable {
 
   public DataManager data;
   private String componentId; // the id of the displayed component
-  private ViewInputFilesPanel viewFilesPanel;
+  private ParameterActionPanel actionPanel;
 
   /**
    * Initializes a table of parameters for a single WMT model component. The
@@ -33,12 +54,7 @@ public class ParameterTable extends FlexTable {
   public ParameterTable(DataManager data) {
 
     this.data = data;
-    this.data.getPerspective().setParameterTable(this);
     this.setWidth("100%");
-
-    if (this.data.getSelectedComponent() != null) {
-      loadTable();
-    }
   }
 
   /**
@@ -50,16 +66,18 @@ public class ParameterTable extends FlexTable {
     infoMessage.setStyleName("wmt-ParameterTableMessage");
     this.setWidget(0, 0, infoMessage);
   }
-
+  
   /**
    * A worker that loads the ParameterTable with parameter values for the
-   * selected model component. Displays a {@link ViewInputFilesPanel} at the 
+   * selected model component. Displays a {@link ViewInputFilesPanel} at the
    * bottom of the table.
+   * 
+   * @param the id of the component whose parameters are to be displayed
    */
-  public void loadTable() {
+  public void loadTable(String componentId) {
 
     // The component whose parameters are to be displayed.
-    this.setComponentId(data.getSelectedComponent());
+    this.setComponentId(componentId);
 
     // Return if the selected component doesn't have parameters.
     if (data.getModelComponent(componentId).getParameters() == null) {
@@ -71,32 +89,35 @@ public class ParameterTable extends FlexTable {
     // Set the component name on the tab holding the ParameterTable.
     data.getPerspective().setParameterPanelTitle(componentId);
 
+    // Keep track of where we are in the table.
+    Integer tableRowIndex = 0;
+    
+    // Add the ParameterActionPanel. Align it with the ModelActionPanel.
+    actionPanel = new ParameterActionPanel(data, componentId);
+    actionPanel.getElement().getStyle().setMarginTop(-3.0, Unit.PX);
+    this.setWidget(tableRowIndex, 0, actionPanel);
+    tableRowIndex++;
+    
     // Build the parameter table.
     Integer nParameters =
         data.getModelComponent(componentId).getParameters().length();
-    Integer parameterIndex = 0;
     for (int i = 0; i < nParameters; i++) {
       ParameterJSO parameter =
           data.getModelComponent(componentId).getParameters().get(i);
-      this.setWidget(parameterIndex, 0, new DescriptionCell(parameter));
+      this.setWidget(tableRowIndex, 0, new DescriptionCell(parameter));
       if (parameter.getKey().matches("separator")) {
-        this.getFlexCellFormatter().setColSpan(parameterIndex, 0, 2);
-        this.getFlexCellFormatter().setStyleName(parameterIndex, 0,
+        this.getFlexCellFormatter().setColSpan(tableRowIndex, 0, 2);
+        this.getFlexCellFormatter().setStyleName(tableRowIndex, 0,
             "wmt-ParameterSeparator");
       } else {
-        this.setWidget(parameterIndex, 1, new ValueCell(parameter));
-        this.getFlexCellFormatter().setStyleName(parameterIndex, 0,
+        this.setWidget(tableRowIndex, 1, new ValueCell(parameter));
+        this.getFlexCellFormatter().setStyleName(tableRowIndex, 0,
             "wmt-ParameterDescription");
+        this.getFlexCellFormatter().setHorizontalAlignment(tableRowIndex, 1,
+            HasHorizontalAlignment.ALIGN_RIGHT);
       }
-      parameterIndex++;
+      tableRowIndex++;
     }
-
-    // Append links to view input files.
-    viewFilesPanel = new ViewInputFilesPanel(data, componentId);
-    this.setWidget(parameterIndex, 0, viewFilesPanel);
-    this.getFlexCellFormatter().setColSpan(parameterIndex, 0, 2);
-    this.getFlexCellFormatter().setHorizontalAlignment(parameterIndex, 0,
-        HasHorizontalAlignment.ALIGN_CENTER);
   }
 
   /**
@@ -119,17 +140,15 @@ public class ParameterTable extends FlexTable {
     if (!newValue.matches(previousValue)) {
       data.getModelComponent(componentId).getParameter(key).getValue()
           .setDefault(newValue);
-      data.modelIsSaved(false);
-      data.getPerspective().setModelPanelTitle();
+      data.updateModelSaveState(false);
     }
   }
 
   /**
    * Deletes the contents of the ParameterTable and resets the tab title to
-   * "Parameters". Unsets the selectedComponent in the DataManager.
+   * "Parameters".
    */
   public void clearTable() {
-    data.setSelectedComponent(null); // should also be in ControlCell#delete?
     this.setComponentId(null);
     data.getPerspective().setParameterPanelTitle(null);
     this.removeAllRows();

@@ -1,7 +1,5 @@
 import os
 import argparse
-import urlparse
-import urllib2
 import tarfile
 import subprocess
 import shutil

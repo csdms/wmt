@@ -1,16 +1,35 @@
 /**
- * <License>
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 mcflugen
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package edu.colorado.csdms.wmt.client.ui.widgets;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * A GWT composite widget that defines a label and a field (which can
@@ -22,7 +41,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class FieldPanel extends Composite {
 
   private Label fieldLabel;
-  private TextBox field;
+  private TextBox fieldBox;
 
   /**
    * Defines an empty FieldPanel.
@@ -58,21 +77,19 @@ public class FieldPanel extends Composite {
    */
   public FieldPanel(String text, Boolean secure) {
 
-    Grid paths = new Grid(1, 2);
-
     fieldLabel = new Label("Name:");
-    field = secure ? new PasswordTextBox() : new TextBox();
-    field.setText(text);
-    paths.setWidget(0, 0, fieldLabel);
-    paths.setWidget(0, 1, field);
+    fieldBox = secure ? new PasswordTextBox() : new TextBox();
+    fieldBox.setText(text);
 
     // Styles!
-    field.setWidth("15em");
-    fieldLabel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+    fieldBox.setStyleName("wmt-TextBoxen");
     fieldLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
-    VerticalPanel contents = new VerticalPanel();
-    contents.add(paths);
+    HorizontalPanel contents = new HorizontalPanel();
+    contents.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+    contents.setSpacing(5); // px
+    contents.add(fieldLabel);
+    contents.add(fieldBox);
 
     initWidget(contents);
   }
@@ -94,14 +111,14 @@ public class FieldPanel extends Composite {
   /**
    * Returns the text displayed in the FieldPanel.
    */
-  public String getField() {
-    return field.getText();
+  public TextBox getField() {
+    return this.fieldBox;
   }
 
   /**
    * Sets the text displayed in the FieldPanel.
    */
-  public void setField(String text) {
-    field.setText(text);
+  public void setField(TextBox box) {
+    this.fieldBox = box;
   }
 }

@@ -1,3 +1,26 @@
+/**
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 mcflugen
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package edu.colorado.csdms.wmt.client.data;
 
 import java.util.Vector;
@@ -27,6 +50,14 @@ public class ComponentJSO extends JavaScriptObject {
    */
   public final native String getId() /*-{
 		return this.id;
+  }-*/;
+
+  /**
+   * A JSNI method to access the "class" attribute of a WMT component model, a
+   * string.
+   */
+  public final native String getComponentClass() /*-{
+		return (typeof this["class"] != 'undefined') ? this["class"] : null;
   }-*/;
 
   /**
@@ -99,11 +130,6 @@ public class ComponentJSO extends JavaScriptObject {
     return n;
   }-*/;
 
-  @Deprecated
-  public final native JsArray<PortJSO> getPortsProvided() /*-{
-		return this.provides;
-  }-*/;
-
   /**
    * A JSNI method to access the "provides" attribute of a WMT component
    * model. This attribute is a JsArray of PortJSO objects. It's always
@@ -113,6 +139,11 @@ public class ComponentJSO extends JavaScriptObject {
 		return this.provides;
   }-*/;
   
+  @Deprecated
+  public final native JsArray<PortJSO> getPortsProvided() /*-{
+		return this.provides;
+  }-*/;
+
   /**
    * A convenience method that returns the number of CCA uses ports a
    * component has.
@@ -125,17 +156,17 @@ public class ComponentJSO extends JavaScriptObject {
     return n;
   }-*/;
 
-  @Deprecated
-  public final native JsArray<PortJSO> getPortsUsed() /*-{
-		return this.uses;
-  }-*/;
-
   /**
    * A JSNI method to access the "uses" attribute of a WMT component model.
    * This attribute is a JsArray of PortJSO objects. It's always present, but
    * it may be empty.
    */
   public final native JsArray<PortJSO> getUsesPorts() /*-{
+		return this.uses;
+  }-*/;
+
+  @Deprecated
+  public final native JsArray<PortJSO> getPortsUsed() /*-{
 		return this.uses;
   }-*/;
 

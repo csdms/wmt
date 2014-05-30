@@ -7,15 +7,22 @@ from ..render import render
 from ..validators import (not_too_long, not_too_short, not_bad_json,
                           valid_uuid, submission_exists, model_exists)
 from ..cca import rc_from_json
-from .. import run
 from ..utils.io import chunk_copy
 from ..config import logger, site
+from ..utils.ssh import launch_cmt_on_host
 
 import threading
 
 
 def launch_simulation(uuid, username, host, password):
-    resp = submissions.launch(uuid, username, host, password=password)
+    try:
+        #resp = submissions.launch(uuid, username, host, password=password)
+        resp = launch_cmt_on_host(uuid, host, username, password=password)
+    except Exception as error:
+        submissions.update(
+            uuid,
+            status='error',
+            message='unexpected error launching simulation on %s (%s)' % (host, error))
 
     if resp['status_code'] == 200:
         return
@@ -26,7 +33,7 @@ def launch_simulation(uuid, username, host, password):
         submissions.update(
             uuid,
             status='error',
-            message='unexpected error launching simulation on %s' % host)
+            message='unexpected error launching simulation on %s (%d: %s)' % (host, resp['status_code'], resp['stderr']))
 
 
 class Launch(object):
@@ -96,7 +103,8 @@ class Stage(object):
             submissions.stage(form.d.uuid)
         except Exception as error:
             import traceback
-            submissions.update(form.d.uuid, status='error', message=str(error))
+            submissions.update(form.d.uuid, status='error',
+                               message=traceback.format_exc())
             raise web.internalerror("Error staging simulation: %s" %
                                     traceback.format_exc())
 
@@ -109,7 +117,7 @@ class New(object):
     form = web.form.Form(
         web.form.Textbox('name',
                          not_too_short(3),
-                         not_too_long(20),
+                         not_too_long(512),
                          size=30, description='Name:'),
         web.form.Textbox('description',
                          size=30, description='Description:'),
@@ -133,6 +141,35 @@ class New(object):
         return json.dumps(uuid)
 
 
+class UiDelete(object):
+    form = web.form.Form(
+        #web.form.Textbox('uuid',
+        #                 valid_uuid,
+        #                 submission_exists(),
+        #                 size=80, description='Simulation ID:'),
+        web.form.Button('Delete')
+    )
+    def GET(self, uuid):
+        form = self.form()
+        #form.fill(uuid=uuid)
+        return render.confirm_delete(form)
+
+    def POST(self, uuid):
+        form = self.form()
+        #form.fill(uuid=uuid)
+        #if not form.validates():
+        #    return render.confirm_delete(form)
+
+        submissions.delete(uuid)
+        raise web.seeother('/run/show')
+
+
+class Delete(object):
+    def POST(self, uuid):
+        submissions.delete(uuid)
+        raise web.seeother('/run/show')
+
+
 class Update(object):
     form = web.form.Form(
         web.form.Textbox('uuid',
@@ -141,7 +178,7 @@ class Update(object):
                          size=80, description='Simulation id:'),
         web.form.Textbox('status',
                          not_too_short(3),
-                         not_too_long(20),
+                         not_too_long(512),
                          size=80, description='status:'),
         web.form.Textbox('message',
                          not_too_long(10240),
@@ -192,6 +229,36 @@ class Upload(object):
             'url': 'http://csdms.colorado.edu/pub/users/wmt/' + os.path.basename(path_to_dest)})
 
 
+class UploadUuid(object):
+    def GET(self):
+        return render.uploadform("uuid")
+
+    def POST(self, uuid):
+        #user_data = web.input(file={}, uuid=None, filename=None)
+        user_data = web.input(file={})
+
+        #if user_data['filename'] is None:
+        #    filename = user_data['file'].filename
+        #else:
+        #    filename = user_data['filename']
+        filename = user_data['file'].filename
+
+        #if user_data['uuid'] is None:
+        #    path_to_dest = os.path.join(_UPLOAD_DIR, os.path.basename(filename))
+        #else:
+        #    path_to_dest = os.path.join(_UPLOAD_DIR, user_data['uuid'], filename)
+        #path_to_dest = os.path.join(_UPLOAD_DIR, uuid, filename)
+        path_to_dest = os.path.join(_UPLOAD_DIR, filename)
+
+        with open(path_to_dest, 'w') as dest_fp:
+            checksum = chunk_copy(user_data['file'].file, dest_fp,
+                                  chunk_size=_CHUNK_SIZE)
+
+        return json.dumps({
+            'checksum': checksum.hexdigest(),
+            'url': 'http://csdms.colorado.edu/pub/users/wmt/' + os.path.basename(path_to_dest)})
+
+
 class Download(object):
     def GET(self, uuid, filename):
         web.header("Content-Disposition", "attachment; filename=%s" % filename)
@@ -221,7 +288,7 @@ class DownloadBundle(object):
                          submission_exists(),
                          size=80, description='Simulation id:'),
         web.form.Textbox('filename',
-                         not_too_long(256),
+                         not_too_long(512),
                          size=80, description='filename:'),
         web.form.Button('Download')
     )

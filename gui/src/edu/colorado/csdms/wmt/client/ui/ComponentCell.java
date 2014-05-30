@@ -1,85 +1,189 @@
 /**
- * <License>
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 mcflugen
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package edu.colorado.csdms.wmt.client.ui;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
+import com.google.gwt.user.client.ui.TreeItem;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
 
 /**
- * Displays a model component in the ModelGrid.
+ * A container for displaying a model component in the {@link ModelTree}.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class ComponentCell extends MenuBar {
-
-  private static String[] ACTIONS = {"Show parameters", "Get info", "Delete"};
-  private static Integer TRIM = 12; // the number of characters to display
+public class ComponentCell extends VerticalPanel implements ClickHandler {
 
   private DataManager data;
-  private Integer iRow = 0;
-  private Integer iCol = 1;
-  private MenuBar componentMenu;
-  private MenuItem componentItem;
-  private MenuBar actionMenu;
+  private String portId;
+  private String componentId;
+  private HTML nameCell;
+  private HTML menuCell;
+  private PopupPanel componentMenu;
+  private TreeItem enclosingTreeItem;
+  private Boolean isAlias = false;
 
   /**
-   * Creates a new {@link ComponentCell}.
+   * Creates a new {@link ComponentCell} displaying the text "driver".
    * 
-   * @param dat the DataManager object for the WMT session
-   * @param displayName the text to display in the cell
-   * @param iRow the row index of the component
-   * @param iCol the column index of the component
+   * @param data the DataManager object for the WMT session
    */
-  public ComponentCell(DataManager data, String displayName, Integer iRow,
-      Integer iCol) {
+  public ComponentCell(DataManager data) {
+    this(data, Constants.DRIVER);
+  }
+
+  /**
+   * Creates a new {@link ComponentCell} displaying a
+   * {@link ComponentSelectionMenu} with a list of available components.
+   * 
+   * @param data the DataManager object for the WMT session
+   * @param portId the id of the corresponding port for the cell
+   */
+  public ComponentCell(DataManager data, String portId) {
 
     this.data = data;
-    if ((iRow != null) && (iCol != null)) {
-      this.iRow = iRow;
-      this.iCol = iCol;
+    this.portId = portId;
+    this.setVerticalAlignment(ALIGN_MIDDLE); // must set before adding children
+    this.setStyleName("wmt-ComponentCell");
+    this.addDomHandler(this, ClickEvent.getType());
+    
+    // The ComponentCell consists of a nameCell and a menuCell in a Grid.
+    nameCell = new HTML(trimName(portId));
+    nameCell.setStyleName("wmt-ComponentCell-NameCell");
+    menuCell = new HTML(Constants.FA_SELECT);
+    menuCell.setStyleName("wmt-ComponentCell-MenuCell");
+    Grid grid = new Grid(1, 2); // one row, two cols
+    this.add(grid);
+    grid.setWidget(0, 0, nameCell);
+    grid.setWidget(0, 1, menuCell);
+
+    // The componentMenu is displayed on a click of the ComponentCell.
+    componentMenu = new ComponentSelectionMenu(this.data, this);
+
+    String tooltip = "Click to select a component";
+    if (portId.matches(Constants.DRIVER)) {
+      tooltip += " to be the driver for the model.";
+    } else {
+      tooltip += " to fill this \"" + portId + "\" port.";
     }
-
-    // Show this menu when selecting a component.
-    componentMenu = new MenuBar(true); // menu items stacked vertically
-    updateComponents();
-
-    // Show this menu after a component has been selected.
-    actionMenu = new MenuBar(true);
-    updateActions();
-
-    componentItem = new MenuItem(trimName(displayName), componentMenu);
-    componentItem.setStyleName("mwmb-componentItem");
-    this.addItem(componentItem);
+    this.setTitle(tooltip);
   }
 
   /**
-   * Loads the names of the available components into the {@link ComponentCell}
-   * menu.
+   * Displays the componentMenu directly beneath the ComponentCell.
    */
-  public void updateComponents() {
-    componentMenu.clearItems();
-    for (int i = 0; i < data.getComponents().size(); i++) {
-      componentMenu.addItem(data.getComponent(i).getName(),
-          new ComponentSelectionCommand(data.getComponent(i).getId()));
-    }
+  @Override
+  public void onClick(ClickEvent event) {
+    componentMenu.setPopupPositionAndShow(new PositionCallback() {
+      final Integer x = ComponentCell.this.getElement().getAbsoluteLeft();
+      final Integer y = ComponentCell.this.getElement().getAbsoluteBottom();
+      @Override
+      public void setPosition(int offsetWidth, int offsetHeight) {
+        componentMenu.setPopupPosition(x, y);
+      }
+    });
   }
-  
+
+  public String getPortId() {
+    return portId;
+  }
+
+  public void setPortId(String portId) {
+    this.portId = portId;
+  }
+
+  public String getComponentId() {
+    return componentId;
+  }
+
+  public void setComponentId(String componentId) {
+    this.componentId = componentId;
+  }
+
+  public HTML getNameCell() {
+    return nameCell;
+  }
+
+  public void setNameCell(HTML nameCell) {
+    this.nameCell = nameCell;
+  }
+
+  public HTML getMenuCell() {
+    return menuCell;
+  }
+
+  public void setMenuCell(HTML menuCell) {
+    this.menuCell = menuCell;
+  }
+
+  public PopupPanel getComponentMenu() {
+    return componentMenu;
+  }
+
+  public void setComponentMenu(PopupPanel componentMenu) {
+    this.componentMenu = componentMenu;
+  }
+
+  public TreeItem getEnclosingTreeItem() {
+    return enclosingTreeItem;
+  }
+
+  public void setEnclosingTreeItem(TreeItem enclosingTreeItem) {
+    this.enclosingTreeItem = enclosingTreeItem;
+  }
+
   /**
-   * Loads the names of the actions that can be performed on a component into
-   * the {@link ComponentCell} menu.
+   * Returns true if this {@link ComponentCell} contains an alias of another
+   * component.
    */
-  public void updateActions() {
-    actionMenu.clearItems();
-    for (int i = 0; i < ACTIONS.length; i++) {
-      actionMenu.addItem(ACTIONS[i], new ComponentActionCommand(ACTIONS[i]));
+  public Boolean isAlias() {
+    return isAlias;
+  }
+
+  /**
+   * Stores the "aliased" state of this {@link ComponentCell}; set to true if
+   * this cell contains an alias of another component in the ModelTree.
+   * 
+   * @param isAlias true if this cell is an alias
+   */
+  public void isAlias(Boolean isAlias) {
+    this.isAlias = isAlias;
+    if (this.isAlias && (this.getTitle() != null)) {
+      String tooltip =
+          " This component is aliased from another instance of "
+              + data.getModelComponent(this.componentId).getName() + ".";
+      this.setTitle(this.getTitle() + tooltip);
     }
   }
-  
+
   /**
    * A worker that trims the name displayed in the {@link ComponentCell} if it's
    * too long.
@@ -87,58 +191,13 @@ public class ComponentCell extends MenuBar {
    * @param name the name to display
    * @return the trimmed name
    */
-  private String trimName(String name) {
+  public String trimName(String name) {
     String trimmedName;
-    if (name.length() > TRIM) {
-      trimmedName = name.substring(0, TRIM) + "\u2026";
+    if (name.length() > Constants.TRIM) {
+      trimmedName = name.substring(0, Constants.TRIM) + Constants.ELLIPSIS;
     } else {
       trimmedName = name;
     }
     return trimmedName;
   }
-  
-  /**
-   * Replaces the generic display name with the name of the selected component
-   * from the menu. If the name of the component is too long, it's trimmed to
-   * fit in the Grid cell. Applies CSS rules to the driverCell.
-   */
-  public class ComponentSelectionCommand implements Command {
-
-    private String componentId;
-    private String displayName;
-
-    public ComponentSelectionCommand(String componentId) {
-      this.componentId = componentId;
-      String componentName = data.getComponent(componentId).getName();
-      this.displayName = trimName(componentName);
-    }
-
-    @Override
-    public void execute() {
-      componentItem.setText(displayName);
-      componentItem.addStyleDependentName("connected");
-      componentItem.setSubMenu(actionMenu);
-      data.getPerspective().getModelGrid().isDriverConnected(true);
-      data.getPerspective().getModelGrid()
-          .addUsesPorts(componentId, iRow, iCol);
-    }
-  }
-
-  /**
-   * Performs the actions listed in the actionMenu.
-   */
-  public class ComponentActionCommand implements Command {
-
-    private String action;
-
-    public ComponentActionCommand(String action) {
-      this.action = action;
-    }
-
-    @Override
-    public void execute() {
-      GWT.log("Action performed: " + action);
-    }
-  }
-
 }

@@ -8,10 +8,6 @@ os.environ.setdefault('WMT_PREFIX',
     os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 )
 
-prefix = '/home/faculty/huttone/Development/wmt/server'
-if prefix not in sys.path:
-    sys.path.insert(0, prefix)
-
 from wmt import URLS
 
 from wsgilog import WsgiLog

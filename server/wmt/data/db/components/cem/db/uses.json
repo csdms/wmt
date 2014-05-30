@@ -1,9 +1,0 @@
-[
-  {
-    "id":"river",
-    "required":false
-  },
-  { "id":"waves",
-    "required":false
-  }
-]

@@ -15,8 +15,21 @@ URLS = (
     '/help/(.*)', 'wmt.controllers.index.Help',
     '/show', 'wmt.controllers.actions.Show',
 
-    '/login', 'wmt.controllers.account.Login',
-    '/logout', 'wmt.controllers.account.Logout',
+    '/account/login', 'wmt.controllers.account.Login',
+    '/account/new', 'wmt.controllers.account.New',
+    '/account/logout', 'wmt.controllers.account.Logout',
+    '/account/username', 'wmt.controllers.account.Username',
+    '/account/reset', 'wmt.controllers.account.ResetPassword',
+
+    '/tag/new', 'wmt.controllers.tag.New',
+    '/tag/delete/(\d+)', 'wmt.controllers.tag.Delete',
+    '/tag/get/(\d+)', 'wmt.controllers.tag.Get',
+    '/tag/list', 'wmt.controllers.tag.List',
+
+    '/tag/model/add', 'wmt.controllers.tag.TagModel',
+    '/tag/model/remove', 'wmt.controllers.tag.UntagModel',
+    '/tag/model/query', 'wmt.controllers.tag.Query',
+    '/tag/model/(\d+)', 'wmt.controllers.tag.ModelTags',
 
     '/components/list', 'wmt.controllers.components.List',
     '/components/dump', 'wmt.controllers.components.Dump',
@@ -44,17 +57,21 @@ URLS = (
     '/models/submit', 'wmt.controllers.actions.Submit',
 
     '/run/new', 'wmt.controllers.run.New',
+    '/run/delete/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Delete',
     '/run/show', 'wmt.controllers.run.Show',
     '/run/status', 'wmt.controllers.run.Status',
     '/run/stage', 'wmt.controllers.run.Stage',
     '/run/launch', 'wmt.controllers.run.Launch',
     '/run/update', 'wmt.controllers.run.Update',
     '/run/upload', 'wmt.controllers.run.Upload',
+    '/run/upload/(%s)' % _UUID_REGEX, 'wmt.controllers.run.UploadUuid',
     '/run/download/(%s)/(.+)' % _UUID_REGEX, 'wmt.controllers.run.Download',
     '/run/download', 'wmt.controllers.run.DownloadBundle',
     '/run/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Get',
     '/run/(%s)/status' % _UUID_REGEX, 'wmt.controllers.run.Status',
     '/run/', 'wmt.controllers.run.GetAll',
+
+    '/run/delete/ui/(%s)' % _UUID_REGEX, 'wmt.controllers.run.UiDelete',
 
     '/hosts/new', 'wmt.controllers.hosts.New',
     '/hosts/view/(\d+)', 'wmt.controllers.hosts.View',

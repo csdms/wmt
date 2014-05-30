@@ -1,21 +1,128 @@
 $def with (submissions)
 
-<h1>Status</h1>
+<h2 class="sub-header">Simulation Status</h2>
 
-<table id="hor-minimalist-a">
-  <tr>
-    <th scope="col">UUID</th>
-    <th scope="col">Name</th>
-    <th scope="col">Updated</th>
-    <th scope="col">Status</th>
-    <th scope="col">Message</th>
-  </tr>
-  $for submission in submissions:
-  <tr>
-    <td>$submission.uuid</td>
-    <td>$submission.name</td>
-    <td>$submission.updated</td>
-    <td>$submission.status</td>
-    <td>$:submission.message</td>
-  </tr>
-</table>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <th scope="col"></th>
+      <th scope="col">Model</th>
+      <th scope="col">Owner</th>
+      <th width="150px" scope="col">Date</th>
+      <th scope="col">Message</th>
+      <!--th width="50px" scope="col"></th>
+      <th width="50px" scope="col"></th>
+      <th width="50px" scope="col"></th-->
+      <!--th scope="col"></th-->
+      <th width="150px" scope="col"></th>
+    </thead>
+    <tbody>
+    $for submission in submissions:
+      <tr>
+        <!--td>
+          <div class="checkbox">
+            <input type="checkbox" value="${submission}.uuid">
+          </div>
+        </td-->
+        <td>
+          $if submission.status == 'error':
+            <!--i class="fa fa-exclamation text-danger"></i-->
+            <span class="glyphicon glyphicon-thumbs-down fa-lg"></span>
+          $elif submission.status == 'success':
+            <!--i class="fa fa-check-circle-o"></i-->
+            <span class="glyphicon glyphicon-thumbs-up fa-lg"></span>
+          $else:
+            <i class="fa fa-spinner fa-spin fa-lg"></i>
+        </td>
+        <!--td>
+          <div class="btn-group button-group-xs">
+          $if submission.status == 'error':
+            <button type="button" class="btn"><i class="fa fa-exclamation text-danger"></i></button>
+          $elif submission.status == 'success':
+            <button type="button" class="btn"><i class="fa fa-check-circle-o"></i></button>
+          $else:
+            <button type="button" class="btn"><i class="fa fa-spinner fa-spin"></i></button>
+          <button class="btn"><a href="http://csdms.colorado.edu/pub/users/wmt/${submission.uuid}.tar.gz"><i class="fa fa-download"></i></a></button-->
+
+          <!--button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <span class="fa fa-caret-down"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button-->
+
+          <!--ul class="dropdown-menu" role="menu">
+            <li><a href="$submission.uuid"><i class="fa fa-info fa-fw"></i> Info</a></li>
+            <li><button class="btn btn-primary" data-togle="modal" data-target="#myModal"><i class="fa fa-trash-o fa-fw"></i> Delete</button></li>
+            <li><a href="http://csdms.colorado.edu/pub/users/wmt/${submission.uuid}.tar.gz"><i class="fa fa-download fa-fw"></i> Download</a></li>
+          </ul-->
+        <!--/div>
+
+        </td-->
+
+        <td>$submission.name</td>
+        <td>$submission.owner[:5]...</td>
+        <td>$submission.created[:16]</td>
+        <td>$:submission.message</td>
+        <!--td><i class="fa fa-trash-o fa-fw"></i></td-->
+        <!--td>
+            <button class="btn btn-default">
+            <a href="$PREFIX/run/${submission.uuid}"><span class="glyphicon glyphicon-info-sign fa-lg"></span></a>
+            </button>
+        </td-->
+        <!--td>
+            $if submission.status == 'success':
+              <button class="btn btn-default">
+            $else:
+              <button class="btn btn-default" disabled="disabled">
+
+            <a href="http://csdms.colorado.edu/pub/users/wmt/${submission.uuid}.tar.gz"><span class="glyphicon glyphicon-cloud-download fa-lg"></span></a>
+
+            </button>
+        </td-->
+        <!--td>
+          <form action="delete/${submission.uuid}" method="post">
+            <button type="submit" class="btn btn-default">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </form>
+        </td-->
+        <td>
+          <div class="btn-group button-group-xs">
+            <button class="btn btn-default">
+            <a href="$PREFIX/run/${submission.uuid}"><span class="glyphicon glyphicon-info-sign fa-lg"></span></a>
+            </button>
+            $if submission.status == 'success':
+              <button class="btn btn-default">
+            $else:
+              <button class="btn btn-default" disabled="disabled">
+
+            <a href="http://csdms.colorado.edu/pub/users/wmt/${submission.uuid}.tar.gz"><span class="glyphicon glyphicon-cloud-download fa-lg"></span></a>
+
+            </button>
+            <button type="submit" class="btn btn-default">
+              <a href="$PREFIX/run/delete/ui/${submission.uuid}"><span class="glyphicon glyphicon-trash fa-lg"></span></a>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+       ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

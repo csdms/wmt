@@ -1,9 +1,0 @@
-{
-  "id":"cem",
-  "name":"CEM",
-  "summary": "The Coastline Evolution Model addresses predominately sandy, wave-dominated coastlines on time-scales ranging from years to millenia and on spatial scales ranging from kilometers to hundreds of kilometers.",
-  "url":"http://csdms.colorado.edu/wiki/Model_help:CEM",
-  "author": "A. Brad Murray",
-  "version": "0.1.1",
-  "doi": "10.1594/IEDA/100100"
-}

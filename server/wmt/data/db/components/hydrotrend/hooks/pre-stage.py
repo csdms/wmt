@@ -1,3 +1,0 @@
-
-def execute(env):
-    pass

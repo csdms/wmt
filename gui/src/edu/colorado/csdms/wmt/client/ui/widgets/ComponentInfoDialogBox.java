@@ -1,9 +1,28 @@
 /**
- * <License>
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 mcflugen
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package edu.colorado.csdms.wmt.client.ui.widgets;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -11,7 +30,6 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
@@ -25,8 +43,7 @@ import edu.colorado.csdms.wmt.client.ui.handler.DialogCancelHandler;
  */
 public class ComponentInfoDialogBox extends DialogBox {
 
-  private static String[] LABELS = {
-      "id", "summary", "url", "author", "email", "version", "license", "doi"};
+  private static String[] LABELS = {"summary", "url", "author"};
   private Grid grid;
   private ClosePanel closePanel;
 
@@ -38,24 +55,17 @@ public class ComponentInfoDialogBox extends DialogBox {
 
     this.setAutoHideEnabled(false);
     this.setModal(false);
-
-    grid = new Grid(LABELS.length, 2);
+    this.setStyleName("wmt-DialogBox");
+        
+    grid = new Grid(LABELS.length, 1);
     grid.setCellPadding(5); // px
 
-    for (int i = 0; i < LABELS.length; i++) {
-      Label label = new Label(LABELS[i] + ":");
-      label.getElement().getStyle().setMarginLeft(2, Unit.EM);
-      grid.setWidget(i, 0, label);
-      grid.getCellFormatter().setHorizontalAlignment(i, 0,
-          HasHorizontalAlignment.ALIGN_RIGHT);
-    }
-
+    closePanel = new ClosePanel();
+    
     VerticalPanel contents = new VerticalPanel();
     contents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+    contents.setWidth("35em");
     contents.add(grid);
-    contents.setWidth("40em");
-
-    closePanel = new ClosePanel();
     contents.add(closePanel);
 
     this.setWidget(contents);
@@ -74,25 +84,29 @@ public class ComponentInfoDialogBox extends DialogBox {
    */
   public void update(final ComponentJSO componentJso) {
 
-    this.setText(componentJso.getName());
+    String title = componentJso.getName();
+    if (componentJso.getVersion() != null) {
+      title += " v" + componentJso.getVersion();
+    }
+    if (componentJso.getDoi() != null) {
+      title += " (" + componentJso.getDoi() + ")";
+    }
+    this.setText(title);
 
-    String url =
-        "<a href='" + componentJso.getURL() + "'>" + componentJso.getURL()
-            + "</a>";
-    String[] info =
-        {
-            componentJso.getId(), componentJso.getSummary(), url,
-            componentJso.getAuthor(), componentJso.getEmail(),
-            componentJso.getVersion(), componentJso.getLicense(),
-            componentJso.getDoi()};
+    String url = "<a href='" + componentJso.getURL() + "'>" 
+        + componentJso.getURL() + "</a>";
+    String author = (componentJso.getAuthor() == null) 
+        ? " " : componentJso.getAuthor();
+    String[] info = {componentJso.getSummary(), url, 
+        "Model developer: " + author};
 
     HTML urlHtml = null;
     for (int i = 0; i < LABELS.length; i++) {
       if (url.equals(info[i])) {
         urlHtml = new HTML(info[i]);
-        grid.setWidget(i, 1, urlHtml);
+        grid.setWidget(i, 0, urlHtml);
       } else {
-        grid.setWidget(i, 1, new HTML(info[i]));
+        grid.setWidget(i, 0, new HTML(info[i]));
       }
     }
 

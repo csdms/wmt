@@ -1,9 +1,0 @@
-{
-  "id":"child",
-  "name":"CHILD",
-  "summary": "Computes the time evolution of a topographic surface z(x,y,t) by fluvial and hillslope erosion and sediment transport.",
-  "url":"http://csdms.colorado.edu/wiki/Model_help:CHILD",
-  "author": "Greg Tucker",
-  "version": "2010.07.06",
-  "doi": "10.1594/IEDA/100102"
-}

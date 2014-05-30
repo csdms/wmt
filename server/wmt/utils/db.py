@@ -42,11 +42,92 @@ def _load_table(name, db='.'):
     return table
 
 
+_EMPTY_PRINT_SECTION = [
+    {
+        "key":"separator",
+        "name":"Output",
+        "description":"Output",
+        "value":{
+            "type":"string",
+            "default":""
+        }
+    },
+    {
+        "key":"output_interval",
+        "name":"Output interval",
+        "description":"Interval between output files",
+        "value":{
+            "type":"float",
+            "default":1.0,
+            "range":{
+                "min":0,
+                "max":1e6
+            },
+        "units":"d"
+        }
+    },
+    {
+        "key":"output_format",
+        "name":"Output format",
+        "description":"File format for output files",
+        "value":{
+            "type":"choice",
+            "default":"netcdf",
+            "choices":[
+                "netcdf",
+                "vtk"
+            ]
+        }
+    }
+]
+
+_PRINT_ITEM_STRING = """
+{
+    "key":"${standard_name}",
+    "name":"Output ${standard_name}",
+    "description":"Output file for ${standard_name}",
+    "value":{
+        "type":"choice",
+        "default":"off",
+        "choices":[
+            "off",
+            "${standard_name}"
+        ]
+    }
+}
+"""
+
+
+def _print_item_as_dict(name):
+    import json
+    from string import Template
+
+    s = Template(_PRINT_ITEM_STRING)
+    return json.loads(s.substitute(standard_name=name))
+
+
+def _construct_print_section_from_provides(path_to_db):
+    import copy
+
+    try:
+        names = _load_table('provides', db=path_to_db)[0]['exchange_items']
+    except (KeyError, IndexError):
+        return []
+    else:
+        section = copy.deepcopy(_EMPTY_PRINT_SECTION)
+        for name in names:
+            section.append(_print_item_as_dict(name))
+    return section
+
+
 def _construct_component_from_db(path_to_db):
     desc = _load_table('info', db=path_to_db)
 
     for table in ['parameters', 'uses', 'provides', 'files', 'argv']:
         desc[table] = _load_table(table, db=path_to_db)
+
+    print_section = _construct_print_section_from_provides(path_to_db)
+    desc['parameters'].extend(print_section)
 
     return desc
 

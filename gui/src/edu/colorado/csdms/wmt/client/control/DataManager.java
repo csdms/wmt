@@ -1,33 +1,62 @@
 /**
- * <License>
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 mcflugen
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package edu.colorado.csdms.wmt.client.control;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeMap;
 
+import com.google.gwt.dom.client.Style.Cursor;
+
+import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.data.ComponentJSO;
+import edu.colorado.csdms.wmt.client.data.LabelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
-import edu.colorado.csdms.wmt.client.ui.ComponentList;
+import edu.colorado.csdms.wmt.client.security.Security;
 import edu.colorado.csdms.wmt.client.ui.ModelTree;
 import edu.colorado.csdms.wmt.client.ui.Perspective;
 
 /**
  * A class for storing and sharing data, as well as the state of UI elements,
- * within WMT.
+ * within WMT. This is the main controller for the application.
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class DataManager {
-
+  
+  public static String VERSION = "2014-05-19";
+  
   private Boolean developmentMode;
+  private Boolean apiDevelopmentMode;
+  
+  public Constants constants;
 
+  // Get the state of UI elements through the Perspective. 
   private Perspective perspective;
-  private ModelTree modelTree;
 
   private List<ComponentJSO> components; // "class" components
   private List<ComponentJSO> modelComponents; // "instance" components
@@ -39,24 +68,28 @@ public class DataManager {
   private String modelString; // stringified JSON
   
   private String simulationId; // the uuid of a submitted run
-  private String hostname;
-  private String username;
-  private String password;
   
   // Experiment with public members, for convenience.
+  public Security security;
   public List<String> componentIdList;
+  public Integer nComponents = 0;
+  public HashMap<String, Integer> retryComponentLoad;
   public List<Integer> modelIdList;
   public List<String> modelNameList;
+  public TreeMap<String, LabelJSO> modelLabels; // maintains sort
   public Integer saveAttempts = 0;
 
   /**
    * Initializes the DataManager object used in a WMT session.
    */
   public DataManager() {
+    security = new Security();
     componentIdList = new ArrayList<String>();
+    retryComponentLoad = new HashMap<String, Integer>();
     components = new ArrayList<ComponentJSO>();
     modelComponents = new ArrayList<ComponentJSO>();
     modelIdList = new ArrayList<Integer>();
+    modelLabels = new TreeMap<String, LabelJSO>();
     modelNameList = new ArrayList<String>();
   }
 
@@ -78,20 +111,48 @@ public class DataManager {
   }
 
   /**
+   * Returns true if we're using the API development mode.
+   */
+  public Boolean isApiDevelopmentMode() {
+    return apiDevelopmentMode;
+  }
+
+  /**
+   * Stores the API development mode: true if it's being used.
+   * 
+   * @param apiDevelopmentMode
+   */
+  public void isApiDevelopmentMode(Boolean apiDevelopmentMode) {
+    this.apiDevelopmentMode = apiDevelopmentMode;
+  }
+
+  /**
+   * Shows the "wait" cursor.
+   */
+  public void showWaitCursor() {
+    perspective.getElement().getStyle().setCursor(Cursor.WAIT);
+  }
+  
+  /**
+   * Shows the default cursor.
+   */
+  public void showDefaultCursor() {
+    perspective.getElement().getStyle().setCursor(Cursor.DEFAULT);
+  }
+  
+  /**
    * A convenience method that returns the prefix (a String) to be displayed
    * before the name of the tab title in the WMT interface. Currently a Font
    * Awesome icon.
    * 
-   * @param tabName the name of the tab: "model", "parameter" or "component"
+   * @param tabName the name of the tab: "model" or "parameter"
    */
   public String tabPrefix(String tabName) {
     String prefix = "";
     if (tabName.matches("model")) {
-      prefix = "<i class='fa fa-globe'></i> ";
+      prefix = Constants.FA_COGS;
     } else if (tabName.matches("parameter")) {
-      prefix = "<i class='fa fa-wrench'></i> ";
-    } else if (tabName.matches("component")) {
-      prefix = "<i class='fa fa-cogs'></i> ";
+      prefix = Constants.FA_WRENCH;
     }
     return prefix;
   }
@@ -140,33 +201,12 @@ public class DataManager {
   }
 
   /**
-   * A convenience method that adds a component to the ArrayList of
-   * components.
-   * <p>
-   * Once all the components have been pulled from the server, sort them
-   * alphabetically and initialize the {@link ComponentList}.
+   * A convenience method that adds a component to the ArrayList of components.
    * 
    * @param component the component to add, a ComponentJSO object
    */
   public void addComponent(ComponentJSO component) {
     this.components.add(component);
-    if (this.components.size() == this.componentIdList.size()) {
-      sortComponents();
-      perspective.initializeModel();
-    }
-  }
-
-  /**
-   * Performs an in-place sort of the ArrayList of components using a
-   * {@link Comparator}.
-   */
-  public void sortComponents() {
-    Collections.sort(components, new Comparator<ComponentJSO>() {
-      @Override
-      public int compare(ComponentJSO o1, ComponentJSO o2) {
-        return o1.getName().compareTo(o2.getName());
-      }
-    });
   }
 
   /**
@@ -331,6 +371,16 @@ public class DataManager {
   }
 
   /**
+   * A helper method that updates the current model's save state and title.
+   * 
+   * @param state true if saved
+   */
+  public void updateModelSaveState(Boolean state) {
+    modelIsSaved(state);
+    perspective.setModelPanelTitle();
+  }
+  
+  /**
    * Gets the stringified model JSON created by {@link #serialize()}.
    */
   public String getModelString() {
@@ -360,72 +410,6 @@ public class DataManager {
    */
   public void setSimulationId(String simulationId) {
     this.simulationId = simulationId;
-  }
-
-  /**
-   * Returns the hostname of the machine where the user wants the model to be
-   * run.
-   */
-  public String getHostname() {
-    return hostname;
-  }
-
-  /**
-   * Stores the hostname of the machine where the user wants the model to be
-   * run.
-   * 
-   * @param hostname
-   */
-  public void setHostname(String hostname) {
-    this.hostname = hostname;
-  }
-
-  /**
-   * Returns the user's username for the host on which the model is to be run.
-   */
-  public String getUsername() {
-    return username;
-  }
-
-  /**
-   * Stores the user's username for the host on which the model is to be run.
-   * 
-   * @param username
-   */
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  /**
-   * Returns the user's password for the host on which the model is to be run.
-   */
-  public String getPassword() {
-    return password;
-  }
-
-  /**
-   * Stores the user's password for the host on which the model is to be run.
-   * 
-   * @param password
-   */
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  /**
-   * Returns a reference to the {@link ModelTree} used in a WMT session.
-   */
-  public ModelTree getModelTree() {
-    return modelTree;
-  }
-
-  /**
-   * Stores a reference to the {@link ModelTree} used in a WMT session.
-   * 
-   * @param modelTree the ModelTree instance
-   */
-  public void setModelTree(ModelTree modelTree) {
-    this.modelTree = modelTree;
   }
 
   /**
@@ -472,13 +456,5 @@ public class DataManager {
 
     ModelSerializer serializer = new ModelSerializer(this);
     serializer.deserialize();
-
-    // Locate the driver of the model and display its parameters.
-    for (int i = 0; i < model.nComponents(); i++) {
-      if (model.getComponents().get(0).isDriver()) {
-        setSelectedComponent(model.getComponents().get(0).getId());
-        getPerspective().getParameterTable().loadTable();
-      }
-    }
   }
 }

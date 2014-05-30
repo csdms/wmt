@@ -1,17 +1,21 @@
 import os
 
 
-class Error(object):
+class Error(Exception):
     pass
 
 
-class FileNotFoundError(object):
-    def __init__(self, filename):
+class FileNotFoundError(Error):
+    def __init__(self, filename, paths):
         self._filename = filename
+        self._paths = paths
 
     def __str__(self):
-        return '%s: file not found' % self._filename
-
+        message = [
+            '%s: file not found' % self._filename,
+            'search paths:',
+        ] + self._paths
+        return os.linesep.join(message)
 
 def find_file(filename, paths=['.', ]):
     for path in paths:
@@ -27,7 +31,7 @@ def find_file_in_search_path(filename, envvar):
     if found:
         return found
     else:
-        raise FileNotFoundError(filename)
+        raise FileNotFoundError(filename, paths)
 
 
 def find_simulation_input_file(filename):
