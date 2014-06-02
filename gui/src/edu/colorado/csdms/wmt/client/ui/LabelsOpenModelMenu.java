@@ -102,10 +102,17 @@ public class LabelsOpenModelMenu extends PopupPanel {
         labelBox.addStyleDependentName("public");
       }
       labelBox.addClickHandler(new LabelSelectionHandler(data, entry));
-      labelPanel.add(labelBox);
+
+      // Force the "public" and username labels to the top, in either order.
+      if (entry.getKey().equals("public")
+          || entry.getKey().equals(data.security.getWmtUsername())) {
+        labelPanel.insert(labelBox, 0);
+      } else {
+        labelPanel.add(labelBox);
+      }
     }
 
-    // Rebuild the list of available models in the droplist.    
+    // Rebuild the list of available models in the droplist.
     if (rebuildDroplist) {
       rebuildDroplist();
     }
