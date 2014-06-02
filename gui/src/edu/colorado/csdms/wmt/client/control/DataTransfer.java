@@ -1269,6 +1269,10 @@ public class DataTransfer {
       LabelQueryJSO jso = parse(rtxt);
       for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
         for (int i = 0; i < jso.getIds().length(); i++) {
+
+          GWT.log("Entry : " + entry.getValue().getId());
+          GWT.log("JSO : " + jso.getIds().get(i));
+          
           if (entry.getValue().getId() == jso.getIds().get(i)) {
             entry.getValue().isSelected(true);
           }

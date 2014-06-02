@@ -94,4 +94,11 @@ public class LabelQueryJSOTest extends GWTTestCase {
   public void testGetIds() {
     assertEquals(ids, jso.getIds());
   }
+  
+  // Test whether a single id can be accessed.
+  @Test
+  public void testGetSingleId() {
+    int index = 0;
+    assertEquals(ids.get(index), jso.getIds().get(index));
+  }
 }
