@@ -16,6 +16,16 @@
   },
   {
     "owner":"",
+    "tag":"public",
+    "id":3
+  },
+  {
+    "owner":"foo@bar.com",
+    "tag":"foo model label",
+    "id":2
+  },
+  {
+    "owner":"",
     "tag":"Test",
     "id":1
   }
