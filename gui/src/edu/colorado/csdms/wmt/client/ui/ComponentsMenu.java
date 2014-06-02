@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.colorado.csdms.wmt.client.Constants;
 import edu.colorado.csdms.wmt.client.control.DataManager;
+import edu.colorado.csdms.wmt.client.data.ComponentJSO;
 import edu.colorado.csdms.wmt.client.ui.widgets.ComponentInfoDialogBox;
 
 /**
@@ -75,15 +76,16 @@ public class ComponentsMenu extends PopupPanel {
   public void populateMenu() {
     componentsPanel.clear();    
     for (int i = 0; i < data.getComponents().size(); i++) {
-      final Integer index = i;
-      HTML item = new HTML(data.getComponent(i).getName());
+      String componentId = data.componentIdList.get(i);
+      final ComponentJSO componentJSO = data.getComponent(componentId);
+      HTML item = new HTML(componentJSO.getName());
       item.setStyleName("wmt-ComponentSelectionMenuItem");
       item.addClickHandler(new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
           ComponentInfoDialogBox componentInfoDialogBox =
               data.getPerspective().getComponentInfoBox();
-          componentInfoDialogBox.update(data.getComponent(index));
+          componentInfoDialogBox.update(componentJSO);
           componentInfoDialogBox.center();
         }
       });
