@@ -226,6 +226,10 @@ body, table td, select, button {
 .wmt-PopupPanelCheckBoxItem {
   line-height: 2.0; /* Don't use :hover, set line-height. */
 }
+.wmt-PopupPanelCheckBoxItem-header {
+  color: colorAcqua;
+  font-weight: bold;
+}
 .wmt-PopupPanelCheckBoxItem-public:after {
   content: "public";
   font-variant: small-caps;
