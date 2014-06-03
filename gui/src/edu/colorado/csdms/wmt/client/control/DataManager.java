@@ -37,6 +37,7 @@ import edu.colorado.csdms.wmt.client.data.LabelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelJSO;
 import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 import edu.colorado.csdms.wmt.client.security.Security;
+import edu.colorado.csdms.wmt.client.ui.ComponentCell;
 import edu.colorado.csdms.wmt.client.ui.ModelTree;
 import edu.colorado.csdms.wmt.client.ui.Perspective;
 
@@ -61,6 +62,7 @@ public class DataManager {
   private List<ComponentJSO> components; // "class" components
   private List<ComponentJSO> modelComponents; // "instance" components
   private String selectedComponent;
+  private ComponentCell componentShowingParameters;
   
   private ModelJSO model;
   private ModelMetadataJSO metadata;
@@ -410,6 +412,15 @@ public class DataManager {
    */
   public void setSimulationId(String simulationId) {
     this.simulationId = simulationId;
+  }
+
+  public ComponentCell getShowingParameters() {
+    return componentShowingParameters;
+  }
+
+  public void setShowingParameters(ComponentCell componentShowingParameters) {
+    this.componentShowingParameters = componentShowingParameters;
+    this.componentShowingParameters.addStyleDependentName("showingParameters");
   }
 
   /**
