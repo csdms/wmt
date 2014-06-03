@@ -36,7 +36,6 @@ import edu.colorado.csdms.wmt.client.ui.ComponentCell;
  * 
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-@SuppressWarnings("unused")
 public class ComponentShowParametersCommand implements Command {
 
   private DataManager data;
@@ -60,5 +59,8 @@ public class ComponentShowParametersCommand implements Command {
     GWT.log("Show parameters for: " + data.getComponent(componentId).getName());
     data.getPerspective().getParameterTable().clearTable();
     data.getPerspective().getParameterTable().loadTable(componentId);
+    ComponentCell wasShowingParameters = data.getShowingParameters();
+    wasShowingParameters.removeStyleDependentName("showingParameters");
+    data.setShowingParameters(cell);
   }
 }

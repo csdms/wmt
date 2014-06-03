@@ -118,10 +118,11 @@ public class LabelsMenu extends PopupPanel {
       // Force the "public" and username labels to the top, in either order.
       if (entry.getKey().equals("public")
           || entry.getKey().equals(data.security.getWmtUsername())) {
+        labelBox.addStyleDependentName("header");
         labelPanel.insert(labelBox, 0);
       } else {
         labelPanel.add(labelBox);
-      }      
+      }
     }
   }
 

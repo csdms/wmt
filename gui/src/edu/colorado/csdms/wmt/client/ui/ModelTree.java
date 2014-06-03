@@ -141,12 +141,10 @@ public class ModelTree extends Tree {
       data.replaceModelComponent(data.getComponent(componentId));
     }
 
-    // Is this the driver? If so, display the component's parameters. Also
-    // suggest a model name.
+    // Is this the driver? If so, suggest a model name.
     if (this.getItem(0).equals(target)) {
       data.getModel().setName(
           componentName + " " + data.saveAttempts.toString());
-      data.getPerspective().getParameterTable().loadTable(componentId);
     }
 
     // Mark the model state as unsaved.

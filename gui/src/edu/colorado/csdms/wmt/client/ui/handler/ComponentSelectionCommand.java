@@ -91,14 +91,14 @@ public class ComponentSelectionCommand implements Command {
     String displayName = cell.trimName(componentName);
     cell.getNameCell().setText(displayName);
     cell.addStyleDependentName("connected");
-    
+
     // Replace the componentMenu with the actionMenu.
-    cell.setComponentMenu(new ComponentActionMenu(data, cell)); 
+    cell.setComponentMenu(new ComponentActionMenu(data, cell));
     cell.getMenuCell().setHTML(Constants.FA_ACTION);
 
     // Is this the driver?
     Boolean isDriver = (cell.getEnclosingTreeItem().getParentItem() == null);
-    
+
     // If this is the driver, select its label in the list of model labels.
     if (isDriver) {
       try {
@@ -108,7 +108,13 @@ public class ComponentSelectionCommand implements Command {
         GWT.log(e.toString());
       }
     }
-    
+
+    // If this is the driver, display the component's parameters.
+    if (isDriver) {
+      data.setShowingParameters(cell);
+      data.getPerspective().getParameterTable().loadTable(componentId);
+    }
+
     // Update the tooltip text.
     String ctype = isDriver ? Constants.DRIVER : "component";
     String tooltip = "Model " + ctype + ": " + componentName + ". ";
