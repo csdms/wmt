@@ -173,9 +173,9 @@ body, table td, select, button {
 .wmt-ComponentCell-showingParameters:after {
   position: absolute;
   right: -20px;
-  top: -4px;
+  top: 0px;
   font-family: "FontAwesome";
-  padding: 3px;
+  /* padding: 3px; */
   content: "\f0ad"; /* fa-wrench */
   color: colorAbisso;
 }
