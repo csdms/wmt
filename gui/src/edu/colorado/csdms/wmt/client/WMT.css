@@ -166,6 +166,18 @@ body, table td, select, button {
   font-style: normal;
   color: white;
   background-color: colorAcqua;
+  position: relative;  
+}
+
+/* A ComponentCell that displays a component's parameters. */
+.wmt-ComponentCell-showingParameters:after {
+  position: absolute;
+  right: -20px;
+  top: -4px;
+  font-family: "FontAwesome";
+  padding: 3px;
+  content: "\f0ad"; /* fa-wrench */
+  color: colorAbisso;
 }
 
 /* The name (port or component) shown inside the ComponentCell. */
