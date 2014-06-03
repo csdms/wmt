@@ -50,7 +50,6 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
   private PopupPanel componentMenu;
   private TreeItem enclosingTreeItem;
   private Boolean isAlias = false;
-  private Boolean isShowingParameters = false;
 
   /**
    * Creates a new {@link ComponentCell} displaying the text "driver".
@@ -183,14 +182,6 @@ public class ComponentCell extends VerticalPanel implements ClickHandler {
               + data.getModelComponent(this.componentId).getName() + ".";
       this.setTitle(this.getTitle() + tooltip);
     }
-  }
-
-  public Boolean isShowingParameters() {
-    return isShowingParameters;
-  }
-
-  public void isShowingParameters(Boolean isShowingParameters) {
-    this.isShowingParameters = isShowingParameters;
   }
 
   /**
