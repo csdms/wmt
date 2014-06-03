@@ -416,6 +416,7 @@ public class DataManager {
    * Returns the id of the Component (a String) that is currently selected in
    * the {@link ModelTree}.
    */
+  @Deprecated
   public String getSelectedComponent() {
     return selectedComponent;
   }
@@ -426,6 +427,7 @@ public class DataManager {
    * 
    * @param selectedComponent the id of the Component to set, a String
    */
+  @Deprecated
   public void setSelectedComponent(String selectedComponent) {
     this.selectedComponent = selectedComponent;
   }
