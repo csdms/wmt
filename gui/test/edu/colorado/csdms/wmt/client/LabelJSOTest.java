@@ -27,24 +27,25 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.gwt.core.client.JsArrayInteger;
 import com.google.gwt.junit.client.GWTTestCase;
 
-import edu.colorado.csdms.wmt.client.data.LabelQueryJSO;
+import edu.colorado.csdms.wmt.client.data.LabelJSO;
 
 /**
- * Tests for {@link LabelQueryJSO}. JUnit integration is provided by
- * extending {@link GWTTestCase}.
+ * Tests for {@link LabelJSO}. JUnit integration is provided by extending
+ * {@link GWTTestCase}.
  * 
  * @see http://www.gwtproject.org/doc/latest/DevGuideTesting.html
  * @see http://www.gwtproject.org/doc/latest/tutorial/JUnit.html
- * @see http://blog.danielwellman.com/2008/08/testing-json-parsing-using-javascript-overlay-types-in-gwt-15.html
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class LabelQueryJSOTest extends GWTTestCase {
+public class LabelJSOTest extends GWTTestCase {
 
-  private LabelQueryJSO jso;
-  private JsArrayInteger ids;
+  private LabelJSO jso;
+  private String owner;
+  private String tag;
+  private int id;
+  private boolean selected;
   
   /**
    * The module that sources this class. Must be present.
@@ -53,26 +54,34 @@ public class LabelQueryJSOTest extends GWTTestCase {
   public String getModuleName() {
      return "edu.colorado.csdms.wmt.WMT";
   }
-  
+
   /**
    * A JSNI method that defines a fixture for the tests. Returns a
-   * {@link LabelQueryJSO} object for testing.
+   * {@link LabelJSO} object for testing.
+   * <p>
+   * Note that "selected" member isn't present, and is therefore null.
    * 
-   * @param ids
+   * @param owner
+   * @param tag
+   * @param id
+   * @return
    */
-  private native LabelQueryJSO testLabelQueryJSO(JsArrayInteger ids) /*-{
-		return ids;
+  private native LabelJSO testLabelJSO(String owner, String tag, int id) /*-{
+		return {
+		  "owner": owner,
+		  "tag": tag,
+		  "id": id,
+		  };
   }-*/;  
   
   @Before
   @Override
   protected void gwtSetUp() throws Exception {
-    ids = (JsArrayInteger) JsArrayInteger.createObject();
-    ids.setLength(3);
-    ids.push(4);
-    ids.push(3);
-    ids.push(12);
-    jso = testLabelQueryJSO(ids);
+    owner = "foo@bar.com";
+    tag = "Test";
+    id = 42;
+    selected = true; // initially unused
+    jso = testLabelJSO(owner, tag, id);
   }
 
   @After
@@ -81,31 +90,65 @@ public class LabelQueryJSOTest extends GWTTestCase {
   }
 
   /*
-   * Test the length of the array.
+   * Test getting owner.
    */
   @Test
-  public void testLength() {
-    int arrayLength = 3;
-    assertEquals(arrayLength, jso.getIds().length());
+  public void testGetOwner() {
+    assertEquals(owner, jso.getOwner());
   }
 
   /*
-   * Test whether all ids can be accessed.
+   * Test getting tag/label.
    */
   @Test
-  public void testGetIds() {
-    assertEquals(ids, jso.getIds());
+  public void testGetLabel() {
+    assertEquals(tag, jso.getLabel());
   }
-  
+
   /*
-   * Test whether a single id can be accessed.
-   * 
-   * This test fails in development mode, but passes in production mode.
-   * See: http://www.gwtproject.org/doc/latest/DevGuideCodingBasicsCompatibility.html#language
+   * Test setting tag/label.
    */
   @Test
-  public void testGetSingleId() {
-    int index = 0;
-    assertEquals(ids.get(index), jso.getIds().get(index));
+  public void testSetLabel() {
+    String newLabel = "hoopy frood";
+    jso.setLabel(newLabel);
+    assertEquals(newLabel, jso.getLabel());
+  }
+
+  /*
+   * Test getting id.
+   */
+  @Test
+  public void testGetId() {
+    assertEquals(id, jso.getId());
+  }
+
+  /*
+   * Test setting id.
+   */
+  @Test
+  public void testSetId() {
+    int newId = 17;
+    jso.setId(newId);
+    assertEquals(newId, jso.getId());
+  }
+
+  /*
+   * Test for an unset "selected" member -- the return from LabelJSO#isSelected
+   * should be false. This is the default state, since "selected" isn't included
+   * in a LabelJSO from the server; it's added later in the UI code.
+   */
+  @Test
+  public void testGetSelectedUninitialized() {
+    assertFalse(jso.isSelected());
+  }
+
+  /*
+   * Test getting/setting "selected" member.
+   */
+  @Test
+  public void testSetSelected() {
+    jso.isSelected(selected);
+    assertTrue(jso.isSelected());
   }
 }
