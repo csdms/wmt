@@ -29,24 +29,23 @@ import org.junit.Test;
 
 import com.google.gwt.junit.client.GWTTestCase;
 
-import edu.colorado.csdms.wmt.client.data.LabelJSO;
+import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 
 /**
- * Tests for {@link LabelJSO}. JUnit integration is provided by extending
- * {@link GWTTestCase}.
+ * Tests for {@link ModelMetadataJSO}. JUnit integration is provided by
+ * extending {@link GWTTestCase}.
  * 
  * @see http://www.gwtproject.org/doc/latest/DevGuideTesting.html
  * @see http://www.gwtproject.org/doc/latest/tutorial/JUnit.html
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class LabelJSOTest extends GWTTestCase {
+public class ModelMetadataJSOTest extends GWTTestCase {
 
-  private LabelJSO jso;
+  private ModelMetadataJSO jso;
   private String owner;
-  private String tag;
   private int id;
-  private boolean selected;
-  
+  private String name;
+
   /**
    * The module that sources this class. Must be present.
    */
@@ -57,31 +56,29 @@ public class LabelJSOTest extends GWTTestCase {
 
   /**
    * A JSNI method that defines a fixture for the tests. Returns a
-   * {@link LabelJSO} object for testing.
-   * <p>
-   * Note that "selected" member isn't present.
+   * {@link ModelMetadataJSO} object for testing.
    * 
    * @param owner
-   * @param tag
    * @param id
+   * @param name
    * @return
    */
-  private native LabelJSO testLabelJSO(String owner, String tag, int id) /*-{
+  private native ModelMetadataJSO testModelMetadataJSO(String owner, int id,
+      String name) /*-{
 		return {
-		  "owner": owner,
-		  "tag": tag,
-		  "id": id
-		  };
+			"owner" : owner,
+			"id" : id,
+			"name" : name
+		};
   }-*/;  
   
   @Before
   @Override
   protected void gwtSetUp() throws Exception {
     owner = "foo@bar.com";
-    tag = "Test";
     id = 42;
-    selected = true; // initially unused
-    jso = testLabelJSO(owner, tag, id);
+    name = "Test";
+    jso = testModelMetadataJSO(owner, id, name);
   }
 
   @After
@@ -98,21 +95,13 @@ public class LabelJSOTest extends GWTTestCase {
   }
 
   /*
-   * Test getting tag/label.
+   * Test setting owner.
    */
   @Test
-  public void testGetLabel() {
-    assertEquals(tag, jso.getLabel());
-  }
-
-  /*
-   * Test setting tag/label.
-   */
-  @Test
-  public void testSetLabel() {
-    String newLabel = "hoopy frood";
-    jso.setLabel(newLabel);
-    assertEquals(newLabel, jso.getLabel());
+  public void testSetOwner() {
+    String newOwner = "fu@baz.org";
+    jso.setOwner(newOwner);
+    assertEquals(newOwner, jso.getOwner());
   }
 
   /*
@@ -134,21 +123,21 @@ public class LabelJSOTest extends GWTTestCase {
   }
 
   /*
-   * Test for an unset "selected" member -- the return from LabelJSO#isSelected
-   * should be false. This is the default state, since "selected" isn't included
-   * in a LabelJSO from the server; it's added later in the UI code.
+   * Test getting name.
    */
   @Test
-  public void testGetSelectedUninitialized() {
-    assertFalse(jso.isSelected());
+  public void testGetName() {
+    assertEquals(name, jso.getName());
   }
 
   /*
-   * Test getting/setting "selected" member.
+   * Test setting name.
    */
   @Test
-  public void testSetSelected() {
-    jso.isSelected(selected);
-    assertTrue(jso.isSelected());
+  public void testSetLabel() {
+    String newName = "Tset";
+    jso.setName(newName);
+    assertEquals(newName, jso.getName());
   }
+
 }
