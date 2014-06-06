@@ -38,9 +38,7 @@ import edu.colorado.csdms.wmt.client.data.LabelQueryJSO;
  * 
  * @see http://www.gwtproject.org/doc/latest/DevGuideTesting.html
  * @see http://www.gwtproject.org/doc/latest/tutorial/JUnit.html
- * @see http
- *      ://blog.danielwellman.com/2008/08/testing-json-parsing-using-javascript
- *      -overlay-types-in-gwt-15.html
+ * @see http://blog.danielwellman.com/2008/08/testing-json-parsing-using-javascript-overlay-types-in-gwt-15.html
  * @author Mark Piper (mark.piper@colorado.edu)
  */
 public class LabelQueryJSOTest extends GWTTestCase {
@@ -82,20 +80,29 @@ public class LabelQueryJSOTest extends GWTTestCase {
   protected void gwtTearDown() throws Exception {
   }
 
-  // Test the length of the array.
+  /*
+   * Test the length of the array.
+   */
   @Test
   public void testLength() {
     int arrayLength = 3;
     assertEquals(arrayLength, jso.getIds().length());
   }
 
-  // Test whether all ids can be accessed.
+  /*
+   * Test whether all ids can be accessed.
+   */
   @Test
   public void testGetIds() {
     assertEquals(ids, jso.getIds());
   }
   
-  // Test whether a single id can be accessed.
+  /*
+   * Test whether a single id can be accessed.
+   * 
+   * This test fails in development mode, but passes in production mode.
+   * See: http://www.gwtproject.org/doc/latest/DevGuideCodingBasicsCompatibility.html#language
+   */
   @Test
   public void testGetSingleId() {
     int index = 0;
