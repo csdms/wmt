@@ -27,25 +27,25 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.gwt.core.client.JsArrayInteger;
 import com.google.gwt.junit.client.GWTTestCase;
 
-import edu.colorado.csdms.wmt.client.data.LabelQueryJSO;
+import edu.colorado.csdms.wmt.client.data.ModelMetadataJSO;
 
 /**
- * Tests for {@link LabelQueryJSO}. JUnit integration is provided by
+ * Tests for {@link ModelMetadataJSO}. JUnit integration is provided by
  * extending {@link GWTTestCase}.
  * 
  * @see http://www.gwtproject.org/doc/latest/DevGuideTesting.html
  * @see http://www.gwtproject.org/doc/latest/tutorial/JUnit.html
- * @see http://blog.danielwellman.com/2008/08/testing-json-parsing-using-javascript-overlay-types-in-gwt-15.html
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class LabelQueryJSOTest extends GWTTestCase {
+public class ModelMetadataJSOTest extends GWTTestCase {
 
-  private LabelQueryJSO jso;
-  private JsArrayInteger ids;
-  
+  private ModelMetadataJSO jso;
+  private String owner;
+  private int id;
+  private String name;
+
   /**
    * The module that sources this class. Must be present.
    */
@@ -53,26 +53,32 @@ public class LabelQueryJSOTest extends GWTTestCase {
   public String getModuleName() {
      return "edu.colorado.csdms.wmt.WMT";
   }
-  
+
   /**
    * A JSNI method that defines a fixture for the tests. Returns a
-   * {@link LabelQueryJSO} object for testing.
+   * {@link ModelMetadataJSO} object for testing.
    * 
-   * @param ids
+   * @param owner
+   * @param id
+   * @param name
+   * @return
    */
-  private native LabelQueryJSO testLabelQueryJSO(JsArrayInteger ids) /*-{
-		return ids;
+  private native ModelMetadataJSO testModelMetadataJSO(String owner, int id,
+      String name) /*-{
+		return {
+			"owner" : owner,
+			"id" : id,
+			"name" : name
+		};
   }-*/;  
   
   @Before
   @Override
   protected void gwtSetUp() throws Exception {
-    ids = (JsArrayInteger) JsArrayInteger.createObject();
-    ids.setLength(3);
-    ids.push(4);
-    ids.push(3);
-    ids.push(12);
-    jso = testLabelQueryJSO(ids);
+    owner = "foo@bar.com";
+    id = 42;
+    name = "Test";
+    jso = testModelMetadataJSO(owner, id, name);
   }
 
   @After
@@ -81,31 +87,57 @@ public class LabelQueryJSOTest extends GWTTestCase {
   }
 
   /*
-   * Test the length of the array.
+   * Test getting owner.
    */
   @Test
-  public void testLength() {
-    int arrayLength = 3;
-    assertEquals(arrayLength, jso.getIds().length());
+  public void testGetOwner() {
+    assertEquals(owner, jso.getOwner());
   }
 
   /*
-   * Test whether all ids can be accessed.
+   * Test setting owner.
    */
   @Test
-  public void testGetIds() {
-    assertEquals(ids, jso.getIds());
+  public void testSetOwner() {
+    String newOwner = "fu@baz.org";
+    jso.setOwner(newOwner);
+    assertEquals(newOwner, jso.getOwner());
   }
-  
+
   /*
-   * Test whether a single id can be accessed.
-   * 
-   * This test fails in development mode, but passes in production mode.
-   * See: http://www.gwtproject.org/doc/latest/DevGuideCodingBasicsCompatibility.html#language
+   * Test getting id.
    */
   @Test
-  public void testGetSingleId() {
-    int index = 0;
-    assertEquals(ids.get(index), jso.getIds().get(index));
+  public void testGetId() {
+    assertEquals(id, jso.getId());
   }
+
+  /*
+   * Test setting id.
+   */
+  @Test
+  public void testSetId() {
+    int newId = 17;
+    jso.setId(newId);
+    assertEquals(newId, jso.getId());
+  }
+
+  /*
+   * Test getting name.
+   */
+  @Test
+  public void testGetName() {
+    assertEquals(name, jso.getName());
+  }
+
+  /*
+   * Test setting name.
+   */
+  @Test
+  public void testSetLabel() {
+    String newName = "Tset";
+    jso.setName(newName);
+    assertEquals(newName, jso.getName());
+  }
+
 }

@@ -27,25 +27,27 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.gwt.core.client.JsArrayInteger;
 import com.google.gwt.junit.client.GWTTestCase;
 
-import edu.colorado.csdms.wmt.client.data.LabelQueryJSO;
+import edu.colorado.csdms.wmt.client.data.ParameterJSO;
+import edu.colorado.csdms.wmt.client.data.ValueJSO;
 
 /**
- * Tests for {@link LabelQueryJSO}. JUnit integration is provided by
- * extending {@link GWTTestCase}.
+ * Tests for {@link ParameterJSO}. JUnit integration is provided by extending
+ * {@link GWTTestCase}.
  * 
  * @see http://www.gwtproject.org/doc/latest/DevGuideTesting.html
  * @see http://www.gwtproject.org/doc/latest/tutorial/JUnit.html
- * @see http://blog.danielwellman.com/2008/08/testing-json-parsing-using-javascript-overlay-types-in-gwt-15.html
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class LabelQueryJSOTest extends GWTTestCase {
+public class ParameterJSOTest extends GWTTestCase {
 
-  private LabelQueryJSO jso;
-  private JsArrayInteger ids;
-  
+  private ParameterJSO jso;
+  private String key;
+  private String name;
+  private String description;
+  private ValueJSO value;
+
   /**
    * The module that sources this class. Must be present.
    */
@@ -53,26 +55,48 @@ public class LabelQueryJSOTest extends GWTTestCase {
   public String getModuleName() {
      return "edu.colorado.csdms.wmt.WMT";
   }
-  
+
   /**
    * A JSNI method that defines a fixture for the tests. Returns a
-   * {@link LabelQueryJSO} object for testing.
-   * 
-   * @param ids
+   * {@link ParameterJSO} object for testing.
+   *
+   * @param key
+   * @param name
+   * @param description
    */
-  private native LabelQueryJSO testLabelQueryJSO(JsArrayInteger ids) /*-{
-		return ids;
-  }-*/;  
+  private native ParameterJSO testParameterJSO(String key, String name,
+      String description, ValueJSO value) /*-{
+		return {
+			"key" : key,
+			"name" : name,
+			"description" : description,
+			"value" : value
+		};
+  }-*/;
+
+  /**
+   * A JSNI method that defines a fixture for the tests. Returns a
+   * {@link ValueJSO} object for testing.
+   */
+  private native ValueJSO testValueJSO() /*-{
+		return {
+			"default" : 500,
+			"range" : {
+				"max" : 2147483647,
+				"min" : 0
+			},
+			"type" : "int"
+		};
+  }-*/;
   
   @Before
   @Override
   protected void gwtSetUp() throws Exception {
-    ids = (JsArrayInteger) JsArrayInteger.createObject();
-    ids.setLength(3);
-    ids.push(4);
-    ids.push(3);
-    ids.push(12);
-    jso = testLabelQueryJSO(ids);
+    key = "number_of_rows";
+    name = "Number of rows";
+    description = "Number of rows in the computational grid";
+    value = testValueJSO();
+    jso = testParameterJSO(key, name, description, value);
   }
 
   @After
@@ -81,31 +105,34 @@ public class LabelQueryJSOTest extends GWTTestCase {
   }
 
   /*
-   * Test the length of the array.
+   * Test getting key.
    */
   @Test
-  public void testLength() {
-    int arrayLength = 3;
-    assertEquals(arrayLength, jso.getIds().length());
+  public void testGetKey() {
+    assertEquals(key, jso.getKey());
   }
 
   /*
-   * Test whether all ids can be accessed.
+   * Test getting name.
    */
   @Test
-  public void testGetIds() {
-    assertEquals(ids, jso.getIds());
+  public void testGetName() {
+    assertEquals(name, jso.getName());
+  }
+
+  /*
+   * Test getting description.
+   */
+  @Test
+  public void testGetDescription() {
+    assertEquals(description, jso.getDescription());
   }
   
   /*
-   * Test whether a single id can be accessed.
-   * 
-   * This test fails in development mode, but passes in production mode.
-   * See: http://www.gwtproject.org/doc/latest/DevGuideCodingBasicsCompatibility.html#language
+   * Test getting value.
    */
   @Test
-  public void testGetSingleId() {
-    int index = 0;
-    assertEquals(ids.get(index), jso.getIds().get(index));
+  public void testGetValue() {
+    assertSame(value, jso.getValue());
   }
 }

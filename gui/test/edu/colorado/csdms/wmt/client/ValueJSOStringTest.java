@@ -27,25 +27,24 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.gwt.core.client.JsArrayInteger;
 import com.google.gwt.junit.client.GWTTestCase;
 
-import edu.colorado.csdms.wmt.client.data.LabelQueryJSO;
+import edu.colorado.csdms.wmt.client.data.ValueJSO;
 
 /**
- * Tests for {@link LabelQueryJSO}. JUnit integration is provided by
+ * Tests for {@link ValueJSO} of type "string". JUnit integration is provided by
  * extending {@link GWTTestCase}.
  * 
  * @see http://www.gwtproject.org/doc/latest/DevGuideTesting.html
  * @see http://www.gwtproject.org/doc/latest/tutorial/JUnit.html
- * @see http://blog.danielwellman.com/2008/08/testing-json-parsing-using-javascript-overlay-types-in-gwt-15.html
  * @author Mark Piper (mark.piper@colorado.edu)
  */
-public class LabelQueryJSOTest extends GWTTestCase {
+public class ValueJSOStringTest extends GWTTestCase {
 
-  private LabelQueryJSO jso;
-  private JsArrayInteger ids;
-  
+  private ValueJSO jso;
+  private String type = "string";
+  private String defaultValue;
+
   /**
    * The module that sources this class. Must be present.
    */
@@ -53,26 +52,26 @@ public class LabelQueryJSOTest extends GWTTestCase {
   public String getModuleName() {
      return "edu.colorado.csdms.wmt.WMT";
   }
-  
+
   /**
    * A JSNI method that defines a fixture for the tests. Returns a
-   * {@link LabelQueryJSO} object for testing.
+   * {@link ValueJSO} object for testing.
    * 
-   * @param ids
+   * @param defaultValue
+   * @param type
    */
-  private native LabelQueryJSO testLabelQueryJSO(JsArrayInteger ids) /*-{
-		return ids;
-  }-*/;  
+  private native ValueJSO testValueJSO(String defaultValue, String type) /*-{
+		return {
+			"default" : defaultValue,
+			"type" : type
+		};
+  }-*/;
   
   @Before
   @Override
   protected void gwtSetUp() throws Exception {
-    ids = (JsArrayInteger) JsArrayInteger.createObject();
-    ids.setLength(3);
-    ids.push(4);
-    ids.push(3);
-    ids.push(12);
-    jso = testLabelQueryJSO(ids);
+    defaultValue = "Hydrotrend";
+    jso = testValueJSO(defaultValue, type);
   }
 
   @After
@@ -81,31 +80,68 @@ public class LabelQueryJSOTest extends GWTTestCase {
   }
 
   /*
-   * Test the length of the array.
+   * Test getting type.
    */
   @Test
-  public void testLength() {
-    int arrayLength = 3;
-    assertEquals(arrayLength, jso.getIds().length());
+  public void testGetType() {
+    assertEquals(type, jso.getType());
   }
 
   /*
-   * Test whether all ids can be accessed.
+   * Test getting default.
    */
   @Test
-  public void testGetIds() {
-    assertEquals(ids, jso.getIds());
+  public void testGetDefault() {
+    assertEquals(defaultValue, jso.getDefault());
+  }
+
+  /*
+   * Test setting default.
+   */
+  @Test
+  public void testSetDefault() {
+    String newDefault = "Gondolin";
+    jso.setDefault(newDefault);
+    assertEquals(newDefault, jso.getDefault());
+  }
+
+  /*
+   * Test getting units. Should return null if not present.
+   */
+  @Test
+  public void testGetUnits() {
+    assertNull(jso.getUnits());
   }
   
   /*
-   * Test whether a single id can be accessed.
-   * 
-   * This test fails in development mode, but passes in production mode.
-   * See: http://www.gwtproject.org/doc/latest/DevGuideCodingBasicsCompatibility.html#language
+   * Test getting min. Should return null if not present.
    */
   @Test
-  public void testGetSingleId() {
-    int index = 0;
-    assertEquals(ids.get(index), jso.getIds().get(index));
+  public void testGetMin() {
+    assertNull(jso.getMin());
+  }
+
+  /*
+   * Test getting max. Should return null if not present.
+   */
+  @Test
+  public void testGetMax() {
+    assertNull(jso.getMax());
+  }
+  
+  /*
+   * Test getting choices. Should return null if not present.
+   */
+  @Test
+  public void testGetChoices() {
+    assertNull(jso.getChoices());
+  }
+  
+  /*
+   * Test getting files. Should return null if not present.
+   */
+  @Test
+  public void testGetFiles() {
+    assertNull(jso.getFiles());
   }
 }
