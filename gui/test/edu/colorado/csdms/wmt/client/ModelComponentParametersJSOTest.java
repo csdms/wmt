@@ -42,12 +42,12 @@ import edu.colorado.csdms.wmt.client.data.ModelComponentParametersJSO;
  */
 public class ModelComponentParametersJSOTest extends GWTTestCase {
 
-  private static final String[] keys = {
+  private static final String[] KEYS = {
       "simulation_name", "number_of_rows", "number_of_columns", "row_spacing",
       "column_spacing", "output_format"};
-  private static final String[] values = {
+  private static final String[] VALUES = {
       "CEM", "4200", "2100", "150", "300", "vtk"};
-  private static final int N_PARAMETERS = keys.length;
+  private static final int N_PARAMETERS = KEYS.length;
   private ModelComponentParametersJSO jso;
   private JsArrayString keysJso;
   private JsArrayString valuesJso;
@@ -91,8 +91,8 @@ public class ModelComponentParametersJSOTest extends GWTTestCase {
   @Before
   @Override
   protected void gwtSetUp() throws Exception {
-    keysJso = toJsArray(keys);
-    valuesJso = toJsArray(values);
+    keysJso = toJsArray(KEYS);
+    valuesJso = toJsArray(VALUES);
     jso = testModelComponentParametersJSO(keysJso, valuesJso);
   }
 
@@ -101,16 +101,60 @@ public class ModelComponentParametersJSOTest extends GWTTestCase {
   protected void gwtTearDown() throws Exception {
   }
 
-  // Test the number of parameters through the keys.
+  /*
+   * Test the number of parameters through the keys.
+   */
   @Test
   public void testNumberOfKeys() {
     assertEquals(N_PARAMETERS, jso.getKeys().length());
   }
 
-  // Test the number of parameters through the values.
+  /*
+   * Test the number of parameters through the values.
+   */
   @Test
   public void testNumberOfValues() {
     assertEquals(N_PARAMETERS, jso.getValues().length());
   }
 
+  /*
+   * Test getting all keys. There's no assertArrayEquals in GWTTestCase, so
+   * compare "join"-ed Strings.
+   */
+  @Test
+  public void testGetKeys() {
+    assertEquals(keysJso.join(), jso.getKeys().join());
+  }
+
+  /*
+   * Test getting all values. There's no assertArrayEquals in GWTTestCase, so
+   * compare "join"-ed Strings.
+   */
+  @Test
+  public void testGetValues() {
+    assertEquals(valuesJso.join(), jso.getValues().join());
+  }
+
+  /*
+   * Test getting a single value, given a key.
+   */
+  @Test
+  public void testGetSingleValue() {
+    Integer index = 2; // arbitrary, but between 0 and N_PARAMETERS.
+    String key = KEYS[index];
+    String value = VALUES[index];
+    assertEquals(value, jso.getValue(key));
+  }
+  
+  /*
+   * Test adding a new parameter. This may not be wholly independent from
+   * #testGetSingleValue.
+   */
+  @Test
+  public void testAddParameter() {
+    String key = "foo";
+    String value = "bar";
+    jso.addParameter(key, value);
+    assertEquals(value, jso.getValue(key));
+  }
 }
