@@ -43,6 +43,7 @@ import edu.colorado.csdms.wmt.client.data.PortJSO;
  */
 public class PortJSOTest extends GWTTestCase {
 
+  private static final String[] ITEMS = {"foo", "bar", "baz"};
   private PortJSO portJSO;
   private String id;
   private boolean required;
@@ -78,10 +79,10 @@ public class PortJSOTest extends GWTTestCase {
   protected void gwtSetUp() throws Exception {
     id = "test";
     required = true;
-    exchange_items = (JsArrayString) JsArrayString.createArray();
-    exchange_items.push("foo");
-    exchange_items.push("bar");
-    exchange_items.push("baz");
+    exchange_items = JsArrayString.createArray().cast();
+    for (String item : ITEMS) {
+      exchange_items.push(item);
+    }
     portJSO = testPortJSO(id, required, exchange_items);
   }
 

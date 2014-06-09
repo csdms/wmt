@@ -58,7 +58,10 @@ public class ModelComponentConnectionsJSO extends JavaScriptObject {
 		var connections = [];
 		for (var key in this) {
 			var atString = this[key];
-			var componentName = atString.substr(atString.indexOf("@") + 1);
+			var componentName = null;
+			if (atString != null) {
+			  componentName = atString.substr(atString.indexOf("@") + 1);
+			}
 			connections = connections.concat(componentName);
 		}
 		return connections;

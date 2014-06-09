@@ -42,19 +42,21 @@ import edu.colorado.csdms.wmt.client.data.ValueJSO;
  */
 public class ValueJSOFilesTest extends GWTTestCase {
 
+  private static final String[] FILENAMES = {
+      "danube.hyps", "eel.hyps", "ganges.hyps", "lanyang.hyps", "po.hyps",
+      "waipaoa.hyps"};
+  private static final int ARRAY_LENGTH = FILENAMES.length;
   private ValueJSO jso;
   private String type = "files";
   private String defaultValue;
   private JsArrayString files;
-  private int arrayLength;
-
 
   /**
    * The module that sources this class. Must be present.
    */
   @Override
   public String getModuleName() {
-     return "edu.colorado.csdms.wmt.WMT";
+    return "edu.colorado.csdms.wmt.WMT";
   }
 
   /**
@@ -73,20 +75,16 @@ public class ValueJSOFilesTest extends GWTTestCase {
 			"type" : type
 		};
   }-*/;
-  
+
   @Before
   @Override
   protected void gwtSetUp() throws Exception {
-    files = (JsArrayString) JsArrayString.createObject();
-    arrayLength = 6;
-    files.setLength(arrayLength);
-    files.push("danube.hyps");
-    files.push("eel.hyps");
-    files.push("ganges.hyps");
-    files.push("lanyang.hyps");
-    files.push("po.hyps");
-    files.push("waipaoa.hyps");
-    defaultValue = "danube.hyps";
+    files = JsArrayString.createObject().cast();
+    files.setLength(ARRAY_LENGTH);
+    for (String file : FILENAMES) {
+      files.push(file);
+    }
+    defaultValue = FILENAMES[0];
     jso = testValueJSO(defaultValue, files, type);
   }
 
@@ -108,7 +106,7 @@ public class ValueJSOFilesTest extends GWTTestCase {
    */
   @Test
   public void testLength() {
-    assertEquals(arrayLength, jso.getFiles().length());
+    assertEquals(ARRAY_LENGTH, jso.getFiles().length());
   }
 
   /*
@@ -136,7 +134,7 @@ public class ValueJSOFilesTest extends GWTTestCase {
   public void testGetUnits() {
     assertNull(jso.getUnits());
   }
-  
+
   /*
    * Test getting min. Should return null if not present.
    */
@@ -152,7 +150,7 @@ public class ValueJSOFilesTest extends GWTTestCase {
   public void testGetMax() {
     assertNull(jso.getMax());
   }
-  
+
   /*
    * Test getting choices. Should return null if not present.
    */
@@ -160,7 +158,7 @@ public class ValueJSOFilesTest extends GWTTestCase {
   public void testGetChoices() {
     assertNull(jso.getChoices());
   }
-  
+
   /*
    * Test getting files.
    */
