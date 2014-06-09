@@ -43,6 +43,8 @@ import edu.colorado.csdms.wmt.client.data.ComponentListJSO;
  */
 public class ComponentListJSOTest extends GWTTestCase {
 
+  private static final String[] COMPONENTS = {"avulsion", "cem", "hydrotrend"};
+  private static final int ARRAY_LENGTH = COMPONENTS.length; 
   private ComponentListJSO jso;
   private JsArrayString ids;
   
@@ -67,11 +69,11 @@ public class ComponentListJSOTest extends GWTTestCase {
   @Before
   @Override
   protected void gwtSetUp() throws Exception {
-    ids = (JsArrayString) JsArrayString.createObject();
-    ids.setLength(3);
-    ids.push("avulsion");
-    ids.push("cem");
-    ids.push("hydrotrend");
+    ids = JsArrayString.createObject().cast();
+    ids.setLength(ARRAY_LENGTH);
+    for (String component : COMPONENTS) {
+      ids.push(component);
+    }
     jso = testComponentListJSO(ids);
   }
 
@@ -80,20 +82,25 @@ public class ComponentListJSOTest extends GWTTestCase {
   protected void gwtTearDown() throws Exception {
   }
 
-  // Test the length of the array.
+  /*
+   * Test the length of the array.
+   */
   @Test
   public void testLength() {
-    int arrayLength = 3;
-    assertEquals(arrayLength, jso.getComponents().length());
+    assertEquals(ARRAY_LENGTH, jso.getComponents().length());
   }
 
-  // Test whether all ids can be retrieved.
+  /*
+   * Test whether all ids can be retrieved.
+   */
   @Test
   public void testGetIds() {
     assertEquals(ids, jso.getComponents());
   }
 
-  // Test whether a single id can be retrieved.
+  /*
+   * Test whether a single id can be retrieved.
+   */
   @Test
   public void testGetSingleId() {
     int index = 0;
