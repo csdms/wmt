@@ -43,6 +43,8 @@ import edu.colorado.csdms.wmt.client.data.LabelQueryJSO;
  */
 public class LabelQueryJSOTest extends GWTTestCase {
 
+  private static final Integer[] LABEL_IDS = {4, 3, 12, 134, 2};
+  private static final int ARRAY_LENGTH = LABEL_IDS.length;
   private LabelQueryJSO jso;
   private JsArrayInteger ids;
   
@@ -67,11 +69,11 @@ public class LabelQueryJSOTest extends GWTTestCase {
   @Before
   @Override
   protected void gwtSetUp() throws Exception {
-    ids = (JsArrayInteger) JsArrayInteger.createObject();
-    ids.setLength(3);
-    ids.push(4);
-    ids.push(3);
-    ids.push(12);
+    ids = JsArrayInteger.createObject().cast();
+    ids.setLength(ARRAY_LENGTH);
+    for (Integer label_id : LABEL_IDS) {
+      ids.push(label_id);
+    }
     jso = testLabelQueryJSO(ids);
   }
 
@@ -85,8 +87,7 @@ public class LabelQueryJSOTest extends GWTTestCase {
    */
   @Test
   public void testLength() {
-    int arrayLength = 3;
-    assertEquals(arrayLength, jso.getIds().length());
+    assertEquals(ARRAY_LENGTH, jso.getIds().length());
   }
 
   /*
@@ -105,7 +106,7 @@ public class LabelQueryJSOTest extends GWTTestCase {
    */
   @Test
   public void testGetSingleId() {
-    int index = 0;
+    Integer index = 0;
     assertEquals(ids.get(index), jso.getIds().get(index));
   }
 }

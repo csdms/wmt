@@ -42,6 +42,8 @@ import edu.colorado.csdms.wmt.client.data.ValueJSO;
  */
 public class ValueJSOChoiceTest extends GWTTestCase {
 
+  private static final String[] CHOICE_ARRAY = {"netcdf", "vtk"};
+  private static final int ARRAY_LENGTH = CHOICE_ARRAY.length;
   private ValueJSO jso;
   private String type = "choice";
   private String defaultValue;
@@ -76,11 +78,12 @@ public class ValueJSOChoiceTest extends GWTTestCase {
   @Before
   @Override
   protected void gwtSetUp() throws Exception {
-    choices = (JsArrayString) JsArrayString.createObject();
-    choices.setLength(2);
-    choices.push("netcdf");
-    choices.push("vtk");
-    defaultValue = "netcdf";
+    choices = JsArrayString.createObject().cast();
+    choices.setLength(ARRAY_LENGTH);
+    for (String choice : CHOICE_ARRAY) {
+      choices.push(choice);
+    }
+    defaultValue = CHOICE_ARRAY[0];
     jso = testValueJSO(defaultValue, choices, type);
   }
 
@@ -102,8 +105,7 @@ public class ValueJSOChoiceTest extends GWTTestCase {
    */
   @Test
   public void testLength() {
-    int arrayLength = 2;
-    assertEquals(arrayLength, jso.getChoices().length());
+    assertEquals(ARRAY_LENGTH, jso.getChoices().length());
   }
 
   /*
