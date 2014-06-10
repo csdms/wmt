@@ -61,8 +61,17 @@ public class DeleteModelHandler implements ClickHandler {
     Integer selIndex =
         box.getDroplistPanel().getDroplist().getSelectedIndex();
     Integer modelId = data.modelIdList.get(selIndex);
-    GWT.log("Deleting model: " + modelId);
 
+    /*
+     * Check whether the current user owns the model selected for deletion. If
+     * not, issue a message and exit. This might entail a call to
+     * models/open/<id>.
+     * 
+     * Alternately, check owner on server and return a status code != 200. The
+     * client can then display a message to the user.
+     */
+    
+    GWT.log("Deleting model: " + modelId);
     DataTransfer.deleteModel(data, modelId);
 
     // If the deleted model is currently displayed in the model tree, close it.
