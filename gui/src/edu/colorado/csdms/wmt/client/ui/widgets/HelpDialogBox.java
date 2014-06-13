@@ -67,15 +67,15 @@ public class HelpDialogBox extends DialogBox {
         "<p><b>The CSDMS Web Modeling Tool</b></br>Version: "
             + DataManager.VERSION + "</p>";
     String website =
-        "<p>For more information on CSDMS, please visit" + " our website at"
-            + " <a href='" + Constants.CSDMS_HOME
-            + "'>csdms.colorado.edu</a>.</p>";
+        "<p>For more information on CSDMS, please visit our <a href='"
+            + Constants.CSDMS_HOME + "'>website</a>, or <a href='mailto:"
+            + Constants.CSDMS_EMAIL + "'>email</a> us.</p>";
     String help =
         "<p>For a detailed description of the WMT interface,"
             + " please see <a href='" + Constants.WMT_HELP
             + "'>WMT Help</a>.</p>";
     String tutorial =
-        "<p>For a brief tutorial," + " please see <a href='"
+        "<p>For a brief tutorial, please see <a href='"
             + Constants.WMT_TUTORIAL + "'>WMT Tutorial</a>.</p>";
 
     HTML title1Html = new HTML(title1);

@@ -33,10 +33,11 @@ import com.google.gwt.core.client.GWT;
  */
 public class Constants {
 
-  // The CSDMS website and wiki articles.
+  // The CSDMS website, email, and wiki articles.
   public static final String CSDMS_HOME = "http://csdms.colorado.edu/";
   public static final String WMT_HELP = CSDMS_HOME + "wiki/WMT_help";
   public static final String WMT_TUTORIAL = CSDMS_HOME + "wiki/WMT_tutorial";
+  public static final String CSDMS_EMAIL = "CSDMSsupport@colorado.edu";
   
   // This switch toggles API development and public mode.
   public static final Boolean USE_API_DEV_MODE = true;
@@ -98,7 +99,10 @@ public class Constants {
       + " Please choose a different name.";
   public static String DELETE_LABEL_ERR = "This label cannot be deleted because"
       + " it is not owned by the current user.";
-  public static String SIGN_IN_MSG = "Please sign in to use WMT.";
+  
+  public static String SIGN_IN_MSG = "<p>Please sign in to use WMT.</p>"
+      + "<p>For assistance, email <a href='mailto:" + Constants.CSDMS_EMAIL 
+      + "'>" + Constants.CSDMS_EMAIL + "</a>.</p>";
   
   // Number of tries to fetch a component; a magic number.
   public static Integer RETRY_ATTEMPTS = 3;

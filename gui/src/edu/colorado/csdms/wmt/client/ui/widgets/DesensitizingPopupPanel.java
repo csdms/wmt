@@ -27,8 +27,8 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -63,7 +63,7 @@ public class DesensitizingPopupPanel extends PopupPanel {
 
     this.message = message;
     
-    Label messageLabel = new Label(this.message);
+    HTML messageLabel = new HTML(this.message);
     messageLabel.getElement().getStyle().setMargin(10.0, Unit.PX);
     
     Button okButton = new Button("OK");
