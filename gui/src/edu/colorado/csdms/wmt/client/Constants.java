@@ -97,7 +97,7 @@ public class Constants {
       + " Please choose a different name.";
   public static String DELETE_LABEL_ERR = "This label cannot be deleted because"
       + " it is not owned by the current user.";
-  
+  public static String SIGN_IN_MSG = "Please sign in to use WMT.";
   
   // Number of tries to fetch a component; a magic number.
   public static Integer RETRY_ATTEMPTS = 3;
