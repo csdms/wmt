@@ -25,6 +25,8 @@ package edu.colorado.csdms.wmt.client;
 
 import com.google.gwt.core.client.GWT;
 
+import edu.colorado.csdms.wmt.client.control.DataManager;
+
 /**
  * A class that defines, as public static members, constants used in the WMT
  * client.
@@ -38,7 +40,9 @@ public class Constants {
   public static final String WMT_HELP = CSDMS_HOME + "wiki/WMT_help";
   public static final String WMT_TUTORIAL = CSDMS_HOME + "wiki/WMT_tutorial";
   public static final String CSDMS_EMAIL = "CSDMSsupport@colorado.edu";
-  
+  public static final String WMT_TITLE = "<h2>WMT</h2><p><b>The CSDMS Web"
+      + " Modeling Tool</b></br>Version: " + DataManager.VERSION + "</p>";
+
   // This switch toggles API development and public mode.
   public static final Boolean USE_API_DEV_MODE = true;
 
@@ -99,11 +103,13 @@ public class Constants {
       + " Please choose a different name.";
   public static String DELETE_LABEL_ERR = "This label cannot be deleted because"
       + " it is not owned by the current user.";
-  
-  public static String SIGN_IN_MSG = "<p>Please sign in to use WMT.</p>"
+  public static String SIGN_IN_MSG = 
+      WMT_TITLE + "<p>Please sign in to use WMT.</p>"
+      + "<p>If this is your first time using WMT, create a<br>"
+      + "sign in with an email address and a password.</p>"
       + "<p>For assistance, email <a href='mailto:" + Constants.CSDMS_EMAIL 
       + "'>" + Constants.CSDMS_EMAIL + "</a>.</p>";
-  
+
   // Number of tries to fetch a component; a magic number.
   public static Integer RETRY_ATTEMPTS = 3;
 

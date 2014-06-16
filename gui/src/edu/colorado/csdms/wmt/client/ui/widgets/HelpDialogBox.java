@@ -62,10 +62,6 @@ public class HelpDialogBox extends DialogBox {
     contents.setWidth("30em");
     contents.getElement().getStyle().setMargin(1.0, Unit.EM);
 
-    String title1 = "<h2>WMT</h2>";
-    String title2 =
-        "<p><b>The CSDMS Web Modeling Tool</b></br>Version: "
-            + DataManager.VERSION + "</p>";
     String website =
         "<p>For more information on CSDMS, please visit our <a href='"
             + Constants.CSDMS_HOME + "'>website</a>, or <a href='mailto:"
@@ -78,21 +74,17 @@ public class HelpDialogBox extends DialogBox {
         "<p>For a brief tutorial, please see <a href='"
             + Constants.WMT_TUTORIAL + "'>WMT Tutorial</a>.</p>";
 
-    HTML title1Html = new HTML(title1);
-    HTML title2Html = new HTML(title2);
+    HTML titleHtml = new HTML(Constants.WMT_TITLE);
     HTML websiteHtml = new HTML(website);
     HTML helpHtml = new HTML(help);
     HTML tutorialHtml = new HTML(tutorial);
 
-    contents.add(title1Html);
-    contents.add(title2Html);
+    contents.add(titleHtml);
     contents.add(websiteHtml);
     contents.add(helpHtml);
     contents.add(tutorialHtml);
 
-    contents.setCellHorizontalAlignment(title1Html,
-        HasHorizontalAlignment.ALIGN_CENTER);
-    contents.setCellHorizontalAlignment(title2Html,
+    contents.setCellHorizontalAlignment(titleHtml,
         HasHorizontalAlignment.ALIGN_CENTER);
 
     closePanel = new ClosePanel();
