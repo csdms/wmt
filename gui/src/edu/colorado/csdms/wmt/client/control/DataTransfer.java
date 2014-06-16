@@ -24,6 +24,7 @@
 package edu.colorado.csdms.wmt.client.control;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -800,12 +801,17 @@ public class DataTransfer {
       data.getPerspective().getLoginPanel().showInputPanel();
       data.getPerspective().reset();
 
-      // Clear any user-owned labels from list.
+      // Clear any user-owned labels from list. Locate first, then remove.
+      List<String> toRemove = new ArrayList<String>();
       for (Map.Entry<String, LabelJSO> entry : data.modelLabels.entrySet()) {
         if (data.security.getWmtUsername().equals(entry.getValue().getOwner())) {
-          data.modelLabels.remove(entry.getKey());
+          toRemove.add(entry.getKey());
         }
       }
+      for (String key : toRemove) {
+        GWT.log("Remove label: " + key);
+        data.modelLabels.remove(key);
+      }      
 
       // Remind the user to sign in to use WMT. (Grays out the entire window.)
       DesensitizingPopupPanel signInPopup =
