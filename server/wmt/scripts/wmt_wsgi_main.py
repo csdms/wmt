@@ -3,7 +3,7 @@ import os
 import sys
 import web
 
-os.environ.setdefault('WMT_ENABLE_SESSIONS', 'FALSE')
+os.environ.setdefault('WMT_ENABLE_SESSIONS', 'TRUE')
 os.environ.setdefault('WMT_PREFIX',
     os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 )
