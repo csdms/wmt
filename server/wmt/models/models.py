@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 
 from .components import get_component
-from ..config import (site, db)
+from ..config import (site, db, tag_db)
 from ..session import get_username
 from .tags import select_public_models
 
