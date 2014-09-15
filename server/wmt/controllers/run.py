@@ -200,7 +200,9 @@ class Update(object):
         raise web.seeother('/run/show')
 
 
-_UPLOAD_DIR = '/data/ftp/pub/users/wmt'
+#_UPLOAD_DIR = '/data/ftp/pub/users/wmt'
+#_UPLOAD_DIR = '/Library/WebServer/Documents/files'
+_UPLOAD_DIR = site['pickup']
 _CHUNK_SIZE = 8192
 
 class Upload(object):

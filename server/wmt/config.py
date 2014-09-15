@@ -23,6 +23,8 @@ def _read_config_file(path_to_file, prefix=None):
     for (name, path) in site.items():
         site[name] = os.path.join(prefix, path)
     site.update(config.items('url'))
+    for (key, value) in config.items('pickup'):
+        site['pickup_' + key] = value
 
     site['pw'] = CryptContext.from_path(path_to_file, section='passlib')
     return site
