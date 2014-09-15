@@ -31,8 +31,16 @@ def create_empty_database(path_to_db, clobber=True, schema=None):
 
     if schema is not None:
         with closing(conn) as db:
-            with open(schema, 'r') as f:
-                db.cursor().executescript(f.read())
+            if os.path.isfile(schema):
+                with open(schema, 'r') as f:
+                    script = f.read()
+            else:
+                try:
+                    script = schema.read()
+                except AttributeError:
+                    script = schema
+            db.cursor().executescript(script)
+            #db.cursor().executescript(f.read())
             db.commit()
 
     conn.close()
@@ -207,7 +215,7 @@ class Site(object):
 
         self.to_conf_file(os.path.join(self.dir['conf'].prefix, 'wmt.ini'))
 
-    def to_conf_file(self, filename):
+    def to_dict(self):
         sections = OrderedDict([
             ('paths', OrderedDict([
                 #('prefix', self.prefix),
@@ -220,12 +228,18 @@ class Site(object):
                 ('database', os.path.join('%(db)s', 'wmt.db')),
                 ('user_db', os.path.join('%(db)s', 'users.db')),
                 ('submission_db', os.path.join('%(db)s', 'submission.db')),
-                ('db', self.dir['db'].name), ])
+                ('pickup', os.path.join(self.dir['files'].name, 'pickup')),
+                ('db', self.dir['db'].name), ]),
             ),
             ('url', OrderedDict([
                 ('scheme', self._options.pop('url_scheme')),
                 ('netloc', self._options.pop('url_netloc')),
                 ('path', self._options.pop('url_path')), ]),
+            ),
+            ('pickup', OrderedDict([
+                ('scheme', self._options.pop('pickup_scheme')),
+                ('netloc', self._options.pop('pickup_netloc')),
+                ('path', self._options.pop('pickup_path')), ]),
             ),
             ('passlib', OrderedDict([
                 ('schemes', 'sha512_crypt, sha256_crypt'),
@@ -234,6 +248,26 @@ class Site(object):
             ),
         ])
         sections['user'] = OrderedDict(self._options)
+
+        return sections
+
+    def to_conf_string(self):
+        from StringIO import StringIO
+
+        sections = self.to_dict()
+
+        conf_file = StringIO()
+        try:
+            write_configuration(conf_file, sections)
+        except Exception:
+            raise
+        else:
+            return conf_file.getvalue()
+        finally:
+            conf_file.close()
+
+    def to_conf_file(self, filename):
+        sections = self.to_dict()
 
         with open(filename, 'w') as conf_file:
             write_configuration(conf_file, sections)
