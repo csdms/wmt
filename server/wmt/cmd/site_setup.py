@@ -3,7 +3,7 @@ import os
 from string import Template
 from collections import OrderedDict
 
-from .site import Site
+from ..installer.site import Site
 
 
 _HTTPD_CONF = """
@@ -116,6 +116,13 @@ def parse_args():
     parser.add_argument('--url-netloc', default='localhost',
                         help='Network location of the WMT server')
 
+    parser.add_argument('--pickup-scheme', default='https',
+                        help='URL scheme specifier for the pickup')
+    parser.add_argument('--pickup-path', default='pickup',
+                        help='Hierarchical path to the pickup')
+    parser.add_argument('--pickup-netloc', default='localhost',
+                        help='Network location of the pickup')
+
     parser.add_argument('--dry-run', action='store_true',
                         help='go through the motions')
     parser.add_argument('--httpd-conf', action=SetAsDryRun, nargs=0,
@@ -134,7 +141,11 @@ def main():
                       ('email', args.email),
                       ('url_scheme', args.url_scheme),
                       ('url_netloc', args.url_netloc),
-                      ('url_path', args.url_path), ])
+                      ('url_path', args.url_path),
+                      ('pickup_scheme', args.pickup_scheme),
+                      ('pickup_netloc', args.pickup_netloc),
+                      ('pickup_path', args.pickup_path),
+                     ])
 
     if not args.dry_run:
         setup(args.prefix, user_vars)

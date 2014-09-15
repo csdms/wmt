@@ -28,7 +28,11 @@ setup(name='wmt',
                'data/templates/*html', ], },
       entry_points={
           'console_scripts': [
-              'wmt_setup = wmt.installer.site_setup:main',
+              'wmt-site-setup = wmt.cmd.site_setup:main',
+              'wmt-site-conf = wmt.cmd.site_conf:main',
+              'wmt-db-new = wmt.cmd.db_new:main',
+              'wmt-db-schema = wmt.cmd.db_schema:main',
+              'wmt-db-update = wmt.cmd.db_update:main',
               'wmt_fill_file = wmt.scripts.fill_file:main',
               'wmt_validate = wmt.scripts.validate:main',
               'wmt_get_db = wmt.installer.components:main',
