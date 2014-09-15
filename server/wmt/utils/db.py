@@ -21,7 +21,7 @@ class LoadError(Error):
 def _component_names(palette_dir):
     names = set()
     for item in os.listdir(palette_dir):
-        if os.path.isdir(os.path.join(palette_dir, item)):
+        if os.path.isdir(os.path.join(palette_dir, item)) and not item.startswith('.'):
             names.add(item)
     return names
 
@@ -37,6 +37,7 @@ def _load_table(name, db='.'):
             except ValueError as error:
                 raise LoadError(str(error))
     except IOError as error:
+        print(error, file=STDERR)
         table = []
 
     return table
