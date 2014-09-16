@@ -1,6 +1,7 @@
 import web
 import json
 import os
+from datetime import datetime
 
 from ..models import (models, users, components)
 from ..render import render
@@ -173,8 +174,9 @@ class Open(object):
     def GET(self, id):
         web.header('Content-Type', 'application/json; charset=utf-8')
         model = _get_model_or_raise(id)
+        date = datetime.strptime(model.date, '%a, %d %b %Y %H:%M:%S %Z')
         return json.dumps(dict(name=model.name, id=model.id,
-                               owner=model.owner))
+                               owner=model.owner, date=date.isoformat()))
 
 
 class Show(object):
