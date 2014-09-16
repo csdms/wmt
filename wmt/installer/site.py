@@ -7,7 +7,7 @@ from collections import OrderedDict
 import wmt
 
 from .components import download_and_unpack_from_github
-
+from ..schema import SCHEMA
 
 _PACKAGE_PREFIX = os.path.abspath(os.path.dirname(wmt.__file__))
 
@@ -168,8 +168,7 @@ class Database(SiteSubFolder):
 
         for db in ['wmt', 'users', 'submission', 'session', ]:
             create_empty_database(
-                os.path.join(self.prefix, db + '.db'),
-                schema=os.path.join(src_dir, db + '.sql'),
+                os.path.join(self.prefix, db + '.db'), schema=SCHEMA[db],
                 clobber=True)
         chown_folder_and_files(self.prefix, 'nobody', 'nobody')
 
