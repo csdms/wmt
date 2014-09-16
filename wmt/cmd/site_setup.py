@@ -44,7 +44,7 @@ To finish the installation you'll have to do the following:
 """
 
 def setup(prefix, options={}):
-    site = Site(prefix, options=options)
+    site = Site(os.path.abspath(prefix), options=options)
     site.create()
 
 
@@ -72,13 +72,14 @@ def print_post_setup_instructions(args):
         import re
         return re.sub('^', " " * indent, s, flags=re.MULTILINE)
 
+    prefix = os.path.abspath(args.prefix)
     site_vars = {
-        'prefix': args.prefix,
+        'prefix': prefix,
         'netloc': args.url_netloc,
-        'db_dir': os.path.join(args.prefix, 'db'),
-        'static_dir': os.path.join(args.prefix, 'static'),
-        'startup_script': os.path.join(args.prefix, 'bin', 'start_wmt.wsgi'),
-        'python_path': os.path.join(args.prefix, 'internal'),
+        'db_dir': os.path.join(prefix, 'db'),
+        'static_dir': os.path.join(prefix, 'static'),
+        'startup_script': os.path.join(prefix, 'bin', 'start_wmt.wsgi'),
+        'python_path': os.path.join(prefix, 'internal'),
     }
     httpd_conf = _HTTPD_CONF.format(**site_vars)
 
@@ -135,17 +136,18 @@ def parse_args():
 def main():
     args = parse_args()
 
-    user_vars = read_site_vars(args.file)
+    user_vars = dict([
+        ('name', args.name),
+        ('email', args.email),
+        ('url_scheme', args.url_scheme),
+        ('url_netloc', args.url_netloc),
+        ('url_path', args.url_path),
+        ('pickup_scheme', args.pickup_scheme),
+        ('pickup_netloc', args.pickup_netloc),
+        ('pickup_path', args.pickup_path),
+    ])
     user_vars.update(collect_user_vars(args.conf))
-    user_vars.update([('name', args.name),
-                      ('email', args.email),
-                      ('url_scheme', args.url_scheme),
-                      ('url_netloc', args.url_netloc),
-                      ('url_path', args.url_path),
-                      ('pickup_scheme', args.pickup_scheme),
-                      ('pickup_netloc', args.pickup_netloc),
-                      ('pickup_path', args.pickup_path),
-                     ])
+    user_vars.update(read_site_vars(args.file))
 
     if not args.dry_run:
         setup(args.prefix, user_vars)
