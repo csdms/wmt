@@ -142,9 +142,15 @@ class Files(SiteSubFolder):
 
 class Static(SiteSubFolder):
     name = 'static'
-    def populate(self):
-        src_dir = os.path.join(_PACKAGE_PREFIX, 'data', 'static')
-        copy_dir_contents(src_dir, self.prefix)
+    #def populate(self):
+    #    src_dir = os.path.join(_PACKAGE_PREFIX, 'data', 'static')
+    #    copy_dir_contents(src_dir, self.prefix)
+
+    def create(self):
+        try:
+            os.symlink(os.path.join(_PACKAGE_PREFIX, 'data', 'static'), self.prefix)
+        except OSError:
+            pass
 
 
 class Logs(SiteSubFolder):
@@ -156,9 +162,15 @@ class Logs(SiteSubFolder):
 
 class Templates(SiteSubFolder):
     name = 'templates'
-    def populate(self):
-        src_dir = os.path.join(_PACKAGE_PREFIX, 'data', 'templates')
-        copy_dir_contents(src_dir, self.prefix)
+    #def populate(self):
+    #    src_dir = os.path.join(_PACKAGE_PREFIX, 'data', 'templates')
+    #    copy_dir_contents(src_dir, self.prefix)
+
+    def create(self):
+        try:
+            os.symlink(os.path.join(_PACKAGE_PREFIX, 'data', 'templates'), self.prefix)
+        except OSError:
+            pass
 
 
 class Database(SiteSubFolder):
