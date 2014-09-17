@@ -70,7 +70,7 @@ create table hosts (
 SCHEMA = {
     'session': _SESSION,
     'submission': _SUBMISSION,
-    'tags': _TAGS,
+    'tag': _TAGS,
     'users': _USERS,
     'wmt': _WMT,
 }
