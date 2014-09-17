@@ -192,7 +192,9 @@ class List(object):
         all_models = models.get_models()
         resp = []
         for model in all_models:
-            resp.append(dict(id=model.id, name=model.name))
+            date = datetime.strptime(model.date, '%a, %d %b %Y %H:%M:%S %Z')
+            resp.append(dict(id=model.id, name=model.name,
+                             owner=model.owner, date=date.isoformat()))
         return json.dumps(resp)
 
 
