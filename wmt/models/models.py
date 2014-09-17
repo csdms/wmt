@@ -68,17 +68,12 @@ def get_private_models():
                      vars=dict(owner=get_username()))
 
 
-def get_models():
+def get_models(sortby=None):
     where = ' OR '.join(['owner=$user', 'owner=\'\''])
     ids = set()
     for entry in db.select('models', order='id DESC', where=where, what='id', vars=dict(user=get_username())):
         ids.add(entry['id'])
     ids |= get_public_models()
-
-    #for model in db.select('models', order='id DESC', where=where, what='id', vars=dict(user=get_username())):
-    #    models.append(model)
-    #for model in get_public_models():
-    #    models.append(model)
 
     models = []
     for id in ids:
@@ -86,6 +81,9 @@ def get_models():
             models.append(get_model(id))
         except BadIdError:
             pass
+
+    if sortby:
+        models.sort(key=lambda model: model[sortby])
 
     return models
 
@@ -97,10 +95,6 @@ def get_model(id):
         raise BadIdError(id)
 
     return model
-    #if model['owner'] in ['', get_username()]:
-    #    return model
-    #else:
-    #    raise AuthorizationError(id)
 
 
 def get_model_component(id, component):
