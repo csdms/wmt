@@ -1,6 +1,7 @@
 import web
 import json
 import os
+import shutil
 from datetime import datetime
 
 from ..models import (models, users, components)
@@ -123,6 +124,24 @@ class Save(object):
         return json.dumps(int(id))
 
 
+class SaveAs(New):
+    def GET(self, id):
+        return New.GET(self)
+
+    def POST(self, id):
+        new_id = New.POST(self)
+
+        src = models.get_model_upload_dir(id)
+        dst = models.get_model_upload_dir(new_id)
+
+        for name in os.listdir(src):
+            srcname = os.path.join(src, name)
+            dstname = os.path.join(dst, name)
+            shutil.copy2(srcname, dstname)
+
+        return new_id
+
+
 class Delete(object):
     """
     Remove a model by *id*. To remove model *1*, go here (**please don't do
@@ -189,7 +208,7 @@ class Show(object):
 class List(object):
     def GET(self):
         web.header('Content-Type', 'application/json; charset=utf-8')
-        all_models = models.get_models()
+        all_models = models.get_models(sortby='name')
         resp = []
         for model in all_models:
             date = datetime.strptime(model.date, '%a, %d %b %Y %H:%M:%S %Z')
