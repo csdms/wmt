@@ -131,7 +131,7 @@ def select_public_models():
     return select_models_tagged_with(public_id)
 
 
-def select_model(tags):
+def select_model(tags, sortby=None):
     from . import models
 
 
@@ -147,6 +147,10 @@ def select_model(tags):
             bad_ids.append(id)
     for id in bad_ids:
         selected.remove(id)
+
+    selected = list(selected)
+    if sortby:
+        selected.sort(key=lambda id: models.get_model(id)[sortby])
 
     return selected
 
