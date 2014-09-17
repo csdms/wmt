@@ -32,6 +32,7 @@ create table tags (
   tag      text,
   owner    text
 );
+INSERT INTO "tags" VALUES(1, 'public', '');
 create table model_tags (
   model_id       integer,
   tag_id         integer
