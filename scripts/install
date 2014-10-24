@@ -1,0 +1,427 @@
+#! /usr/bin/env python
+import os
+import sys
+import subprocess
+import shutil
+import urllib2
+import platform
+from datetime import datetime
+from distutils.dir_util import mkpath
+
+BUILD_ENVIRON = {
+    'PATH': os.pathsep.join(['/usr/bin', '/bin', '/usr/sbin', '/sbin',
+                             '/etc', '/usr/lib']),
+}
+
+MAC_OS_NAME = {
+    '10.6': 'Snow Leopard',
+    '10.7': 'Lion',
+    '10.8': 'Mountain Lion',
+    '10.9': 'Mavericks',
+    '10.10': 'Yosemite',
+}
+
+WMT_INI_CONTENTS = """
+[paths]
+templates = templates
+files = files
+uploads = files/uploads
+downloads = files/downloads
+static = static
+logs = logs
+database = %(db)s/wmt.db
+user_db = %(db)s/users.db
+submission_db = %(db)s/submission.db
+db = db
+
+[url]
+scheme = http
+netloc = {url_netloc}
+path = {url_path}
+
+[passlib]
+schemes = sha512_crypt, sha256_crypt
+sha256_crypt__default_rounds = 100000
+sha512_crypt__default_rounds = 100000
+
+[user]
+name = {user_name}
+email = {user_email}
+"""
+
+
+def is_linux_os():
+    return platform.system() == 'Linux'
+
+
+class cd(object):
+    def __init__(self, dir):
+        self._dir = dir
+
+    def __enter__(self):
+        self._starting_dir = os.path.abspath(os.getcwd())
+        if not os.path.isdir(self._dir):
+            mkpath(self._dir)
+        os.chdir(self._dir)
+        return os.path.abspath(os.getcwd())
+
+    def __exit__(self, type, value, traceback):
+        os.chdir(self._starting_dir)
+
+
+def download_argparse(dest, cache='.'):
+    url = 'https://argparse.googlecode.com/hg/argparse.py'
+    md5 = '3184e88e6009629e9aa2f852e3d7ab13'
+
+    return download_url(url, dest, cache=cache, md5=md5)
+
+
+def checksum_matches(path, md5):
+    import hashlib
+
+    if md5 is None:
+        return False
+
+    hasher = hashlib.md5()
+    with open(path, 'r') as contents:
+        hasher.update(contents.read())
+
+    return hasher.hexdigest() == md5
+
+
+def download_url(url, dest, md5=None, cache='.'):
+    dest = os.path.abspath(os.path.join(cache, dest))
+
+    if os.path.exists(dest):
+        if checksum_matches(dest, md5):
+            status('md5 %s' % url)
+            return dest
+        else:
+            os.remove(dest)
+
+    status('Fetching %s' % url)
+
+    try:
+        response = urllib2.urlopen(url)
+    except urllib2.HTTPError as error:
+        raise
+    except urllib2.URLError as error:
+        raise
+    else:
+        with open(dest, 'w') as destination:
+            shutil.copyfileobj(response, destination)
+
+    return os.path.abspath(dest)
+
+
+def miniconda_url(version='3.7.0', python='', url=None):
+    url = url or 'http://repo.continuum.io/miniconda'
+
+    if is_linux_os():
+        os = 'Linux-x86_64'
+    else:
+        os = 'MacOSX-x86_64'
+    file = 'Miniconda{python}-{version}-{os}.sh'.format(
+        python=python, version=version, os=os)
+
+    return '/'.join([url, file])
+
+
+def download_miniconda(dest, cache='.'):
+    return download_url(miniconda_url(), dest, cache=cache,
+                        md5='2656c37fd8a1a384650d7f09407a0893')
+
+
+def install_argparse():
+    import tempfile
+    tmp_dir = tempfile.mkdtemp(prefix='wmt', suffix='.d')
+    download_argparse('argparse.py', cache=tmp_dir)
+    return tmp_dir
+
+
+def check_output(*args, **kwds):
+    kwds.setdefault('stdout', subprocess.PIPE)
+    return subprocess.Popen(*args, **kwds).communicate()[0]
+
+
+def system(*args, **kwds):
+    verbose = kwds.pop('verbose', True)
+
+    status(' '.join(args[0]))
+
+    if verbose:
+        call = subprocess.check_call
+    else:
+        call = check_output
+
+    try:
+        call(*args, **kwds)
+    except subprocess.CalledProcessError:
+        status('Error')
+        raise
+
+
+def git_clone(url, git=None, dir='.'):
+    git = git or which('git')
+
+    with cd(dir):
+        system([git, 'init', '-q'])
+        system([git, 'config', 'remote.origin.url', url])
+        system([git, 'config', 'remote.origin.fetch',
+                '+refs/head/*:refs/remotes/origin/*'])
+        system([git, 'fetch', 'origin',
+                'master:refs/remotes/origin/master', '-n', '--depth=1'])
+        system([git, 'reset', '--hard', 'origin/master'])
+
+
+def git_pull(url, dir='.'):
+    with cd(dir):
+        system(['git', 'checkout', '-q', 'master'])
+        system(['git', 'pull', 'origin', '-q',
+                'refs/heads/master:refs/remotes/origin/master'])
+
+
+def git_clone_or_update(url, dir='.'):
+    if os.path.isdir(os.path.join(dir, '.git')):
+        status('Updating %s' % url)
+        git_pull(url, dir=dir)
+    else:
+        status('Cloning %s' % url)
+        git_clone(url, dir=dir)
+
+
+def ln_s(src, dst):
+    if not os.path.exists(dst):
+        system(['ln', '-s', os.path.abspath(src), os.path.abspath(dst)])
+
+
+def which(prog, env=None):
+    prog = os.environ.get(env or prog.upper(), prog)
+
+    try:
+        prog = check_output(['which', prog],
+                            stderr=open('/dev/null', 'w')).strip()
+    except subprocess.CalledProcessError:
+        return None
+    else:
+        return prog
+
+
+def which_python():
+    return which('python')
+
+
+def python_version(python, micro=False):
+    ver = check_output(
+            [python, '-c',
+             'import platform; print(platform.python_version())']).strip()
+    if micro:
+        return ver
+    else:
+        return '.'.join(ver.split('.')[:2])
+
+
+def python_site_packages(python):
+    return os.path.join('lib', 'python%s' % python_version(python),
+                        'site-packages')
+
+
+def status(message):
+    print ' '.join(['==>', message])
+
+
+def prepend_path(var, path):
+    path = os.path.normpath(path)
+
+    try:
+        paths = os.environ[var].split(os.pathsep)
+    except KeyError:
+        paths = []
+    else:
+        paths = [os.path.normpath(p) for p in paths]
+
+    try:
+        paths.remove(path)
+    except ValueError:
+        pass
+
+    os.environ[var] = os.pathsep.join([path] + paths)
+
+
+def create_and_prepend_path(var, path):
+    mkpath(path)
+    prepend_path(var, path)
+
+
+def fetch_wmt_api(dir='.', url=None):
+    git_clone_or_update(url or 'https://github.com/csdms/wmt', dir=dir)
+
+
+def set_build_environ(keep=['HOME', 'USER', 'TERM'], env=None):
+    import getpass
+
+    for key in os.environ.keys():
+        if key not in keep:
+            del os.environ[key]
+    os.environ.update(env)
+    os.environ.setdefault('HOME', os.path.expanduser('~'))
+    os.environ.setdefault('USER', getpass.getuser())
+    os.environ.setdefault('TERM', 'xterm-256color')
+
+
+def install_python(prefix, dir='.'):
+    import urllib2
+
+    cache = os.path.join(prefix, 'var', 'cache')
+    with cd(cache):
+        miniconda = download_miniconda('miniconda.sh')
+
+    conda_prefix = os.path.join(prefix, 'opt', 'conda')
+    with cd(conda_prefix) as base:
+        conda = os.path.join(base, 'bin', 'conda')
+
+        env_bindir = os.path.join(base, 'envs', 'wmt', 'bin')
+        env_site_packages = os.path.join(base, 'envs', 'wmt', 'lib',
+                                         'python2.7', 'site-packages')
+
+        if not os.path.exists(conda):
+            system(['bash', miniconda, '-f', '-b', '-p', base])
+
+            system([conda, 'config',
+                    '--set', 'always_yes', 'yes',
+                    '--set', 'changeps1', 'no'])
+            system([conda, 'update', 'conda'])
+
+        if not os.path.isdir(env_bindir):
+            system([conda, 'create', '-n', 'wmt', 'python=2.7'])
+
+        system([conda, 'install', '-n', 'wmt',
+                'numpy', 'scipy', 'setuptools', 'netcdf4',
+                'pyyaml', 'nose>=1.3', 'requests', 'passlib', 'pip'])
+
+        system([conda, 'update', '-n', 'wmt', '--all'])
+
+        pip = os.path.join(env_bindir, 'pip')
+        system([pip, 'install', '--upgrade', 'web.py'])
+        system([pip, 'install', '--upgrade', 'wsgilog'])
+        system([pip, 'install', '--upgrade', 'requests_toolbelt'])
+
+    prepend_path('PATH', env_bindir)
+    prepend_path('PYTHONPATH', env_site_packages)
+
+    return os.path.join(env_bindir, 'python')
+
+
+def install_wmt_api(prefix, dir='.'):
+    create_and_prepend_path(
+        'PYTHONPATH', os.path.join(
+            prefix, python_site_packages(which_python())))
+
+    with cd(prefix):
+        for path in ['bin', 'conf', 'db', 'files/uploads', 'files/downloads']:
+            mkpath(path)
+
+    with cd(os.path.join(prefix, 'opt', 'wmt-api')):
+        fetch_wmt_api()
+
+        system([which_python(), 'setup.py', 'develop'])
+
+        ln_s(os.path.join('wmt', 'scripts', 'wmt_wsgi_main.py'),
+             os.path.join(prefix, 'bin', 'wmt_wsgi_main.py'))
+        ln_s(os.path.join('wmt', 'data', 'templates'),
+             os.path.join(prefix, 'templates'))
+        ln_s(os.path.join('wmt', 'data', 'static'),
+             os.path.join(prefix, 'static'))
+
+    with cd(os.path.join(prefix, 'db')):
+            git_clone_or_update('https://github.com/csdms/component_metadata',
+                                dir='components')
+
+            system(['wmt-db-new', 'wmt', 'users', 'submission', 'session',
+                    'tag', '--clobber'])
+
+    with cd(os.path.join(prefix, 'conf')):
+        with open('wmt.ini', 'w') as fp:
+            fp.write(WMT_INI_CONTENTS)
+
+
+def total_seconds(dt):
+    return (dt.microseconds +
+            (dt.seconds + dt.days * 24 * 3600.) * 1e6) / 1e6
+
+
+def print_summary(start, end):
+    print 'Started: %s' % start
+    print 'Finished: %s' % end
+    print 'Build time: %d seconds' % total_seconds(end - start)
+
+    print 'Build system: %s' % platform.system()
+    if platform.system() == 'Darwin':
+        ver = platform.mac_ver()[0]
+        major_minor = '.'.join(ver.split('.')[:2])
+        print 'Mac OSX: %s (%s)' % (ver, MAC_OS_NAME[major_minor])
+    else:
+        print 'Linux distribution: %s' % '-'.join(platform.linux_distribution())
+    print 'Python version: %s' % python_version(which_python(), micro=True)
+    print 'Build environment:'
+    for item in os.environ.items():
+        print '- %s: %s' % item
+
+
+if __name__ == '__main__':
+    try:
+        import argparse
+    except ImportError:
+        tmp = install_argparse()
+        sys.path.append(tmp)
+        try:
+            import argparse
+        except ImportError:
+            raise
+        finally:
+            shutil.rmtree(tmp)
+
+    git = which('git')
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('prefix', help='Install prefix for wmt-api')
+    parser.add_argument('--verbose', action='store_true',
+                        help='Be verbose')
+
+    parser.add_argument('--with-python', default='internal',
+                         metavar='PYTHON',
+                         help='Path to Python executable [internal]')
+
+    parser.add_argument('--with-git', default=git, metavar='git',
+                        required=not git,
+                        help='Path to git executable [%s]' % git)
+
+    args = parser.parse_args()
+
+    BUILD_ENVIRON.update({
+        'GIT': args.with_git,
+    })
+    set_build_environ(env=BUILD_ENVIRON)
+
+    start = datetime.now()
+
+    install_prefix = os.path.abspath(args.prefix)
+    with cd(install_prefix) as base:
+        for dir in ['bin', 'etc', 'tmp', 'var/log', 'var/cache', 'opt',
+                    'local']:
+            if not os.path.isdir(dir):
+                mkpath(dir)
+
+    if args.with_python == 'internal':
+        os.environ['PYTHON'] = install_python(install_prefix)
+    else:
+        os.environ.setdefault('PYTHON', args.with_python)
+
+    with cd(install_prefix) as dir:
+        install_wmt_api(dir)
+
+    end = datetime.now()
+
+    status('Finished')
+    status('Summary')
+    print_summary(start, end)
