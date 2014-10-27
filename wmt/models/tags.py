@@ -42,6 +42,24 @@ class TagNameError(Error):
         return '%s' % self._tag
 
 
+def to_resource(tag):
+    return {
+        '_type': 'tag',
+        'id': tag.id,
+        'href': '/api/tags/%d' % tag.id,
+        'tag': tag.tag,
+        'owner': tag.owner,
+    }
+
+
+def from_resource(resource):
+    return {
+        'id': resource['id'],
+        'tag': resource['tag'],
+        'owner': resource['owner'],
+    }
+
+
 def new_tag(tag, owner=''):
     try:
         return get_tag_by_name(tag)
