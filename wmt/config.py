@@ -52,6 +52,7 @@ if not os.path.isfile(site['database']):
 submission_db = web.database(dbn='sqlite', db=site['submission_db'])
 user_db = web.database(dbn='sqlite', db=site['user_db'])
 tag_db = web.database(dbn='sqlite', db=os.path.join(site['db'], 'tag.db'))
+names_db = web.database(dbn='sqlite', db=site['names_db'])
 palette = load_palette(os.path.join(site['db'], 'components'))
 
 logging.basicConfig()
