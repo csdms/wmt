@@ -9,7 +9,7 @@ def new_user(username, password):
 
     hashed_password = site['pw'].encrypt(password)
     try:
-        db.insert('users', username=username.lower(), password=hashed_password)
+        return db.insert('users', username=username.lower(), password=hashed_password)
     except IntegrityError:
         pass
 
@@ -26,8 +26,19 @@ def get_user(username):
         return None
 
 
+def get_user_by_id(id):
+    try:
+        return db.select('users', where='id=$id', vars=locals())[0]
+    except IndexError:
+        return None
+
+
 def create_account(username, password):
     db.insert('users', username=username, password=password)
+
+
+def delete_user(id):
+    db.delete('users', where='id=$id', vars=locals())
 
 
 #def get_user_by_name(username):
