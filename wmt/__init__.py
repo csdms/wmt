@@ -9,7 +9,35 @@ __author__ = [
 __license__ = "public domain"
 
 _UUID_REGEX = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+_EMAIL = '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}'
+
 URLS = (
+    '/api', 'wmt.api.root.Root',
+    '/api/users', 'wmt.api.users.Users',
+    '/api/users/(\d+)', 'wmt.api.users.User',
+
+    '/api/components', 'wmt.api.components.Components',
+    '/api/components/(\w+)', 'wmt.api.components.Component',
+    '/api/components/(\w+)/params', 'wmt.api.components.Parameters',
+    '/api/components/(\w+)/params/(\w+)', 'wmt.api.components.Parameter',
+    '/api/components/(\w+)/files', 'wmt.api.components.Files',
+    '/api/components/(\w+)/files/(\w+)', 'wmt.api.components.File',
+    '/api/components/(\w+)/inputs', 'wmt.api.components.Inputs',
+    '/api/components/(\w+)/outputs', 'wmt.api.components.Outputs',
+
+    '/api/tags', 'wmt.api.tags.Tags',
+    '/api/tags/(\d+)', 'wmt.api.tags.Tag',
+    '/api/tags/(\d+)/models', 'wmt.api.tags.Models',
+
+    '/api/models', 'wmt.api.models.Models',
+    '/api/models/(\d+)', 'wmt.api.models.Model',
+    '/api/models/(\d+)/tags', 'wmt.api.models.Tags',
+    '/api/models/(\d+)/actions', 'wmt.api.models.Actions',
+    '/api/models/(\d+)/status', 'wmt.api.models.Status',
+
+    '/api/names', 'wmt.api.names.Names',
+    '/api/names/(\d+)', 'wmt.api.names.Name',
+
     '/', 'wmt.controllers.index.Index',
     '/help', 'wmt.controllers.index.Help',
     '/help/(.*)', 'wmt.controllers.index.Help',
