@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 
+from flask import current_app
 from flask.ext.login import current_user
 
 from sqlalchemy import Column, Integer, Text
@@ -10,7 +11,7 @@ from ...utils.io import write_readme
 
 Base = SESSIONS['submission']['base']
 db_session = SESSIONS['submission']['session']
-STAGE_DIR = '/data/web/htdocs/wmt/api/v1/files/downloads'
+#STAGE_DIR = '/data/web/htdocs/wmt/api/v1/files/downloads'
 
 
 class Sim(Base):
@@ -38,7 +39,8 @@ class Sim(Base):
         self.created = now
         self.updated = now
         self.owner = owner or ""
-        self.stage_dir = os.path.join(STAGE_DIR, self.uuid)
+        self.stage_dir = os.path.join(current_app.config['STAGE_DIR'],
+                                      self.uuid)
 
         self._create_stage_dir()
 

@@ -6,9 +6,11 @@ from flask import g, request, abort, url_for
 from flask.ext.login import current_user
 from flask_login import login_user, logout_user
 
-from ..database import SESSIONS
+from ..services import users
+
+#from ..database import SESSIONS
 from ..utils import as_resource, as_collection
-from ..db import users as user_db
+#from ..db import users as user_db
 
 
 users_page = Blueprint('users', __name__)
@@ -35,7 +37,7 @@ class User(object):
 def login():
     if request.method == 'POST':
         data = json.loads(request.data)
-        if user_db.authenticate_user(data['username'], data['password']):
+        if users.authenticate_user(data['username'], data['password']):
             return as_resource(data['username'])
     else:
         auth = request.authorization
@@ -46,7 +48,7 @@ def login():
             username = request.args.get('username', None)
             password = request.args.get('password', None)
 
-        if user_db.authenticate_user(username, password):
+        if users.authenticate_user(username, password):
             login_user(User(username))
             return as_resource(username)
 
@@ -77,7 +79,7 @@ def to_resource(user):
 
 
 def request_user_tags(id):
-    user = user_db.get(id) or abort(404)
+    user = users.get_or_404(id)
     tags = requests.get(url_for('tags.search',
                                 username=user.username,
                                 _external=True)).text
@@ -85,7 +87,7 @@ def request_user_tags(id):
 
 
 def request_user_models(id):
-    user = user_db.get(id) or abort(404)
+    user = users.get_or_404(id)
     models = requests.get(url_for('models.search',
                                   username=user.username,
                                   _external=True)).text
@@ -98,7 +100,7 @@ def show():
         sort = request.args.get('sort', 'id')
         order = request.args.get('order', 'asc')
 
-        users = user_db.all(sort=sort, order=order)
+        users = users.all(sort=sort, order=order)
         collection = [to_resource(u) for u in users]
 
         return as_collection(collection)
@@ -128,11 +130,11 @@ def search():
     contains = request.args.get('contains', None)
 
     if contains is not None:
-        names = user_db.contains(contains)
+        names = users.contains(contains)
     elif username is not None:
-        names = user_db.get_by_name(username)
+        names = users.get_by_name(username)
     else:
-        names = user_db.all()
+        names = users.all()
 
     collection = [to_resource(name) for name in names]
     return as_collection(collection)
@@ -141,14 +143,14 @@ def search():
 @users_page.route('/<int:id>', methods=['GET', 'REMOVE', 'PATCH',
                                         'OPTIONS'])
 def user(id):
-    u = user_db.get(id) or abort(404)
+    u = users.get_or_404(id)
 
     if request.method == 'REMOVE':
         abort(405)
     elif request.method == 'PATCH':
         data = json.loads(request.data)
-        if not user_db.change_password(u.username, data['old'],
-                                       data['new']):
+        if not users.change_password(u.username, data['old'],
+                                     data['new']):
             abort(401)
 
     return as_resource(to_resource(u))

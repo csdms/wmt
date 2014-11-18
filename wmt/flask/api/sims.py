@@ -3,14 +3,12 @@ import os
 from flask import Blueprint
 from flask import json, url_for, current_app
 from flask import g, request, abort, send_file
-from flaskext.uploads import UploadSet
 
 from ..utils import as_resource, as_collection
-from ..db import sim as sim_db
+from ..services import sims
 
 
 sims_page = Blueprint('sims', __name__)
-#STAGE_DIR = '/data/web/htdocs/wmt/api/dev/files/downloads'
 
 
 def to_resource(sim):
@@ -44,33 +42,34 @@ def show():
         sort = request.args.get('sort', 'id')
         order = request.args.get('order', 'asc')
 
-        sims = sim_db.all(sort=sort, order=order)
-        collection = [to_resource(sim) for sim in sims]
+        sims_list = sims.all(sort=sort, order=order)
+        collection = [to_resource(sim) for sim in sims_list]
         return as_collection(collection)
     elif request.method == 'POST':
         data = json.loads(request.data)
         return as_resource(to_resource(
-            sim_db.add(data['name'], data['model'])))
+            sims.create(data['name'], data['model'])))
 
 
 @sims_page.route('/<int:id>', methods=['GET', 'PATCH', 'REMOVE'])
 def sim(id):
-    sim = sim_db.get(id) or abort(404)
+    sim = sims.get_or_404(id)
 
     if request.method == 'PATCH':
         data = json.loads(request.data)
         if set(data.keys()).issubset(['status', 'message']):
-            sim_db.update_status(id, **data) or abort(401)
+            sims.update_status(id, **data) or abort(401)
         else:
             abort(400)
     elif request.method == 'REMOVE':
-        sim_db.remove()
+        sims.remove(sim)
 
     return as_resource(to_resource(sim))
 
 
 @sims_page.route('/<int:id>/status', methods=['GET', 'PATCH', 'PUT'])
 def status(id):
+    sim = sims.get_or_404(id)
 
     if request.method in ['PATCH', 'PUT']:
         data = json.loads(request.data)
@@ -80,9 +79,8 @@ def status(id):
             abort(400)
         elif request.method == 'PUT' and keys != set(['status', 'message']):
             abort(400)
-        sim_db.update_status(**data)
+        sims.update_status(sim, **data)
 
-    sim = sim_db.get(id) or abort(404)
     return as_resource({'status': sim.status,
                         'message': sim.message })
 
@@ -93,7 +91,7 @@ def files(id):
 
     format = request.args.get('format', 'gztar')
 
-    sim = sim_db.get(id) or abort(404)
+    sim = sims.get_or_404(id)
 
     try:
         tmpdir = tempfile.mkdtemp(prefix='wmt', suffix='.d')
@@ -114,8 +112,8 @@ def actions(id):
     if request.method == 'POST':
         data = json.loads(request.data)
         if data['action'] == 'start':
-            sim_db.start(id)
+            sims.start(id)
         elif data['action'] == 'stop':
-            sim_db.stop(id)
+            sims.stop(id)
         else:
             abort(400)

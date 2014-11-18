@@ -3,21 +3,15 @@ import os
 from flask import Blueprint
 from flask import json, url_for
 from flask import g, request, abort, current_app
-#from flaskext.uploads import UploadSet, All
+from flask.ext.login import current_user, login_required
 
 from werkzeug import secure_filename
 
-from ..utils import as_resource, as_collection
-from ..db import model as model_db
-from ..db import tag as tag_db
+from ..utils import as_resource, as_collection, jsonify_collection
+from ..services import models, tags
 
 
 models_page = Blueprint('models', __name__)
-
-#files = UploadSet('file', All)
-
-
-#UPLOAD_DIR = '/data/web/htdocs/wmt/api/dev/files/uploads'
 
 
 def components(model):
@@ -29,7 +23,8 @@ def to_resource(model):
         'rel': 'resource/blueprint',
         'href': url_for('.blueprint', id=model.id),
     }]
-    for tag in tag_db.tags_with_model(model.id):
+    #for tag in tag_db.tags_with_model(model.id):
+    for tag in model.tags:
         link = dict(rel='collection/tags')
         if tag is not None:
             link['href'] = url_for('tags.tag', id=tag.id)
@@ -56,40 +51,60 @@ def to_collection(models):
     return [to_resource(model) for model in get_all_models()]
 
 
-@models_page.route('/', methods=['GET', 'POST', 'OPTIONS'])
+@models_page.route('/', methods=['GET'])
 def show():
-    if request.method == 'GET':
-        collection = [to_resource(model) for model in model_db.all()]
-        return as_collection(collection)
-    elif request.method == 'POST':
-        data = json.loads(request.data)
-        return as_resource(to_resource(
-            model_db.add(data['name'], data['json'])))
+    return jsonify_collection(models.all())
 
 
-@models_page.route('/<int:id>', methods=['GET', 'REMOVE', 'OPTIONS', 'PATCH'])
+@models_page.route('/', methods=['POST'])
+@login_required
+def add():
+    data = json.loads(request.data)
+    owner = current_user.get_id()
+    #return as_resource(to_resource(
+    #    models.create(data['name'], data['json'], owner=owner)))
+    return models.create(data['name'], data['json'], owner=owner).jsonify()
+
+
+@models_page.route('/<int:id>', methods=['GET'])
 def model(id):
-    model = model_db.query(id=id).first() or abort(404)
+    return models.get_or_404(id).jsonify()
 
-    if request.method == 'REMOVE':
-        model_db.remove(model)
-    elif request.method == 'PATCH':
-        data = json.loads(request.data)
-        model_db.update(id, **data)
 
-    return as_resource(to_resource(model))
+@models_page.route('/<int:id>', methods=['PATCH'])
+@login_required
+def edit(id):
+    model = models.get_or_404(id)
+    data = json.loads(request.data)
+    models.update(model, **data)
+    return model.jsonify()
+
+
+@models_page.route('/<int:id>', methods=['DELETE'])
+@login_required
+def delete(id):
+    model = models.get_or_404(id)
+    models.delete(model)
+    return model.jsonify()
 
 
 @models_page.route('/<int:id>/blueprint', methods=['GET'])
 def blueprint(id):
-    model = model_db.query(id=id).first() or abort(404)
-
+    model = models.get_or_404(id)
     return as_resource(json.loads(model.json))
 
 
-@models_page.route('/<int:id>/uploads', methods=['GET', 'POST', 'PUT', 'REMOVE'])
+@models_page.route('/<int:id>/uploads', methods=['GET'])
+def fetch_uploads(id):
+    model = models.get_or_404(id)
+    model_uploads = os.path.join(current_app.config['UPLOAD_DIR'], str(id))
+    return json.dumps(os.listdir(model_uploads))
+
+
+@models_page.route('/<int:id>/uploads', methods=['POST', 'PUT', 'DELETE'])
+@login_required
 def uploads(id):
-    model = model_db.query(id=id).first() or abort(404)
+    model = models.get_or_404(id)
     model_uploads = os.path.join(current_app.config['UPLOAD_DIR'], str(id))
 
     if request.method in ['PUT', 'POST']:
@@ -102,7 +117,7 @@ def uploads(id):
             else:
                 os.remove(path)
         file.save(path)
-    elif request.method == 'REMOVE':
+    elif request.method == 'DELETE':
         data = json.loads(request.data)
         filename = secure_filename(data['filename'])
         path = os.path.join(model_uploads, filename)
@@ -115,15 +130,21 @@ def uploads(id):
 @models_page.route('/search')
 def search():
     username = request.args.get('username', None)
-
-    models = model_db.query(owner=username)
-    #models = Model.query.filter_by(owner=username)
-    collection = [url_for('.model', id=m.id) for m in models or []]
-    return as_collection(collection)
+    return jsonify_collection(models.find(owner=username))
 
 
-@models_page.route('/<int:id>/tags')
-def models_tags(id):
-    tags = tag_db.tags_with_model(id)
-    collection = [url_for('tags.tag', id=t.tag_id) for t in tags or []]
-    return as_collection(collection)
+@models_page.route('/<int:id>/tags', methods=['GET'])
+def get_tags(id):
+    model = models.get_or_404(id)
+    return jsonify_collection(model.tags)
+
+
+@models_page.route('/<int:id>/tags', methods=['POST'])
+@login_required
+def add_a_tag(id):
+    model = models.get_or_404(id)
+
+    data = json.loads(request.data)
+    tag = tags.get(data['id']) or abort(400)
+    models.append(model, tags=tag)
+    return jsonify_collection(model.tags)

@@ -2,17 +2,46 @@ import sqlite3
 
 from flask import Flask, g, session, request, redirect, url_for
 from flask_login import LoginManager
-from flaskext.uploads import UploadSet, All, configure_uploads
+#from flaskext.uploads import UploadSet, All, configure_uploads
 
-from .views import (names_page, tags_page, users_page, models_page,
-                    components_page, sims_page)
-from .utils import as_resource, as_collection
+from passlib.context import CryptContext
+
+from .database import start_engines
 
 
 DEBUG = True
 SECRET_KEY = 'super secret key'
 SERVER_NAME = 'csdms.colorado.edu'
 UPLOADS_DEFAULT_DEST = '/data/web/htdocs/wmt/api/dev/files/uploads'
+#UPLOADED_DATAFILES_DEST = '/data/web/htdocs/wmt/api/dev/files/uploads'
+UPLOAD_DIR = '/data/web/htdocs/wmt/api/dev/files/uploads'
+STAGE_DIR = '/data/web/htdocs/wmt/api/dev/files/downloads'
+DATABASE_DIR = '/data/web/htdocs/wmt/api/v1/db'
+CRYPT_INI_PATH = '/data/web/htdocs/wmt/api/v1/conf/wmt.ini'
+CRYPT_INI = """
+[passlib]
+schemes = sha512_crypt, sha256_crypt
+sha256_crypt__default_rounds = 100000
+sha512_crypt__default_rounds = 100000
+""".strip()
+
+
+app = Flask(__name__)
+app.config.from_object(__name__)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+app.config['pw'] = CryptContext.from_string(app.config['CRYPT_INI'],
+                                            section='passlib')
+
+
+start_engines()
+
+
+from .views import (names_page, tags_page, users_page, models_page,
+                    components_page, sims_page)
+from .utils import as_resource, as_collection
 
 PAGES = [
     (names_page, 'names'),
@@ -22,19 +51,14 @@ PAGES = [
     (components_page, 'components'),
     (sims_page, 'sims'),
 ]
-app = Flask(__name__)
-app.config.from_object(__name__)
-
 for page in PAGES:
     app.register_blueprint(page[0], url_prefix='/' + page[1])
 
-login_manager = LoginManager()
-login_manager.init_app(app)
 
-files = UploadSet('datafiles', extensions=All)
-app.config['files'] = files
-app.config['UPLOADED_DATAFILES_DEST'] = '/data/web/htdocs/wmt/api/dev/files/uploads'
-configure_uploads(app, (files, ))
+#files = UploadSet('datafiles', extensions=All)
+#app.config['files'] = files
+#app.config['UPLOADED_DATAFILES_DEST'] = '/data/web/htdocs/wmt/api/dev/files/uploads'
+#configure_uploads(app, (files, ))
 
 
 class User(object):
