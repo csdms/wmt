@@ -357,7 +357,7 @@ def delete(id):
     else:
         raise AuthenticationError()
 
-    return None, 204
+    return "", 204
 
 
 @users_page.route('/<int:id>', methods=['PATCH'])
