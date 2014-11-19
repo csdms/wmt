@@ -12,7 +12,7 @@ Contents:
    :maxdepth: 2
 
    api
-
+   spec
 
 Indices and tables
 ==================
