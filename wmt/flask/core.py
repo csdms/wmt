@@ -1,8 +1,9 @@
 import sqlite3
 import json
 
-from flask import jsonify, Response
+from flask import jsonify, abort, Response
 from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import sqlalchemy
 from .errors import InvalidJsonError
 
 
@@ -32,20 +33,25 @@ class Service(object):
             raise ValueError('%r is not of type %r' % (model, self.__model__))
         return True
 
-    def save(self, model):
-        self._is_instance_or_raise(model)
 
-        db.session.add(model)
-        tries, max_tries = 0, 10
+    def _add_or_retry(self, model, max_tries=10):
+        tries = 0
         while tries < max_tries:
             try:
+                db.session.add(model)
                 db.session.commit()
-            except sqlite3.OperationalError:
+            except Exception as error:
+                db.session.rollback()
                 tries += 1
             else:
                 break
 
-        if tries == max_tries:
+        return tries < max_tries
+
+    def save(self, model):
+        self._is_instance_or_raise(model)
+
+        if not self._add_or_retry(model, max_tries=10):
             abort(503)
 
         return model
@@ -91,6 +97,7 @@ class Service(object):
         return model
 
     def append(self, model, **kwds):
+        self._is_instance_or_raise(model)
         for key, value in kwds.items():
             getattr(model, key).append(value)
         db.session.commit()
