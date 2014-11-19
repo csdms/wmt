@@ -1,35 +1,19 @@
 import json
+import tempfile
+import shutil
 
 from wmt.flask import create_app
+from wmt.flask.settings import WmtDebugSettings
 from wmt.flask.core import db
 from wmt.flask.models.models import Model
 from wmt.flask.users.models import User
 from wmt.flask.tags.models import Tag
 
 
-#app = create_app().test_client()
+WMT_DATABASE_DIR = tempfile.mkdtemp(prefix='wmt-testing-db', suffix='.d')
 
-DEBUG = True
-SECRET_KEY = 'super secret key'
-CRYPT_INI_CONTENTS = """
-[passlib]
-schemes = sha512_crypt, sha256_crypt
-sha256_crypt__default_rounds = 100000
-sha512_crypt__default_rounds = 100000
-""".strip()
-DATABASE_DIR = '/Users/huttone/git/wmt/db'
 
-SQLALCHEMY_MIGRATE_REPO = path.join(DATABASE_DIR, 'db_repository')
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(DATABASE_DIR, 'wmt.db')
-SQLALCHEMY_BINDS = {
-    'names': 'sqlite:///' + path.join(DATABASE_DIR, 'names.db'),
-    'tags': 'sqlite:///' + path.join(DATABASE_DIR, 'tag.db'),
-    'users': 'sqlite:///' + path.join(DATABASE_DIR, 'users.db'),
-    'sims': 'sqlite:///' + path.join(DATABASE_DIR, 'submission.db'),
-    'models': 'sqlite:///' + path.join(DATABASE_DIR, 'models.db'),
-}
-
-app = create_app()
+app = create_app(settings_override=WmtDebugSettings(WMT_DATABASE_DIR))
 
 
 FAKE_TAG = {
@@ -67,3 +51,7 @@ def setup():
             db.session.commit()
         except:
             pass
+
+
+def teardown():
+    shutil.rmtree(WMT_DATABASE_DIR)
