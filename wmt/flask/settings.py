@@ -1,22 +1,39 @@
 from os import path
 
 
-DEBUG = True
-SECRET_KEY = 'super secret key'
-CRYPT_INI_CONTENTS = """
+class WmtSettings(object):
+    DEBUG = False
+    SECRET_KEY = None
+    CRYPT_INI_CONTENTS = """
 [passlib]
 schemes = sha512_crypt, sha256_crypt
 sha256_crypt__default_rounds = 100000
 sha512_crypt__default_rounds = 100000
 """.strip()
-DATABASE_DIR = '/Users/huttone/git/wmt/db'
+    DATABASE_DIR = '/Users/huttone/git/wmt/db'
 
-SQLALCHEMY_MIGRATE_REPO = path.join(DATABASE_DIR, 'db_repository')
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(DATABASE_DIR, 'wmt.db')
-SQLALCHEMY_BINDS = {
-    'names': 'sqlite:///' + path.join(DATABASE_DIR, 'names.db'),
-    'tags': 'sqlite:///' + path.join(DATABASE_DIR, 'tag.db'),
-    'users': 'sqlite:///' + path.join(DATABASE_DIR, 'users.db'),
-    'sims': 'sqlite:///' + path.join(DATABASE_DIR, 'submission.db'),
-    'models': 'sqlite:///' + path.join(DATABASE_DIR, 'models.db'),
-}
+    def __init__(self, dir=None):
+        self._db_dir = dir
+
+    @property
+    def SQLALCHEMY_DATABASE_URI(self):
+        return self.sqlite_db_path('wmt.db')
+
+    @property
+    def SQLALCHEMY_BINDS(self):
+        return {'names': self.sqlite_db_path('names.db'),
+                'tags':  self.sqlite_db_path('tag.db'),
+                'users':  self.sqlite_db_path('users.db'),
+                'sims':  self.sqlite_db_path('submission.db'),
+                'models':  self.sqlite_db_path('models.db'), }
+
+    def sqlite_db_path(self, filename):
+        if self._db_dir is not None:
+            return 'sqlite:///' + path.join(self._db_dir, filename)
+        else:
+            return 'sqlite:///:memory:'
+
+
+class WmtDebugSettings(WmtSettings):
+    DEBUG = True
+    SECRET_KEY = 'super-secret-key'
