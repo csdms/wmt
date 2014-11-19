@@ -114,7 +114,7 @@ def test_new():
         assert_dict_equal(json.loads(c.get(user['href']).data), user)
 
         c.delete(user['href'], data=json.dumps({'password': 'foobar'}),
-                   headers={'Content-type': 'application/json'})
+                 headers={'Content-type': 'application/json'})
         assert_404_not_found(c.get(user['href']))
 
 
@@ -176,13 +176,12 @@ def _add_user(app, name):
                           headers={'Content-type': 'application/json'})
 
 
-def test_lots_of_new():
-    names = ['foo@bar.baz%d' % id for id in xrange(10)]
+def test_asynchronous_new():
+    names = ['foo@bar.baz%d' % id for id in xrange(100)]
 
     for name in names:
         thr = Thread(target=_add_user, args=[app, name])
         thr.start()
-        thr.join()
 
     for name in names:
         with app.test_client() as c:
