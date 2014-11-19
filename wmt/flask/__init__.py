@@ -5,6 +5,7 @@ from flask_login import LoginManager
 
 from passlib.context import CryptContext
 
+from .settings import WmtSettings
 from .core import db
 from .blueprints import register_blueprints
 from .errors import ERROR_HANDLERS
@@ -27,7 +28,8 @@ class User(object):
         return self._id
 
 
-def create_app(settings_override=None, register_security_blueprint=True):
+def create_app(settings_override=None, register_security_blueprint=True,
+               wmt_root_path=None):
     app = Flask(__name__, instance_relative_config=True)
 
     login_manager = LoginManager()
@@ -41,7 +43,9 @@ def create_app(settings_override=None, register_security_blueprint=True):
     def create_database():
         db.create_all()
 
-    app.config.from_object('wmt.flask.settings')
+    app.config.from_object(WmtSettings(
+        os.path.join(wmt_root_path or app.root_path, 'db')))
+    #app.config.from_object(WmtSettings('/Users/huttone/git/wmt/db'))
     app.config.from_pyfile('settings.cfg', silent=True)
     app.config.from_object(settings_override)
 
