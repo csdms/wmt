@@ -10,7 +10,7 @@ WMT-API is a web api that allows people get information about numerical
 models, connect the models to one another, and then run the models on a
 remote cluster.
 
-*This spec is not, by any stretch of the imagination, complete*. It will
+**This spec is not, by any stretch of the imagination, complete**. It will
 100% change between now and a finished product.
 
 This spec deals only with how a person might interact with the API. It does
@@ -24,7 +24,7 @@ Although WMT-API is a web API that is really designed for use by a client
 program, I'll outline some scenarios as though real people will be interacting
 with the API because that could happen and it makes it sound more interesting.
 
-*Scenario 1: Mark.*
+**Scenario 1: Mark.**
 
 Mark is a busy professor at a university in a quaint mountain town. He has
 heard of a model called *zowie* and would like to run it. Unfortunately, his
@@ -41,22 +41,32 @@ their own JSON-formatted blueprint.
 URL-by-URL Specification
 ------------------------
 
+The API is devided into 6 basic collections of resources:
+
+1. users
+2. components
+3. names
+4. models
+5. tags
+6. sims
+
 /api/users
 ``````````
 
 If someone wants information about WMT users, or wants to do user-y things
-(like login/out) they send HTTP requests to URLs that start with */api/users*.
+(like login/out) they send HTTP requests to URLs that start with
+**/api/users**.
 
-If a user sends a GET to */api/users*, the server constructs a collection of
+If a user sends a GET to **/api/users**, the server constructs a collection of
 user resources that contain information about every user in the WMT database
 and sends that back formatted as JSON objects.
 
-To search for a subset of users, use */api/users/search*. Some examples are:
+To search for a subset of users, use **/api/users/search**. Some examples are:
 
-1. */api/users/search?username=charliesheen* to get the user whose username
+1. **/api/users/search?username=charliesheen** to get the user whose username
    matches *charliesheen*. Since usernames are unique, only one user will
    be returned.
-2. */api/users/search?contains=charlie to get users whose username contains
+2. */api/users/search?contains=charlie* to get users whose username contains
    the string "charlie".
 
 To create a new user, send a POST to */api/users* along with a JSON body
@@ -77,6 +87,10 @@ WMT accounts I no longer remember who I am logged in as. That's what
 */api/users/whoami* is for. Send a GET, and the server returns the name of
 the currently logged-in user.
 
+
+/api/users/<id>
+```````````````
+
 To do things that are specific to a particular user, send requests to URLs
 that start with */api/users/<id>*. <id> is an integer that is specific to
 a particular user. If you happen to be the first user in the database, you
@@ -93,13 +107,13 @@ Once a person begings to use the WMT, they'll have some other stuff associated
 with them. For example, users will build models and to help them organize
 their work we allow them to tag each model with one or more tags. So,
 
-1. Send a GET to */api/users/1/models* to the all the models that user 1
+1. Send a GET to **/api/users/1/models** to the all the models that user 1
    has created.
-2. Send a GET to */api/users/1/tags to the all the tags that user 1 has
+2. Send a GET to **/api/users/1/tags** to the all the tags that user 1 has
    created.
 
 What about if a person wants a list of all their models that have been
 tagged with a particular tag? Oh yeah, we can do that. Try a GET at
-*/api/users/1/models/search?tag=winning* to find all of Charlie Sheen's
+**/api/users/1/models/search?tag=winning** to find all of Charlie Sheen's
 models that are tagged as "winning". I bet you didn't know Charlie Sheen
 was a WMT user.
