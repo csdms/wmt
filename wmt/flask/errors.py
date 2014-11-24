@@ -1,3 +1,4 @@
+import types
 from flask import jsonify
 
 
@@ -45,31 +46,40 @@ class WrongJsonError(Error):
 class ProcessingError(Error):
     status_code = 422
     message = "Validation failed"
-    def __init__(self, resource, field, code):
+    def __init__(self, resource, fields, code):
+        if isinstance(fields, types.StringTypes):
+            fields = [fields]
+
         self.resource = resource
-        self.field = field
+        self.fields = fields
         self.code = code
 
     def to_resource(self):
         resource = super(ProcessingError, self).to_resource()
         resource["errors"] = [{
             "resource": self.resource,
-            "field": self.field,
+            "field": field,
             "code": self.code
-        }]
+        } for field in self.fields]
         return resource
 
 
 class AlreadyExistsError(ProcessingError):
-    def __init__(self, resource, field):
-        super(AlreadyExistsError, self).__init__(resource, field,
+    def __init__(self, resource, fields):
+        super(AlreadyExistsError, self).__init__(resource, fields,
                                                  "already_exists")
 
 
 class MissingFieldError(ProcessingError):
-    def __init__(self, resource, field):
-        super(MissingFieldError, self).__init__(resource, field,
+    def __init__(self, resource, fields):
+        super(MissingFieldError, self).__init__(resource, fields,
                                                 "missing_field")
+
+
+class InvalidFieldError(ProcessingError):
+    def __init__(self, resource, fields):
+        super(MissingFieldError, self).__init__(resource, fields,
+                                                "invalid")
 
 
 def jsonify_error(error):
