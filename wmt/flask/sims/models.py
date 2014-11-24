@@ -1,22 +1,30 @@
 import datetime
 
-from ..core import db
+from ..core import db, JsonMixin
 
 
-class Sim(db.Model):
+class SimJsonSerializer(JsonMixin):
+    __hidden_fileds__ = set(['stage_dir'])
+
+
+class Sim(SimJsonSerializer, db.Model):
     __tablename__ = 'submission'
     __bind_key__ = 'sims'
 
     id = db.Column(db.Integer, primary_key=True)
-    model_id = db.Column(db.Integer)
+    model_id = db.Column(db.Integer, db.ForeignKey('models.id'))
     uuid = db.Column(db.Text)
     name = db.Column(db.Text)
     status = db.Column(db.Text)
     created = db.Column(db.Text)
     updated = db.Column(db.Text)
     message = db.Column(db.Text)
-    owner = db.Column(db.Text)
+    owner = db.Column(db.Integer, db.ForeignKey('users.id'))
     stage_dir = db.Column(db.Text)
+
+    @property
+    def url_for(self):
+        return url_for('.sim', id=self.id)
 
     def __init__(self, name, model_id, owner=None):
         now = datetime.now().isoformat()
