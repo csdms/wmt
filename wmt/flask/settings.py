@@ -1,4 +1,4 @@
-from os import path
+import os
 
 
 class WmtSettings(object):
@@ -12,12 +12,18 @@ sha512_crypt__default_rounds = 100000
 """.strip()
 
     def __init__(self, dir=None):
-        self._root_dir = dir or path.abspath('.')
-        self._db_dir = path.join(self._root_dir, 'db')
+        self._root_dir = dir or os.getcwd()
+        self._db_dir = os.path.join(self._root_dir, 'db')
+        if not os.path.exists(self._db_dir):
+            os.mkdir(self._db_dir)
 
     @property
     def WMT_ROOT_DIR(self):
         return self._root_dir
+
+    @property
+    def STAGE_DIR(self):
+        return os.path.join(self._root_dir, 'files', 'download')
 
     @property
     def WMT_DATABASE_DIR(self):
@@ -37,7 +43,7 @@ sha512_crypt__default_rounds = 100000
 
     def sqlite_db_path(self, filename):
         if self._db_dir is not None:
-            return 'sqlite:///' + path.join(self._db_dir, filename)
+            return 'sqlite:///' + os.path.join(self._db_dir, filename)
         else:
             return 'sqlite:///:memory:'
 
