@@ -1,5 +1,5 @@
 import json
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 from . import FAKE_USER_NAME, FAKE_USER_PASS
 
 
@@ -21,6 +21,15 @@ def assert_422_unprocessable_entity(resp):
 
 def assert_200_success(resp):
     assert_equal(resp.status_code, 200)
+
+
+def assert_success(resp):
+    assert_equal((resp.status_code - 200) // 100, 0)
+
+
+def assert_204_empty(resp):
+    assert_equal(resp.status_code, 204)
+    assert_equal(resp.data, "")
 
 
 def loads_if_assert_200(resp):
