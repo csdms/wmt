@@ -50,6 +50,10 @@ def create_app(settings_override=None, register_security_blueprint=True,
     app.config['pw'] = CryptContext.from_string(
         app.config['CRYPT_INI_CONTENTS'], section='passlib')
 
+    import logging
+    logging.basicConfig()
+    app.config['log'] = logging.getLogger('wmtserver')
+
     db.init_app(app)
 
     @app.route('/')
