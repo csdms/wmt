@@ -8,12 +8,13 @@ from wmt.flask.core import db
 from wmt.flask.models.models import Model
 from wmt.flask.users.models import User
 from wmt.flask.tags.models import Tag
+from wmt.flask.sims.models import Sim
 
 
-WMT_DATABASE_DIR = tempfile.mkdtemp(prefix='wmt-testing-db', suffix='.d')
+#WMT_DATABASE_DIR = tempfile.mkdtemp(prefix='wmt-testing-db', suffix='.d')
+WMT_ROOT_DIR = tempfile.mkdtemp(prefix='wmt-testing', suffix='.d')
 
-
-app = create_app(settings_override=WmtDebugSettings(WMT_DATABASE_DIR))
+app = create_app(settings_override=WmtDebugSettings(WMT_ROOT_DIR))
 
 
 FAKE_TAG = {
@@ -25,6 +26,12 @@ FAKE_BLUEPRINT = {
 FAKE_MODEL = {
     'name': u'foo',
     'json': json.dumps(FAKE_BLUEPRINT),
+}
+FAKE_SIM_NAME = u'foobar'
+FAKE_SIM_MODEL = 1
+FAKE_SIM = {
+    'name': FAKE_SIM_NAME,
+    'model': FAKE_SIM_MODEL,
 }
 FAKE_USER_NAME = u'foo@bar.baz.edu'
 FAKE_USER_PASS = u'foobar'
@@ -46,7 +53,8 @@ def setup():
                             app.config['pw'].encrypt(FAKE_USER1_PASS)))
         db.session.add(Model(FAKE_MODEL['name'], FAKE_MODEL['json'],
                              FAKE_USER['username']))
-        db.session.add(Tag(FAKE_TAG['tag'], 1)) #FAKE_USER['username']))
+        db.session.add(Tag(FAKE_TAG['tag'], 1))
+        db.session.add(Sim(FAKE_SIM_NAME, FAKE_SIM_MODEL))
         try:
             db.session.commit()
         except:
@@ -54,4 +62,4 @@ def setup():
 
 
 def teardown():
-    shutil.rmtree(WMT_DATABASE_DIR)
+    shutil.rmtree(WMT_ROOT_DIR)
