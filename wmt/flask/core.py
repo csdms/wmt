@@ -91,7 +91,6 @@ class JsonMixin(object):
 
 class Service(object):
     __model__ = None
-    __fields__ = set()
 
     def _is_instance_or_raise(self, model):
         if not isinstance(model, self.__model__):
@@ -171,13 +170,6 @@ class Service(object):
         self._is_instance_or_raise(model)
         db.session.delete(model)
         db.session.commit()
-
-    def to_resource(self, **kwds):
-        resource = {'@type': self.__model__.lower()}
-        resource.update(kwds)
-        for field in self.__fields__:
-            resource[field] = getattr(self, field)
-        return resource
 
     @staticmethod
     def jsonify_collection(models):
