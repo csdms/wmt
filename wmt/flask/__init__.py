@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, url_for, jsonify
 from flask_login import LoginManager
 
 from passlib.context import CryptContext
@@ -53,6 +53,18 @@ def create_app(settings_override=None, register_security_blueprint=True,
         app.config['CRYPT_INI_CONTENTS'], section='passlib')
 
     db.init_app(app)
+
+    @app.route('/')
+    def site_map():
+        COLLECTIONS = ['users', 'names', 'components', 'models', 'tags',
+                       'sims']
+        map = {"@type": "api", "href": url_for('.site_map')}
+        links = []
+        for rel in COLLECTIONS:
+            href = url_for('.'.join([rel, 'show']))
+            links.append({'rel': rel, 'href': href})
+        map['links'] = links
+        return jsonify(map)
 
     register_blueprints(app, __name__, __path__)
 
