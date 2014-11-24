@@ -4,29 +4,94 @@ import json
 from flask import jsonify, abort, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy import sqlalchemy
-from .errors import InvalidJsonError
+from .errors import InvalidJsonError, MissingFieldError, WrongJsonError
 
 
 db = SQLAlchemy()
 
 
-def loads_or_fail(resp):
+def deserialize_request(request, fields=None, require='all'):
+    assert(require in ['all', 'none', 'some'])
+    if fields:
+        fields = set(fields)
+    else:
+        fields = set()
+
     try:
-        return json.loads(resp.data)
-    except :
+        data = json.loads(request.data)
+    except ValueError:
         raise InvalidJsonError()
+
+    try:
+        provided_fields = set(data.keys())
+    except AttributeError:
+        raise WrongJsonError('resource')
+
+    if not provided_fields.issubset(fields):
+        raise WrongJsonError('resource')
+
+    if require == 'all' and provided_fields != fields:
+        raise MissingFieldError('resource', fields - provided_fields)
+    elif require == 'some' and len(provided_fields) == 0:
+        raise MissingFieldError('resource', fields)
+
+    return data
 
 
 class JsonMixin(object):
-    def jsonify(self):
-        return Response(json.dumps(self.to_resource(),
-                                   sort_keys=True, indent=2,
-                                   separators=(',', ': ')),
+    __public_fields__ = set()
+    __hidden_fields__ = set()
+
+    def fields(self):
+        import inspect
+        members = inspect.getmembers(self,
+                                     lambda p: not inspect.isroutine(p))    
+        fields = []
+        for member in members:
+            if not member[0].startswith('_'):
+                fields.append(member[0])
+        return set(fields)
+
+    def to_resource(self):
+        public = self.__public_fields__ or self.fields()
+        hidden = self.__hidden_fields__ or set()
+
+        resource = {'@type': self.__class__.__name__.lower()}
+
+        for field in public - hidden:
+            value = getattr(self, field)
+            if isinstance(value, property):
+                resource[field] = value.fget(self)
+            else:
+                resource[field] = value
+
+        try:
+            resource['links'] = self.object_links
+        except AttributeError:
+            pass
+
+        try:
+            link_objects = self.link_objects
+        except AttributeError:
+            pass
+        else:
+            for obj, href in link_objects.items():
+                resource[obj] = href
+
+        return resource
+
+    def to_json(self):
+        return json.dumps(self.to_resource(), sort_keys=True, indent=2,
+                          separators=(',', ': '))
+
+    def jsonify(self, **kwds):
+        return Response(self.to_json(),
                         mimetype='application/x-resource+json; charset=utf-8')
 
 
 class Service(object):
     __model__ = None
+    __fields__ = set()
 
     def _is_instance_or_raise(self, model):
         if not isinstance(model, self.__model__):
@@ -106,3 +171,18 @@ class Service(object):
         self._is_instance_or_raise(model)
         db.session.delete(model)
         db.session.commit()
+
+    def to_resource(self, **kwds):
+        resource = {'@type': self.__model__.lower()}
+        resource.update(kwds)
+        for field in self.__fields__:
+            resource[field] = getattr(self, field)
+        return resource
+
+    @staticmethod
+    def jsonify_collection(models):
+        return Response(
+            json.dumps([model.to_resource() for model in models],
+                       sort_keys=True, indent=2,
+                       separators=(',', ': ')),
+            mimetype='application/x-collection+json; charset=utf-8')
