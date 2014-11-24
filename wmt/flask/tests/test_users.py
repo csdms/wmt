@@ -4,8 +4,30 @@ from nose.tools import (assert_equal, assert_is_instance, assert_dict_equal,
                         assert_list_equal)
 from .tools import (assert_404_not_found, assert_401_unauthorized,
                     assert_403_forbidden, login_or_fail, assert_200_success,
-                    assert_422_unprocessable_entity)
+                    assert_204_empty, assert_422_unprocessable_entity)
 from . import app, FAKE_USER
+
+
+def assert_is_user_resource(user, username=None):
+    assert_is_instance(user, dict)
+    assert_equal(set(user.keys()), set(['@type', 'href', 'id', 'username',
+                                        'links']))
+    assert_equal(user['@type'], 'user')
+    if username:
+        assert_equal(user['username'], username)
+
+
+def assert_200_user(response, username=None):
+    assert_200_success(response)
+    assert_is_user_resource(json.loads(response.data))
+
+
+def assert_200_collection(response, item_count=None):
+    assert_200_success(response)
+    collection = json.loads(response.data)
+    assert_is_instance(collection, list)
+    if item_count is not None:
+        assert_equal(len(collection), item_count)
 
 
 def new_user(name, password):
@@ -25,10 +47,10 @@ def new_user_or_fail(name, password):
 
 def test_whoami():
     with app.test_client() as c:
-        assert_equal(json.loads(c.get('/users/whoami').data), "guest")
+        #assert_equal(json.loads(c.get('/users/whoami').data), "guest")
+        assert_204_empty(c.get('/users/whoami'))
         login_or_fail(c, **FAKE_USER)
-        assert_equal(json.loads(c.get('/users/whoami').data),
-                     FAKE_USER['username'])
+        assert_200_user(c.get('/users/whoami'), username=FAKE_USER['username'])
 
 
 def test_login():
@@ -36,10 +58,15 @@ def test_login():
     url = '/users/login?username=%s&password=%s' % (username, password)
 
     with app.test_client() as c:
-        assert_equal(json.loads(c.get(url).data), username) 
-        assert_equal(json.loads(c.get('/users/whoami').data), username)
-        assert_equal(json.loads(c.get('/users/logout').data), "guest")
-        assert_equal(json.loads(c.get('/users/whoami').data), "guest")
+        assert_200_user(c.get(url), username=username)
+
+        #assert_equal(json.loads(c.get(url).data), username) 
+        assert_200_user(c.get('/users/whoami'), username=username)
+        #assert_equal(json.loads(c.get('/users/whoami').data),
+        #             {u'href': u'/users/1', u'id': 1, u'username': username})
+        assert_204_empty(c.get('/users/logout'))
+        #assert_equal(json.loads(c.get('/users/whoami').data), "anonymous")
+        assert_204_empty(c.get('/users/whoami'))
 
 
 def test_login_bad_username():
@@ -61,24 +88,24 @@ def test_login_bad_password():
 def test_logout():
     with app.test_client() as c:
         login_or_fail(c, **FAKE_USER)
-        assert_equal(json.loads(c.get('/users/whoami').data),
-                     FAKE_USER['username'])
+        assert_200_user(c.get('/users/whoami'), username=FAKE_USER['username'])
 
         for _ in xrange(10):
-            c.get('/users/logout')
-            assert_equal(json.loads(c.get('/users/whoami').data), "guest")
+            assert_204_empty(c.get('/users/logout'))
+            #assert_equal(json.loads(c.get('/users/whoami').data), "anonymous")
+            assert_204_empty(c.get('/users/whoami'))
 
 
 def test_show():
     with app.test_client() as c:
-        users = json.loads(c.get('/users/').data)
-        assert_is_instance(users, list)
-        for user in users:
-            assert_equal(user['_type'], 'user')
+        resp = c.get('/users/')
+        assert_200_collection(resp)
+        for user in json.loads(resp.data):
+            assert_is_user_resource(user)
 
 
 def test_user():
-    expected = {u'_type': u'user',
+    expected = {u'@type': u'user',
                 u'href': u'/users/1',
                 u'id': 1,
                 u'links': [
@@ -89,9 +116,10 @@ def test_user():
                 u'username': FAKE_USER['username'],
                }
     with app.test_client() as c:
-        user = json.loads(c.get('/users/1').data)
-        for k in ['_type', 'href', 'username']:
-            assert_equal(user[k], expected[k])
+        #user = json.loads(c.get('/users/1').data)
+        assert_200_user(c.get('/users/1'))
+        #for k in ['@type', 'href', 'username']:
+        #    assert_equal(user[k], expected[k])
 
 
 def test_user_that_does_not_exist():
@@ -105,13 +133,15 @@ def test_new():
     with app.test_client() as c:
         resp = c.post('/users/', data=data,
                       headers={'Content-type': 'application/json'})
-        assert_200_success(resp)
+        assert_200_user(resp, username='foobar@baz.com')
 
+        #assert_is_user_resource(resp, username='foobar@baz.com')
         user = json.loads(resp.data)
 
-        assert_equal(user['username'], 'foobar@baz.com')
+        #assert_equal(user['username'], 'foobar@baz.com')
 
-        assert_dict_equal(json.loads(c.get(user['href']).data), user)
+        assert_dict_equal(json.loads(c.get(user['href']).data),
+                          json.loads(resp.data))
 
         c.delete(user['href'], data=json.dumps({'password': 'foobar'}),
                  headers={'Content-type': 'application/json'})
@@ -122,9 +152,10 @@ def test_new_existing():
     name, password = FAKE_USER['username'], 'a-different-password'
 
     with app.test_client() as c:
-        existing = json.loads(c.get('/users/search?username=%s' % name).data)
+        #existing = json.loads(c.get('/users/search?username=%s' % name).data)
+        resp = c.get('/users/search?username=%s' % name)
+        assert_200_collection(resp, item_count=1)
 
-    assert_equal(len(existing), 1)
     assert_422_unprocessable_entity(new_user(name, password))
 
 
@@ -150,16 +181,19 @@ def test_delete_bad_password():
 def test_search_for_existing():
     name = FAKE_USER['username']
     with app.test_client() as c:
-        users = json.loads(c.get('/users/search?username=%s' % name).data)
-    assert_equal(len(users), 1)
+        #users = json.loads(c.get('/users/search?username=%s' % name).data)
+        resp = c.get('/users/search?username=%s' % name)
+        assert_200_collection(resp, item_count=1)
+
+    users = json.loads(resp.data)
     assert_equal(users[0]['username'], name)
 
 
 def test_search_for_non_existing():
     name = 'not-a-name@example.com'
     with app.test_client() as c:
-        users = json.loads(c.get('/users/search?username=%s' % name).data)
-    assert_list_equal(users, [])
+        resp = c.get('/users/search?username=%s' % name)
+        assert_200_collection(resp, item_count=0)
 
 
 from threading import Thread
@@ -177,7 +211,7 @@ def _add_user(app, name):
 
 
 def test_asynchronous_new():
-    names = ['foo@bar.baz%d' % id for id in xrange(100)]
+    names = ['foo@bar.baz%d' % id for id in xrange(10)]
 
     for name in names:
         thr = Thread(target=_add_user, args=[app, name])
@@ -185,8 +219,11 @@ def test_asynchronous_new():
 
     for name in names:
         with app.test_client() as c:
-            users = json.loads(c.get('/users/search?username=%s' % name).data)
-            assert_equal(len(users), 1)
+            resp = c.get('/users/search?username=%s' % name)
+            assert_200_collection(resp, item_count=1)
+
+            users = json.loads(resp.data)
+
             c.delete(users[0]['href'], data=json.dumps({'password': 'foobar'}),
                      headers={'Content-type': 'application/json'})
             assert_404_not_found(c.get(users[0]['href']))

@@ -7,11 +7,20 @@ from nose.tools import (assert_equal, assert_is_instance, assert_dict_equal,
 
 from .tools import (assert_401_unauthorized, assert_404_not_found,
                     assert_403_forbidden, assert_200_success,
-                    assert_422_unprocessable_entity, loads_if_assert_200,
+                    assert_204_empty, loads_if_assert_200,
+                    assert_422_unprocessable_entity,
                     json_post, json_delete, login_or_fail)
 from . import (app, FAKE_TAG, FAKE_USER, FAKE_USER_NAME, FAKE_USER1_NAME,
                FAKE_USER1_PASS)
 
+
+def assert_is_tag_resource(tag, name=None):
+    assert_is_instance(tag, dict)
+    assert_equal(set(tag.keys()), set(['@type', 'href', 'id', 'tag', 'user',
+                                      'links']))
+    assert_equal(tag['@type'], 'tag')
+    if name:
+        assert_equal(tag['tag'], name)
 
 
 def test_show():
@@ -19,21 +28,13 @@ def test_show():
         tags = json.loads(c.get('/tags/').data)
     assert_is_instance(tags, list)
     for tag in tags:
-        assert_equal(tag['_type'], 'tag')
+        assert_is_tag_resource(tag)
 
 
 def test_get_existing():
-    expected = {
-        u'_type': u'tag',
-        u'href': u'/tags/1',
-        u'tag': u'foobar',
-        u'id': 1,
-        u'user': {u'href': u'/users/1'}
-    }
     with app.test_client() as c:
         tag = loads_if_assert_200(c.get('/tags/1'))
-
-    assert_dict_equal(tag, expected)
+    assert_is_tag_resource(tag, name='foobar')
 
 
 def test_get_non_existing():
@@ -52,8 +53,7 @@ def test_new_and_delete():
 
     with app.test_client() as c:
         login_or_fail(c, **FAKE_USER)
-        deleted = loads_if_assert_200(json_delete(c, added['href']))
-    assert_equal(deleted, added)
+        assert_204_empty(json_delete(c, added['href']))
 
 
 def test_new_not_logged_in():
