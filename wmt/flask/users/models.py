@@ -3,7 +3,11 @@ from flask import Response, url_for
 from ..core import db, JsonMixin
 
 
-class User(db.Model, JsonMixin):
+class UserJsonSerializer(JsonMixin):
+    __public_fields__ = set(['href', 'id', 'username'])
+
+
+class User(UserJsonSerializer, db.Model):
     __tablename__ = 'users'
     __bind_key__ = 'users'
 
@@ -13,14 +17,12 @@ class User(db.Model, JsonMixin):
     tags = db.relationship('Tag', backref='owned_by', lazy='dynamic')
     models = db.relationship('Model', backref='owned_by', lazy='dynamic')
 
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
+    @property
+    def href(self):
+        return url_for('.user', id=self.id)
 
-    def __repr__(self):
-        return '<User %r>' % self.username
-
-    def to_resource(self):
+    @property
+    def object_links(self):
         links = []
         for tag in self.tags:
             links.append(dict(rel='resource/tags',
@@ -28,20 +30,11 @@ class User(db.Model, JsonMixin):
         for model in self.models:
             links.append(dict(rel='resource/models',
                               href=url_for('models.model', id=model.id)))
-        resource = {
-            '_type': 'user',
-            'id': self.id,
-            'href': url_for('.user', id=self.id),
-            'username': self.username,
-            'links': [
-                {'rel': 'collection/tags',
-                 'href': url_for('.tags', id=self.id)
-                },
-                {'rel': 'collection/models',
-                 'href': url_for('.models', id=self.id)
-                },
-            ]
-        }
-        if len(links) > 0:
-            resource['links'] = links
-        return resource
+        return links
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+    def __repr__(self):
+        return '<User %r>' % self.username
