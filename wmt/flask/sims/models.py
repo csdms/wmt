@@ -49,18 +49,17 @@ class Sim(SimJsonSerializer, db.Model):
     def __repr__(self):
         return '<Sim %r>' % self.name
 
-    def _create_stage_dir(uuid):
-        path = self.stage_dir
-
+    def _create_stage_dir(self):
         try:
-            os.mkdir(path)
+            os.mkdir(self.stage_dir)
         except OSError:
-            logger.warning('%s: Stage directory already exists' % path)
+            current_app.config['log'].warning(
+                '%s: Stage directory already exists' % self.stage_dir)
 
-        write_readme(path, mode='w', params={
-            'user': 'anonymous',
-            'staged_on': datetime.now().isoformat()
-        })
+        #write_readme(self.stage_dir, mode='w', params={
+        #    'user': 'anonymous',
+        #    'staged_on': datetime.now().isoformat()
+        #})
 
     def update_status(self, sim, status=None, message=None):
         updates = dict(updated=datetime.now().isoformat())
