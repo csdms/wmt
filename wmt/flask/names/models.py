@@ -1,31 +1,39 @@
-#from flask_security import UserMixin, RoleMixin
+from flask import url_for
+
 from standard_names import StandardName
-from ..core import db
+from ..core import db, JsonMixin
 
 
-class Name(db.Model):
+class NameJsonSerializer(JsonMixin):
+    __public_fields__ = set(['href', 'id', 'name', 'object', 'quantity',
+                             'operators'])
+
+
+class Name(NameJsonSerializer, db.Model):
     __tablename__ = 'names'
     __bind_key__ = 'names'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
 
+    @property
+    def href(self):
+        return url_for('names.name', id=self.id)
+
+    @property
+    def object(self):
+        return StandardName(self.name).object
+
+    @property
+    def quantity(self):
+        return StandardName(self.name).quantity
+
+    @property
+    def operators(self):
+        return StandardName(self.name).operators
+
     def __init__(self, name):
         self.name = name
 
     def __repr__(self):
         return '<Name %r>' % self.name
-
-    def to_resource(self, brief=False):
-        if brief:
-            return {'id': self.id, 'name': self.name}
-        else:
-            sn = StandardName(self.name)
-            return {
-                'id': self.id,
-                'href': '/api/names/%d' % self.id,
-                'name': self.name,
-                'object': sn.object,
-                'quantity': sn.quantity,
-                'operators': sn.operators,
-            }
