@@ -2,18 +2,26 @@ from os import path
 
 
 class WmtSettings(object):
-    DEBUG = False
-    SECRET_KEY = None
+    DEBUG = True
+    SECRET_KEY = 'secret-key'
     CRYPT_INI_CONTENTS = """
 [passlib]
 schemes = sha512_crypt, sha256_crypt
 sha256_crypt__default_rounds = 100000
 sha512_crypt__default_rounds = 100000
 """.strip()
-    DATABASE_DIR = '/Users/huttone/git/wmt/db'
 
     def __init__(self, dir=None):
-        self._db_dir = dir
+        self._root_dir = dir or path.abspath('.')
+        self._db_dir = path.join(self._root_dir, 'db')
+
+    @property
+    def WMT_ROOT_DIR(self):
+        return self._root_dir
+
+    @property
+    def WMT_DATABASE_DIR(self):
+        return self._db_dir
 
     @property
     def SQLALCHEMY_DATABASE_URI(self):

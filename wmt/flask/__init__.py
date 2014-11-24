@@ -43,9 +43,7 @@ def create_app(settings_override=None, register_security_blueprint=True,
     def create_database():
         db.create_all()
 
-    app.config.from_object(WmtSettings(
-        os.path.join(wmt_root_path or app.root_path, 'db')))
-    #app.config.from_object(WmtSettings('/Users/huttone/git/wmt/db'))
+    app.config.from_object(WmtSettings(wmt_root_path or app.root_path))
     app.config.from_pyfile('settings.cfg', silent=True)
     app.config.from_object(settings_override)
 
