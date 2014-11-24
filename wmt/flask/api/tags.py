@@ -8,6 +8,7 @@ from ..utils import as_resource, as_collection
 from ..services import tags, users
 from ..errors import (AuthenticationError, AuthorizationError,
                       AlreadyExistsError)
+from ..core import deserialize_request
 
 
 tags_page = Blueprint('tags', __name__)
@@ -15,17 +16,16 @@ tags_page = Blueprint('tags', __name__)
 
 @tags_page.route('/', methods=['GET', 'OPTIONS'])
 def show():
-    collection = [tag.to_resource() for tag in tags.all()]
-    return as_collection(collection)
+    return tags.jsonify_collection(tags.all())
 
 
 @tags_page.route('/', methods=['POST'])
 @login_required
 def add():
-    data = json.loads(request.data)
+    data = deserialize_request(request, fields=['tag'])
     owner = users.first(username=current_user.get_id())
     if tags.first(tag=data['tag'], owner=owner.id):
-        raise AlreadyExistsError("Tag", "%s:%s" % (data['tag'], owner))
+        raise AlreadyExistsError("tag", "%s:%s" % (data['tag'], owner))
     return tags.create(data['tag'], owner=owner.id).jsonify()
 
 
@@ -34,10 +34,10 @@ def search():
     username = request.args.get('username', None)
     owner = users.first(username=username)
 
-    tags_list = tags.find(owner=owner)
-
-    collection = [url_for('.tag', id=tag.id) for tag in tags_list]
-    return as_collection(collection)
+    if owner:
+        return tags.jsonify_collection(tags.find(owner=owner.id))
+    else:
+        return tags.jsonify_collection([])
 
 
 @tags_page.route('/<int:id>', methods=['GET'])
@@ -53,12 +53,11 @@ def remove(id):
     if user.id != tag.owner:
         raise AuthorizationError()
     tags.delete(tag)
-    return tag.jsonify()
+    return '', 204
 
 
 @tags_page.route('/<int:id>/models')
 def tags_models(id):
-    models = tags.models_with_tag(id) or []
-
-    collection = [url_for('.models', id=m.model_id) for m in models]
-    return as_collection(collection)
+    from ..models.models import Model
+    models = tags.get_or_404(id).models
+    return tags.jsonify_collection(models.filter(Model.tags.any(id=id)))

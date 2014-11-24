@@ -11,7 +11,7 @@ from ..models.models import Model
 from ..utils import as_resource, as_collection
 from ..errors import (AuthenticationError, AlreadyExistsError,
                       MissingFieldError, InvalidJsonError)
-from ..core import loads_or_fail
+from ..core import deserialize_request
 
 
 users_page = Blueprint('users', __name__)
@@ -32,35 +32,6 @@ class User(object):
 
     def get_id(self):
         return self._id
-
-
-class JsonResource(object):
-    required = set()
-
-    @classmethod
-    def from_resource(clazz, req):
-        try:
-            data = json.loads(req.data)
-        except ValueError:
-            raise InvalidJsonError()
-
-        missing = clazz.required - set(data.keys())
-        if missing:
-            raise MissingFieldError(__name__, missing[0])
-
-        return data
-
-
-class Credentials(JsonResource):
-    required = set(['username', 'password'])
-
-
-class Password(JsonResource):
-    required = set(['password'])
-
-
-class ChangePassword(JsonResource):
-    required = set(['old', 'new'])
 
 
 @users_page.route('/login', methods=['POST'])
@@ -111,14 +82,14 @@ def login_with_post():
     :statuscode 400: bad json
     :statuscode 401: authentication error
     """
-    data = loads_or_fail(request)
+    data = deserialize_request(request, fields=['username', 'password'])
     try:
         u, p = data['username'], data['password']
     except KeyError:
         raise InvalidJsonError()
 
     if users.authenticate(u, p):
-        return as_resource(u)
+        return users.first(username=u).jsonify()
     else:
         raise AuthenticationError()
 
@@ -136,13 +107,13 @@ def login_with_get():
         password = request.args.get('password', None)
 
         if not username:
-            raise MissingFieldError('Credentials', 'username')
+            raise MissingFieldError('credentials', 'username')
         if not password:
-            raise MissingFieldError('Credentials', 'password')
+            raise MissingFieldError('credentials', 'password')
 
     if users.authenticate(username, password):
         login_user(User(username))
-        return as_resource(username)
+        return users.first(username=username).jsonify()
 
     raise AuthenticationError()
 
@@ -159,7 +130,7 @@ def logout():
        Host: csdms.colorado.edu
     """
     logout_user()
-    return as_resource("guest")
+    return "", 204
 
 
 @users_page.route('/', methods=['GET'])
@@ -211,9 +182,7 @@ def show():
     sort = request.args.get('sort', 'id')
     order = request.args.get('order', 'asc')
 
-    collection = [u.to_resource() for u in users.all(sort=sort, order=order)]
-
-    return as_collection(collection)
+    return users.jsonify_collection(users.all(sort=sort, order=order))
 
 
 @users_page.route('/', methods=['POST'])
@@ -263,7 +232,7 @@ def create():
     :statuscode 400: bad JSON
     :statuscode 422: user already exists
     """
-    data = Credentials.from_resource(request)
+    data = deserialize_request(request, fields=['username', 'password'])
 
     user = users.first(username=data['username'])
     if user:
@@ -287,8 +256,7 @@ def search():
     else:
         names = users.all()
 
-    collection = [name.to_resource() for name in names]
-    return as_collection(collection)
+    return as_collection([user.to_resource() for user in names])
 
 
 @users_page.route('/<int:id>', methods=['GET'])
@@ -350,7 +318,7 @@ def delete(id):
        { "password": "dragon" }
     """
     u = users.get_or_404(id)
-    data = Password.from_resource(request)
+    data = deserialize_request(request, fields=['password'])
 
     if users.authenticate(u.username, data['password']):
         users.delete(u)
@@ -377,12 +345,12 @@ def change_password(id):
          "new_password": "mississippi"
        }
     """
-    u = users.get_or_404(id)
-    data = json.loads(request.data)
-    data = ChangePassword(request)
+    data = deserialize_request(request, require=['password'])
 
-    if not users.change_password(u.username, data['old_password'],
-                                 data['new_password']):
+    u = users.get_or_404(id)
+
+    if not users.change_password(u.username, data['password'],
+                                 data['password']):
         raise AuthenticationError()
 
     return u.jsonify()
@@ -393,8 +361,7 @@ def tags(id):
     """Get the tags owned by a user.
     """
     user = users.get_or_404(id)
-    collection = [tag.to_resource() for tag in user.tags]
-    return as_collection(collection)
+    return users.jsonify_collection(user.tags)
 
 
 @users_page.route('/<int:id>/models')
@@ -402,8 +369,7 @@ def models(id):
     """Get the models owned by a user.
     """
     user = users.get_or_404(id)
-    collection = [m.to_resource() for m in user.models]
-    return as_collection(collection)
+    return users.jsonify_collection(user.models)
 
 
 @users_page.route('/<int:id>/models/search')
@@ -437,12 +403,15 @@ def search_models(id):
     if search:
         models = models.filter(Model.tags.any(**search))
 
-    collection = [model.to_resource() for model in models]
-    return as_collection(collection)
+    return users.jsonify_collection(models)
 
 
 @users_page.route('/whoami')
 def whoami():
     """Returns the name of the currently authenticated user.
     """
-    return as_resource(current_user.get_id() or "guest")
+    user = users.first(username=current_user.get_id())
+    if user:
+        return user.jsonify()
+    else:
+        return '', 204

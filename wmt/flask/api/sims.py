@@ -3,89 +3,68 @@ import os
 from flask import Blueprint
 from flask import json, url_for, current_app
 from flask import g, request, abort, send_file
+from flask.ext.login import current_user, login_required
 
 from ..utils import as_resource, as_collection
-from ..services import sims
+from ..errors import InvalidFieldError, AuthorizationError
+from ..services import sims, users
+from ..core import deserialize_request
 
 
 sims_page = Blueprint('sims', __name__)
 
 
-def to_resource(sim):
-    #links = []
-    #for tag in tag_db.tags_with_model(model.id):
-    #    link = dict(rel='collection/tags')
-    #    if tag is not None:
-    #        link['href'] = url_for('tags.tag', id=tag.id)
-    #    else:
-    #        link['href'] = None
-    #    links.append(link)
-    return {
-        '_type': 'sim',
-        'id': sim.id,
-        'uuid': sim.uuid,
-        'href': '/api/sims/%d' % sim.id,
-        'created': sim.created,
-        'updated': sim.updated,
-        'owner': sim.owner or None,
-        #'links': links,
-    }
+def assert_owner_or_raise(sim):
+    user = users.first(username=current_user.get_id())
+    if user.id != sim.owner:
+        raise AuthorizationError()
 
 
-def to_collection(sims):
-    return [to_resource(sim) for sim in sims]
-
-
-@sims_page.route('/', methods=['GET', 'POST', 'OPTIONS'])
+@sims_page.route('/')
 def show():
-    if request.method == 'GET':
-        sort = request.args.get('sort', 'id')
-        order = request.args.get('order', 'asc')
+    sort = request.args.get('sort', 'id')
+    order = request.args.get('order', 'asc')
 
-        sims_list = sims.all(sort=sort, order=order)
-        collection = [to_resource(sim) for sim in sims_list]
-        return as_collection(collection)
-    elif request.method == 'POST':
-        data = json.loads(request.data)
-        return as_resource(to_resource(
-            sims.create(data['name'], data['model'])))
+    return sims.jsonify_collection(sims.all(sort=sort, order=order))
 
 
-@sims_page.route('/<int:id>', methods=['GET', 'PATCH', 'REMOVE'])
+@sims_page.route('/', methods=['POST'])
+@login_required
+def new():
+    data = deserialize_request(request, fields=['name', 'model'])
+    return sims.create(data['name'], data['model']).jsonify()
+
+
+@sims_page.route('/<int:id>')
 def sim(id):
+    return sims.get_or_404(id).jsonify()
+
+
+@sims_page.route('/<int:id>', methods=['PATCH', 'PUT'])
+@login_required
+def update(id):
     sim = sims.get_or_404(id)
 
+    assert_owner_or_raise(sim)
+
+    kwds = dict(fields=['status', 'message'])
     if request.method == 'PATCH':
-        data = json.loads(request.data)
-        if set(data.keys()).issubset(['status', 'message']):
-            sims.update_status(id, **data) or abort(401)
-        else:
-            abort(400)
-    elif request.method == 'REMOVE':
-        sims.remove(sim)
+        kwds['require'] = 'some'
+    data = deserialize_request(request, **kwds)
 
-    return as_resource(to_resource(sim))
+    sims.update_status(id, **data) or abort(401)
+
+    return sim.jsonify()
 
 
-@sims_page.route('/<int:id>/status', methods=['GET', 'PATCH', 'PUT'])
-def status(id):
-    sim = sims.get_or_404(id)
-
-    if request.method in ['PATCH', 'PUT']:
-        data = json.loads(request.data)
-        keys = set(data.keys())
-        if request.method == 'PATCH' and not keys.issubset(['status',
-                                                            'message']):
-            abort(400)
-        elif request.method == 'PUT' and keys != set(['status', 'message']):
-            abort(400)
-        sims.update_status(sim, **data)
-
-    return as_resource({'status': sim.status,
-                        'message': sim.message })
+@sims_page.route('/<int:id>', methods=['DELETE'])
+@login_required
+def delete(id):
+    sims.remove(sims.get_or_404(id))
+    return "", 204
 
 
-@sims_page.route('/<int:id>/files', methods=['GET'])
+@sims_page.route('/<int:id>/files')
 def files(id):
     import tempfile, tarfile, shutil
 
@@ -110,10 +89,10 @@ def files(id):
 @sims_page.route('/<int:id>/actions', methods=['POST'])
 def actions(id):
     if request.method == 'POST':
-        data = json.loads(request.data)
+        data = deserialize_request(request, fields=['action'])
         if data['action'] == 'start':
             sims.start(id)
         elif data['action'] == 'stop':
             sims.stop(id)
         else:
-            abort(400)
+            raise InvalidFieldError('sim', 'action')

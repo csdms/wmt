@@ -21,9 +21,7 @@ def show():
     sort = request.args.get('sort', 'id')
     order = request.args.get('order', 'asc')
 
-    names_list = names.all(sort=sort, order=order)
-    collection = [name.to_resource(brief=True) for name in names_list]
-    return jsonify_collection(collection)
+    return names.jsonify_collection(names.all(sort=sort, order=order))
 
 
 @names_page.route('/<int:id>')
@@ -39,5 +37,4 @@ def search():
         names_list = names.contains(contains)
     else:
         names_list = names.all()
-    collection = [name.to_resource(brief=True) for name in names_list]
-    return json_response(collection)
+    return names.jsonify_collection(names_list)

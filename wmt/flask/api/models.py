@@ -9,6 +9,7 @@ from werkzeug import secure_filename
 
 from ..utils import as_resource, as_collection, jsonify_collection
 from ..services import models, tags
+from ..core import deserialize_request
 
 
 models_page = Blueprint('models', __name__)
@@ -53,16 +54,14 @@ def to_collection(models):
 
 @models_page.route('/', methods=['GET'])
 def show():
-    return jsonify_collection(models.all())
+    return models.jsonify_collection(models.all())
 
 
 @models_page.route('/', methods=['POST'])
 @login_required
 def add():
-    data = json.loads(request.data)
+    data = deserialize_request(request, fields=['name', 'json'])
     owner = current_user.get_id()
-    #return as_resource(to_resource(
-    #    models.create(data['name'], data['json'], owner=owner)))
     return models.create(data['name'], data['json'], owner=owner).jsonify()
 
 
@@ -74,8 +73,9 @@ def model(id):
 @models_page.route('/<int:id>', methods=['PATCH'])
 @login_required
 def edit(id):
+    data = deserialize_request(request, fields=['name', 'json'],
+                               require='some')
     model = models.get_or_404(id)
-    data = json.loads(request.data)
     models.update(model, **data)
     return model.jsonify()
 
@@ -85,7 +85,7 @@ def edit(id):
 def delete(id):
     model = models.get_or_404(id)
     models.delete(model)
-    return model.jsonify()
+    return '', 204
 
 
 @models_page.route('/<int:id>/blueprint', methods=['GET'])
@@ -118,7 +118,7 @@ def uploads(id):
                 os.remove(path)
         file.save(path)
     elif request.method == 'DELETE':
-        data = json.loads(request.data)
+        data = deserialize_request(request, fields=['filename'])
         filename = secure_filename(data['filename'])
         path = os.path.join(model_uploads, filename)
         if os.path.isfile(path):
@@ -135,8 +135,7 @@ def search():
 
 @models_page.route('/<int:id>/tags', methods=['GET'])
 def get_tags(id):
-    model = models.get_or_404(id)
-    return jsonify_collection(model.tags)
+    return models.jsonify_collection(models.get_or_404(id).tags)
 
 
 @models_page.route('/<int:id>/tags', methods=['POST'])
@@ -144,7 +143,8 @@ def get_tags(id):
 def add_a_tag(id):
     model = models.get_or_404(id)
 
-    data = json.loads(request.data)
+    data = deserialize_request(request, fields=['id'])
     tag = tags.get(data['id']) or abort(400)
     models.append(model, tags=tag)
-    return jsonify_collection(model.tags)
+
+    return models.jsonify_collection(model.tags)
