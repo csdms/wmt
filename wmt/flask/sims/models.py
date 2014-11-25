@@ -8,7 +8,7 @@ from ..core import db, JsonMixin
 
 
 class SimJsonSerializer(JsonMixin):
-    __hidden_fileds__ = set(['stage_dir'])
+    __hidden_fields__ = set(['stage_dir'])
 
 
 class Sim(SimJsonSerializer, db.Model):
