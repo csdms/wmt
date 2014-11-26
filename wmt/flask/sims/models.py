@@ -55,12 +55,10 @@ class Sim(SimJsonSerializer, db.Model):
         self.stage_dir = os.path.join(current_app.config['STAGE_DIR'],
                                       self.uuid)
 
-        self._create_stage_dir()
-
     def __repr__(self):
         return '<Sim %r>' % self.name
 
-    def _create_stage_dir(self):
+    def create_stage_dir(self):
         wmt_dir = os.path.join(self.stage_dir, '.wmt')
         mkpath(wmt_dir)
 
@@ -70,8 +68,13 @@ class Sim(SimJsonSerializer, db.Model):
                                  'created': self.created,
                                  'updated': self.updated,
                                  'owner': self.owner,
-                                 'model': self.model_id,
+                                 'model': self.model.id,
+                                 'model_name': self.model.name,
+                                 'user': self.user.username
                                 }))
+
+        with open(os.path.join(wmt_dir, 'model.json'), 'w') as fp:
+            fp.write(self.model.json)
 
     def update_status(self, sim, status=None, message=None):
         updates = dict(updated=datetime.now().isoformat())

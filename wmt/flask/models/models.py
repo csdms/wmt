@@ -22,6 +22,7 @@ class Model(ModelJsonSerializer, db.Model):
 
     tags = db.relationship('Tag', secondary='model_tags', backref='model_tags',
                            lazy='dynamic')
+    sims = db.relationship('Sim', backref='model')
 
     @property
     def href(self):

@@ -16,6 +16,7 @@ class User(UserJsonSerializer, db.Model):
     password = db.Column(db.Text)
     tags = db.relationship('Tag', backref='owned_by', lazy='dynamic')
     models = db.relationship('Model', backref='owned_by', lazy='dynamic')
+    sims = db.relationship('Sim', backref='user', lazy='dynamic')
 
     @property
     def href(self):
