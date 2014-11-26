@@ -2,13 +2,15 @@ import os
 from datetime import datetime
 from uuid import uuid4
 
-from flask import current_app
+from flask import current_app, url_for
 
 from ..core import db, JsonMixin
 
 
 class SimJsonSerializer(JsonMixin):
     __hidden_fields__ = set(['stage_dir'])
+    __public_fields__ = set(['id', 'name', 'status', 'owner', 'message',
+                             'href'])
 
 
 class Sim(SimJsonSerializer, db.Model):
@@ -27,8 +29,15 @@ class Sim(SimJsonSerializer, db.Model):
     stage_dir = db.Column(db.Text)
 
     @property
-    def url_for(self):
-        return url_for('.sim', id=self.id)
+    def href(self):
+        return url_for('sims.sim', id=self.id)
+
+    @property
+    def link_objects(self):
+        return {
+            'user': {'href': url_for('users.user', id=self.owner)},
+            'model': {'href': url_for('models.model', id=self.model_id)},
+        }
 
     def __init__(self, name, model_id, owner=None):
         now = datetime.now().isoformat()
@@ -40,7 +49,7 @@ class Sim(SimJsonSerializer, db.Model):
         self.message = 'Run has been submitted'
         self.created = now
         self.updated = now
-        self.owner = owner or ""
+        self.owner = owner or 0
         self.stage_dir = os.path.join(current_app.config['STAGE_DIR'],
                                       self.uuid)
 
