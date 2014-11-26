@@ -73,8 +73,9 @@ def test_new_not_logged_in():
 def test_new_existing():
     with app.test_client() as c:
         login_or_fail(c, **FAKE_USER)
-        assert_422_unprocessable_entity(
-            json_post(c, '/sims/', data=dict(name=FAKE_SIM_NAME)))
+        assert_200_success(
+            json_post(c, '/sims/', data=dict(name=FAKE_SIM_NAME,
+                                             model=FAKE_SIM_MODEL)))
 
 
 def test_delete_non_existing():
