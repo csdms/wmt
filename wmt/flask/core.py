@@ -70,12 +70,8 @@ class JsonMixin(object):
         except AttributeError:
             pass
 
-        try:
-            link_objects = self.link_objects
-        except AttributeError:
-            pass
-        else:
-            for obj, href in link_objects.items():
+        if hasattr(self, 'link_objects'):
+            for obj, href in self.link_objects.items():
                 resource[obj] = href
 
         return resource
