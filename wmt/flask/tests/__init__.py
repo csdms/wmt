@@ -54,7 +54,7 @@ def setup():
         db.session.add(Model(FAKE_MODEL['name'], FAKE_MODEL['json'],
                              FAKE_USER['username']))
         db.session.add(Tag(FAKE_TAG['tag'], 1))
-        db.session.add(Sim(FAKE_SIM_NAME, FAKE_SIM_MODEL))
+        db.session.add(Sim(FAKE_SIM_NAME, FAKE_SIM_MODEL, owner=1))
         try:
             db.session.commit()
         except:
