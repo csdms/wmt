@@ -32,7 +32,8 @@ def show():
 @login_required
 def new():
     data = deserialize_request(request, fields=['name', 'model'])
-    return sims.create(data['name'], data['model']).jsonify()
+    user = users.first(username=current_user.get_id())
+    return sims.create(data['name'], data['model'], owner=user.id).jsonify()
 
 
 @sims_page.route('/<int:id>')
@@ -60,7 +61,11 @@ def update(id):
 @sims_page.route('/<int:id>', methods=['DELETE'])
 @login_required
 def delete(id):
-    sims.remove(sims.get_or_404(id))
+    sim = sims.get_or_404(id)
+    user = users.first(username=current_user.get_id())
+    if user.id != sim.owner:
+        raise AuthorizationError()
+    sims.delete(sim)
     return "", 204
 
 
