@@ -1,6 +1,8 @@
 import os
 from datetime import datetime
 from uuid import uuid4
+import json
+from distutils.dir_util import mkpath
 
 from flask import current_app, url_for
 
@@ -59,16 +61,17 @@ class Sim(SimJsonSerializer, db.Model):
         return '<Sim %r>' % self.name
 
     def _create_stage_dir(self):
-        try:
-            os.mkdir(self.stage_dir)
-        except OSError:
-            current_app.config['log'].warning(
-                '%s: Stage directory already exists' % self.stage_dir)
+        wmt_dir = os.path.join(self.stage_dir, '.wmt')
+        mkpath(wmt_dir)
 
-        #write_readme(self.stage_dir, mode='w', params={
-        #    'user': 'anonymous',
-        #    'staged_on': datetime.now().isoformat()
-        #})
+        with open(os.path.join(wmt_dir, 'sim.json'), 'w') as fp:
+            fp.write(json.dumps({'uuid': self.uuid,
+                                 'name': self.name,
+                                 'created': self.created,
+                                 'updated': self.updated,
+                                 'owner': self.owner,
+                                 'model': self.model_id,
+                                }))
 
     def update_status(self, sim, status=None, message=None):
         updates = dict(updated=datetime.now().isoformat())
