@@ -33,7 +33,9 @@ def show():
 def new():
     data = deserialize_request(request, fields=['name', 'model'])
     user = users.first(username=current_user.get_id())
-    return sims.create(data['name'], data['model'], owner=user.id).jsonify()
+    sim = sims.create(data['name'], data['model'], owner=user.id)
+    sim.create_stage_dir()
+    return sim.jsonify()
 
 
 @sims_page.route('/<int:id>')
