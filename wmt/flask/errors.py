@@ -14,6 +14,7 @@ class Error(Exception):
     def to_resource(self):
         return {
             "message": str(self),
+            "status": self.status_code,
             "documentation_url": DOCUMENTATION_URL
         }
 
@@ -41,6 +42,14 @@ class InvalidJsonError(Error):
 class WrongJsonError(Error):
     status_code = 400
     message = "Body should be a JSON object"
+
+    #def __init__(self, body):
+    #    self.body = body
+
+    def to_resource(self):
+        resource = super(WrongJsonError, self).to_resource()
+        #resource['body'] = self.body
+        return resource
 
 
 class ProcessingError(Error):
@@ -78,7 +87,7 @@ class MissingFieldError(ProcessingError):
 
 class InvalidFieldError(ProcessingError):
     def __init__(self, resource, fields):
-        super(MissingFieldError, self).__init__(resource, fields,
+        super(InvalidFieldError, self).__init__(resource, fields,
                                                 "invalid")
 
 
@@ -93,4 +102,5 @@ ERROR_HANDLERS = [
     (WrongJsonError, jsonify_error),
     (AlreadyExistsError, jsonify_error),
     (MissingFieldError, jsonify_error),
+    (InvalidFieldError, jsonify_error),
 ]
