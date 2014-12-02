@@ -129,8 +129,8 @@ def uploads(id):
 
 @models_page.route('/search')
 def search():
-    username = request.args.get('username', None)
-    return jsonify_collection(models.find(owner=username))
+    query = dict(request.args.items())
+    return models.jsonify_collection(models.find(**query))
 
 
 @models_page.route('/<int:id>/tags', methods=['GET'])
