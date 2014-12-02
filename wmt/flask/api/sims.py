@@ -9,6 +9,7 @@ from ..utils import as_resource, as_collection
 from ..errors import InvalidFieldError, AuthorizationError
 from ..services import sims, users
 from ..core import deserialize_request
+from ..tasks import exec_remote_wmt
 
 
 sims_page = Blueprint('sims', __name__)
@@ -93,13 +94,30 @@ def files(id):
         shutil.rmtree(tmpdir)
 
 
-@sims_page.route('/<int:id>/actions', methods=['POST'])
-def actions(id):
-    if request.method == 'POST':
-        data = deserialize_request(request, fields=['action'])
-        if data['action'] == 'start':
-            sims.start(id)
-        elif data['action'] == 'stop':
-            sims.stop(id)
-        else:
-            raise InvalidFieldError('sim', 'action')
+@sims_page.route('/<int:id>/start', methods=['POST'])
+def start(id):
+    sim = sims.get_or_404(id)
+
+    data = deserialize_request(request, fields=['host',
+                                                'username',
+                                                'password'])
+
+    hosts = current_app.config['WMT_EXEC_HOSTS']
+    if data['host'] not in hosts:
+        raise InvalidFieldError('start', 'host')
+    else:
+        host_config = hosts[data['host']]
+
+    return exec_remote_wmt(data['host'], sim.uuid,
+                    username=data['username'],
+                    password=data['password'],
+                    which_wmt_exe=host_config['which_wmt_exe'])
+
+
+@sims_page.route('/<int:id>/stop', methods=['POST'])
+def stop(id):
+    sim = sims.get_or_404(id)
+
+    stop_simulation(sim.uuid)
+
+    return '', 204
