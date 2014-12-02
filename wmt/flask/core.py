@@ -4,7 +4,8 @@ import json
 from flask import jsonify, abort, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy import sqlalchemy
-from .errors import InvalidJsonError, MissingFieldError, WrongJsonError
+from .errors import (InvalidJsonError, InvalidFieldError, MissingFieldError,
+                     WrongJsonError)
 
 
 db = SQLAlchemy()
@@ -12,10 +13,11 @@ db = SQLAlchemy()
 
 def deserialize_request(request, fields=None, require='all'):
     assert(require in ['all', 'none', 'some'])
-    if fields:
-        fields = set(fields)
-    else:
+
+    if fields is None:
         fields = set()
+    else:
+        fields = set(fields)
 
     try:
         data = json.loads(request.data)
@@ -28,7 +30,7 @@ def deserialize_request(request, fields=None, require='all'):
         raise WrongJsonError('resource')
 
     if not provided_fields.issubset(fields):
-        raise WrongJsonError('resource')
+        raise InvalidFieldError('resource', provided_fields - fields)
 
     if require == 'all' and provided_fields != fields:
         raise MissingFieldError('resource', fields - provided_fields)
