@@ -10,6 +10,12 @@ schemes = sha512_crypt, sha256_crypt
 sha256_crypt__default_rounds = 100000
 sha512_crypt__default_rounds = 100000
 """.strip()
+    WMT_SERVER_URL = 'https://csdms.colorado.edu'
+    WMT_EXEC_HOSTS = {
+        'beach.colorado.edu': {
+            'which_wmt_exe': '/home/csdms/wmt/f/bin/wmt-exe',
+        }
+    }
 
     def __init__(self, dir=None):
         self._root_dir = dir or os.getcwd()
