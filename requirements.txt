@@ -1,7 +1,11 @@
 flask
 flask-sqlalchemy
 flask-testing
+flask-login
 sqlalchemy-migrate
 PyYAML>=3.10
 passlib
 sphinxcontrib-httpdomain==1.1.8
+CmtStandardNames
+paramiko
+nose>=1.3
