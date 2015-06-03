@@ -197,6 +197,8 @@ def test_search_for_non_existing():
 
 
 from threading import Thread
+import random
+import time
 
 
 def _add_user(app, name):
@@ -211,11 +213,16 @@ def _add_user(app, name):
 
 
 def test_asynchronous_new():
-    names = ['foo@bar.baz%d' % id for id in xrange(10)]
+    names = ['foo@bar.baz%d' % id for id in xrange(20)]
 
+    threads = []
     for name in names:
         thr = Thread(target=_add_user, args=[app, name])
         thr.start()
+        threads.append(thr)
+
+    for thread in threads:
+        thread.join()
 
     for name in names:
         with app.test_client() as c:
