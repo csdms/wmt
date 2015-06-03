@@ -8,6 +8,7 @@ import platform
 from datetime import datetime
 from distutils.dir_util import mkpath
 
+
 BUILD_ENVIRON = {
     'PATH': os.pathsep.join(['/usr/bin', '/bin', '/usr/sbin', '/sbin',
                              '/etc', '/usr/lib']),
@@ -320,14 +321,13 @@ def install_wmt_api(prefix, dir='.'):
     with cd(prefix):
         for path in ['bin', 'conf', 'db', 'files/uploads', 'files/downloads']:
             mkpath(path)
+        fetch_wmt_api(dir='wmt')
 
-    with cd(os.path.join(prefix, 'opt', 'wmt-api')):
-        fetch_wmt_api()
+    with cd(os.path.join(prefix, 'wmt')):
+        #system([which_python(), 'setup.py', 'develop'])
 
-        system([which_python(), 'setup.py', 'develop'])
-
-        ln_s(os.path.join('wmt', 'scripts', 'wmt_wsgi_main.py'),
-             os.path.join(prefix, 'bin', 'wmt_wsgi_main.py'))
+        ln_s(os.path.join('wsgi.py'),
+             os.path.join(prefix, 'bin', 'wsgi.py'))
         ln_s(os.path.join('wmt', 'data', 'templates'),
              os.path.join(prefix, 'templates'))
         ln_s(os.path.join('wmt', 'data', 'static'),
@@ -337,12 +337,12 @@ def install_wmt_api(prefix, dir='.'):
             git_clone_or_update('https://github.com/csdms/component_metadata',
                                 dir='components')
 
-            system(['wmt-db-new', 'wmt', 'users', 'submission', 'session',
-                    'tag', '--clobber'])
+            #system(['wmt-db-new', 'wmt', 'users', 'submission', 'session',
+            #        'tag', '--clobber'])
 
-    with cd(os.path.join(prefix, 'conf')):
-        with open('wmt.ini', 'w') as fp:
-            fp.write(WMT_INI_CONTENTS)
+    #with cd(os.path.join(prefix, 'conf')):
+    #    with open('wmt.ini', 'w') as fp:
+    #        fp.write(WMT_INI_CONTENTS)
 
 
 def total_seconds(dt):
