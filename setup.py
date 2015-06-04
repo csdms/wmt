@@ -19,7 +19,7 @@ setup(name='wmt',
       install_requires=['flask', 'flask-sqlalchemy', 'flask-testing',
                         'flask-login', 'sqlalchemy-migrate', 'PyYAML>=3.10',
                         'passlib', 'sphinxcontrib-httpdomain==1.1.8',
-                        'cmtstandardnames', 'paramiko']
+                        'cmtstandardnames', 'paramiko'],
       packages=find_packages(),
       #packages=['wmt', 'wmt.scripts', 'wmt.models', ],
       long_description="Create, save, edit, run collections of connected components.",
