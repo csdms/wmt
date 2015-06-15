@@ -94,10 +94,11 @@ def login_with_post():
         raise AuthenticationError()
 
 
-@users_page.route('/login')
+@users_page.route('/login', methods=['GET'])
 def login_with_get():
     """Authenticate as a user.
     """
+
     auth = request.authorization
 
     if auth is not None:
@@ -112,7 +113,7 @@ def login_with_get():
             raise MissingFieldError('credentials', 'password')
 
     if users.authenticate(username, password):
-        login_user(User(username))
+        login_user(User(username), remember=True)
         return users.first(username=username).jsonify()
 
     raise AuthenticationError()
