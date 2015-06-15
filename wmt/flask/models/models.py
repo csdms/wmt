@@ -26,7 +26,7 @@ class Model(ModelJsonSerializer, db.Model):
 
     @property
     def href(self):
-        return url_for('.model', id=self.id)
+        return url_for('models.model', id=self.id)
 
     @property
     def object_links(self):
