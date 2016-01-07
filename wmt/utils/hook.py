@@ -1,4 +1,5 @@
 import os
+import yaml
 
 
 class Error(Exception):
@@ -36,3 +37,8 @@ def find_file_in_search_path(filename, envvar):
 
 def find_simulation_input_file(filename):
     return find_file_in_search_path(filename, 'WMT_INPUT_FILE_PATH')
+
+
+def yaml_dump(filename, envvar):
+    with open(filename, 'w') as fp:
+        yaml.safe_dump(envvar, fp, default_flow_style=False)
