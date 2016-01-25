@@ -83,17 +83,41 @@ class New(object):
 
 
 class ResetPassword(object):
+    form = web.form.Form(
+        web.form.Textbox('username',
+                         not_too_long(512),
+                         valid_email_address,
+                         size=30, description='username:'),
+        web.form.Password('password',
+                          web.form.notnull,
+                          size=30,
+                          description='password:'),
+        web.form.Password('password2',
+                          web.form.notnull,
+                          size=30,
+                          description='repeat password:'),
+        web.form.Button('Submit'),
+        validators = [
+            web.form.Validator('Passwords did not match',
+                               lambda i: i.password == i.password2)
+        ]
+    )
+
+    def GET(self):
+        return render.reset(self.form())
+
     def POST(self):
-        params = web.input(pw="", user="")
-        if len(params.pw) == 0:
-            raise web.BadRequest('password must not be null')
+        form = self.form()
+        if not form.validates():
+            return render.reset(form)
 
         try:
-            user_id = users.get_user(params.user).id
+            user_id = users.get_user(form.d.username).id
         except AttributeError:
             raise web.BadRequest('user does not exist')
         else:
-            users.change_password(user_id, params.pw)
+            users.change_password(user_id, form.d.password)
+            raise web.ok('password has been reset')
 
 
 class Logout(object):
