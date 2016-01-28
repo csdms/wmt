@@ -417,6 +417,8 @@ if __name__ == '__main__':
     else:
         os.environ.setdefault('PYTHON', args.with_python)
 
+    prepend_path('PATH', os.path.dirname(os.environ['PYTHON']))
+
     with cd(install_prefix) as dir:
         install_wmt_api(dir)
 
