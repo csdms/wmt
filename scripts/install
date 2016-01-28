@@ -35,9 +35,14 @@ submission_db = %(db)s/submission.db
 db = db
 
 [url]
-scheme = http
+scheme = {url_scheme}
 netloc = {url_netloc}
 path = {url_path}
+
+[pickup]
+scheme = {pickup_scheme}
+netloc = {pickup_netloc}
+path = {pickup_path}
 
 [passlib]
 schemes = sha512_crypt, sha256_crypt
