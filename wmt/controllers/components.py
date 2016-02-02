@@ -6,10 +6,13 @@ from ..models import components as comps
 from ..validators import (not_too_long, not_too_short, not_bad_json)
 
 
+indent = 2
+
+
 class List(object):
     def GET(self):
         web.header('Content-Type', 'application/json; charset=utf-8')
-        return json.dumps(comps.get_component_names(sort=True))
+        return json.dumps(comps.get_component_names(sort=True), indent=indent)
 
 
 class Show(object):
@@ -22,10 +25,10 @@ class Show(object):
             raise web.notfound()
 
         if user_data.key is None:
-            return json.dumps(comp)
+            return json.dumps(comp, indent=indent)
         else:
             try:
-                return json.dumps(comp[user_data.key])
+                return json.dumps(comp[user_data.key], indent=indent)
             except KeyError:
                 raise web.notfound()
 
@@ -33,14 +36,14 @@ class Show(object):
 class Dump(object):
     def GET(self):
         web.header('Content-Type', 'application/json; charset=utf-8')
-        return json.dumps(comps.get_components())
+        return json.dumps(comps.get_components(), indent=indent)
 
 
 class Parameters(object):
     def GET(self, name):
         web.header('Content-Type', 'application/json; charset=utf-8')
         try:
-            return json.dumps(comps.get_component_params(name))
+            return json.dumps(comps.get_component_params(name), indent=indent)
         except KeyError:
             raise web.notfound()
 
@@ -80,7 +83,7 @@ class Defaults(object):
     def GET(self, name):
         web.header('Content-Type', 'application/json; charset=utf-8')
         try:
-            return json.dumps(comps.get_component_defaults(name))
+            return json.dumps(comps.get_component_defaults(name), indent=indent)
         except KeyError:
             raise web.notfound()
 
@@ -91,7 +94,7 @@ class Command(object):
         try:
             if x['format'] == 'json':
                 web.header('Content-Type', 'application/json; charset=utf-8')
-                return json.dumps(comps.get_component_argv(name))
+                return json.dumps(comps.get_component_argv(name), indent=indent)
             else:
                 return render.code('> ' + ' '.join(comps.get_component_argv(name)))
         except KeyError:
