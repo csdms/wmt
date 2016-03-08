@@ -52,33 +52,6 @@ _EMPTY_PRINT_SECTION = [
             "type":"string",
             "default":""
         }
-    },
-    {
-        "key":"output_interval",
-        "name":"Output interval",
-        "description":"Interval between output files",
-        "value":{
-            "type":"float",
-            "default":1.0,
-            "range":{
-                "min":0,
-                "max":1e6
-            },
-        "units":"d"
-        }
-    },
-    {
-        "key":"output_format",
-        "name":"Output format",
-        "description":"File format for output files",
-        "value":{
-            "type":"choice",
-            "default":"netcdf",
-            "choices":[
-                "netcdf",
-                "vtk"
-            ]
-        }
     }
 ]
 
