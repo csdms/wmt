@@ -1,8 +1,10 @@
 from __future__ import print_function
 
 import os
+
 import requests
 from requests_toolbelt import MultipartEncoder
+import yaml
 
 
 class execute_in_dir(object):
@@ -25,8 +27,19 @@ def write_key_value_pairs(filelike, **kwds):
 
 
 def write_readme(prefix, mode='w', params={}):
-    with open(os.path.join(prefix, 'README'), mode) as readme:
-        write_key_value_pairs(readme, **params)
+    if mode not in ('a', 'w'):
+        raise ValueError('{mode}: mode not understood'.format(mode=mode))
+
+    path_to_readme = os.path.join(prefix, 'README.yaml')
+    if mode == 'a' and os.path.isfile(path_to_readme):
+        with open(path_to_readme, 'r') as fp:
+            current = yaml.load(fp)
+    else:
+        current = dict()
+
+    current.update(params)
+    with open(path_to_readme, 'w') as fp:
+        yaml.dump(current, stream=fp, default_flow_style=False)
 
 
 def _copy_a_chunk(src_fp, dest_fp, chunk_size, checksum=None):
