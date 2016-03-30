@@ -132,41 +132,81 @@ def _create_stage_dir(uuid):
 #    return resp
 
 
+def get_global_params(params):
+    global_params = {
+        'run_duration': None,
+    }
+    for name in global_params:
+        try:
+            global_params[name] = params[name]
+        except Keyerror:
+            pass
+
+    return global_params
+
+
+def set_global_parameters(components, driver):
+    component_params = dict()
+    for component in components:
+        name = component['id']
+        component_params[name] = component['parameters']
+
+    global_params = get_global_params(component_params[driver])
+
+    for params in component_params.values():
+        params.update(global_params)
+
+
+def set_port_parameters(port, components):
+    name = port['name']
+    for component in components:
+        if component['id'] == name:
+            params = component['parameters']
+            break
+    port['time_step'] = float(params['update_time_step'])
+
+
 def stage(uuid):
-    path = _get_stage_dir(uuid)
-    write_readme(path, mode='a', params={
-        'staged_on': current_time_as_string()
-    })
+    import yaml
 
     os.environ['WMT_INPUT_FILE_PATH'] = os.pathsep.join([
         models.get_model_upload_dir(get_model_id(uuid)),
         os.getcwd(),
     ])
 
-    update(uuid, status='staging', message='staging components...')
-    for component in get_components(uuid):
-        update(uuid,
-            status='staging', message='staging %s...' % component['class'])
-        stage_component(path, component)
+    model, ports = models.get_model_yaml(get_model_id(uuid))
+    components = get_components(uuid)
 
-    model, components = models.get_model_yaml(get_model_id(uuid))
-    with open(os.path.join(_get_stage_dir(uuid), 'model.yaml'), 'w') as f:
-        f.write(model)
-    with open(os.path.join(_get_stage_dir(uuid), 'components.yaml'), 'w') as f:
-        f.write(components)
-    #with open(os.path.join(_get_stage_dir(uuid), 'model.yaml'), 'w') as f:
-    #    f.write(models.get_model_yaml(get_model_id(uuid)))
+    set_global_parameters(components, model['driver'])
+
+    with execute_in_dir(_get_stage_dir(uuid)) as cwd:
+        write_readme('.', mode='a',
+                     params={'staged_on': current_time_as_string()})
+
+        update(uuid, status='staging', message='staging components...')
+        for component in components:
+            stage_component(component, prefix=cwd)
+
+        for port in ports:
+            set_port_parameters(port, components)
+
+        with open('model.yaml', 'w') as f:
+            f.write(yaml.dump(model, default_flow_style=False))
+
+        with open('components.yaml', 'w') as f:
+            f.write(yaml.dump_all(ports, default_flow_style=False))
 
 
 def _component_stagein(component):
-    name = component['class'].lower()
+    name = component['class']
 
     files = components.get_component_formatted_input(
         name, **component['parameters'])
 
     for (filename, contents) in files.items():
-        with open(filename, 'w') as f:
-            f.write(contents)
+        if not os.path.isfile(filename):
+            with open(filename, 'w') as f:
+                f.write(contents)
 
     with open('run.sh', 'w') as f:
         f.write(' '.join(components.get_component_argv(name)))
@@ -191,9 +231,10 @@ def prepend_to_path(envvar, path):
     os.environ[envvar] = os.pathsep.join(paths)
 
 
-def stage_component(prefix, component):
-    name = component['class'].lower()
-    stage_dir = os.path.join(prefix, name)
+def stage_component(component, prefix='.'):
+    # name = component['class'].lower()
+    name = component['class']
+    stage_dir = os.path.abspath(os.path.join(prefix, name))
 
     _make_stage_dir(stage_dir, ifexists='pass')
 
