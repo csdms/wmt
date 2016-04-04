@@ -145,6 +145,7 @@ def get_model_yaml(id):
                 })
 
         params = component['parameters']
+        d['time_step'] = float(params['update_time_step'])
 
         d['print'] = []
         if 'output_interval' in params and 'output_format' in params:
@@ -164,9 +165,10 @@ def get_model_yaml(id):
 
         components.append(d)
 
-    #return yaml.dump_all([info] + components, default_flow_style=False)
-    return (yaml.dump(info, default_flow_style=False),
-            yaml.dump_all(components, default_flow_style=False))
+    # return yaml.dump_all([info] + components, default_flow_style=False)
+    return info, components
+    # return (yaml.dump(info, default_flow_style=False),
+    #         yaml.dump_all(components, default_flow_style=False))
 
 
 def get_model_ids():
