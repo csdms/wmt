@@ -36,6 +36,26 @@ def launch_simulation(uuid, username, host, password):
             message='unexpected error launching simulation on %s (%d: %s)' % (host, resp['status_code'], resp['stderr']))
 
 
+def parse_submission_status(status):
+    import yaml
+
+    status.stdout = status.message
+    status.time = ''
+    status.time_elapsed = ''
+
+    try:
+        info = yaml.load(status.message)
+    except yaml.YAMLError:
+        info = {}
+
+    if isinstance(info, dict):
+        status.stdout = info.get('stdout', '')
+        status.time = info.get('time', '')
+        status.time_elapsed = info.get('time_elapsed', '')
+
+    return status
+
+
 class Launch(object):
     form = web.form.Form(
         web.form.Textbox('uuid',
@@ -370,9 +390,14 @@ class Status(object):
         except submissions.IdError:
             raise web.internalerror("Unable to find submission %s" % uuid)
 
-        return render.status(uuid, status)
+        return render.status(uuid, parse_submission_status(status))
 
 
 class Show(object):
     def GET(self):
-        return render.statustable(submissions.get_submissions())
+        statuses = [
+            parse_submission_status(s)
+            for s in submissions.get_submissions()
+        ]
+        return render.statustable(statuses)
+        # return render.statustable(submissions.get_submissions())
