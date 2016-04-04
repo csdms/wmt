@@ -61,7 +61,11 @@ $def with (submissions)
         <td>$submission.name</td>
         <td>$submission.owner[:5]...</td>
         <td>$submission.created[:16]</td>
-        <td>$:submission.message</td>
+        <td>
+          $if submission.status == 'running':
+              <pre><code>Time: $:submission.time</code></pre>
+          <pre><code>$:submission.stdout</code></pre>
+        </td>
         <!--td><i class="fa fa-trash-o fa-fw"></i></td-->
         <!--td>
             <button class="btn btn-default">
@@ -88,7 +92,7 @@ $def with (submissions)
         <td>
           <div class="btn-group button-group-xs">
             <button class="btn btn-default">
-            <a href="$PREFIX/run/${submission.uuid}"><span class="glyphicon glyphicon-info-sign fa-lg"></span></a>
+            <a href="$PREFIX/run/${submission.uuid}/status"><span class="glyphicon glyphicon-info-sign fa-lg"></span></a>
             </button>
             $if submission.status == 'success':
               <button class="btn btn-default">
