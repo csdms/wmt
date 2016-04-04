@@ -1,0 +1,17 @@
+$def with (tables)
+
+<h1 class="sub-header">Parameters</h1>
+
+$for title, params in tables:
+  <h2 class="sub-header">$title</h2>
+
+  <div class="table-responsive">
+    <table class="table table-condensed table-striped">
+      $for param in params:
+        <tr>
+          <td class="col-sm-10">$param['name']</td>
+          <td class="col-sm-2">$param['value']['default']</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

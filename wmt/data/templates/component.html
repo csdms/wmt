@@ -1,0 +1,40 @@
+$def with (component)
+
+<h2 class="sub-header">$component['id'] (v$component['version'])</h2>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <td>Summary</td>
+        <td>$component['summary']</td>
+      </tr>
+      <tr>
+        <td>Author</td>
+        <td>$component['author']</td>
+      </tr>
+      <tr>
+        <td>Version</td>
+        <td>$component['version']</td>
+      </tr>
+      <tr>
+        <td>License</td>
+        <td>$component['license']</td>
+      </tr>
+      <tr>
+        <td>URL</td>
+        <td><a href=$component['url']>$component['url']</a></td>
+      </tr>
+      <tr>
+        <td>DOI</td>
+        <td>$component['doi']</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<button class="btn btn-lg btn-block">
+  <a href="$PREFIX/components/pretty-params/$component['id']">
+    Set Parameters
+  </a>
+</button>

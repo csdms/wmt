@@ -1,0 +1,17 @@
+$def with (components)
+
+<h2 class="sub-header">Components</h2>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <tbody>
+    $for component in components:
+      <tr>
+        <td>
+          <a href="$PREFIX/components/pretty-show/${component['id']}">$component['id']</a>
+        </td>
+        <td>$component['summary']</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

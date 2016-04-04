@@ -1,0 +1,25 @@
+$def with (models)
+
+<h2 class="sub-header">Models</h2>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Created</th>
+      <th>Owner</th>
+    </thead>
+    <tbody>
+    $for model in models:
+    <tr>
+        <td>
+          <a href="$PREFIX/models/view/${model['id']}">$model['id']</a>
+        </td>
+        <td>$model['name']</td>
+        <td>$model['date']</td>
+        <td>$model['owner']</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
