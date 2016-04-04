@@ -18,6 +18,32 @@ class IdError(Error):
     def __str__(self):
         return str(self._id)
 
+import string
+
+
+TEXT_CHARACTERS = ''.join(map(chr, range(32, 127)) + list("\n\r\t\b"))
+NULL_TRANS = string.maketrans("", "")
+
+
+def is_text_file(fname, block=1024):
+    with open(fname, 'r') as fp:
+        return is_text(fp.read(block))
+
+
+def is_text(buff):
+    if '\0' in buff:
+        return False
+
+    if len(buff) == 0:
+        return True
+
+    bin_chars = buff.translate(NULL_TRANS, TEXT_CHARACTERS)
+
+    if len(bin_chars) > len(buff) * 0.3:
+        return False
+    
+    return True
+
 
 def get_components():
     return palette.values()
@@ -96,11 +122,15 @@ def get_component_formatted_input(name, **kwds):
 
     input = dict()
     for (filename, contents) in get_component_input(name).items():
-        formatted = format.format(contents, **kwds)
+        # formatted = format.format(contents, **kwds)
         (base, ext) = os.path.splitext(filename)
         if ext == '.tmpl':
             filename = base
-        input[filename] = format.format(contents, **kwds)
+
+        if is_text(contents):
+            input[filename] = format.format(contents, **kwds)
+        else:
+            input[filename] = contents
 
     return input
 
