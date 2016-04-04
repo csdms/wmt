@@ -1,10 +1,59 @@
 $def with (title, submission)
 
-<h1>$title</h1>
+<h1>$submission.name</h1>
 
+<h2>Summary</h2>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <td>Started</td>
+        <td>$submission.created</td>
+      </tr>
+      <tr>
+        <td>Owner</td>
+        <td>$submission.owner</td>
+      </tr>
+      <tr>
+        <td>Last Update</td>
+        <td>$submission.updated</td>
+      </tr>
+      <tr>
+        <td>Run Time</td>
+        <td>$submission.time_elapsed</td>
+      </tr>
+      <tr>
+        <td>ID</td>
+        <td>$submission.uuid</td>
+      </tr>
+      <tr>
+        <td>Model</td>
+        <td>$submission.model_id</td>
+      </tr>
+      <tr>
+        <td>Status</td>
+        <td>$submission.status</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+$if submission.status == 'success':
+  <button class="btn btn-lg btn-success btn-block">
+    <a href="http://csdms.colorado.edu/pub/users/wmt/${submission.uuid}.tar.gz">
+      <span class="glyphicon glyphicon-cloud-download fa-lg"></span>
+    </a>
+  </button>
+
+<button class="btn btn-lg btn-block">
+  <a href="$PREFIX/run/show">The Rest...</a>
+</button>
+
+<h2>Standard Output</h2>
 $if submission.status == 'error':
   <div class="bad">
 $else:
   <div class="good">
-<pre>$submission.message</pre>
+
+<pre><code>$:submission.stdout</code></pre>
 </div>
