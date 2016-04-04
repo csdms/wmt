@@ -20,7 +20,7 @@ class Log(WsgiLog):
             logformat = '%(message)s',
             tofile = True,
             toprint = True,
-            file = os.path.join(os.environ['WMT_PREFIX'], 'logs', 'wsgilog.log'),
+            file = os.path.join(os.environ['WMT_PREFIX'], 'var/log', 'wsgilog.log'),
             interval = 'S',
             backups = 5,
         )
