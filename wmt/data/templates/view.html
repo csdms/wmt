@@ -1,7 +1,27 @@
-$def with (model)
+$def with (model, as_yaml)
 
 <h1>$model.name</h1>
 
-<pre><code>
-$model.json
-</code></pre>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <td>Date created</td>
+        <td>$model.date</td>
+      </tr>
+      <tr>
+        <td>Owner</td>
+        $if model.owner == '':
+          <td>None</td>
+        $else:
+          <td>$model.owner</td>
+      </tr>
+      <tr>
+        <td>ID</td>
+        <td>$model.id</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<pre class="prettyprint lang-yaml">$as_yaml</pre>
