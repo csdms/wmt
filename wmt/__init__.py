@@ -31,6 +31,10 @@ URLS = (
     '/tag/model/query', 'wmt.controllers.tag.Query',
     '/tag/model/(\d+)', 'wmt.controllers.tag.ModelTags',
 
+    '/components/pretty-list', 'wmt.controllers.components.PrettyList',
+    '/components/pretty-show/(\w+)', 'wmt.controllers.components.PrettyShow',
+    '/components/pretty-params/(\w+)', 'wmt.controllers.components.PrettyParameters',
+
     '/components/list', 'wmt.controllers.components.List',
     '/components/dump', 'wmt.controllers.components.Dump',
     '/components/show/(\w+)', 'wmt.controllers.components.Show',
@@ -39,6 +43,8 @@ URLS = (
     '/components/input/(\w+)', 'wmt.controllers.components.Input',
     '/components/format/(\w+)', 'wmt.controllers.components.Format',
     '/components/command/(\w+)', 'wmt.controllers.components.Command',
+
+    '/models/pretty-list', 'wmt.controllers.models.PrettyList',
 
     '/models/new', 'wmt.controllers.models.New',
     '/models/open/(\d+)', 'wmt.controllers.models.Open',

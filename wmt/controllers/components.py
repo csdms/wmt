@@ -12,6 +12,13 @@ class List(object):
         return json.dumps(comps.get_component_names(sort=True))
 
 
+class PrettyList(object):
+    def GET(self):
+        components = comps.get_components()
+        components.sort(cmp=lambda a, b: cmp(a['id'], b['id']))
+        return render.componenttable(components)
+
+
 class Show(object):
     def GET(self, name):
         web.header('Content-Type', 'application/json; charset=utf-8')
@@ -30,6 +37,15 @@ class Show(object):
                 raise web.notfound()
 
 
+class PrettyShow(object):
+    def GET(self, name):
+        try:
+            component = comps.get_component(name)
+        except comps.IdError:
+            raise web.notfound()
+        return render.component(component)
+
+
 class Dump(object):
     def GET(self):
         web.header('Content-Type', 'application/json; charset=utf-8')
@@ -43,6 +59,29 @@ class Parameters(object):
             return json.dumps(comps.get_component_params(name))
         except KeyError:
             raise web.notfound()
+
+
+class PrettyParameters(object):
+    def GET(self, name):
+        try:
+            parameters = comps.get_component_params(name)
+        except KeyError:
+            raise web.notfound()
+
+        tables = []
+        for param in parameters:
+            if param['key'] == 'separator':
+                table = []
+                tables.append((param['name'], table))
+            else:
+                try:
+                    table.append(param)
+                except NameError:
+                    table = []
+                    tables.append(('', table))
+
+
+        return render.paramtable(tables)
 
 
 class Input(object):

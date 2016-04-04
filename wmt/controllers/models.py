@@ -4,6 +4,8 @@ import os
 import shutil
 from datetime import datetime
 
+import yaml
+
 from ..models import (models, users, components)
 from ..render import render
 from ..validators import (not_too_short, not_bad_json)
@@ -45,7 +47,8 @@ class Validate(object):
         try:
             json.loads(form.d.json)
         except ValueError as error:
-            return render.status('Error', Status('error', str(error)))
+            return render.error(str(error))
+            # return render.error(Status('error', str(error)))
         return render.status('Success', Status('success', 'Valid JSON'))
 
 
@@ -186,7 +189,8 @@ class View(object):
     """
     def GET(self, id):
         model = _get_model_or_raise(id)
-        return render.view(model)
+        as_yaml = yaml.dump(yaml.load(model.json), default_flow_style=False)
+        return render.view(model, as_yaml)
 
 
 class Open(object):
@@ -215,6 +219,19 @@ class List(object):
             resp.append(dict(id=model.id, name=model.name,
                              owner=model.owner, date=date.isoformat()))
         return json.dumps(resp)
+
+
+class PrettyList(object):
+    def GET(self):
+        all_models = models.get_models(sortby='name')
+        models_brief = []
+        for model in all_models:
+            date = datetime.strptime(model.date, '%a, %d %b %Y %H:%M:%S %Z')
+            models_brief.append(dict(id=model.id, name=model.name,
+                                     owner=model.owner, date=date.isoformat()))
+        models_brief.sort(cmp=lambda a, b: cmp(a['date'], b['date']))
+        models_brief.reverse()
+        return render.modeltable(models_brief)
 
 
 class Export(object):
