@@ -145,13 +145,20 @@ def get_global_params(params):
     return global_params
 
 
+def get_component_globals(name):
+    parameters = components.get_component_params(name)
+    return [p['key'] for p in parameters if p.get('global', False)]
+
+
 def set_global_parameters(components, driver):
     component_params = dict()
     for component in components:
         name = component['id']
         component_params[name] = component['parameters']
 
-    global_params = get_global_params(component_params[driver])
+    global_params = {}
+    for name in get_component_globals(driver):
+        global_params[name] = component_params[driver][name]
 
     for params in component_params.values():
         params.update(global_params)
@@ -163,7 +170,7 @@ def set_port_parameters(port, components):
         if component['id'] == name:
             params = component['parameters']
             break
-    port['time_step'] = float(params['update_time_step'])
+    port['time_step'] = float(params['_update_time_step'])
 
 
 def stage(uuid):
