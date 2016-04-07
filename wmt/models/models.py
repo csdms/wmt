@@ -145,12 +145,12 @@ def get_model_yaml(id):
                 })
 
         params = component['parameters']
-        d['time_step'] = float(params['update_time_step'])
+        d['time_step'] = float(params['_update_time_step'])
 
         d['print'] = []
-        if 'output_interval' in params and 'output_format' in params:
-            interval = params['output_interval']
-            format = params['output_format']
+        if '_output_interval' in params and '_output_format' in params:
+            interval = params['_output_interval']
+            format = params['_output_format']
             for (var, value) in params.items():
                 if '__' in var and value != 'off':
                     d['print'].append({
