@@ -134,7 +134,7 @@ def _create_stage_dir(uuid):
 
 def get_global_params(params):
     global_params = {
-        'run_duration': None,
+        '_run_duration': None,
     }
     for name in global_params:
         try:
@@ -158,7 +158,8 @@ def set_global_parameters(components, driver):
 
     global_params = {}
     for name in get_component_globals(driver):
-        global_params[name] = component_params[driver][name]
+        if name not in ('separator', ):
+            global_params[name] = component_params[driver][name]
 
     for params in component_params.values():
         params.update(global_params)
