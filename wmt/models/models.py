@@ -111,8 +111,14 @@ def get_model_yaml(id):
     conf = json.loads(get_model(id)['json'])
     name, model = conf['name'], conf['model']
 
-    components = []
     info = dict()
+    for component in model:
+        if component.get('driver', False):
+            params = component['parameters']
+            info['driver'] = str(component['id'])
+            info['duration'] = float(params['_run_duration'])
+
+    components = []
     for component in model:
         d = {}
         d['name'] = str(component['id'])
@@ -149,7 +155,7 @@ def get_model_yaml(id):
 
         d['print'] = []
         if '_output_interval' in params and '_output_format' in params:
-            interval = params['_output_interval']
+            interval = info['duration'] / float(params['_output_interval'])
             format = params['_output_format']
             for (var, value) in params.items():
                 if '__' in var and value != 'off':
@@ -159,9 +165,9 @@ def get_model_yaml(id):
                         'format': str(format),
                     })
 
-        if component.get('driver', False):
-            info['driver'] = str(component['id'])
-            info['duration'] = float(params['run_duration'])
+        # if component.get('driver', False):
+        #     info['driver'] = str(component['id'])
+        #     info['duration'] = float(params['_run_duration'])
 
         components.append(d)
 
