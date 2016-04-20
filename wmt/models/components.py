@@ -115,7 +115,7 @@ def get_component_input(name):
     return files
 
 
-def get_component_formatted_input(name, **kwds):
+def get_component_formatted_input(name, ignore_binary=False, **kwds):
     from ..utils.templatefile import FileFormatter
 
     format = FileFormatter(get_component_defaults(name))
@@ -130,7 +130,10 @@ def get_component_formatted_input(name, **kwds):
         if is_text(contents):
             input[filename] = format.format(contents, **kwds)
         else:
-            input[filename] = contents
+            if ignore_binary:
+                input[filename] = 'Binary file'
+            else:
+                input[filename] = contents
 
     return input
 

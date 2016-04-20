@@ -290,11 +290,16 @@ class Format(object):
             mapping = component['parameters']
 
         if x['format'].lower() == 'html':
-            return render.files(components.get_component_formatted_input(name, **mapping))
+            files = components.get_component_formatted_input(name,
+                                                             ignore_binary=True,
+                                                             **mapping)
+            return render.files(files)
         elif x['format'].lower() == 'json':
             web.header('Content-Type', 'application/json; charset=utf-8')
             return json.dumps(mapping, sort_keys=True, indent=4, separators=(',', ': '))
         else:
-            files = components.get_component_formatted_input(name, **mapping)
+            files = components.get_component_formatted_input(name,
+                                                             ignore_binary=True,
+                                                             **mapping)
             return '\n'.join([
                 '>>> start: {0}\n{1}\n<<< end: {0}\n'.format(*item) for item in files.items()])
