@@ -47,7 +47,7 @@ _EMPTY_PRINT_SECTION = [
     {
         "key":"separator",
         "name":"Output",
-        "description":"Output",
+        "description":"Output files",
         "value":{
             "type":"string",
             "default":""
@@ -59,7 +59,7 @@ _PRINT_ITEM_STRING = """
 {
     "key":"${standard_name}",
     "name":"Output ${standard_name}",
-    "description":"Output file for ${standard_name}",
+    "description":"${standard_name}",
     "value":{
         "type":"choice",
         "default":"off",
