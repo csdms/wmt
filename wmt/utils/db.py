@@ -39,6 +39,7 @@ def _load_table(name, db='.'):
     except IOError as error:
         print(error, file=STDERR)
         table = []
+        raise LoadError(str(error))
 
     return table
 
@@ -98,10 +99,16 @@ def _construct_component_from_db(path_to_db):
     desc = _load_table('info', db=path_to_db)
 
     for table in ['parameters', 'uses', 'provides', 'files', 'argv']:
-        desc[table] = _load_table(table, db=path_to_db)
+        try:
+            desc[table] = _load_table(table, db=path_to_db)
+        except LoadError:
+            if table == 'argv':
+                desc[table] = []
+            else:
+                raise
 
-    print_section = _construct_print_section_from_provides(path_to_db)
-    desc['parameters'].extend(print_section)
+    # print_section = _construct_print_section_from_provides(path_to_db)
+    # desc['parameters'].extend(print_section)
 
     return desc
 
@@ -115,5 +122,6 @@ def load_palette(palette_dir):
             palette[name] = _construct_component_from_db(path_to_db)
         except LoadError:
             print('%s: unable to load' % name, file=STDERR)
+            raise
 
     return palette
