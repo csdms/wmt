@@ -6,18 +6,35 @@ import requests
 from requests_toolbelt import MultipartEncoder
 import yaml
 
+from distutils.dir_util import mkpath
+
+# class execute_in_dir(object):
+#     def __init__(self, dir):
+#         self._init_dir = os.getcwd()
+#         self._exe_dir = dir
+
+#     def __enter__(self):
+#         os.chdir(self._exe_dir)
+#         return os.getcwd()
+
+#     def __exit__(self, type, value, traceback):
+#         os.chdir(self._init_dir)
+#         return isinstance(value, OSError)
+
 
 class execute_in_dir(object):
     def __init__(self, dir):
-        self._init_dir = os.getcwd()
-        self._exe_dir = dir
+        self._dir = dir
 
     def __enter__(self):
-        os.chdir(self._exe_dir)
-        return os.getcwd()
+        self._starting_dir = os.path.abspath(os.getcwd())
+        if not os.path.isdir(self._dir):
+            mkpath(self._dir)
+        os.chdir(self._dir)
+        return os.path.abspath(os.getcwd())
 
     def __exit__(self, type, value, traceback):
-        os.chdir(self._init_dir)
+        os.chdir(self._starting_dir)
         return isinstance(value, OSError)
 
 
