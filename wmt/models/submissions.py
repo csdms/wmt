@@ -213,8 +213,10 @@ def _component_stagein(component):
 
     for (filename, contents) in files.items():
         if not os.path.isfile(filename):
-            with open(filename, 'w') as f:
-                f.write(contents)
+            with execute_in_dir(os.path.dirname(filename)):
+                # with open(filename, 'w') as f:
+                with open(os.path.basename(filename), 'w') as f:
+                    f.write(contents)
 
     with open('run.sh', 'w') as f:
         f.write(' '.join(components.get_component_argv(name)))
