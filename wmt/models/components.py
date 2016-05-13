@@ -128,7 +128,10 @@ def get_component_formatted_input(name, ignore_binary=False, **kwds):
             filename = base
 
         if is_text(contents):
-            input[filename] = format.format(contents, **kwds)
+            try:
+                input[filename] = format.format(contents, **kwds)
+            except ValueError:
+                input[filename] = contents
         else:
             if ignore_binary:
                 input[filename] = 'Binary file'
