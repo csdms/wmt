@@ -89,24 +89,34 @@ $def with (submissions)
             </button>
           </form>
         </td-->
-        <td>
-          <div class="btn-group button-group-xs">
-            <button class="btn btn-default">
-            <a href="$PREFIX/run/${submission.uuid}/status"><span class="glyphicon glyphicon-info-sign fa-lg"></span></a>
-            </button>
+
+	<td>
+
+	  <div class="btn-group button-group-xs">
+
+	    <a href="$PREFIX/run/${submission.uuid}" class="btn btn-link">
+	      <span class="glyphicon glyphicon-info-sign fa-lg"></span>
+	    </a>
+
             $if submission.status == 'success':
-              <button class="btn btn-default">
-            $else:
-              <button class="btn btn-default" disabled="disabled">
+              <a href="http://csdms.colorado.edu/pub/users/wmt/${submission.uuid}.tar.gz"
+	         class="btn btn-link" role="button">
+		<span class="glyphicon glyphicon-cloud-download fa-lg"></span>
+              </a>
+	    $else:
+              <a href="http://csdms.colorado.edu/pub/users/wmt/${submission.uuid}.tar.gz"
+		 class="btn btn-link disabled" role="button">
+		<span class="glyphicon glyphicon-cloud-download fa-lg"></span>
+              </a>
 
-            <a href="http://csdms.colorado.edu/pub/users/wmt/${submission.uuid}.tar.gz"><span class="glyphicon glyphicon-cloud-download fa-lg"></span></a>
+	    <a href="$PREFIX/run/delete/ui/${submission.uuid}" class="btn btn-link">
+	      <span class="glyphicon glyphicon-trash fa-lg"></span>
+	    </a>
 
-            </button>
-            <button type="submit" class="btn btn-default">
-              <a href="$PREFIX/run/delete/ui/${submission.uuid}"><span class="glyphicon glyphicon-trash fa-lg"></span></a>
-            </button>
-          </div>
-        </td>
+	  </div>
+
+	</td>
+
       </tr>
     </tbody>
   </table>
