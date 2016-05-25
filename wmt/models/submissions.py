@@ -213,8 +213,10 @@ def _component_stagein(component):
 
     for (filename, contents) in files.items():
         if not os.path.isfile(filename):
-            with execute_in_dir(os.path.dirname(filename)):
-                # with open(filename, 'w') as f:
+            component_dir = os.path.dirname(filename)
+            if os.path.isdir(component_dir) is False:
+                component_dir = os.curdir
+            with execute_in_dir(component_dir):
                 with open(os.path.basename(filename), 'w') as f:
                     f.write(contents)
 
