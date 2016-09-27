@@ -158,7 +158,8 @@ def get_model_yaml(id):
             interval = info['duration'] / float(params['_output_interval'])
             format = params['_output_format']
             for (var, value) in params.items():
-                if '__' in var and value != 'off':
+                # if '__' in var and value != 'off':
+                if '__' in var and value == var and value != 'off':
                     d['print'].append({
                         'name': str(value),
                         'interval': float(interval),
