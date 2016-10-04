@@ -375,7 +375,7 @@ class Get(object):
             raise web.internalerror("Unable to find submission %s" % uuid)
 
         web.header('Content-Type', 'application/json; charset=utf-8')
-        return json.dumps(dict(info), indent=2)
+        return json.dumps(dict(info), indent=indent)
 
 
 class GetAll(object):
@@ -383,7 +383,7 @@ class GetAll(object):
         infos = submissions.get_submissions()
 
         web.header('Content-Type', 'application/json; charset=utf-8')
-        return json.dumps([dict(info) for info in infos], indent=2)
+        return json.dumps([dict(info) for info in infos], indent=indent)
 
 
 class Status(object):
