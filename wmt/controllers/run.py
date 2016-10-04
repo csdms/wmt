@@ -14,6 +14,9 @@ from ..utils.ssh import launch_cmt_on_host
 import threading
 
 
+indent = 2
+
+
 def launch_simulation(uuid, username, host, password):
     try:
         #resp = submissions.launch(uuid, username, host, password=password)
@@ -372,7 +375,7 @@ class Get(object):
             raise web.internalerror("Unable to find submission %s" % uuid)
 
         web.header('Content-Type', 'application/json; charset=utf-8')
-        return json.dumps(dict(info))
+        return json.dumps(dict(info), indent=2)
 
 
 class GetAll(object):
@@ -380,7 +383,7 @@ class GetAll(object):
         infos = submissions.get_submissions()
 
         web.header('Content-Type', 'application/json; charset=utf-8')
-        return json.dumps([dict(info) for info in infos])
+        return json.dumps([dict(info) for info in infos], indent=2)
 
 
 class Status(object):
