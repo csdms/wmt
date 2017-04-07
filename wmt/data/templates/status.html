@@ -43,15 +43,14 @@ $def with (title, submission)
 </div>
 
 $if submission.status == 'success':
-  <button class="btn btn-lg btn-success btn-block">
-    <a href="http://csdms.colorado.edu/pub/users/wmt/${submission.uuid}.tar.gz">
-      <span class="glyphicon glyphicon-cloud-download fa-lg"></span>
-    </a>
-  </button>
+  <a href="http://csdms.colorado.edu/pub/users/wmt/${submission.uuid}.tar.gz"
+     class="btn btn-lg btn-success btn-block" role="button">
+    <span class="glyphicon glyphicon-cloud-download fa-lg"></span>
+  </a>
 
-<button class="btn btn-lg btn-block">
-  <a href="$PREFIX/run/show">The Rest...</a>
-</button>
+<a href="$PREFIX/run/show"
+   class="btn btn-lg btn-block btn-default" role="button">The Rest...
+</a>
 
 <h2>Standard Output</h2>
 $if submission.status == 'error':
