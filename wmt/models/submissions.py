@@ -2,6 +2,7 @@ import web
 import os
 from uuid import uuid4
 import json
+import shutil
 
 from . import components, models
 from ..config import submission_db as db
@@ -243,7 +244,7 @@ def prepend_to_path(envvar, path):
     os.environ[envvar] = os.pathsep.join(paths)
 
 
-def stage_component(component, prefix='.'):
+def stage_component(component, prefix='.', prestage_only=False):
     # name = component['class'].lower()
     name = component['class']
     stage_dir = os.path.abspath(os.path.join(prefix, name))
@@ -257,6 +258,10 @@ def stage_component(component, prefix='.'):
 
     with execute_in_dir(stage_dir) as _:
         hooks['pre-stage'].execute(component['parameters'])
+
+    if prestage_only:
+        shutil.rmtree(stage_dir)
+        return
 
     with execute_in_dir(stage_dir) as _:
         _component_stagein(component)
