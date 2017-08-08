@@ -6,10 +6,7 @@ from datetime import datetime
 
 import yaml
 
-from wmt.models.submissions import prepend_to_path
-from wmt.utils.io import execute_in_dir
-
-from ..models import (models, users, components)
+from ..models import (models, users, components, submissions)
 from ..render import render
 from ..validators import (not_too_short, not_bad_json)
 from ..cca import rc_from_json
@@ -285,30 +282,15 @@ class Format(object):
         else:
             try:
                 component = models.get_model_component(int(id), name)
+                submissions.stage_component(component,
+                                            prefix=site['tmp'],
+                                            prestage_only=True)
             except models.BadIdError:
                 raise web.notfound()
             except models.AuthorizationError:
                 raise web.Unauthorized()
 
-            try:
-                stage_dir = os.path.abspath(os.path.join(site['tmp'], name))
-                try:
-                    os.mkdir(stage_dir)
-                except:
-                    pass
-                prepend_to_path('WMT_INPUT_FILE_PATH',
-                                os.path.join(site['db'], 'components',
-                                             name, 'files'))
-
-                hooks = components.get_component_hooks(name)
-                with execute_in_dir(stage_dir) as _:
-                    hooks['pre-stage'].execute(component['parameters'])
-
-                mapping = component['parameters']
-            except:
-                raise web.notfound('Error in pre-staging files')
-            finally:
-                shutil.rmtree(stage_dir)
+            mapping = component['parameters']
 
         if x['format'].lower() == 'html':
             files = components.get_component_formatted_input(name,
