@@ -244,7 +244,7 @@ def prepend_to_path(envvar, path):
     os.environ[envvar] = os.pathsep.join(paths)
 
 
-def stage_component(component, prefix='.', prestage_only=False):
+def stage_component(component, prefix='.', hooks_only=False):
     # name = component['class'].lower()
     name = component['class']
     stage_dir = os.path.abspath(os.path.join(prefix, name))
@@ -259,12 +259,12 @@ def stage_component(component, prefix='.', prestage_only=False):
     with execute_in_dir(stage_dir) as _:
         hooks['pre-stage'].execute(component['parameters'])
 
-    if prestage_only:
-        shutil.rmtree(stage_dir)
-        return
-
-    with execute_in_dir(stage_dir) as _:
-        _component_stagein(component)
+    if not hooks_only:
+        with execute_in_dir(stage_dir) as _:
+            _component_stagein(component)
 
     with execute_in_dir(stage_dir) as _:
         hooks['post-stage'].execute(component['parameters'])
+
+    if hooks_only:
+        return stage_dir
