@@ -30,6 +30,13 @@ def _get_model_or_raise(id):
         raise web.Unauthorized()
 
 
+def _copy_uploaded_files(id, dest):
+    upload_dir = models.get_model_upload_dir(id)
+    files = os.listdir(upload_dir)
+    for f in files:
+        shutil.copy(os.path.join(upload_dir, f), dest)
+
+
 def get_generated_input(name, path):
     files = [f for f in os.listdir(path) if not
              os.path.isdir(os.path.join(path, f))]
@@ -302,6 +309,7 @@ class Format(object):
                 tmpdir = submissions.stage_component(component,
                                                    prefix=site['tmp'],
                                                    hooks_only=True)
+                _copy_uploaded_files(id, tmpdir)
                 generated_input = get_generated_input(name, tmpdir)
                 shutil.rmtree(tmpdir)
             except models.BadIdError:
