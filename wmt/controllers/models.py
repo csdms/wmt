@@ -306,6 +306,7 @@ class Format(object):
         else:
             try:
                 component = models.get_model_component(int(id), name)
+                component['parameters']['_model_id'] = id
                 tmpdir = submissions.stage_component(component,
                                                    prefix=site['tmp'],
                                                    hooks_only=True)

@@ -194,6 +194,7 @@ def stage(uuid):
 
         update(uuid, status='staging', message='staging components...')
         for component in components:
+            component['parameters']['_model_id'] = get_model_id(uuid)
             stage_component(component, prefix=cwd)
 
         for port in ports:
