@@ -1,6 +1,8 @@
 from __future__ import print_function
 
 import os
+import tempfile
+import shutil
 
 import requests
 from requests_toolbelt import MultipartEncoder
@@ -36,6 +38,27 @@ class execute_in_dir(object):
     def __exit__(self, type, value, traceback):
         os.chdir(self._starting_dir)
         return isinstance(value, OSError)
+
+
+class execute_in_tmpdir(object):
+
+    """Context that creates and changes to a temporary directory."""
+
+    def __init__(self, **kwds):
+        self._cleanup = kwds.pop('cleanup', True)
+        self._kwds = kwds
+        self._tmp_dir = None
+
+    def __enter__(self):
+        self._starting_dir = os.path.abspath(os.getcwd())
+        self._tmp_dir = tempfile.mkdtemp(**self._kwds)
+        os.chdir(self._tmp_dir)
+        return os.path.abspath(self._tmp_dir)
+
+    def __exit__(self, ex_type, ex_value, traceback):
+        os.chdir(self._starting_dir)
+        if self._cleanup:
+            shutil.rmtree(self._tmp_dir)
 
 
 def write_key_value_pairs(filelike, **kwds):
