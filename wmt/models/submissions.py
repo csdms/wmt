@@ -2,7 +2,6 @@ import web
 import os
 from uuid import uuid4
 import json
-import shutil
 
 from . import components, models
 from ..config import submission_db as db
