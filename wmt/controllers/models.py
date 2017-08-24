@@ -308,19 +308,19 @@ class Format(object):
         else:
             try:
                 component = models.get_model_component(int(id), name)
-                component['parameters']['_model_id'] = id
-                tmpdir = submissions.stage_component(component,
-                                                   prefix=site['tmp'],
-                                                   hooks_only=True)
-                copy_uploaded_files(id, tmpdir)
-                generated_input = get_generated_input(name, tmpdir)
-                shutil.rmtree(tmpdir)
             except models.BadIdError:
                 raise web.notfound()
             except models.AuthorizationError:
                 raise web.Unauthorized()
 
             mapping = component['parameters']
+            mapping['_model_id'] = id
+            tmpdir = submissions.stage_component(component,
+                                                 prefix=site['tmp'],
+                                                 hooks_only=True)
+            copy_uploaded_files(id, tmpdir)
+            generated_input = get_generated_input(name, tmpdir)
+            shutil.rmtree(tmpdir)
 
         if x['format'].lower() == 'json':
             web.header('Content-Type', 'application/json; charset=utf-8')
