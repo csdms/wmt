@@ -266,5 +266,4 @@ def stage_component(component, prefix='.', hooks_only=False):
     with execute_in_dir(stage_dir) as _:
         hooks['post-stage'].execute(component['parameters'])
 
-    if hooks_only:
-        return stage_dir
+    return stage_dir
