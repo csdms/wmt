@@ -49,6 +49,8 @@ def get_generated_input(name, path):
             contents = fp.read()
         if components.is_text(contents):
             input[f] = format.format(contents)
+        else:
+            input[f] = 'Binary file'
 
     return input
 
