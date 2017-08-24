@@ -12,7 +12,7 @@ from ..render import render
 from ..validators import (not_too_short, not_bad_json)
 from ..cca import rc_from_json
 from ..config import site
-from ..utils.io import chunk_copy
+from ..utils.io import chunk_copy, execute_in_tmpdir
 from ..session import get_username
 
 from collections import namedtuple
@@ -308,17 +308,17 @@ class Format(object):
         else:
             try:
                 component = models.get_model_component(int(id), name)
-                component['parameters']['_model_id'] = id
-                tmpdir = submissions.stage_component(component,
-                                                   prefix=site['tmp'],
-                                                   hooks_only=True)
-                copy_uploaded_files(id, tmpdir)
-                generated_input = get_generated_input(name, tmpdir)
-                shutil.rmtree(tmpdir)
             except models.BadIdError:
                 raise web.notfound()
             except models.AuthorizationError:
                 raise web.Unauthorized()
+            else:
+                with execute_in_tmpdir() as _:
+                    component['parameters']['_model_id'] = id
+                    stage_dir = submissions.stage_component(component,
+                                                            hooks_only=True)
+                    copy_uploaded_files(id, stage_dir)
+                    generated_input = get_generated_input(name, stage_dir)
 
             mapping = component['parameters']
 
