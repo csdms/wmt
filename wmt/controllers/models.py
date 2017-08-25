@@ -30,13 +30,6 @@ def _get_model_or_raise(id):
         raise web.Unauthorized()
 
 
-def copy_uploaded_files(id, dest):
-    upload_dir = models.get_model_upload_dir(id)
-    files = os.listdir(upload_dir)
-    for f in files:
-        shutil.copy(os.path.join(upload_dir, f), dest)
-
-
 def get_generated_input(name, path):
     files = [f for f in os.listdir(path) if not
              os.path.isdir(os.path.join(path, f))]
@@ -316,9 +309,10 @@ class Format(object):
                 with execute_in_tmpdir() as _:
                     mapping = component['parameters']
                     mapping['_model_id'] = id
+                    os.environ['WMT_INPUT_FILE_PATH'] = \
+                        models.get_model_upload_dir(id)
                     stage_dir = submissions.stage_component(component,
                                                             hooks_only=True)
-                    copy_uploaded_files(id, stage_dir)
                     generated_input = get_generated_input(name, stage_dir)
 
         if x['format'].lower() == 'json':
