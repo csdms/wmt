@@ -263,3 +263,5 @@ def stage_component(component, prefix='.'):
 
     with execute_in_dir(stage_dir) as _:
         hooks['post-stage'].execute(component['parameters'])
+
+    return stage_dir

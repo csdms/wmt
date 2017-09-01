@@ -2,16 +2,17 @@ import web
 import json
 import os
 import shutil
+from string import Formatter
 from datetime import datetime
 
 import yaml
 
-from ..models import (models, users, components)
+from ..models import (models, users, components, submissions)
 from ..render import render
 from ..validators import (not_too_short, not_bad_json)
 from ..cca import rc_from_json
 from ..config import site
-from ..utils.io import chunk_copy
+from ..utils.io import chunk_copy, execute_in_tmpdir
 from ..session import get_username
 
 from collections import namedtuple
@@ -27,6 +28,24 @@ def _get_model_or_raise(id):
         raise web.notfound()
     except models.AuthorizationError:
         raise web.Unauthorized()
+
+
+def get_generated_input(path):
+    files = [f for f in os.listdir(path) if not
+             os.path.isdir(os.path.join(path, f))]
+
+    input = dict()
+    format = Formatter()
+
+    for f in files:
+        with open(os.path.join(path, f), 'r') as fp:
+            contents = fp.read()
+        if components.is_text(contents):
+            input[f] = format.format(contents)
+        else:
+            input[f] = 'Binary file'
+
+    return input
 
 
 class Validate(object):
@@ -286,20 +305,28 @@ class Format(object):
                 raise web.notfound()
             except models.AuthorizationError:
                 raise web.Unauthorized()
+            else:
+                with execute_in_tmpdir() as _:
+                    mapping = component['parameters']
+                    os.environ['WMT_INPUT_FILE_PATH'] = \
+                        models.get_model_upload_dir(id)
+                    stage_dir = submissions.stage_component(component)
+                    generated_input = get_generated_input(stage_dir)
 
-            mapping = component['parameters']
-
-        if x['format'].lower() == 'html':
-            files = components.get_component_formatted_input(name,
-                                                             ignore_binary=True,
-                                                             **mapping)
-            return render.files(files)
-        elif x['format'].lower() == 'json':
+        if x['format'].lower() == 'json':
             web.header('Content-Type', 'application/json; charset=utf-8')
-            return json.dumps(mapping, sort_keys=True, indent=4, separators=(',', ': '))
+            return json.dumps(mapping, sort_keys=True, indent=4,
+                              separators=(',', ': '))
         else:
             files = components.get_component_formatted_input(name,
                                                              ignore_binary=True,
                                                              **mapping)
-            return '\n'.join([
-                '>>> start: {0}\n{1}\n<<< end: {0}\n'.format(*item) for item in files.items()])
+            combined = files.copy()
+            if int(id) > 0:
+                combined.update(generated_input)
+
+            if x['format'].lower() == 'html':
+                return render.files(combined)
+            else:
+                return '\n'.join(['>>> start: {0}\n{1}\n<<< end: {0}\n'
+                                  .format(*item) for item in combined.items()])
