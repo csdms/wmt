@@ -33,7 +33,6 @@ database = %(db)s/wmt.db
 user_db = %(db)s/users.db
 submission_db = %(db)s/submission.db
 db = db
-tmp = tmp
 
 [url]
 scheme = {url_scheme}
@@ -324,8 +323,7 @@ def install_wmt_api(prefix, dir='.'):
             prefix, python_site_packages(which_python())))
 
     with cd(prefix):
-        for path in ['bin', 'conf', 'db', 'files/uploads',
-                     'files/downloads', 'tmp']:
+        for path in ['bin', 'conf', 'db', 'files/uploads', 'files/downloads']:
             mkpath(path)
 
     with cd(os.path.join(prefix, 'opt', 'wmt-api')):
