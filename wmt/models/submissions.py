@@ -193,7 +193,6 @@ def stage(uuid):
 
         update(uuid, status='staging', message='staging components...')
         for component in components:
-            component['parameters']['_model_id'] = get_model_id(uuid)
             stage_component(component, prefix=cwd)
 
         for port in ports:
@@ -244,7 +243,7 @@ def prepend_to_path(envvar, path):
     os.environ[envvar] = os.pathsep.join(paths)
 
 
-def stage_component(component, prefix='.', hooks_only=False):
+def stage_component(component, prefix='.'):
     # name = component['class'].lower()
     name = component['class']
     stage_dir = os.path.abspath(os.path.join(prefix, name))
@@ -259,9 +258,8 @@ def stage_component(component, prefix='.', hooks_only=False):
     with execute_in_dir(stage_dir) as _:
         hooks['pre-stage'].execute(component['parameters'])
 
-    if not hooks_only:
-        with execute_in_dir(stage_dir) as _:
-            _component_stagein(component)
+    with execute_in_dir(stage_dir) as _:
+        _component_stagein(component)
 
     with execute_in_dir(stage_dir) as _:
         hooks['post-stage'].execute(component['parameters'])
