@@ -78,6 +78,7 @@ URLS = (
     '/run/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Get',
     '/run/(%s)/status' % _UUID_REGEX, 'wmt.controllers.run.Status',
     '/run/', 'wmt.controllers.run.GetAll',
+    '/run/visualize', 'wmt.controllers.run.Visualize',
 
     '/hosts/new', 'wmt.controllers.hosts.New',
     '/hosts/view/(\d+)', 'wmt.controllers.hosts.View',

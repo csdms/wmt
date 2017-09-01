@@ -8,6 +8,7 @@ from ..validators import (not_too_long, not_too_short, not_bad_json,
                           valid_uuid, submission_exists, model_exists)
 from ..cca import rc_from_json
 from ..utils.io import chunk_copy
+from ..utils.ssh import pickup_url
 from ..config import logger, site
 from ..utils.ssh import launch_cmt_on_host
 
@@ -409,3 +410,46 @@ class Show(object):
         ]
         return render.statustable(statuses)
         # return render.statustable(submissions.get_submissions())
+
+
+class Visualize(object):
+
+    form = web.form.Form(
+        web.form.Textbox('uuid',
+                         valid_uuid,
+                         submission_exists(),
+                         size=80, description='Simulation id:'),
+        web.form.Textbox('component',
+                         not_too_long(512),
+                         size=80, description='Component:'),
+        web.form.Textbox('filepath',
+                         not_too_long(512),
+                         size=80, description='Filepath:'),
+        web.form.Button('Visualize')
+    )
+
+    error_message = """Unable to visualize simulation results. This is
+either a bad simulation UUID or the simulation has not yet been
+staged."""
+
+    def GET(self):
+        return render.titled_form('Visualize Simulation Output', self.form())
+
+    def POST(self):
+        import tarfile
+
+        form = self.form()
+        if not form.validates():
+            raise web.internalerror(self.error_message)
+
+        if not os.path.isdir(os.path.join(site['pickup'], form.d.uuid)):
+            tarball = form.d.uuid + '.tar.gz'
+            os.chdir(site['pickup'])
+            with tarfile.open(tarball) as tar:
+                tar.extractall()
+
+        visualize_url = os.path.join(pickup_url(),
+                                     form.d.uuid,
+                                     form.d.component,
+                                     form.d.filepath)
+        web.seeother(visualize_url)
