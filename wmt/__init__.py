@@ -77,6 +77,7 @@ URLS = (
     '/run/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Get',
     '/run/(%s)/status' % _UUID_REGEX, 'wmt.controllers.run.Status',
     '/run/', 'wmt.controllers.run.GetAll',
+    '/run/visualize', 'wmt.controllers.run.Visualize',
 
     '/run/delete/ui/(%s)' % _UUID_REGEX, 'wmt.controllers.run.UiDelete',
 
