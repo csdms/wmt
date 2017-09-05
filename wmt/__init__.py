@@ -65,6 +65,7 @@ URLS = (
 
     '/run/new', 'wmt.controllers.run.New',
     '/run/delete/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Delete',
+    '/run/delete/ui/(%s)' % _UUID_REGEX, 'wmt.controllers.run.UiDelete',
     '/run/show', 'wmt.controllers.run.Show',
     '/run/status', 'wmt.controllers.run.Status',
     '/run/stage', 'wmt.controllers.run.Stage',
@@ -77,8 +78,6 @@ URLS = (
     '/run/(%s)' % _UUID_REGEX, 'wmt.controllers.run.Get',
     '/run/(%s)/status' % _UUID_REGEX, 'wmt.controllers.run.Status',
     '/run/', 'wmt.controllers.run.GetAll',
-
-    '/run/delete/ui/(%s)' % _UUID_REGEX, 'wmt.controllers.run.UiDelete',
 
     '/hosts/new', 'wmt.controllers.hosts.New',
     '/hosts/view/(\d+)', 'wmt.controllers.hosts.View',
