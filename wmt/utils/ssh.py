@@ -14,6 +14,13 @@ def site_url():
     return urlparse.urlunsplit(parts)
 
 
+def pickup_url():
+    import urlparse
+    parts = (site['pickup_scheme'], site['pickup_netloc'],
+             site['pickup_path'], '', '')
+    return urlparse.urlunsplit(parts)
+
+
 def open_connection_to_host(host, username, password=None, onerror='raise'):
     assert(onerror in ['raise', 'prompt'])
 
