@@ -178,13 +178,15 @@ class UiDelete(object):
         return render.confirm_delete(form)
 
     def POST(self, uuid):
-        form = self.form()
-        #form.fill(uuid=uuid)
-        #if not form.validates():
-        #    return render.confirm_delete(form)
-
         submissions.delete(uuid)
-        raise web.seeother('/run/show')
+        os.chdir(site['pickup'])
+        tarball = uuid + '.tar.gz'
+        try:
+            os.remove(tarball)
+        except:
+            pass
+        finally:
+            raise web.seeother('/run/show')
 
 
 class Delete(object):
