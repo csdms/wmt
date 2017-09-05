@@ -39,6 +39,15 @@ def launch_simulation(uuid, username, host, password):
             message='unexpected error launching simulation on %s (%d: %s)' % (host, resp['status_code'], resp['stderr']))
 
 
+def delete_output(uuid):
+    os.chdir(site['pickup'])
+    tarball = uuid + '.tar.gz'
+    try:
+        os.remove(tarball)
+    except:
+        pass
+
+
 def parse_submission_status(status):
     import yaml
 
@@ -178,12 +187,8 @@ class UiDelete(object):
         return render.confirm_delete(form)
 
     def POST(self, uuid):
-        form = self.form()
-        #form.fill(uuid=uuid)
-        #if not form.validates():
-        #    return render.confirm_delete(form)
-
         submissions.delete(uuid)
+        delete_output(uuid)
         raise web.seeother('/run/show')
 
 
