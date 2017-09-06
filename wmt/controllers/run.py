@@ -453,3 +453,40 @@ staged."""
                                      form.d.component,
                                      form.d.filepath)
         web.seeother(visualize_url)
+
+
+class VisualizeFile(object):
+
+    error_message = """Unable to visualize simulation results. This is
+either because the simulation has not completed, or the simulation
+contains no visualization."""
+
+    def GET(self, uuid):
+        import tarfile
+
+        info = submissions.get_submission(uuid)
+        driver = models.get_model_driver(info['model_id'])
+
+        tarball = uuid + '.tar.gz'
+        os.chdir(site['pickup'])
+        try:
+            with tarfile.open(tarball) as tar:
+                tar.extractall()
+        except IOError:
+            pass
+        except:
+            raise web.internalerror(self.error_message)
+
+        try:
+            driver['parameters']['_visualization']
+        except KeyError:
+            visualize_url = os.path.join(pickup_url(),
+                                         uuid,
+                                         driver['id'])
+        else:
+            visualize_url = os.path.join(pickup_url(),
+                                         uuid,
+                                         driver['id'],
+                                         driver['parameters']['_visualization'])
+
+        web.seeother(visualize_url)
