@@ -105,6 +105,13 @@ def get_model_component(id, component):
     raise KeyError(component)
 
 
+def get_model_driver(id):
+    model = json.loads(get_model(id)['json'])
+    for item in model['model']:
+        if item['driver']:
+            return item
+
+
 def get_model_yaml(id):
     import yaml
 

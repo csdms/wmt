@@ -14,7 +14,7 @@ $def with (submissions)
       <th width="50px" scope="col"></th>
       <th width="50px" scope="col"></th-->
       <!--th scope="col"></th-->
-      <th width="150px" scope="col"></th>
+      <th width="120px" scope="col"></th>
     </thead>
     <tbody>
     $for submission in submissions:
@@ -111,6 +111,10 @@ $def with (submissions)
 
 	    <a href="$PREFIX/run/delete/ui/${submission.uuid}" class="btn btn-link">
 	      <span class="glyphicon glyphicon-trash fa-lg"></span>
+	    </a>
+
+	    <a href="$PREFIX/run/visualize/${submission.uuid}" class="btn btn-link">
+	      <span class="glyphicon glyphicon-eye-open fa-lg"></span>
 	    </a>
 
 	  </div>
