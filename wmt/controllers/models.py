@@ -2,7 +2,6 @@ import web
 import json
 import os
 import shutil
-from string import Formatter
 from datetime import datetime
 
 import yaml
@@ -31,17 +30,14 @@ def _get_model_or_raise(id):
 
 
 def get_generated_input(path):
+    input = dict()
     files = [f for f in os.listdir(path) if not
              os.path.isdir(os.path.join(path, f))]
-
-    input = dict()
-    format = Formatter()
-
     for f in files:
         with open(os.path.join(path, f), 'r') as fp:
             contents = fp.read()
         if components.is_text(contents):
-            input[f] = format.format(contents)
+            input[f] = contents
         else:
             input[f] = 'Binary file'
 
