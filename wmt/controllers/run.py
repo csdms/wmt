@@ -46,7 +46,7 @@ def delete_tarball(uuid):
     tarball = uuid + '.tar.gz'
     try:
         os.remove(tarball)
-    except:
+    except OSError:
         pass
 
 
