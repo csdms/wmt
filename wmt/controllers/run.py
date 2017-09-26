@@ -42,6 +42,15 @@ def launch_simulation(uuid, username, host, password):
 
 
 def delete_tarball(uuid):
+    """
+    Delete a simulation results tarball from the server pickup site.
+
+    Parameters
+    ----------
+    uuid : str
+      The simulation id.
+
+    """
     os.chdir(site['pickup'])
     tarball = uuid + '.tar.gz'
     try:
@@ -51,6 +60,15 @@ def delete_tarball(uuid):
 
 
 def delete_results(uuid):
+    """
+    Delete unpacked simulation results from the server pickup site.
+
+    Parameters
+    ----------
+    uuid : str
+      The simulation id.
+
+    """
     os.chdir(site['pickup'])
     try:
         shutil.rmtree(uuid)
