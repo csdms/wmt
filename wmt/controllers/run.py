@@ -1,5 +1,6 @@
 import web
 import os
+import shutil
 import json
 
 from ..models import (models, users, submissions)
@@ -40,12 +41,38 @@ def launch_simulation(uuid, username, host, password):
             message='unexpected error launching simulation on %s (%d: %s)' % (host, resp['status_code'], resp['stderr']))
 
 
-def delete_output(uuid):
+def delete_tarball(uuid):
+    """
+    Delete a simulation results tarball from the server pickup site.
+
+    Parameters
+    ----------
+    uuid : str
+      The simulation id.
+
+    """
     os.chdir(site['pickup'])
     tarball = uuid + '.tar.gz'
     try:
         os.remove(tarball)
-    except:
+    except OSError:
+        pass
+
+
+def delete_results(uuid):
+    """
+    Delete unpacked simulation results from the server pickup site.
+
+    Parameters
+    ----------
+    uuid : str
+      The simulation id.
+
+    """
+    os.chdir(site['pickup'])
+    try:
+        shutil.rmtree(uuid)
+    except OSError:
         pass
 
 
@@ -189,7 +216,8 @@ class UiDelete(object):
 
     def POST(self, uuid):
         submissions.delete(uuid)
-        delete_output(uuid)
+        delete_tarball(uuid)
+        delete_results(uuid)
         raise web.seeother('/run/show')
 
 
