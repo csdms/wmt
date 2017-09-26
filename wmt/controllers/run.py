@@ -1,5 +1,6 @@
 import web
 import os
+import shutil
 import json
 
 from ..models import (models, users, submissions)
@@ -46,6 +47,14 @@ def delete_tarball(uuid):
     try:
         os.remove(tarball)
     except:
+        pass
+
+
+def delete_results(uuid):
+    os.chdir(site['pickup'])
+    try:
+        shutil.rmtree(uuid)
+    except OSError:
         pass
 
 
@@ -190,6 +199,7 @@ class UiDelete(object):
     def POST(self, uuid):
         submissions.delete(uuid)
         delete_tarball(uuid)
+        delete_results(uuid)
         raise web.seeother('/run/show')
 
 
