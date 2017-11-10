@@ -8,11 +8,18 @@ from ..render import render
 from ..validators import not_too_long, valid_uuid, submission_exists
 from ..config import site
 from ..utils.ssh import pickup_url
+from .run import delete_tarball
+
+
+class Delete(object):
+    def POST(self, uuid):
+        delete_tarball(uuid)
+        return json.dumps(uuid)
 
 
 class Create(object):
 
-    error_message = """ Unable to create tarball. This is either a bad
+    error_message = """Unable to create tarball. This is either a bad
 simulation UUID or the simulation has not yet been staged.
 """
     form = web.form.Form(
