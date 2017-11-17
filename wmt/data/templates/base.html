@@ -73,7 +73,7 @@ $def with (page)
         </div>
         <div class="navbar-collapse collapse">
           $if CONTEXT.username == '':
-            <form class="navbar-form navbar-right" role="form" action="account/login" method="post">
+            <form class="navbar-form navbar-right" role="form" action="$PREFIX/account/login" method="post">
               <div class="form-group">
                 <input id="username" name="username" type="email" placeholder="Email" class="form-control">
               </div>
@@ -83,7 +83,7 @@ $def with (page)
               <button type="submit" class="btn btn-success">Sign in</button>
             </form>
           $else:
-            <form class="navbar-form navbar-right" role="form" action="account/logout" method="post">
+            <form class="navbar-form navbar-right" role="form" action="$PREFIX/account/logout" method="post">
               <!--div class="form-group">
                 <input id="username" name="username" type="email" text="$CONTEXT.username" class="form-control">
               </div-->
