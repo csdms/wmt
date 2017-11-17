@@ -81,6 +81,9 @@ URLS = (
     '/run/visualize', 'wmt.controllers.run.Visualize',
     '/run/visualize/(%s)' % _UUID_REGEX, 'wmt.controllers.run.VisualizeFile',
 
+    '/package/create', 'wmt.controllers.package.Create',
+    '/package/delete/(%s)' % _UUID_REGEX, 'wmt.controllers.package.Delete',
+
     '/hosts/new', 'wmt.controllers.hosts.New',
     '/hosts/view/(\d+)', 'wmt.controllers.hosts.View',
     '/hosts/edit/(\d+)', 'wmt.controllers.hosts.Edit',
