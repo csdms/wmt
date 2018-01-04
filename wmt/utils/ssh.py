@@ -3,19 +3,18 @@ from __future__ import absolute_import
 import paramiko
 import getpass
 import os
+import urlparse
 
 from ..config import site
 from ..models import submissions
 
 
 def site_url():
-    import urlparse
     parts = (site['scheme'], site['netloc'], site['path'], '', '')
     return urlparse.urlunsplit(parts)
 
 
 def pickup_url():
-    import urlparse
     parts = (site['pickup_scheme'], site['pickup_netloc'],
              site['pickup_path'], '', '')
     return urlparse.urlunsplit(parts)
