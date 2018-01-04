@@ -51,7 +51,7 @@ def copy_launch_file(sftp, local_path, remote_path):
         raise ValueError(' -> '.join([local_path, os.path.join(remote_path, filename)]))
 
 
-def execute_launch_command(ssh, wmt_prefix, uuid):
+def execute_launch_command(ssh, host, uuid):
     # run_command = ' '.join([
     #     os.path.join(wmt_prefix, 'bin', 'wmt-exe'),
     #     #'/Users/huttone/anaconda/bin/wmt-exe',
@@ -60,30 +60,34 @@ def execute_launch_command(ssh, wmt_prefix, uuid):
     #     '--with-wmt-slave=%s' % os.path.join(wmt_prefix, 'bin', 'wmt-slave'),
     #     '--daemon',
     # ])
+    info = get_host_info(host)
+
     run_command = ' '.join([
-        os.path.join(wmt_prefix, 'bin', 'wmt-script'),
+        os.path.join(info['wmt_prefix'], 'bin', 'wmt-script'),
         '--run',
-        '--launcher=qsub',
+        '--launcher={}'.format(info['launcher']),
         uuid
     ])
     #wmt_execute = os.path.join(wmt_prefix, 'bin', 'wmt-execute.sh')
     #wmt_execute = os.path.join(wmt_prefix, 'bin', 'wmt-qsub.sh')
 
     #run_command = '/usr/bin/env -i /bin/bash %s %s --server-url=%s' % (wmt_execute, uuid, site_url())
-    submissions.update(uuid, status='launching', message='Running command: %s' % run_command)
+    submissions.update(uuid,
+                       status='launching',
+                       message='Running command: %s' % run_command)
     stdin, stdout, stderr = ssh.exec_command(run_command)
 
     return (stdin, stdout, stderr)
 
 
-def get_host_wmt_prefix(host):
+def get_host_info(host):
     import json
     path_to_info = os.path.join(site['db'], 'hosts', host, 'db', 'info.json')
 
     with open(path_to_info, 'r') as fp:
         info = json.loads(fp.read())
 
-    return info['wmt_prefix']
+    return info
 
 
 def get_host_launch_files(host):
@@ -110,12 +114,9 @@ def launch_cmt_on_host(uuid, host, username, password=None, args=[]):
         }
     else:
         remote_path = os.path.join('.wmt', uuid)
-
         make_wmt_prefix(ssh, remote_path)
 
-        prefix = get_host_wmt_prefix(host)
-        (_, stdout, stderr) = execute_launch_command(ssh, prefix, uuid)
-
+        (_, stdout, stderr) = execute_launch_command(ssh, host, uuid)
         resp = {
             'status_code': 200,
             'stdout': ''.join(stdout.readlines()),
