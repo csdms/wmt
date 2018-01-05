@@ -64,6 +64,7 @@ def execute_launch_command(ssh, host, uuid):
     run_command = ' '.join([
         os.path.join(info['wmt_prefix'], 'bin', 'wmt-script'),
         '--run',
+        '--server-url={}'.format(site_url()),
         '--launcher={}'.format(info['launcher']),
         uuid
     ])
