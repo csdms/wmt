@@ -113,8 +113,8 @@ def launch_cmt_on_host(uuid, host, username, password=None, args=[]):
             'stderr': str(error),
         }
     else:
-        remote_path = os.path.join('.wmt', uuid)
-        make_wmt_prefix(ssh, remote_path)
+        # remote_path = os.path.join('.wmt', uuid)
+        # make_wmt_prefix(ssh, remote_path)
 
         (_, stdout, stderr) = execute_launch_command(ssh, host, uuid)
         resp = {
