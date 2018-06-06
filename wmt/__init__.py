@@ -41,6 +41,7 @@ URLS = (
     '/components/input/(\w+)', 'wmt.controllers.components.Input',
     '/components/format/(\w+)', 'wmt.controllers.components.Format',
     '/components/command/(\w+)', 'wmt.controllers.components.Command',
+    '/components/refresh', 'wmt.controllers.components.Refresh',
 
     '/models/pretty-list', 'wmt.controllers.models.PrettyList',
     '/models/new', 'wmt.controllers.models.New',

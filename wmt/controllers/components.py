@@ -138,3 +138,14 @@ class Command(object):
                 return render.code('> ' + ' '.join(comps.get_component_argv(name)))
         except KeyError:
             raise web.notfound()
+
+
+class Refresh(object):
+    def GET(self):
+        component_names = comps.get_component_names(sort=True)
+        for name in component_names:
+            hooks = comps.get_component_hooks(name)
+            hooks['refresh'].execute(name)
+
+        web.header('Content-Type', 'application/json; charset=utf-8')
+        return json.dumps('Components refreshed')
