@@ -33,6 +33,7 @@ database = %(db)s/wmt.db
 user_db = %(db)s/users.db
 submission_db = %(db)s/submission.db
 db = db
+opt = opt
 
 [url]
 scheme = {url_scheme}
