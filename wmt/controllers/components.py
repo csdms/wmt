@@ -160,4 +160,4 @@ class RefreshAll(object):
             refresh_component(name)
 
         web.header('Content-Type', 'application/json; charset=utf-8')
-        return json.dumps('All components refreshed')
+        return json.dumps(comps.get_component_names(sort=True), indent=indent)
