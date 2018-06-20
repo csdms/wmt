@@ -9,6 +9,11 @@ from ..validators import (not_too_long, not_too_short, not_bad_json)
 indent = 2
 
 
+def refresh_component(name):
+    hooks = comps.get_component_hooks(name)
+    hooks['refresh'].execute(name)
+
+
 class List(object):
     def GET(self):
         web.header('Content-Type', 'application/json; charset=utf-8')
@@ -138,3 +143,21 @@ class Command(object):
                 return render.code('> ' + ' '.join(comps.get_component_argv(name)))
         except KeyError:
             raise web.notfound()
+
+
+class Refresh(object):
+    def GET(self, name):
+        refresh_component(name)
+
+        web.header('Content-Type', 'application/json; charset=utf-8')
+        return json.dumps('{} component refreshed'.format(name))
+
+
+class RefreshAll(object):
+    def GET(self):
+        component_names = comps.get_component_names(sort=True)
+        for name in component_names:
+            refresh_component(name)
+
+        web.header('Content-Type', 'application/json; charset=utf-8')
+        return json.dumps(comps.get_component_names(sort=True), indent=indent)

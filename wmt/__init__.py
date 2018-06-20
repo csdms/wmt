@@ -25,7 +25,6 @@ URLS = (
     '/tag/delete/(\d+)', 'wmt.controllers.tag.Delete',
     '/tag/get/(\d+)', 'wmt.controllers.tag.Get',
     '/tag/list', 'wmt.controllers.tag.List',
-
     '/tag/model/add', 'wmt.controllers.tag.TagModel',
     '/tag/model/remove', 'wmt.controllers.tag.UntagModel',
     '/tag/model/query', 'wmt.controllers.tag.Query',
@@ -34,7 +33,6 @@ URLS = (
     '/components/pretty-list', 'wmt.controllers.components.PrettyList',
     '/components/pretty-show/(\w+)', 'wmt.controllers.components.PrettyShow',
     '/components/pretty-params/(\w+)', 'wmt.controllers.components.PrettyParameters',
-
     '/components/list', 'wmt.controllers.components.List',
     '/components/dump', 'wmt.controllers.components.Dump',
     '/components/show/(\w+)', 'wmt.controllers.components.Show',
@@ -43,9 +41,10 @@ URLS = (
     '/components/input/(\w+)', 'wmt.controllers.components.Input',
     '/components/format/(\w+)', 'wmt.controllers.components.Format',
     '/components/command/(\w+)', 'wmt.controllers.components.Command',
+    '/components/refresh', 'wmt.controllers.components.RefreshAll',
+    '/components/refresh/(\w+)', 'wmt.controllers.components.Refresh',
 
     '/models/pretty-list', 'wmt.controllers.models.PrettyList',
-
     '/models/new', 'wmt.controllers.models.New',
     '/models/open/(\d+)', 'wmt.controllers.models.Open',
     '/models/save/(\d+)', 'wmt.controllers.models.Save',
@@ -59,7 +58,6 @@ URLS = (
     '/models/upload', 'wmt.controllers.models.Upload',
     '/models/validate', 'wmt.controllers.models.Validate',
     '/models/(-?\d+)/(\w+)/format', 'wmt.controllers.models.Format',
-
     '/models/convert', 'wmt.controllers.actions.Convert',
     '/models/submit', 'wmt.controllers.actions.Submit',
 

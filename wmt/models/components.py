@@ -4,7 +4,7 @@ import json
 from ..config import palette, site, logger
 
 
-_HOOK_NAMES = set(['pre-stage', 'post-stage'])
+_HOOK_NAMES = set(['pre-stage', 'post-stage', 'refresh'])
 
 
 class Error(Exception):
