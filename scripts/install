@@ -23,6 +23,7 @@ MAC_OS_NAME = {
 
 WMT_INI_CONTENTS = """
 [paths]
+bin = bin
 templates = templates
 files = files
 uploads = files/uploads
