@@ -293,7 +293,10 @@ class Format(object):
         x = web.input(defaults='false', format='html')
 
         if int(id) in [-1, 0]:
-            mapping = components.get_component_defaults(name)
+            component = {
+                'class': name,
+                'parameters': components.get_component_defaults(name),
+                }
         else:
             try:
                 component = models.get_model_component(int(id), name)
@@ -301,28 +304,21 @@ class Format(object):
                 raise web.notfound()
             except models.AuthorizationError:
                 raise web.Unauthorized()
-            else:
-                with execute_in_tmpdir() as _:
-                    mapping = component['parameters']
-                    os.environ['WMT_INPUT_FILE_PATH'] = \
-                        models.get_model_upload_dir(id)
-                    stage_dir = submissions.stage_component(component)
-                    generated_input = get_generated_input(stage_dir)
+
+        with execute_in_tmpdir() as _:
+            # os.environ['WMT_INPUT_FILE_PATH'] = \
+            #     models.get_model_upload_dir(id)
+            stage_dir = submissions.stage_component(component)
+            generated_input = get_generated_input(stage_dir)
 
         if x['format'].lower() == 'json':
             web.header('Content-Type', 'application/json; charset=utf-8')
-            return json.dumps(mapping, sort_keys=True, indent=4,
+            return json.dumps(component['parameters'], sort_keys=True, indent=4,
                               separators=(',', ': '))
         else:
-            files = components.get_component_formatted_input(name,
-                                                             ignore_binary=True,
-                                                             **mapping)
-            combined = files.copy()
-            if int(id) > 0:
-                combined.update(generated_input)
-
             if x['format'].lower() == 'html':
-                return render.files(combined)
+                return render.files(generated_input)
             else:
-                return '\n'.join(['>>> start: {0}\n{1}\n<<< end: {0}\n'
-                                  .format(*item) for item in combined.items()])
+                return '\n'.join(
+                    ['>>> start: {0}\n{1}\n<<< end: {0}\n'
+                     .format(*item) for item in generated_input.items()])
