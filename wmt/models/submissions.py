@@ -2,6 +2,7 @@ import web
 import os
 from uuid import uuid4
 import json
+from model_metadata.model_setup import FileSystemLoader
 
 from . import components, models
 from ..config import submission_db as db
@@ -205,25 +206,6 @@ def stage(uuid):
             f.write(yaml.dump_all(ports, default_flow_style=False))
 
 
-def _component_stagein(component):
-    name = component['class']
-
-    files = components.get_component_formatted_input(
-        name, **component['parameters'])
-
-    for (filename, contents) in files.items():
-        if not os.path.isfile(filename):
-            component_dir = os.path.dirname(filename)
-            if os.path.isdir(component_dir) is False:
-                component_dir = os.curdir
-            with execute_in_dir(component_dir):
-                with open(os.path.basename(filename), 'w') as f:
-                    f.write(contents)
-
-    with open('run.sh', 'w') as f:
-        f.write(' '.join(components.get_component_argv(name)))
-
-
 def _make_stage_dir(dir, ifexists='pass'):
     import errno
     try:
@@ -247,11 +229,11 @@ def stage_component(component, prefix='.'):
     # name = component['class'].lower()
     name = component['class']
     stage_dir = os.path.abspath(os.path.join(prefix, name))
+    files_dir = os.path.join(site['db'], 'components', name, 'files')
 
     _make_stage_dir(stage_dir, ifexists='pass')
 
-    prepend_to_path('WMT_INPUT_FILE_PATH',
-        os.path.join(site['db'], 'components', name, 'files'))
+    prepend_to_path('WMT_INPUT_FILE_PATH', files_dir)
 
     hooks = components.get_component_hooks(name)
 
@@ -259,7 +241,11 @@ def stage_component(component, prefix='.'):
         hooks['pre-stage'].execute(component['parameters'])
 
     with execute_in_dir(stage_dir) as _:
-        _component_stagein(component)
+        FileSystemLoader(files_dir).stage_all(os.curdir,
+                                              **component['parameters'])
+        for f in ['api.yaml', 'info.yaml', 'parameters.yaml', 'run.yaml']:
+            if os.path.exists(f):
+                os.remove(f)
 
     with execute_in_dir(stage_dir) as _:
         hooks['post-stage'].execute(component['parameters'])
